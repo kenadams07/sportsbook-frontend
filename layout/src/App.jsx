@@ -4,8 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 
 export default function LayoutApp() {
   return <div className='w-full'>
-<BrowserRouter>
-    <AppRouter />
-</BrowserRouter>
+    <BrowserRouter>
+      <AppRouter />
+    </BrowserRouter>
   </div>;
 }

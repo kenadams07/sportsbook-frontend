@@ -35,7 +35,7 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md w-full mx-auto bg-[#2a2a2a] border-none text-white p-0 max-h-[95vh] overflow-hidden">
+      <DialogContent className="max-w-md w-full mx-auto bg-[#2a2a2a] text-white p-0 max-h-[95vh] overflow-hidden">
         <div className="relative">
           {/* Header */}
           <DialogHeader className="flex flex-row items-center justify-between p-4 sm:p-6">

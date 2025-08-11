@@ -4199,6 +4199,29 @@ html, body {
   --sidebar-accent-foreground: oklch(20.5% 0 0);
   --sidebar-border: oklch(92.2% 0 0);
   --sidebar-ring: oklch(70.8% 0 0);
+    /* was #AF0000 — use primary */
+  --navbar-text: oklch(0.985 0 0);
+  /* white text */
+  --navbar-sub-bg: oklch(0.33 0 0);
+  /* was #505050 */
+  --navbar-dropdown-bg: oklch(0.3 0 0);
+  /* was #424242 */
+  --navbar-dropdown-hover-bg: oklch(0.25 0 0);
+  /* was #3f3f3f or gray-700 */
+  --navbar-border: oklch(0.45 0 0);
+  /* was #4B5563 */
+  --navbar-highlight: oklch(0.83 0.2 85);
+  /* Amber-400 (hover line) */
+  --brand-accent: oklch(0.83 0.2 85);
+  /* Yellow logo bg */
+
+  --button-primary-bg: oklch(0.83 0.2 85);
+  /* yellow-500 */
+  --button-primary-text: oklch(0.15 0 0);
+  /* black text */
+  --clock-bg: oklch(0.4 0.22 27);
+  /* red-700 */
+
 }
 
 .dark {
