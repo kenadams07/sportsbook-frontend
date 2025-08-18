@@ -7,9 +7,15 @@ import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
 
 const navItems = [
-    { label: 'Sports', items: [{ label: 'Football', href: '/sports/football' }, { label: 'Basketball', href: '/sports/basketball' }, { label: 'Tennis', href: '/sports/tennis' }, { label: 'Cricket', href: '/sports/cricket' }, { label: 'All Sports', href: '/sports/all' }] },
-    { label: 'Live', items: [{ label: 'In-Play', href: '/live/in-play' }, { label: 'Live Streaming', href: '/live/streaming' }, { label: 'Live Scores', href: '/live/scores' }] },
-    { label: 'Casino', items: [{ label: 'Home', href: '/casino/slots' }, { label: 'testimonials', href: '/casino/testimonials' }] },
+     { label: 'Live', items: [
+        { label: 'Event View', href: '/live_events/event-view' },
+        { label: 'Live Calendar', href: '/live_events/live-calendar' },
+        { label: 'Results', href: '/live_events/results' },
+        { label: 'Statistics', href: '/live_events/statistics' }
+     ] },
+    { label: 'Sports', items: [{ label: 'Event View', href: '/live/in-play' }, { label: 'Live Calendar', href: '/live/streaming' }, { label: 'Results', href: '/live/scores' },{ label: 'Statistics', href: '/live/scores' }]  },
+   
+    { label: 'Casino', items: [{ label: 'Home', href: '/casino/slots' }, { label: 'Tournaments', href: '/casino/testimonials' }] },
     { label: 'Promotions', items: [{ label: 'Sports Bonus', href: '/promotions/sports' }, { label: 'Casino Bonus', href: '/promotions/casino' }, { label: 'VIP Program', href: '/promotions/vip' }] },
     { label: 'Virtual Sports', items: [{ label: 'Virtual Football', href: '/virtual/football' }, { label: 'Virtual Horse Racing', href: '/virtual/horse-racing' }, { label: 'Virtual Tennis', href: '/virtual/tennis' }] },
     { label: 'Esports', items: [{ label: 'CS:GO', href: '/esports/csgo' }, { label: 'Dota 2', href: '/esports/dota2' }, { label: 'League of Legends', href: '/esports/lol' }, { label: 'Valorant', href: '/esports/valorant' }] },

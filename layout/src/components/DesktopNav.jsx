@@ -7,10 +7,15 @@ import {
   MenubarMenu,
   MenubarTrigger
 } from './ui/menubar';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const DesktopNav = ({ navItems }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Helper to check if a nav item or its subitems are active
+  const isMenuActive = (item) =>
+    item.items && item.items.some((sub) => location.pathname === sub.href);
 
   return (
     <div className="hidden md:block w-full">
@@ -19,12 +24,8 @@ const DesktopNav = ({ navItems }) => {
           <MenubarMenu key={item.label}>
             <MenubarTrigger
               className={`
-                h-full px-3 rounded-none cursor-pointer flex items-center gap-1 transition-colors duration-200 
-                data-[state=open]:bg-black 
-                data-[state=open]:border-t-[4px] 
-                data-[state=open]:border-chart-5 
-                data-[state=open]:text-white
-                hover:bg-black hover:border-t-[4px] hover:border-chart-5 hover:text-white
+                h-full px-3 rounded-none cursor-pointer flex items-center gap-1 transition-colors duration-200
+                ${isMenuActive(item) ? 'border-b-2 border-yellow-400 text-white font-bold bg-black' : 'hover:bg-black hover:border-b-2 hover:border-yellow-400 hover:text-white'}
               `}
             >
               {item.label}
@@ -39,7 +40,7 @@ const DesktopNav = ({ navItems }) => {
               {item.items.map((subItem) => (
                 <MenubarItem
                   key={subItem.href}
-                  className="text-navbar-text rounded-sm bg-mobile-menu my-2 hover:bg-navbar-dropdown-hover hover:border-l-2 hover:border-l-navbar-highlight cursor-pointer"
+                  className={`text-navbar-text rounded-sm bg-mobile-menu my-2 hover:bg-navbar-dropdown-hover hover:border-l-2 hover:border-l-navbar-highlight cursor-pointer ${location.pathname === subItem.href ? 'bg-navbar-dropdown-hover border-l-2 border-yellow-400 text-white font-bold' : ''}`}
                   onClick={() => navigate(subItem.href)}
                 >
                   {subItem.label}

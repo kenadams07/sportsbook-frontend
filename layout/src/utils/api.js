@@ -4,10 +4,10 @@ import {
   notifyError,
   removeLocalStorageItem,
 } from "./Helper";
-import CONSTANTS from "./Constants";
+import { BACKEND_API } from "./Constants";
 
 const api = axios.create({
-  baseURL: CONSTANTS.BACKEND_API,
+  baseURL: BACKEND_API,
 });
 
 api.interceptors.request.use(

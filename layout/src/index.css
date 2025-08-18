@@ -306,3 +306,15 @@ body {
 .animate-shimmer {
   animation: shimmer 1.5s infinite;
 }
+
+
+/* globals.css using Tailwind's custom utilities */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE & Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}

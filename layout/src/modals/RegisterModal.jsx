@@ -36,12 +36,12 @@ export default function RegisterModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
     username: "",
     name: "",
-    middleName: "",
+    middlename: "",
     email: "",
     surname: "",
     gender: "",
-    birthDate: "",
-    zipCode: "",
+    birthdate: "",
+    zipcode: "",
     address: "",
     occupation: "",
     salaryLevel: "",
@@ -64,8 +64,8 @@ export default function RegisterModal({ isOpen, onClose }) {
       newErrors.email = "Valid email is required";
     if (!formData.surname) newErrors.surname = "Surname is required";
     if (!formData.gender) newErrors.gender = "Gender is required";
-    if (!formData.birthDate) newErrors.birthDate = "Birth date is required";
-    if (!formData.zipCode) newErrors.zipCode = "Zip code is required";
+    if (!formData.birthdate) newErrors.birthdate = "Birth date is required";
+    if (!formData.zipcode) newErrors.zipcode = "Zip code is required";
     if (!formData.address) newErrors.address = "Address is required";
     if (!formData.occupation) newErrors.occupation = "Occupation is required";
     if (!formData.salaryLevel) newErrors.salaryLevel = "Salary level is required";
@@ -80,25 +80,18 @@ export default function RegisterModal({ isOpen, onClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    // if (!validateForm()) return;
+
     const formDataWithDate = {
       ...formData,
-      birthDate: date ? format(date, "yyyy-MM-dd") : "",
+      birthdate: date ? format(date, "yyyy-MM-dd") : "",
     };
 
-      dispatch(
-        signup({
-          payload: formDataWithDate,
-          callback: (data) => {
-            if (data.meta.code === 200) {
-              setIsDisabled(false);
-            } else {
-              setIsDisabled(false);
-            }
-          },
-        })
-      );
-   
+    dispatch(
+      signup({
+        payload: formDataWithDate
+      })
+    );
   };
 
   const handleSwitchToLogin = () => {
@@ -106,7 +99,6 @@ export default function RegisterModal({ isOpen, onClose }) {
     setIsLoginModalOpen(true);
   };
 
-  // Shared class for uniform height and style
   const fieldClass =
     "bg-[#404040] border-[#404040] text-white placeholder:text-gray-400 h-12 text-base w-full px-3 flex items-center justify-between";
 
@@ -170,8 +162,8 @@ export default function RegisterModal({ isOpen, onClose }) {
 
                     <Input
                       placeholder="Middle name"
-                      value={formData.middleName}
-                      onChange={(e) => handleInputChange("middleName", e.target.value)}
+                      value={formData.middlename}
+                      onChange={(e) => handleInputChange("middlename", e.target.value)}
                       className={fieldClass}
                     />
 
@@ -196,7 +188,10 @@ export default function RegisterModal({ isOpen, onClose }) {
                       <p className="text-red-500 text-sm">{errors.surname}</p>
                     )}
 
-                    <Select value={formData.gender} onValueChange={(val) => handleInputChange("gender", val)}>
+                    <Select
+                      value={formData.gender || ""}
+                      onValueChange={(val) => handleInputChange("gender", val)}
+                    >
                       <SelectTrigger className={fieldClass}>
                         <SelectValue placeholder="Choose gender" />
                       </SelectTrigger>
@@ -240,7 +235,7 @@ export default function RegisterModal({ isOpen, onClose }) {
                           onSelect={(selectedDate) => {
                             if (selectedDate) {
                               setDate(selectedDate);
-                              handleInputChange("birthDate", format(selectedDate, "yyyy-MM-dd"));
+                              handleInputChange("birthdate", format(selectedDate, "yyyy-MM-dd"));
                               setIsCalendarOpen(false);
                             }
                           }}
@@ -259,9 +254,8 @@ export default function RegisterModal({ isOpen, onClose }) {
                       </PopoverContent>
                     </Popover>
 
-
-                    {errors.birthDate && (
-                      <p className="text-red-500 text-sm">{errors.birthDate}</p>
+                    {errors.birthdate && (
+                      <p className="text-red-500 text-sm">{errors.birthdate}</p>
                     )}
                   </div>
 
@@ -269,12 +263,12 @@ export default function RegisterModal({ isOpen, onClose }) {
                   <div className="space-y-4">
                     <Input
                       placeholder="Zip code"
-                      value={formData.zipCode}
-                      onChange={(e) => handleInputChange("zipCode", e.target.value)}
+                      value={formData.zipcode}
+                      onChange={(e) => handleInputChange("zipcode", e.target.value)}
                       className={fieldClass}
                     />
-                    {errors.zipCode && (
-                      <p className="text-red-500 text-sm">{errors.zipCode}</p>
+                    {errors.zipcode && (
+                      <p className="text-red-500 text-sm">{errors.zipcode}</p>
                     )}
 
                     <Input
@@ -288,7 +282,7 @@ export default function RegisterModal({ isOpen, onClose }) {
                     )}
 
                     <Select
-                      value={formData.occupation}
+                      value={formData.occupation || ""}
                       onValueChange={(val) => handleInputChange("occupation", val)}
                     >
                       <SelectTrigger className={fieldClass}>
@@ -307,7 +301,7 @@ export default function RegisterModal({ isOpen, onClose }) {
                     )}
 
                     <Select
-                      value={formData.salaryLevel}
+                      value={formData.salaryLevel || ""}
                       onValueChange={(val) => handleInputChange("salaryLevel", val)}
                     >
                       <SelectTrigger className={fieldClass}>

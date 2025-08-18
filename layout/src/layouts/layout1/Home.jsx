@@ -1,7 +1,7 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../../components/ui/carousel'
 import React from 'react'
-import UpcomingMatches from '../../components/upcoming-matches'
+import UpcomingMatches from '../../components/UpcomingMatches'
 import ImageCardGrid from '../../components/ImageCardGamesGrid'
 import img1 from "/assets/img1.jpg"
 import img2 from "/assets/img2.jpg"
@@ -44,7 +44,6 @@ const Home = () => {
 
       {/* upcoming matches */}
       <div className='mx-1'>
-
         <UpcomingMatches />
       </div>
       <div className='mx-1'>

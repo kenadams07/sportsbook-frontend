@@ -5,18 +5,31 @@ import { Paths } from './path'
 import { domainConfig } from '../utils/getDomainConfig';
 import Loader from '../components/Loader/Loader';
 import Casino from '../pages/Casino';
+import MainLiveSection from '../components/Live-section/MainLiveSection';
+import LeftSidebarEventView from '../components/Live-section/LeftSidebarEventView';
 
 const Homepage = lazy(() => import('../pages/Homepage'));
 const NotFound = lazy(() => import('../components/Error/NotFound'));
 
+const EventView = () => (
+  <div className="flex w-full h-[calc(100vh-60px)] bg-[#232323] text-white">
+    <LeftSidebarEventView />
+    <div className="flex-1 flex items-center justify-center text-2xl font-bold text-gray-300">
+      Event View Main Content (replace with real content)
+    </div>
+  </div>
+);
+const LiveCalendar = () => <div style={{color: 'white', padding: 24}}>Live Calendar Page</div>;
+const Results = () => <div style={{color: 'white', padding: 24}}>Results Page</div>;
+const Statistics = () => <div style={{color: 'white', padding: 24}}>Statistics Page</div>;
+
 const AppRouter = () => {
   const currentDomain = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5002';
   const config = domainConfig[currentDomain] || domainConfig['http://localhost:5002'];
-  
   const Layout = useMemo(() => {
     return lazy(() => import(`../layouts/${config.layout}/Layout.jsx`));
   }, [config.layout]);
-  
+
   return (
     <MyErrorBoundary>
       <Suspense fallback={<div>
@@ -27,6 +40,11 @@ const AppRouter = () => {
             <Route path="/" element={<Navigate to={Paths.home} replace={true} />} />
             <Route path={Paths.home} element={<Homepage />} />
             <Route path={Paths.casino} element={<Casino />} />
+            <Route path={Paths.live} element={<MainLiveSection />} />
+            <Route path={Paths.eventView} element={<EventView />} />
+            <Route path={Paths.liveCalendar} element={<LiveCalendar />} />
+            <Route path={Paths.results} element={<Results />} />
+            <Route path={Paths.statistics} element={<Statistics />} />
           </Route>
           <Route path='*' element={<NotFound />} />
         </Routes>

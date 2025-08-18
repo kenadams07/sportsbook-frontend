@@ -1,50 +1,47 @@
 import { all, call, put, takeEvery } from "redux-saga/effects";
-import API from "../../../Utils/api";
+import API from "../../../utils/api";
 import { setLocalStorageItem } from "../../../utils/Helper";
 import { signupSuccess, signupFailure } from "../../Action/auth/signupAction";
 import { SIGNUP } from "../../Action/actionTypes";
-import { toast } from "react-hot-toast";
 import { loginSuccess } from "../../Action";
+import { notifyPromise } from "../../../utils/notificationService";
 
-export const notifyPromise = (promise, options = {}) => {
-  const { ib = false } = options;
-  return toast.promise(
-    promise.then((res) => {
-      if (res?.data?.meta?.code === 200) {
-        return res;
-      } else {
-        throw { response: res };
-      }
-    }),
-    {
-      loading: "Signing up...",
-      success: (res) => {
-        if (ib) {
-          return "Partner account created successfully";
-        }
-        return res?.data?.meta?.message || "Signed up Successfully.";
-      },
-      error: (err) =>
-        `${err?.response?.data?.meta?.message || "Signup failed"}`,
-    }
-  );
-};
 
 function* signupRequest(action) {
   try {
-    console.log("action?.payload",action?.payload)
-    const { data } = yield notifyPromise(API.post("/users", action?.payload));
+    const data = yield call(() =>
+      notifyPromise(() => API.post("/users", action.payload), {
+        loadingText: "Signing up...",
+        getSuccessMessage: (res) => {
+          console.log("res",res)
+          // Use the API response message
+          if (res?.data?.code === 200) return res.data.message || "Signed up successfully";
+          return null; // null prevents success notification if code !== 200
+        },
+        getErrorMessage: (err) => {
+          // If API responds with code != 200 or throws error
+          return err?.response?.data?.message || err?.message || "Signup failed";
+        },
+        successDuration: 4000,
+        onSuccess: (res) => {
+          // Optional: additional logic on success
+          console.log("Signup succeeded:", res.data.data);
+        },
+        onError: (err) => {
+          console.log("Signup failed:", err);
+        }
+      })
+    );
 
-    if (data?.meta?.code === 200) {
-    
-        yield call(setLocalStorageItem, "userData", JSON.stringify(data.data));
-        yield call(setLocalStorageItem, "token", data.meta.token);
-        yield put(signupSuccess(data.data));
-        yield put(loginSuccess(data.data));
-    
+    if (data?.data?.code === 200) {
+      // store token, dispatch success actions
+      yield call(setLocalStorageItem, "token", data.data.data.token);
+      yield put(signupSuccess(data.data.data));
+      yield put(loginSuccess(data.data.data));
     } else {
       yield put(signupFailure());
     }
+
   } catch (error) {
     yield put(signupFailure());
   }

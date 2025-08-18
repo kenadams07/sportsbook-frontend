@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { X, User } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -7,7 +7,6 @@ import { Checkbox } from "../components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader } from "../components/ui/dialog";
 
 export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
-    const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false)
   const {
     register,
     handleSubmit,
@@ -31,6 +30,7 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
 
   const onSubmit = (data) => {
     console.log("Login Data:", data);
+    // Place login API call here
   };
 
   return (
@@ -45,7 +45,6 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
               </div>
               <span className="text-xl font-bold">SportsBook</span>
             </div>
-           
           </DialogHeader>
 
           {/* Content */}
@@ -66,9 +65,7 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
                   })}
                 />
                 {errors.emailOrUsername && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.emailOrUsername.message}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{errors.emailOrUsername.message}</p>
                 )}
               </div>
 
@@ -80,16 +77,11 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
                   className="bg-[#404040] border-[#404040] text-white placeholder:text-gray-400 h-12 text-base"
                   {...register("password", {
                     required: "Password is required",
-                    minLength: {
-                      value: 6,
-                      message: "Password must be at least 6 characters",
-                    },
+                    minLength: { value: 6, message: "Password must be at least 6 characters" },
                   })}
                 />
                 {errors.password && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.password.message}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
                 )}
               </div>
 
@@ -120,22 +112,17 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
             <div className="mt-6 p-4 bg-[#333333] rounded text-center">
               <p className="text-xs text-gray-300 leading-relaxed">
                 Safer Gambling message. Set limits on your gambling. For support, contact the National Gambling Helpline
-                on <span className="text-white font-medium">0808 8020 133</span> or visit{" "}
-                {/* <a
-                  href="https://www.begambleaware.org"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-yellow-500 hover:text-yellow-400 underline"
-                >
-                  www.begambleaware.org
-                </a> */}
+                on <span className="text-white font-medium">0808 8020 133</span>
               </p>
               <div className="mt-3">
                 <p className="text-gray-400 text-xs">
                   Have no account?{" "}
                   <button
                     type="button"
-                    onClick={onSwitchToRegister}
+                    onClick={() => {
+                      onClose(); // Close login modal
+                      onSwitchToRegister(); // Open register modal
+                    }}
                     className="text-yellow-500 hover:text-yellow-400 underline"
                   >
                     Join us
