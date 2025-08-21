@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { Clock, ChevronRight } from "lucide-react"
 
 
@@ -54,19 +54,22 @@ function findSportKeyByName(sportName) {
   return null
 }
 
-export default function Component() {
+export default function UpcomingMatches() {
   const [selectedTimeFilter, setSelectedTimeFilter] = useState("0-15M")
   const [selectedSportKey, setSelectedSportKey] = useState("soccer")
-  
   const [selectedGameId, setSelectedGameId] = useState(null)
   const [selectedGameSportKey, setSelectedGameSportKey] = useState(null)
   const [events, setEvents] = useState([])
+  const [oddsByEventId, setOddsByEventId] = useState({})
+  const [highlightedOdds, setHighlightedOdds] = useState({})
+  const oddsPrevRef = useRef({})
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
   const featuredGame = null
   const timeFilters = ["0-15M", "15-30M", "30-60M"]
 
+  // Initial load: fetch static match info
   useEffect(() => {
     const controller = new AbortController()
     async function fetchEvents() {
@@ -74,16 +77,23 @@ export default function Component() {
       setError(null)
       try {
         const sportId = selectedSportKey ? SPORT_ID_BY_KEY[selectedSportKey] : undefined
-        const url = sportId ? `${API_BASE}sport_id=${sportId}&live_matches=true` : API_BASE
-
+        const url = sportId ? `/events?sport_id=${sportId}&live_matches=true` : API_BASE
         const res = await fetch(url, {
           headers: { accept: "application/json" },
           signal: controller.signal,
         })
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         const json = await res.json()
-        const list = json?.data?.sports ?? []
+        const list = json?.sports ?? []
         setEvents(Array.isArray(list) ? list : [])
+        // Set initial odds
+        const oddsMap = {}
+        for (const e of list) {
+          oddsMap[e.eventId] = extractOddsW1W2(e.markets)
+        }
+        setOddsByEventId(oddsMap)
+        oddsPrevRef.current = oddsMap
+        setHighlightedOdds({})
       } catch (e) {
         if (e?.name !== "AbortError") setError(e?.message || "Failed to load events")
       } finally {
@@ -93,6 +103,41 @@ export default function Component() {
     fetchEvents()
     return () => controller.abort()
   }, [selectedSportKey])
+
+  // Polling: update only odds every second, highlight changes
+  useEffect(() => {
+    let intervalId
+    async function pollOdds() {
+      try {
+        const sportId = selectedSportKey ? SPORT_ID_BY_KEY[selectedSportKey] : undefined
+        const url = sportId ? `/events?sport_id=${sportId}&live_matches=true` : API_BASE
+        const res = await fetch(url, { headers: { accept: "application/json" } })
+        if (!res.ok) return
+        const json = await res.json()
+        const list = json?.sports ?? []
+        const oddsMap = { ...oddsByEventId }
+        const highlights = {}
+        for (const e of list) {
+          const newOdds = extractOddsW1W2(e.markets)
+          const prevOdds = oddsPrevRef.current[e.eventId] || {}
+          oddsMap[e.eventId] = newOdds
+          highlights[e.eventId] = {
+            w1: prevOdds.w1 !== newOdds.w1,
+            w2: prevOdds.w2 !== newOdds.w2,
+          }
+        }
+        setOddsByEventId(oddsMap)
+        setHighlightedOdds(highlights)
+        oddsPrevRef.current = oddsMap
+        // Remove highlight after 1s
+        setTimeout(() => {
+          setHighlightedOdds({})
+        }, 1000)
+      } catch {}
+    }
+    intervalId = setInterval(pollOdds, 1000)
+    return () => clearInterval(intervalId)
+  }, [selectedSportKey, oddsByEventId])
 
   const filteredEvents = useMemo(() => {
     if (!selectedSportKey) return events
@@ -105,8 +150,7 @@ export default function Component() {
   const matches = useMemo(() => {
     return filteredEvents.map((e, idx) => {
       const { team1, team2 } = splitEventName(e.eventName)
-      const odds = extractOddsW1W2(e.markets)
-      // try to have a sportKey even if API lacks it (fallback by sportName)
+      const odds = oddsByEventId[e.eventId] || extractOddsW1W2(e.markets)
       const inferredSportKey = e.sportKey || findSportKeyByName(e.sportName) || null
       return {
         id: e.eventId || idx,
@@ -119,9 +163,10 @@ export default function Component() {
         odds,
         additionalMarkets: "",
         sportKey: inferredSportKey,
+        highlight: highlightedOdds[e.eventId] || { w1: false, w2: false },
       }
     })
-  }, [filteredEvents])
+  }, [filteredEvents, oddsByEventId, highlightedOdds])
 
   const handleGameClick = (id, sportKey) => {
     setSelectedGameId(id)
@@ -303,7 +348,7 @@ export default function Component() {
                   <Button
                     variant={isSelected ? "default" : "outline"}
                     size="sm"
-                    className={`w-10 sm:w-16 h-8 px-0 text-[11px] ${isSelected ? "bg-white text-black" : ""}`}
+                    className={`w-10 sm:w-16 h-8 px-0 text-[11px] ${isSelected ? "bg-white text-black" : ""} ${match.highlight.w1 ? "odds-highlight" : ""}`}
                   >
                     {match.odds.w1}
                   </Button>
@@ -311,7 +356,7 @@ export default function Component() {
                   <Button
                     variant={isSelected ? "default" : "outline"}
                     size="sm"
-                    className={`w-10 sm:w-16 h-8 px-0 text-[11px] ${isSelected ? "bg-white text-black" : ""}`}
+                    className={`w-10 sm:w-16 h-8 px-0 text-[11px] ${isSelected ? "bg-white text-black" : ""} ${match.highlight.w2 ? "odds-highlight" : ""}`}
                   >
                     {match.odds.w2}
                   </Button>

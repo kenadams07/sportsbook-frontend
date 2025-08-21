@@ -11,14 +11,6 @@ import LeftSidebarEventView from '../components/Live-section/LeftSidebarEventVie
 const Homepage = lazy(() => import('../pages/Homepage'));
 const NotFound = lazy(() => import('../components/Error/NotFound'));
 
-const EventView = () => (
-  <div className="flex w-full h-[calc(100vh-60px)] bg-[#232323] text-white">
-    <LeftSidebarEventView />
-    <div className="flex-1 flex items-center justify-center text-2xl font-bold text-gray-300">
-      Event View Main Content (replace with real content)
-    </div>
-  </div>
-);
 const LiveCalendar = () => <div style={{color: 'white', padding: 24}}>Live Calendar Page</div>;
 const Results = () => <div style={{color: 'white', padding: 24}}>Results Page</div>;
 const Statistics = () => <div style={{color: 'white', padding: 24}}>Statistics Page</div>;
@@ -39,9 +31,8 @@ const AppRouter = () => {
           <Route element={<Layout />}>
             <Route path="/" element={<Navigate to={Paths.home} replace={true} />} />
             <Route path={Paths.home} element={<Homepage />} />
-            <Route path={Paths.casino} element={<Casino />} />
-            <Route path={Paths.live} element={<MainLiveSection />} />
-            <Route path={Paths.eventView} element={<EventView />} />
+            <Route path={Paths.casino} element={<Casino />} /> 
+            <Route path={Paths.eventView} element={<MainLiveSection />} />
             <Route path={Paths.liveCalendar} element={<LiveCalendar />} />
             <Route path={Paths.results} element={<Results />} />
             <Route path={Paths.statistics} element={<Statistics />} />

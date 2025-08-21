@@ -318,3 +318,32 @@ body {
     scrollbar-width: none; /* Firefox */
   }
 }
+
+/* Chart color classes for sports icons */
+.text-chart-1 { color: #1e88e5; }
+.text-chart-2 { color: #e53935; }
+.text-chart-3 { color: #43a047; }
+.text-chart-4 { color: #fbc02d; }
+.text-chart-5 { color: #8e24aa; }
+.text-chart-6 { color: #00897b; }
+.text-chart-7 { color: #fb8c00; }
+.text-chart-8 { color: #3949ab; }
+.text-chart-9 { color: #d81b60; }
+.text-chart-10 { color: #6d4c41; }
+.text-chart-11 { color: #00acc1; }
+.text-chart-12 { color: #c0ca33; }
+.text-chart-13 { color: #fdd835; }
+.text-chart-14 { color: #5e35b1; }
+.text-chart-15 { color: #757575; }
+.text-chart-16 { color: #388e3c; }
+
+/* Add this to your CSS file (e.g., index.css) */
+.odds-highlight {
+  animation: oddsFlash 1s;
+  background: linear-gradient(90deg, #ffe066 0%, #fffbe6 100%);
+  color: #222 !important;
+}
+@keyframes oddsFlash {
+  0% { background: #ffe066; color: #222; }
+  100% { background: inherit; color: inherit; }
+}

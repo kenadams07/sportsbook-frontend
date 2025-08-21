@@ -15,6 +15,13 @@ export default defineConfig({
     hmr: {
       port: 5002,
     },
+    proxy: {
+      '/events': {
+        target: 'http://89.116.20.218:2700',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/events/, '/events'),
+      },
+    },
   },
   preview: {
     port: 5002,

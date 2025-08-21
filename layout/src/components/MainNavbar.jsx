@@ -5,16 +5,18 @@ import LoginModal from '../modals/LoginModal';
 import { Clock } from './ui/clock';
 import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
-
+import { Link } from 'react-router-dom';
 const navItems = [
-     { label: 'Live', items: [
-        { label: 'Event View', href: '/live_events/event-view' },
-        { label: 'Live Calendar', href: '/live_events/live-calendar' },
-        { label: 'Results', href: '/live_events/results' },
-        { label: 'Statistics', href: '/live_events/statistics' }
-     ] },
-    { label: 'Sports', items: [{ label: 'Event View', href: '/live/in-play' }, { label: 'Live Calendar', href: '/live/streaming' }, { label: 'Results', href: '/live/scores' },{ label: 'Statistics', href: '/live/scores' }]  },
-   
+    {
+        label: 'Live', items: [
+            { label: 'Event View', href: '/live_events/event-view' },
+            { label: 'Live Calendar', href: '/live_events/live-calendar' },
+            { label: 'Results', href: '/live_events/results' },
+            { label: 'Statistics', href: '/live_events/statistics' }
+        ]
+    },
+    { label: 'Sports', items: [{ label: 'Event View', href: '/live/in-play' }, { label: 'Live Calendar', href: '/live/streaming' }, { label: 'Results', href: '/live/scores' }, { label: 'Statistics', href: '/live/scores' }] },
+
     { label: 'Casino', items: [{ label: 'Home', href: '/casino/slots' }, { label: 'Tournaments', href: '/casino/testimonials' }] },
     { label: 'Promotions', items: [{ label: 'Sports Bonus', href: '/promotions/sports' }, { label: 'Casino Bonus', href: '/promotions/casino' }, { label: 'VIP Program', href: '/promotions/vip' }] },
     { label: 'Virtual Sports', items: [{ label: 'Virtual Football', href: '/virtual/football' }, { label: 'Virtual Horse Racing', href: '/virtual/horse-racing' }, { label: 'Virtual Tennis', href: '/virtual/tennis' }] },
@@ -57,14 +59,16 @@ const MainNavbar = () => {
                     <div className="w-full mx-auto px-4 py-2">
                         <div className="flex items-center justify-between h-full w-full">
                             <div className="flex items-center gap-4">
-                                <LazyLoadImage
-                                    src="https://myxxexchbucket.s3.ap-south-1.amazonaws.com/Logo/betxasia.co/betxasia.co-light.jpeg"
-                                    alt="Logo"
-                                    className="rounded-full w-20 h-12 bg-yellow-500 p-1"
-                                />
-                                <p className="text-muted-card text-brand cursor-pointer hover:text-chart-5">
-                                    Sportsbook
-                                </p>
+                                <Link to="/" className="flex items-center gap-4">
+                                    <LazyLoadImage
+                                        src="https://myxxexchbucket.s3.ap-south-1.amazonaws.com/Logo/betxasia.co/betxasia.co-light.jpeg"
+                                        alt="Logo"
+                                        className="rounded-full w-20 h-12 bg-yellow-500 p-1"
+                                    />
+                                    <p className="text-muted-card text-brand cursor-pointer hover:text-chart-5">
+                                        Sportsbook
+                                    </p>
+                                </Link>
                             </div>
                             <div className="flex items-center md:gap-4 gap-2">
                                 <button className="bg-yellow-500 hidden md:block text-black font-bold h-10 py-2 px-6 rounded-md text-sm">
@@ -82,7 +86,7 @@ const MainNavbar = () => {
                                 >
                                     Register
                                 </button>
-                                
+
                                 <Clock />
                             </div>
                         </div>
