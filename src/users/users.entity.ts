@@ -31,7 +31,39 @@ export class Users {
   @Column({ type: 'timestamp', nullable: true })
   emailVerify: Date;
 
-  // Self-referencing relationship: One user can have many direct children, and each child has one direct parent
+  @Column({ unique: true, nullable: true })
+  username: string;
+
+  @Column({ nullable: true })
+  zipcode: string;
+
+  @Column({ nullable: true })
+  name: string;
+
+  @Column({ nullable: true })
+  address: string;
+
+  @Column({ nullable: true })
+  middlename: string;
+
+  @Column({ nullable: true })
+  occupation: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  salaryLevel: string;
+
+  @Column({ nullable: true })
+  surname: string;
+
+  @Column({ nullable: true })
+  gender: string;
+
+  @Column({ type: 'date', nullable: true })
+  birthdate: Date;
+
+  @Column({ nullable: true })
+  passwordHash: string;
+
   @ManyToOne(() => Users, (user) => user.direntparent)
   @JoinColumn({ name: 'parentId' })
   parent: Users;
@@ -39,16 +71,15 @@ export class Users {
   @OneToMany(() => Users, (user) => user.parent, { cascade: ['remove'] })
   direntparent: Users[];
 
-  // currencyId reference (many users to one currency)
   @ManyToOne(() => Currency)
-  @JoinColumn({ name: 'currencyId' })
+  @JoinColumn({ name: 'currency_id' })
   currency: Currency;
 
   @Column({ type: 'int', default: 0 })
   clientShare: number;
 
   @Column('simple-array', { nullable: true })
-  casino: string[]; // stored as comma separated strings
+  casino: string[]; 
 
   @Column({ type: 'int', default: 0 })
   creditReference: number;
@@ -68,15 +99,12 @@ export class Users {
   @Column({ default: true })
   betAllow: boolean;
 
-  // SportsBets relation (assuming one-to-many)
   @OneToMany(() => SportBets, (sportsBet) => sportsBet.user)
   sportsBets: SportBets[];
 
-  // Exposure relation
   @OneToMany(() => Exposure, (exposure) => exposure.user)
   exposure: Exposure[];
 
-  // ResultTransaction relation
   @OneToMany(() => ResultTransaction, (resultTransaction) => resultTransaction.user)
   resultTransaction: ResultTransaction[];
 }

@@ -12,6 +12,7 @@ import { WhiteLabelModule } from './whiteLabel/whiteLabel.module';
 import { RunnersModule } from './runners/runners.module';
 import { MarketModule } from './markets/markets.module';
 import { SportStakeSettingsModule } from './sportStakeSettings/sportStakeSettings.module';
+import { AppGateway } from './app.gateway';
 
 @Module({
   imports: [
@@ -38,5 +39,6 @@ import { SportStakeSettingsModule } from './sportStakeSettings/sportStakeSetting
     ResultTransactionModule,
     SportStakeSettingsModule
   ],
+  providers: [AppGateway],
 })
 export class AppModule { }

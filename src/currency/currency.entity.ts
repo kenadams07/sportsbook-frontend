@@ -15,6 +15,6 @@ export class Currency {
   @Column()
   code: string;
 
-  @Column()
-  value: string;
+  @Column('decimal', { precision: 10, scale: 4 })
+  value: number;
 }

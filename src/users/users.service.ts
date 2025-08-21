@@ -7,14 +7,15 @@ import { Users } from './users.entity';
 export class UsersService {
   constructor(
     @InjectRepository(Users)
-    private usersRepository: Repository<Users>,
+    private readonly usersRepository: Repository<Users>,
   ) {}
 
   findAll(): Promise<Users[]> {
-    return this.usersRepository.find();
+    return this.usersRepository.find({ relations: ['currency'] });
   }
 
-  create(user: Partial<Users>): Promise<Users> {
+  create(payload: Partial<Users>): Promise<Users> {
+    const user = this.usersRepository.create(payload);
     return this.usersRepository.save(user);
   }
 }
