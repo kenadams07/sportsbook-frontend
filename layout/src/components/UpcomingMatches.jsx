@@ -250,19 +250,23 @@ export default function UpcomingMatches() {
         {SPORTS.map((sport) => {
           const Icon = sport.icon
           const isSelected = selectedSportKey === sport.key
+          // Extract background color class from sport.color
+          const colorClass = sport.color.split(' ').find(cls => cls.startsWith('bg-chart-')) || 'bg-gray-600'
           return (
             <div
               key={sport.key}
               onClick={() => setSelectedSportKey(sport.key)}
-              className={`snap-start flex-shrink-0 sm:flex-1 flex flex-col items-center justify-center gap-1 cursor-pointer border border-gray-600 rounded-md transition-transform duration-200 ease-in-out hover:scale-105 text-white ${
-                isSelected ? "ring-2 ring-white" : ""
+              className={`snap-start flex-shrink-0 sm:flex-1 flex flex-col items-center justify-center gap-1 cursor-pointer border rounded-md sport-icon-box ${
+                isSelected 
+                  ? `${colorClass} selected border-white` 
+                  : "border-gray-600 bg-gray-700 text-white hover:bg-gray-600"
               }`}
               // mobile min width to keep chips touch-friendly, but allow grow from sm+
               style={{ padding: "0.45rem 0.7rem", minWidth: "64px" }}
               title={sport.sportNames[0]}
             >
               <Icon className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 mx-auto" />
-              <span className="text-[11px] sm:text-[13px] truncate max-w-[90%] text-center">
+              <span className="text-[11px] sm:text-[13px] truncate max-w-[90%] text-center font-medium">
                 {sport.sportNames[0]}
               </span>
             </div>
@@ -309,16 +313,33 @@ export default function UpcomingMatches() {
         {!loading &&
           matches.map((match) => {
             const isSelected = selectedGameId === match.id
-            // apply color only to the clicked game; prefer selectedGameSportKey when set
-            const effectiveSportKey = selectedGameSportKey || match.sportKey
-            const sportColor = isSelected ? SPORTS.find((s) => s.key === effectiveSportKey)?.color || "" : ""
+            
+            // Determine the background styling based on selection state
+            let backgroundClass = "bg-[#505050] hover:bg-[#606060]"
+            let textColor = "text-white"
+            
+            // Only apply sport color when this specific game is clicked
+            if (isSelected) {
+              // Use selectedSportKey if available, otherwise fall back to match's sport key
+              const effectiveSportKey = selectedSportKey || match.sportKey
+              const sportConfig = SPORTS.find((s) => s.key === effectiveSportKey)
+              
+              if (sportConfig) {
+                // Apply the full sport color background
+                backgroundClass = sportConfig.color.split(' ').find(cls => cls.startsWith('bg-chart-')) || "bg-gray-600"
+                // Adjust text color based on background - lighter backgrounds need dark text
+                textColor = sportConfig.color.includes('bg-chart-4') || sportConfig.color.includes('bg-chart-13') 
+                  ? "text-black" : "text-white"
+              }
+            }
+            
             return (
               <div
                 key={match.id}
                 onClick={() => handleGameClick(match.id, match.sportKey)}
-                className={`cursor-pointer flex items-center justify-between gap-3 px-3 py-2 m-1 rounded-md transition-all ${
-                  isSelected ? `${sportColor} text-white shadow-md` : "bg-[#505050] hover:bg-[#606060]"
-                }`}
+                className={`cursor-pointer flex items-center justify-between gap-3 px-3 py-2 m-1 rounded-md transition-all duration-300 ${
+                  backgroundClass
+                } ${textColor} ${isSelected ? 'shadow-lg transform scale-[1.02] border-2 border-white/20' : ''}`}
               >
                 {/* Left: time + teams */}
                 <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -348,7 +369,11 @@ export default function UpcomingMatches() {
                   <Button
                     variant={isSelected ? "default" : "outline"}
                     size="sm"
-                    className={`w-10 sm:w-16 h-8 px-0 text-[11px] ${isSelected ? "bg-white text-black" : ""} ${match.highlight.w1 ? "odds-highlight" : ""}`}
+                    className={`w-10 sm:w-16 h-8 px-0 text-[11px] font-semibold ${
+                      isSelected 
+                        ? "bg-white text-black hover:bg-gray-100 border-white shadow-sm" 
+                        : "bg-gray-700 text-white border-gray-500 hover:bg-gray-600"
+                    } ${match.highlight.w1 ? "odds-highlight" : ""}`}
                   >
                     {match.odds.w1}
                   </Button>
@@ -356,7 +381,11 @@ export default function UpcomingMatches() {
                   <Button
                     variant={isSelected ? "default" : "outline"}
                     size="sm"
-                    className={`w-10 sm:w-16 h-8 px-0 text-[11px] ${isSelected ? "bg-white text-black" : ""} ${match.highlight.w2 ? "odds-highlight" : ""}`}
+                    className={`w-10 sm:w-16 h-8 px-0 text-[11px] font-semibold ${
+                      isSelected 
+                        ? "bg-white text-black hover:bg-gray-100 border-white shadow-sm" 
+                        : "bg-gray-700 text-white border-gray-500 hover:bg-gray-600"
+                    } ${match.highlight.w2 ? "odds-highlight" : ""}`}
                   >
                     {match.odds.w2}
                   </Button>
