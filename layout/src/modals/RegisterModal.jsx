@@ -140,111 +140,138 @@ export default function RegisterModal({ isOpen, onClose }) {
                 </h2>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                   {/* Left Column */}
-                  <div className="space-y-4">
-                    <Input
-                      placeholder="Username"
-                      value={formData.username}
-                      onChange={(e) => handleInputChange("username", e.target.value)}
-                      className={fieldClass}
-                    />
-                    {errors.username && (
-                      <p className="text-red-500 text-sm">{errors.username}</p>
-                    )}
+                  <div className="space-y-6">
+                    {/* Username with Floating Label */}
+                    <div className="floating-input-container">
+                      <input
+                        type="text"
+                        placeholder="Username"
+                        value={formData.username}
+                        onChange={(e) => handleInputChange("username", e.target.value)}
+                        className={`floating-input ${formData.username ? 'has-value' : ''}`}
+                      />
+                      <label className="floating-label">Username</label>
+                      {errors.username && (
+                        <p className="text-red-500 text-sm mt-1">{errors.username}</p>
+                      )}
+                    </div>
 
-                    <Input
-                      placeholder="Name"
-                      value={formData.name}
-                      onChange={(e) => handleInputChange("name", e.target.value)}
-                      className={fieldClass}
-                    />
-                    {errors.name && (
-                      <p className="text-red-500 text-sm">{errors.name}</p>
-                    )}
+                    {/* Name with Floating Label */}
+                    <div className="floating-input-container">
+                      <input
+                        type="text"
+                        placeholder="Name"
+                        value={formData.name}
+                        onChange={(e) => handleInputChange("name", e.target.value)}
+                        className={`floating-input ${formData.name ? 'has-value' : ''}`}
+                      />
+                      <label className="floating-label">Name</label>
+                      {errors.name && (
+                        <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                      )}
+                    </div>
 
-                    <Input
-                      type="email"
-                      placeholder="E-mail"
-                      value={formData.email}
-                      onChange={(e) => handleInputChange("email", e.target.value)}
-                      className={fieldClass}
-                    />
-                    {errors.email && (
-                      <p className="text-red-500 text-sm">{errors.email}</p>
-                    )}
+                    {/* Email with Floating Label */}
+                    <div className="floating-input-container">
+                      <input
+                        type="email"
+                        placeholder="E-mail"
+                        value={formData.email}
+                        onChange={(e) => handleInputChange("email", e.target.value)}
+                        className={`floating-input ${formData.email ? 'has-value' : ''}`}
+                      />
+                      <label className="floating-label">E-mail</label>
+                      {errors.email && (
+                        <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                      )}
+                    </div>
                   </div>
 
                   {/* Right Column */}
-                  <div className="space-y-4">
-                    {/* Calendar Picker */}
-                    <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className={`${fieldClass} justify-start text-left font-normal border-[#404040] hover:bg-[#404040]`}
+                  <div className="space-y-6">
+                    {/* Calendar Picker with Floating Label Style */}
+                    <div className="floating-input-container">
+                      <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="floating-input justify-start text-left font-normal border-[#404040] hover:bg-[#404040] bg-[#404040]"
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {date ? format(date, "PPP") : <span className="text-transparent">Birth Date</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <label className={`floating-label ${date ? 'top-0 text-xs text-yellow-500 bg-[#2a2a2a] px-1' : ''}`}>
+                          Birth Date
+                        </label>
+
+                        <PopoverContent
+                          className="w-full max-w-[350px] p-0 bg-[#2a2a2a] border-gray-600"
+                          align="start"
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {date ? format(date, "PPP") : <span>Birth Date</span>}
-                        </Button>
-                      </PopoverTrigger>
+                          <Calendar
+                            mode="single"
+                            selected={date}
+                            onSelect={(selectedDate) => {
+                              if (selectedDate) {
+                                setDate(selectedDate);
+                                handleInputChange("birthdate", format(selectedDate, "yyyy-MM-dd"));
+                                setIsCalendarOpen(false);
+                              }
+                            }}
+                            initialFocus
+                            className="bg-[#2a2a2a] text-white"
+                            classNames={{
+                              day_selected: "bg-yellow-500 text-black hover:bg-yellow-600 hover:text-black",
+                              day_today: "border border-yellow-500",
+                              day_outside: "text-gray-500",
+                              day_disabled: "text-gray-700",
+                              head_cell: "text-gray-400",
+                              button: "hover:bg-[#404040]",
+                              nav_button: "border-gray-600 hover:bg-[#404040]",
+                            }}
+                          />
+                        </PopoverContent>
+                      </Popover>
 
-                      <PopoverContent
-                        className="w-full max-w-[350px] p-0 bg-[#2a2a2a] border-gray-600"
-                        align="start"
-                      >
-                        <Calendar
-                          mode="single"
-                          selected={date}
-                          onSelect={(selectedDate) => {
-                            if (selectedDate) {
-                              setDate(selectedDate);
-                              handleInputChange("birthdate", format(selectedDate, "yyyy-MM-dd"));
-                              setIsCalendarOpen(false);
-                            }
-                          }}
-                          initialFocus
-                          className="bg-[#2a2a2a] text-white"
-                          classNames={{
-                            day_selected: "bg-yellow-500 text-black hover:bg-yellow-600 hover:text-black",
-                            day_today: "border border-yellow-500",
-                            day_outside: "text-gray-500",
-                            day_disabled: "text-gray-700",
-                            head_cell: "text-gray-400",
-                            button: "hover:bg-[#404040]",
-                            nav_button: "border-gray-600 hover:bg-[#404040]",
-                          }}
-                        />
-                      </PopoverContent>
-                    </Popover>
+                      {errors.birthdate && (
+                        <p className="text-red-500 text-sm mt-1">{errors.birthdate}</p>
+                      )}
+                    </div>
 
-                    {errors.birthdate && (
-                      <p className="text-red-500 text-sm">{errors.birthdate}</p>
-                    )}
+                    {/* Password with Floating Label */}
+                    <div className="floating-input-container">
+                      <input
+                        type="password"
+                        placeholder="Password"
+                        value={formData.password}
+                        onChange={(e) => handleInputChange("password", e.target.value)}
+                        className={`floating-input ${formData.password ? 'has-value' : ''}`}
+                      />
+                      <label className="floating-label">Password</label>
+                      {errors.password && (
+                        <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                      )}
+                    </div>
 
-                    <Input
-                      type="password"
-                      placeholder="Password"
-                      value={formData.password}
-                      onChange={(e) => handleInputChange("password", e.target.value)}
-                      className={fieldClass}
-                    />
-                    {errors.password && (
-                      <p className="text-red-500 text-sm">{errors.password}</p>
-                    )}
-
-                    <Input
-                      type="password"
-                      placeholder="Confirm password"
-                      value={formData.confirmPassword}
-                      onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
-                      className={fieldClass}
-                    />
-                    {errors.confirmPassword && (
-                      <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
-                    )}
+                    {/* Confirm Password with Floating Label */}
+                    <div className="floating-input-container">
+                      <input
+                        type="password"
+                        placeholder="Confirm password"
+                        value={formData.confirmPassword}
+                        onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+                        className={`floating-input ${formData.confirmPassword ? 'has-value' : ''}`}
+                      />
+                      <label className="floating-label">Confirm password</label>
+                      {errors.confirmPassword && (
+                        <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
+                      )}
+                    </div>
                   </div>
                 </div>
 

@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { X, User } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -11,6 +11,7 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -19,6 +20,10 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
       rememberMe: false,
     },
   });
+
+  // Watch form values to manage floating labels
+  const emailOrUsername = watch("emailOrUsername");
+  const password = watch("password");
 
   useEffect(() => {
     if (isOpen) {
@@ -54,32 +59,35 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
               <h2 className="text-xl sm:text-2xl font-bold">Sign in, we are waiting for you</h2>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              {/* Email / Username */}
-              <div>
-                <Input
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* Email / Username with Floating Label */}
+              <div className="floating-input-container">
+                <input
+                  type="text"
                   placeholder="Email / Username"
-                  className="bg-[#404040] border-[#404040] text-white placeholder:text-gray-400 h-12 text-base"
+                  className={`floating-input ${emailOrUsername ? 'has-value' : ''}`}
                   {...register("emailOrUsername", {
                     required: "Email or username is required",
                   })}
                 />
+                <label className="floating-label">Email / Username</label>
                 {errors.emailOrUsername && (
                   <p className="text-red-500 text-sm mt-1">{errors.emailOrUsername.message}</p>
                 )}
               </div>
 
-              {/* Password */}
-              <div>
-                <Input
+              {/* Password with Floating Label */}
+              <div className="floating-input-container">
+                <input
                   type="password"
                   placeholder="Password"
-                  className="bg-[#404040] border-[#404040] text-white placeholder:text-gray-400 h-12 text-base"
+                  className={`floating-input ${password ? 'has-value' : ''}`}
                   {...register("password", {
                     required: "Password is required",
                     minLength: { value: 6, message: "Password must be at least 6 characters" },
                   })}
                 />
+                <label className="floating-label">Password</label>
                 {errors.password && (
                   <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
                 )}
