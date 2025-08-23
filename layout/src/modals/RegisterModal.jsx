@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useEffect } from "react";
 import { User } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -24,32 +25,37 @@ import {
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { toast } from "sonner";
 import LoginModal from "./LoginModal";
+import { useNavigate } from "react-router-dom";
+import { Paths } from "../routes/path";
 
 import { useDispatch } from "react-redux";
 import { signup } from "../redux/Action/auth/signupAction";
 
 export default function RegisterModal({ isOpen, onClose }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [shouldReopenRegister, setShouldReopenRegister] = useState(false);
   const [date, setDate] = useState(null);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     name: "",
-    middlename: "",
     email: "",
-    surname: "",
-    gender: "",
     birthdate: "",
-    zipcode: "",
-    address: "",
-    occupation: "",
-    salaryLevel: "",
     currency: "GBP",
     password: "",
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
+
+  // Handle reopening register modal when coming back from login modal
+  useEffect(() => {
+    if (shouldReopenRegister && !isLoginModalOpen) {
+      setShouldReopenRegister(false);
+      // Don't close the register modal, just reset the flag
+    }
+  }, [shouldReopenRegister, isLoginModalOpen]);
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -62,13 +68,7 @@ export default function RegisterModal({ isOpen, onClose }) {
     if (!formData.name) newErrors.name = "Name is required";
     if (!formData.email || !/^\S+@\S+\.\S+$/.test(formData.email))
       newErrors.email = "Valid email is required";
-    if (!formData.surname) newErrors.surname = "Surname is required";
-    if (!formData.gender) newErrors.gender = "Gender is required";
     if (!formData.birthdate) newErrors.birthdate = "Birth date is required";
-    if (!formData.zipcode) newErrors.zipcode = "Zip code is required";
-    if (!formData.address) newErrors.address = "Address is required";
-    if (!formData.occupation) newErrors.occupation = "Occupation is required";
-    if (!formData.salaryLevel) newErrors.salaryLevel = "Salary level is required";
     if (!formData.password || formData.password.length < 6)
       newErrors.password = "Password must be at least 6 characters";
     if (formData.password !== formData.confirmPassword)
@@ -80,7 +80,7 @@ export default function RegisterModal({ isOpen, onClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (!validateForm()) return;
+    if (!validateForm()) return;
 
     const formDataWithDate = {
       ...formData,
@@ -92,11 +92,15 @@ export default function RegisterModal({ isOpen, onClose }) {
         payload: formDataWithDate
       })
     );
+    
+    // Close modal and navigate to verify email page
+    onClose();
+    navigate(Paths.verifyEmail);
   };
 
   const handleSwitchToLogin = () => {
-    onClose();
     setIsLoginModalOpen(true);
+    // Don't close register modal immediately - let it stay in background
   };
 
   const fieldClass =
@@ -105,7 +109,7 @@ export default function RegisterModal({ isOpen, onClose }) {
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="max-w-5xl w-full mx-auto bg-[#2a2a2a] text-white p-0 max-h-[85vh] overflow-hidden">
+        <DialogContent className="max-w-4xl w-full mx-auto bg-[#2a2a2a] text-white p-0 max-h-[85vh] overflow-hidden">
           <VisuallyHidden>
             <DialogTitle>Register</DialogTitle>
           </VisuallyHidden>
@@ -137,7 +141,7 @@ export default function RegisterModal({ isOpen, onClose }) {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   {/* Left Column */}
                   <div className="space-y-4">
                     <Input
@@ -161,13 +165,6 @@ export default function RegisterModal({ isOpen, onClose }) {
                     )}
 
                     <Input
-                      placeholder="Middle name"
-                      value={formData.middlename}
-                      onChange={(e) => handleInputChange("middlename", e.target.value)}
-                      className={fieldClass}
-                    />
-
-                    <Input
                       type="email"
                       placeholder="E-mail"
                       value={formData.email}
@@ -177,41 +174,10 @@ export default function RegisterModal({ isOpen, onClose }) {
                     {errors.email && (
                       <p className="text-red-500 text-sm">{errors.email}</p>
                     )}
+                  </div>
 
-                    <Input
-                      placeholder="Surname"
-                      value={formData.surname}
-                      onChange={(e) => handleInputChange("surname", e.target.value)}
-                      className={fieldClass}
-                    />
-                    {errors.surname && (
-                      <p className="text-red-500 text-sm">{errors.surname}</p>
-                    )}
-
-                    <Select
-                      value={formData.gender || ""}
-                      onValueChange={(val) => handleInputChange("gender", val)}
-                    >
-                      <SelectTrigger className={fieldClass}>
-                        <SelectValue placeholder="Choose gender" />
-                      </SelectTrigger>
-
-                      <SelectContent className="bg-[#404040] border-[#404040] p-0" align="start">
-                        <SelectItem value="male" className="text-white h-12 px-3 flex items-center">
-                          Male
-                        </SelectItem>
-                        <SelectItem value="female" className="text-white h-12 px-3 flex items-center">
-                          Female
-                        </SelectItem>
-                        <SelectItem value="other" className="text-white h-12 px-3 flex items-center">
-                          Other
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {errors.gender && (
-                      <p className="text-red-500 text-sm">{errors.gender}</p>
-                    )}
-
+                  {/* Right Column */}
+                  <div className="space-y-4">
                     {/* Calendar Picker */}
                     <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                       <PopoverTrigger asChild>
@@ -256,66 +222,6 @@ export default function RegisterModal({ isOpen, onClose }) {
 
                     {errors.birthdate && (
                       <p className="text-red-500 text-sm">{errors.birthdate}</p>
-                    )}
-                  </div>
-
-                  {/* Right Column */}
-                  <div className="space-y-4">
-                    <Input
-                      placeholder="Zip code"
-                      value={formData.zipcode}
-                      onChange={(e) => handleInputChange("zipcode", e.target.value)}
-                      className={fieldClass}
-                    />
-                    {errors.zipcode && (
-                      <p className="text-red-500 text-sm">{errors.zipcode}</p>
-                    )}
-
-                    <Input
-                      placeholder="Address"
-                      value={formData.address}
-                      onChange={(e) => handleInputChange("address", e.target.value)}
-                      className={fieldClass}
-                    />
-                    {errors.address && (
-                      <p className="text-red-500 text-sm">{errors.address}</p>
-                    )}
-
-                    <Select
-                      value={formData.occupation || ""}
-                      onValueChange={(val) => handleInputChange("occupation", val)}
-                    >
-                      <SelectTrigger className={fieldClass}>
-                        <SelectValue placeholder="Choose occupation" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-[#404040] border-[#404040]">
-                        <SelectItem value="student" className="text-white">Student</SelectItem>
-                        <SelectItem value="employed" className="text-white">Employed</SelectItem>
-                        <SelectItem value="self-employed" className="text-white">Self-employed</SelectItem>
-                        <SelectItem value="unemployed" className="text-white">Unemployed</SelectItem>
-                        <SelectItem value="retired" className="text-white">Retired</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {errors.occupation && (
-                      <p className="text-red-500 text-sm">{errors.occupation}</p>
-                    )}
-
-                    <Select
-                      value={formData.salaryLevel || ""}
-                      onValueChange={(val) => handleInputChange("salaryLevel", val)}
-                    >
-                      <SelectTrigger className={fieldClass}>
-                        <SelectValue placeholder="Choose salary level" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-[#404040] border-[#404040]">
-                        <SelectItem value="0-25k" className="text-white">£0 - £25,000</SelectItem>
-                        <SelectItem value="25k-50k" className="text-white">£25,000 - £50,000</SelectItem>
-                        <SelectItem value="50k-75k" className="text-white">£50,000 - £75,000</SelectItem>
-                        <SelectItem value="75k+" className="text-white">£75,000+</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {errors.salaryLevel && (
-                      <p className="text-red-500 text-sm">{errors.salaryLevel}</p>
                     )}
 
                     <Input
@@ -367,6 +273,11 @@ export default function RegisterModal({ isOpen, onClose }) {
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
+        onSwitchToRegister={() => {
+          setIsLoginModalOpen(false);
+          setShouldReopenRegister(true);
+          // Register modal should remain open (don't call onClose)
+        }}
       />
     </>
   );

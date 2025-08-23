@@ -6,4 +6,5 @@ export const Paths = {
     liveCalendar: '/live_events/live-calendar',
     results: '/live_events/results',
     statistics: '/live_events/statistics',
+    verifyEmail: '/verify-email',
 }

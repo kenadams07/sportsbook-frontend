@@ -7,12 +7,15 @@ import Loader from '../components/Loader/Loader';
 import Casino from '../pages/Casino';
 import MainLiveSection from '../components/Live-section/MainLiveSection';
 import LeftSidebarEventView from '../components/Live-section/LeftSidebarEventView';
+import LiveCalender from '../components/Live-section/LiveCalender';
+import Results from '../components/Live-section/Results';
+import VerifyEmail from '../pages/VerifyEmail';
 
 const Homepage = lazy(() => import('../pages/Homepage'));
 const NotFound = lazy(() => import('../components/Error/NotFound'));
 
-const LiveCalendar = () => <div style={{color: 'white', padding: 24}}>Live Calendar Page</div>;
-const Results = () => <div style={{color: 'white', padding: 24}}>Results Page</div>;
+
+
 const Statistics = () => <div style={{color: 'white', padding: 24}}>Statistics Page</div>;
 
 const AppRouter = () => {
@@ -33,10 +36,11 @@ const AppRouter = () => {
             <Route path={Paths.home} element={<Homepage />} />
             <Route path={Paths.casino} element={<Casino />} /> 
             <Route path={Paths.eventView} element={<MainLiveSection />} />
-            <Route path={Paths.liveCalendar} element={<LiveCalendar />} />
+            <Route path={Paths.liveCalendar} element={<LiveCalender />} />
             <Route path={Paths.results} element={<Results />} />
             <Route path={Paths.statistics} element={<Statistics />} />
           </Route>
+          <Route path={Paths.verifyEmail} element={<VerifyEmail />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </Suspense>

@@ -10,7 +10,7 @@ const navItems = [
 
 export default function SecondaryLiveNavbar() {
   return (
-    <nav className="flex bg-[#232323] border-b border-[#444] px-6 h-12 items-center gap-2">
+    <nav className="flex bg-live-secondary border-b border-live px-6 h-12 items-center gap-2">
       {navItems.map((item) => (
         <NavLink
           key={item.to}
@@ -18,8 +18,8 @@ export default function SecondaryLiveNavbar() {
           className={({ isActive }) =>
             `h-full flex items-center px-5 text-base font-semibold transition-colors duration-200 border-b-2 ${
               isActive
-                ? "text-white border-yellow-400 bg-[#232323] font-bold"
-                : "text-gray-400 border-transparent hover:text-white hover:border-yellow-400"
+                ? "text-live-primary border-live-accent bg-live-secondary font-bold"
+                : "text-live-muted border-transparent hover:text-live-primary hover:border-live-accent"
             }`
           }
           end

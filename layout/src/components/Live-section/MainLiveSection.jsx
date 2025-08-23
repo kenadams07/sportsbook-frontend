@@ -21,9 +21,9 @@ export default function MainLiveSection() {
         },
       }
     : null;
-
+      console.log("rightEventInfo",selectedMatch);
   return (
-    <div className="flex w-full h-[calc(100vh-60px)] bg-[#3f3e3e] text-white gap-3">
+    <div className="flex w-full h-[calc(100vh-60px)] bg-live-primary text-live-primary gap-3">
       {/* Left section: sidebar */}
       <div className="w-[18%] min-w-[230px] max-w-[360px] overflow-y-auto">
         <LeftSidebarEventView
