@@ -25,6 +25,9 @@ export class Users {
   @Column({ nullable: true })
   passwordText: string;
 
+  @Column({ nullable: true })
+  token: string;
+
   @Column({ type: 'int', default: 0 })
   role: number;
 

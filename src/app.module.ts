@@ -13,6 +13,7 @@ import { RunnersModule } from './runners/runners.module';
 import { MarketModule } from './markets/markets.module';
 import { SportStakeSettingsModule } from './sportStakeSettings/sportStakeSettings.module';
 import { AppGateway } from './app.gateway';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -41,7 +42,8 @@ import { AppGateway } from './app.gateway';
     SportBetsModule,
     ExposureModule,
     ResultTransactionModule,
-    SportStakeSettingsModule
+    SportStakeSettingsModule,
+    EmailModule
   ],
   providers: [AppGateway],
 })
