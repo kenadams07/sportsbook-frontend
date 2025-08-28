@@ -320,7 +320,24 @@ body {
 /* Floating Label Input Styles */
 .floating-input-container {
   position: relative;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
+  margin-bottom: 1.25rem; /* Reduced from 2rem for sleeker spacing */
+  min-height: 3.5rem; /* Reduced from 4rem */
+}
+
+/* Responsive spacing adjustments */
+@media (max-width: 640px) {
+  .floating-input-container {
+    margin-bottom: 1.5rem; /* Reduced from 2.25rem */
+    min-height: 3.75rem; /* Reduced from 4.25rem */
+  }
+}
+
+@media (min-width: 768px) {
+  .floating-input-container {
+    margin-bottom: 1.5rem; /* Reduced from 2.5rem */
+    min-height: 3.75rem; /* Reduced from 4.5rem */
+  }
 }
 
 .floating-input {
@@ -328,12 +345,14 @@ body {
   border: 1px solid #404040;
   color: white;
   height: 3rem;
-  padding: 1rem 0.75rem 0.5rem 0.75rem;
+  padding: 1.125rem 0.75rem 0.375rem 0.75rem; /* Adjusted padding for better label positioning */
   border-radius: 0.375rem;
   width: 100%;
   font-size: 1rem;
   transition: all 0.2s ease;
   outline: none;
+  position: relative;
+  z-index: 1;
 }
 
 .floating-input:focus {
@@ -350,7 +369,8 @@ body {
   font-size: 1rem;
   pointer-events: none;
   transition: all 0.2s ease;
-  z-index: 1;
+  z-index: 2; /* Ensure label is above input */
+  background-color: transparent;
 }
 
 .floating-input:focus + .floating-label,
@@ -362,14 +382,84 @@ body {
   color: #eab308;
   background-color: #2a2a2a;
   padding: 0 0.25rem;
+  left: 0.65rem; /* Slight adjustment for better positioning */
 }
 
 .floating-input::placeholder {
   color: transparent;
+  opacity: 0; /* Ensure placeholder is completely hidden */
 }
 
 .floating-input:focus::placeholder {
   color: transparent;
+  opacity: 0;
+}
+
+/* Additional floating label rules for calendar picker and better cross-browser support */
+.floating-input-container .floating-input + .floating-label,
+.floating-input-container button + .floating-label {
+  /* Ensure consistent behavior across all input types */
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Calendar picker specific styling */
+.floating-input-container button.floating-input {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  padding-left: 0.75rem;
+  font-weight: 400;
+}
+
+/* Ensure calendar picker label moves properly when date is selected */
+.floating-input-container button.floating-input:not(:empty) + .floating-label,
+.floating-input-container button.floating-input[aria-expanded="true"] + .floating-label {
+  top: 0;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #eab308;
+  background-color: #2a2a2a;
+  padding: 0 0.25rem;
+  left: 0.65rem;
+}
+.error-message {
+  position: absolute;
+  bottom: -1.25rem; /* Reduced from -1.5rem */
+  left: 0;
+  font-size: 0.75rem; /* Small text size - 12px */
+  color: #ef4444; /* Red-500 */
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0;
+  padding: 0.125rem 0;
+  max-width: 100%;
+  word-wrap: break-word;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.error-message.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Responsive error message adjustments */
+@media (max-width: 640px) {
+  .error-message {
+    font-size: 0.7rem; /* Even smaller on mobile - 11.2px */
+    bottom: -1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .error-message {
+    font-size: 0.8rem; /* Slightly larger on desktop - 12.8px */
+    bottom: -1rem;
+  }
 }
 
 /* Button primary background and text color using your CSS variables */

@@ -1,54 +1,171 @@
-import React, { useState } from "react";
-import { Mail, Check, RefreshCw, ArrowLeft } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Mail, Check, RefreshCw, ArrowLeft, Send } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
+import { useDispatch, useSelector } from "react-redux";
+import { verifyEmail } from "../redux/Action/auth/verifyEmailAction";
+import { Paths } from "../routes/path";
 export default function VerifyEmail() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [verificationCode, setVerificationCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
+  const [isTimerOn, setIsTimerOn] = useState(false);
+  const [isInputDisabled, setIsInputDisabled] = useState(true);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [verificationStatus, setVerificationStatus] = useState("");
+  const timerRef = useRef(null);
+
+  const userData = useSelector((state) => state?.Login?.userData);
+  const verifyEmailState = useSelector((state) => state?.VerifyEmail);
+
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s < 10 ? "0" + s : s}`;
+  };
+
+  const handleSendOTP = () => {
+    if (!userData?.email) {
+      toast.error("Email not found. Please try logging in again.");
+      return;
+    }
+
+    setVerificationCode("");
+    setIsInputDisabled(false);
+    setIsTimerOn(true);
+    setTimeLeft(120);
+
+    const payload = {
+      email: userData?.email,
+      route: "VE",
+    };
+
+    // Remove the callback function from the dispatch
+    dispatch(
+      verifyEmail({
+        payload,
+        route: "VE",
+      })
+    );
+  };
+
+  const handleChangeOTP = (e) => {
+    const value = e.target.value;
+    const isValid = /^[0-9]{0,6}$/.test(value);
+    if (isValid) {
+      setVerificationCode(value);
+    }
+  };
 
   const handleVerifyCode = async (e) => {
     e.preventDefault();
+
+    if (!userData?.email) {
+      toast.error("Email not found. Please try logging in again.");
+      return;
+    }
+
     if (!verificationCode.trim()) {
       toast.error("Please enter the verification code");
       return;
     }
 
-    setIsLoading(true);
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setIsVerified(true);
-      toast.success("Email verified successfully!");
-      
-      // Redirect to login after successful verification
-      setTimeout(() => {
-        navigate('/');
-      }, 2000);
-    } catch (error) {
-      toast.error("Invalid verification code. Please try again.");
-    } finally {
-      setIsLoading(false);
+    if (verificationCode.length !== 6) {
+      toast.error("Please enter a 6-digit verification code");
+      return;
     }
+
+    setIsLoading(true);
+    setVerificationStatus("Verifying");
+
+    const payload = {
+      email: userData?.email,
+      otp: verificationCode,
+    };
+
+    // Remove the callback function from the dispatch
+    dispatch(
+      verifyEmail({
+        payload,
+        route: "VE",
+      },(response) => {
+        console.log("verified otp", response);
+        if(response?.code==200)
+        {
+           navigate(Paths.home);
+        }
+       
+      })
+    );
+ 
   };
 
-  const handleResendCode = async () => {
-    setIsResending(true);
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      toast.success("Verification code resent to your email");
-    } catch (error) {
-      toast.error("Failed to resend code. Please try again.");
-    } finally {
-      setIsResending(false);
+  useEffect(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
     }
-  };
+
+    if (isTimerOn) {
+      timerRef.current = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            if (timerRef.current) {
+              clearInterval(timerRef.current);
+              timerRef.current = null;
+            }
+            setIsTimerOn(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [isTimerOn]);
+
+  useEffect(() => {
+    if (verifyEmailState?.loading) {
+      if (!verifyEmailState?.data?.hasOwnProperty("otp")) {
+        toast.info("Sending OTP to your email...");
+      } else if (verifyEmailState?.data?.hasOwnProperty("otp")) {
+        toast.info("Verifying your code...");
+      }
+    } else if (verifyEmailState?.success) {
+      if (!verifyEmailState?.data?.hasOwnProperty("otp")) {
+        toast.success("OTP sent to your email");
+      } else if (verifyEmailState?.data?.hasOwnProperty("otp")) {
+        setIsLoading(false);
+        setVerificationStatus("Verification Success");
+        setIsVerified(true);
+        toast.success("Email verified successfully!");
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      }
+    } else if (verifyEmailState?.error) {
+      if (!verifyEmailState?.data?.hasOwnProperty("otp")) {
+        toast.error("Failed to send OTP. Please try again.");
+        setIsInputDisabled(false);
+      } else if (verifyEmailState?.data?.hasOwnProperty("otp")) {
+        toast.error("Invalid verification code. Please try again.");
+        setIsInputDisabled(false);
+        setVerificationStatus("");
+      }
+      setIsLoading(false);
+    }
+  }, [verifyEmailState, navigate]);
 
   if (isVerified) {
     return (
@@ -58,15 +175,11 @@ export default function VerifyEmail() {
             <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
               <Check className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-white mb-4">
-              Email Verified!
-            </h1>
+            <h1 className="text-2xl font-bold text-white mb-4">Email Verified!</h1>
             <p className="text-gray-400 mb-6">
               Your email has been successfully verified. You can now access all features of SportsBook.
             </p>
-            <div className="text-sm text-gray-500">
-              Redirecting you to login...
-            </div>
+            <div className="text-sm text-gray-500">Redirecting you to login...</div>
           </div>
         </div>
       </div>
@@ -77,85 +190,82 @@ export default function VerifyEmail() {
     <div className="min-h-screen bg-gradient-to-br from-[#1a1a1a] to-[#2a2a2a] flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         <div className="bg-[#2a2a2a] rounded-2xl shadow-2xl p-8 border border-gray-700">
-          {/* Header */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-6">
               <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center">
                 <span className="text-black font-bold text-lg">S</span>
               </div>
             </div>
-            <h1 className="text-2xl font-bold text-white mb-2">
-              Verify Your Email
-            </h1>
+            <h1 className="text-2xl font-bold text-white mb-2">Verify Your Email</h1>
             <p className="text-gray-400 text-sm">
               We've sent a verification code to your email address. Please enter the code below to complete your registration.
             </p>
+            {userData?.email && (
+              <p className="text-yellow-500 text-sm mt-2 font-medium">
+                {userData.email}
+              </p>
+            )}
           </div>
 
-          {/* Email Icon */}
           <div className="flex justify-center mb-6">
             <div className="w-16 h-16 bg-[#404040] rounded-full flex items-center justify-center">
               <Mail className="w-8 h-8 text-yellow-500" />
             </div>
           </div>
 
-          {/* Verification Form */}
           <form onSubmit={handleVerifyCode} className="space-y-6">
             <div>
               <label htmlFor="verificationCode" className="block text-sm font-medium text-gray-300 mb-2">
                 Verification Code
               </label>
-              <Input
-                id="verificationCode"
-                type="text"
-                placeholder="Enter 6-digit code"
-                value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
-                className="bg-[#404040] border-[#404040] text-white placeholder:text-gray-400 h-12 text-center text-lg tracking-widest"
-                maxLength={6}
-              />
+              <div className="relative">
+                <Input
+                  id="verificationCode"
+                  type="text"
+                  placeholder="Enter 6-digit code"
+                  value={verificationCode}
+                  onChange={handleChangeOTP}
+                  disabled={isInputDisabled}
+                  className="bg-[#404040] border-[#404040] text-white placeholder:text-gray-400 h-12 text-center text-lg tracking-widest pr-24"
+                  maxLength={6}
+                />
+                <Button
+                  type="button"
+                  onClick={handleSendOTP}
+                  disabled={isTimerOn}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-8 text-sm disabled:opacity-50"
+                >
+                  {isTimerOn ? formatTime(timeLeft) : (
+                    <div className="flex items-center gap-1">
+                      <Send className="w-3 h-3" />
+                      Send OTP
+                    </div>
+                  )}
+                </Button>
+              </div>
+              <p className="text-xs text-gray-500 mt-2">
+                {isTimerOn
+                  ? "Didn't receive the code? You can resend in: "
+                  : "Click 'Send OTP' to receive verification code"}
+              </p>
             </div>
 
             <Button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || verificationCode.length !== 6 || isInputDisabled}
               className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-12 text-base disabled:opacity-50"
             >
               {isLoading ? (
                 <div className="flex items-center gap-2">
                   <RefreshCw className="w-4 h-4 animate-spin" />
-                  Verifying...
+                  {verificationStatus || "Verifying..."}
                 </div>
               ) : (
-                "Verify Email"
+                verificationStatus || "Verify Email"
               )}
             </Button>
           </form>
 
-          {/* Resend Code */}
-          <div className="mt-6 text-center">
-            <p className="text-gray-400 text-sm mb-3">
-              Didn't receive the code?
-            </p>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={handleResendCode}
-              disabled={isResending}
-              className="text-yellow-500 hover:text-yellow-400 underline text-sm"
-            >
-              {isResending ? (
-                <div className="flex items-center gap-2">
-                  <RefreshCw className="w-3 h-3 animate-spin" />
-                  Resending...
-                </div>
-              ) : (
-                "Resend Code"
-              )}
-            </Button>
-          </div>
-
-          {/* Back to Home */}
           <div className="mt-8 pt-6 border-t border-gray-600">
             <Button
               onClick={() => navigate('/')}
@@ -167,7 +277,6 @@ export default function VerifyEmail() {
             </Button>
           </div>
 
-          {/* Footer */}
           <div className="mt-6 text-center">
             <p className="text-xs text-gray-500">
               By verifying your email, you agree to our Terms of Service and Privacy Policy.

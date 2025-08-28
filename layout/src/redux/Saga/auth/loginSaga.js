@@ -1,5 +1,5 @@
 import { all, call, put, takeEvery } from "redux-saga/effects";
-import API from "../../../Utils/api";
+import API from "../../../utils/api";
 import { notifyPromise, notifySuccess, setLocalStorageItem } from "../../../utils/Helper";
 import { loginFailure, loginSuccess } from "../../Action/auth/loginAction";
 import { LOGIN } from "../../Action/actionTypes";
@@ -9,14 +9,16 @@ function* loginRequest(action) {
     const { data } = yield notifyPromise(
       API.post("/login", action?.payload?.payload)
     );
-    if (action?.payload?.callback) {
-      yield call(action.payload.callback, data);
-    }
+    
     if (data?.meta?.code === 200) {
       yield put(loginSuccess(data?.data));
       yield call(setLocalStorageItem, "userData", JSON.stringify(data?.data));
       yield call(setLocalStorageItem, "token", data?.meta?.token);
-
+      
+      // Execute callback if provided
+      if (action.callback && typeof action.callback === 'function') {
+        yield call(action.callback, data);
+      }
     } else {
       yield put(loginFailure());
     }

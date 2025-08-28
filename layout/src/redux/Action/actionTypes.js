@@ -12,3 +12,8 @@ export const LOGIN_FAILURE = "LOGIN_FAILURE";
 export const LOGOUT = "LOGOUT";
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 export const LOGOUT_FAILURE = "LOGOUT_FAILURE";
+
+// Auth - Verify Email
+export const VERIFY_EMAIL = "VERIFY_EMAIL";
+export const VERIFY_EMAIL_SUCCESS = "VERIFY_EMAIL_SUCCESS";
+export const VERIFY_EMAIL_FAILURE = "VERIFY_EMAIL_FAILURE";

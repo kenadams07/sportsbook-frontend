@@ -10,22 +10,21 @@ import { notifyPromise } from "../../../utils/notificationService";
 function* signupRequest(action) {
   try {
     const data = yield call(() =>
-      notifyPromise(() => API.post("/users", action.payload), {
-        loadingText: "Signing up...",
+      notifyPromise(() => API.post("/users/signup", action.payload), {
+        loadingText: "On Boarding...",
         getSuccessMessage: (res) => {
-          console.log("res",res)
-          // Use the API response message
-          if (res?.data?.code === 200) return res.data.message || "Signed up successfully";
-          return null; // null prevents success notification if code !== 200
+     
+          if (res?.data?.success) return res.data.message || "On Boarding...";
+          return null; // null prevents success notification if success !== true
         },
         getErrorMessage: (err) => {
-          // If API responds with code != 200 or throws error
+
           return err?.response?.data?.message || err?.message || "Signup failed";
         },
         successDuration: 4000,
         onSuccess: (res) => {
-          // Optional: additional logic on success
-          console.log("Signup succeeded:", res.data.data);
+         
+          console.log("Signup succeeded:", res.data);
         },
         onError: (err) => {
           console.log("Signup failed:", err);
@@ -33,11 +32,17 @@ function* signupRequest(action) {
       })
     );
 
-    if (data?.data?.code === 200) {
-      // store token, dispatch success actions
-      yield call(setLocalStorageItem, "token", data.data.data.token);
+    if (data?.data?.success) {
+    
+      yield call(setLocalStorageItem, "token", data.data.token);
+        yield call(setLocalStorageItem, "userData", data.data.data);
       yield put(signupSuccess(data.data.data));
       yield put(loginSuccess(data.data.data));
+      
+      // Execute callback if provided
+      if (action.callback && typeof action.callback === 'function') {
+        yield call(action.callback, data.data);
+      }
     } else {
       yield put(signupFailure());
     }

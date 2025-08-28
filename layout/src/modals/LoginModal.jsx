@@ -4,7 +4,7 @@ import { X, User } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Checkbox } from "../components/ui/checkbox";
-import { Dialog, DialogContent, DialogHeader } from "../components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "../components/ui/dialog";
 
 export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
   const {
@@ -51,6 +51,14 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
               <span className="text-xl font-bold">SportsBook</span>
             </div>
           </DialogHeader>
+
+          {/* Hidden DialogTitle for accessibility */}
+          <DialogTitle className="sr-only">Login to SportsBook</DialogTitle>
+          
+          {/* Hidden DialogDescription for accessibility */}
+          <DialogDescription className="sr-only">
+            Sign in to your SportsBook account to access your betting features and account information.
+          </DialogDescription>
 
           {/* Content */}
           <div className="px-4 sm:px-6 pb-6 overflow-y-auto">

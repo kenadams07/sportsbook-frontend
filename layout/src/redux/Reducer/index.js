@@ -1,11 +1,13 @@
 import { combineReducers } from "redux";
 import Signup from "./auth/signupReducer";
 import Login from "./auth/loginReducer";
+import VerifyEmail from "./auth/verifyEmailReducer";
 
 
 const appReducer = combineReducers({
   Signup,
   Login,
+  VerifyEmail,
 
   
 });
