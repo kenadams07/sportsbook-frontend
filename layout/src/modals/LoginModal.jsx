@@ -5,6 +5,8 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Checkbox } from "../components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "../components/ui/dialog";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/Action/auth/loginAction";
 
 export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
   const {
@@ -12,6 +14,7 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -21,25 +24,50 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
     },
   });
 
+  const dispatch = useDispatch();
+
   // Watch form values to manage floating labels
   const emailOrUsername = watch("emailOrUsername");
   const password = watch("password");
 
   useEffect(() => {
     if (isOpen) {
-      setValue("emailOrUsername", "");
-      setValue("password", "");
-      setValue("rememberMe", false);
+      // Reset form when modal opens
+      reset({
+        emailOrUsername: "",
+        password: "",
+        rememberMe: false,
+      });
     }
-  }, [isOpen, setValue]);
+  }, [isOpen, reset]);
+
+  const handleClose = () => {
+    // Clear all errors when closing modal
+    reset({
+      emailOrUsername: "",
+      password: "",
+      rememberMe: false,
+    });
+    onClose();
+  };
 
   const onSubmit = (data) => {
     console.log("Login Data:", data);
-    // Place login API call here
+    
+    // Dispatch login action with callback
+    dispatch(
+      login({
+        payload: data
+      }, (response) => {
+        console.log("Login successful, response:", response);
+        // Handle successful login here
+          
+      })
+    );
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-md w-full mx-auto bg-[#2a2a2a] text-white p-0 max-h-[95vh] overflow-hidden">
         <div className="relative">
           {/* Header */}
@@ -67,39 +95,27 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
               <h2 className="text-xl sm:text-2xl font-bold">Sign in, we are waiting for you</h2>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              {/* Email / Username with Floating Label */}
-              <div className="floating-input-container">
-                <input
-                  type="text"
-                  placeholder="Email / Username"
-                  className={`floating-input ${emailOrUsername ? 'has-value' : ''}`}
-                  {...register("emailOrUsername", {
-                    required: "Email or username is required",
-                  })}
-                />
-                <label className="floating-label">Email / Username</label>
-                {errors.emailOrUsername && (
-                  <p className="text-red-500 text-sm mt-1">{errors.emailOrUsername.message}</p>
-                )}
-              </div>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              {/* Email / Username */}
+              <Input
+                type="text"
+                placeholder="Email / Username"
+                error={errors.emailOrUsername?.message}
+                {...register("emailOrUsername", {
+                  required: "Email or username is required",
+                })}
+              />
 
-              {/* Password with Floating Label */}
-              <div className="floating-input-container">
-                <input
-                  type="password"
-                  placeholder="Password"
-                  className={`floating-input ${password ? 'has-value' : ''}`}
-                  {...register("password", {
-                    required: "Password is required",
-                    minLength: { value: 6, message: "Password must be at least 6 characters" },
-                  })}
-                />
-                <label className="floating-label">Password</label>
-                {errors.password && (
-                  <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
-                )}
-              </div>
+              {/* Password */}
+              <Input
+                type="password"
+                placeholder="Password"
+                error={errors.password?.message}
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: { value: 6, message: "Password must be at least 6 characters" },
+                })}
+              />
 
               {/* Remember me */}
               <div className="flex items-center space-x-2 py-2">
@@ -136,7 +152,7 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
                   <button
                     type="button"
                     onClick={() => {
-                      onClose(); // Close login modal
+                      handleClose(); // Close login modal
                       onSwitchToRegister(); // Open register modal
                     }}
                     className="text-yellow-500 hover:text-yellow-400 underline"
@@ -161,14 +177,14 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
 
             {/* Forgot Password */}
             <div className="mt-6 pt-4 border-t border-gray-600 text-center">
-              <Button variant="ghost" className="text-gray-400 hover:text-white text-sm font-medium">
+              <Button variant="ghost" className="text-gray-400 hover:text-white text-sm font-medium hover:bg-[#404040]">
                 FORGOT YOUR PASSWORD?
               </Button>
             </div>
 
             {/* Contact Support */}
             <div className="flex items-center justify-center mt-4">
-              <Button variant="ghost" className="text-gray-400 hover:text-white text-sm">
+              <Button variant="ghost" className="text-gray-400 hover:text-white text-sm hover:bg-[#404040]">
                 <User className="w-4 h-4 mr-2" />
                 Contact support
               </Button>

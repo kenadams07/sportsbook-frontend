@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Mail, Check, RefreshCw, ArrowLeft, Send } from "lucide-react";
 import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
+import { OTPInput } from "../components/ui/otp-input"; // Changed from regular Input to OTPInput
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyEmail } from "../redux/Action/auth/verifyEmailAction";
 import { Paths } from "../routes/path";
+
 export default function VerifyEmail() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [verificationCode, setVerificationCode] = useState("");
+  const [verificationCode, setVerificationCode] = useState(""); // This will now be a string of digits
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
@@ -35,7 +36,7 @@ export default function VerifyEmail() {
       return;
     }
 
-    setVerificationCode("");
+    setVerificationCode(""); // Reset the verification code
     setIsInputDisabled(false);
     setIsTimerOn(true);
     setTimeLeft(120);
@@ -54,13 +55,7 @@ export default function VerifyEmail() {
     );
   };
 
-  const handleChangeOTP = (e) => {
-    const value = e.target.value;
-    const isValid = /^[0-9]{0,6}$/.test(value);
-    if (isValid) {
-      setVerificationCode(value);
-    }
-  };
+  // Removed handleChangeOTP as it's no longer needed with the OTPInput component
 
   const handleVerifyCode = async (e) => {
     e.preventDefault();
@@ -93,16 +88,15 @@ export default function VerifyEmail() {
       verifyEmail({
         payload,
         route: "VE",
-      },(response) => {
+      }, (response) => {
         console.log("verified otp", response);
-        if(response?.code==200)
-        {
-           navigate(Paths.home);
+        if (response?.code == 200) {
+          navigate(Paths.home);
         }
-       
+
       })
     );
- 
+
   };
 
   useEffect(() => {
@@ -218,22 +212,27 @@ export default function VerifyEmail() {
               <label htmlFor="verificationCode" className="block text-sm font-medium text-gray-300 mb-2">
                 Verification Code
               </label>
-              <div className="relative">
-                <Input
+              <div className="flex justify-center mb-2">
+                <OTPInput
                   id="verificationCode"
-                  type="text"
-                  placeholder="Enter 6-digit code"
                   value={verificationCode}
-                  onChange={handleChangeOTP}
+                  onChange={setVerificationCode}
                   disabled={isInputDisabled}
-                  className="bg-[#404040] border-[#404040] text-white placeholder:text-gray-400 h-12 text-center text-lg tracking-widest pr-24"
-                  maxLength={6}
+                  length={6}
                 />
+              </div>
+              <p className="text-xs text-gray-500 mt-4 text-center">
+                {isTimerOn
+                  ? "Didn't receive the code? You can resend in: "
+                  : "Click 'Send OTP' to receive verification code"}
+              </p>
+              <div className="flex justify-center mt-4">
+
                 <Button
                   type="button"
                   onClick={handleSendOTP}
                   disabled={isTimerOn}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-8 text-sm disabled:opacity-50"
+                  className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-8 text-sm disabled:opacity-50"
                 >
                   {isTimerOn ? formatTime(timeLeft) : (
                     <div className="flex items-center gap-1">
@@ -243,11 +242,7 @@ export default function VerifyEmail() {
                   )}
                 </Button>
               </div>
-              <p className="text-xs text-gray-500 mt-2">
-                {isTimerOn
-                  ? "Didn't receive the code? You can resend in: "
-                  : "Click 'Send OTP' to receive verification code"}
-              </p>
+
             </div>
 
             <Button
@@ -270,7 +265,7 @@ export default function VerifyEmail() {
             <Button
               onClick={() => navigate('/')}
               variant="ghost"
-              className="w-full text-gray-400 hover:text-white flex items-center justify-center gap-2"
+              className="w-full text-gray-400 hover:text-white flex items-center justify-center gap-2 hover:bg-[#404040]"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Home

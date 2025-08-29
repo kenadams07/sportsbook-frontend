@@ -1,6 +1,87 @@
 import { importShared } from './__federation_fn_import.js';
-import { j as jsxRuntimeExports } from './__federation_expose_LayoutApp.js';
-import { c as createLucideIcon, w as clsx, S as Slot$1, s as cn, P as Primitive, j as createPopperScope, g as useDirection, h as useControllableState, R as Root2$1, b as createContextScope, e as useId, d as createCollection, u as useComposedRefs, A as Anchor, f as composeEventHandlers, a as useLayoutEffect2, k as Portal$1, i as useCallbackRef, l as hideOthers, o as useFocusGuards, n as ReactRemoveScroll, p as createSlot, F as FocusScope, D as DismissableLayer, C as Content, q as Arrow, v as ChevronDown, t as buildExports } from './Combination.js';
+import { b as createLucideIcon, j as jsxRuntimeExports, L as Link, r as cn, B as Button, y as ArrowLeft, P as Primitive, h as createPopperScope, f as useControllableState, R as Root2$1, c as createContextScope, d as useId, u as useComposedRefs, z as useLayoutEffect2, A as Anchor, e as composeEventHandlers, k as Portal$1, E as usePrevious, g as useCallbackRef, l as hideOthers, o as useFocusGuards, n as ReactRemoveScroll, a as createSlot, F as FocusScope, D as DismissableLayer, C as Content, p as Arrow, v as ChevronDown, G as Check, H as ChevronUp, I as GenIcon, J as FaInfoCircle, K as FaStar } from './__federation_expose_LayoutApp.js';
+import { u as useDirection, c as createCollection, b as buildExports } from './index2.js';
+
+/**
+ * @license lucide-react v0.525.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+];
+const ArrowRight = createLucideIcon("arrow-right", __iconNode);
+
+await importShared('react');
+const footerData = [
+  {
+    heading: "Company",
+    links: [
+      { name: "About Us", to: "/about" }
+    ]
+  },
+  {
+    heading: "Terms and Policy",
+    links: [
+      { name: "Privacy Policy", to: "/privacy-policy" },
+      { name: "Safer Gambling", to: "/safer-gambling" },
+      { name: "General Terms and Conditions", to: "/terms-conditions" },
+      { name: "General Promotion Terms", to: "/safer-gambling" },
+      { name: "Casino Terms and Conditions", to: "/safer-gambling" },
+      { name: "RTP Lists", to: "/safer-gambling" }
+    ]
+  },
+  {
+    heading: "Rules",
+    links: [
+      { name: "Sport Betting", to: "/sports-betting" },
+      { name: "Virtual Sport Betting", to: "/sports-betting" }
+    ]
+  },
+  {
+    heading: "Statistics",
+    links: [
+      { name: "Live Calendar", to: "/live-calendar" },
+      { name: "Statistics", to: "/live-calendar" }
+    ]
+  },
+  {
+    heading: "Help",
+    links: [
+      { name: "FAQ", to: "/faq" },
+      { name: "Contact Us", to: "/faq" }
+    ]
+  }
+];
+function Footer() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("footer", { className: "bg-background text-muted-foreground pt-10 pb-6 px-4 text-xs", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative mb-6 h-px w-full overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute left-0 top-0 h-full w-full bg-gradient-to-r from-transparent via-muted-foreground to-transparent opacity-30" }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 text-center sm:text-left", children: footerData.map((section, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-xs font-semibold mb-2 text-primary-foreground", children: section.heading.toUpperCase() }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "space-y-1", children: section.links.map((link, idx) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Link,
+        {
+          to: link.to,
+          className: "transition-colors duration-200 hover:text-primary-foreground",
+          children: link.name
+        }
+      ) }, idx)) })
+    ] }, index)) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 text-muted-foreground text-lg", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center w-8 h-8 rounded-full border border-pink-500 text-pink-500 text-xs font-bold", children: "18+" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-center sm:text-left", children: "Gambling can be addictive, play responsibly" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-8 text-center text-xs text-muted-foreground", children: [
+      "© ",
+      (/* @__PURE__ */ new Date()).getFullYear(),
+      " Sportsbook. All rights reserved."
+    ] })
+  ] });
+}
 
 function isObject$1(subject) {
   return Object.prototype.toString.call(subject) === '[object Object]';
@@ -1707,27 +1788,27 @@ function EmblaCarousel(root, userOptions, userPlugins) {
 }
 EmblaCarousel.globalOptions = undefined;
 
-const {useRef,useState: useState$1,useCallback,useEffect} = await importShared('react');
+const {useRef: useRef$1,useState: useState$2,useCallback,useEffect: useEffect$2} = await importShared('react');
 
 function useEmblaCarousel(options = {}, plugins = []) {
-  const storedOptions = useRef(options);
-  const storedPlugins = useRef(plugins);
-  const [emblaApi, setEmblaApi] = useState$1();
-  const [viewport, setViewport] = useState$1();
+  const storedOptions = useRef$1(options);
+  const storedPlugins = useRef$1(plugins);
+  const [emblaApi, setEmblaApi] = useState$2();
+  const [viewport, setViewport] = useState$2();
   const reInit = useCallback(() => {
     if (emblaApi) emblaApi.reInit(storedOptions.current, storedPlugins.current);
   }, [emblaApi]);
-  useEffect(() => {
+  useEffect$2(() => {
     if (areOptionsEqual(storedOptions.current, options)) return;
     storedOptions.current = options;
     reInit();
   }, [options, reInit]);
-  useEffect(() => {
+  useEffect$2(() => {
     if (arePluginsEqual(storedPlugins.current, plugins)) return;
     storedPlugins.current = plugins;
     reInit();
   }, [plugins, reInit]);
-  useEffect(() => {
+  useEffect$2(() => {
     if (canUseDOM() && viewport) {
       EmblaCarousel.globalOptions = useEmblaCarousel.globalOptions;
       const newEmblaApi = EmblaCarousel(viewport, storedOptions.current, storedPlugins.current);
@@ -1741,203 +1822,10 @@ function useEmblaCarousel(options = {}, plugins = []) {
 }
 useEmblaCarousel.globalOptions = undefined;
 
-/**
- * @license lucide-react v0.525.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-
-
-const __iconNode$7 = [
-  ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
-  ["path", { d: "M19 12H5", key: "x3x0zl" }]
-];
-const ArrowLeft = createLucideIcon("arrow-left", __iconNode$7);
-
-/**
- * @license lucide-react v0.525.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-
-
-const __iconNode$6 = [
-  ["path", { d: "M5 12h14", key: "1ays0h" }],
-  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
-];
-const ArrowRight = createLucideIcon("arrow-right", __iconNode$6);
-
-/**
- * @license lucide-react v0.525.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-
-
-const __iconNode$5 = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$5);
-
-/**
- * @license lucide-react v0.525.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-
-
-const __iconNode$4 = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$4);
-
-/**
- * @license lucide-react v0.525.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-
-
-const __iconNode$3 = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$3);
-
-/**
- * @license lucide-react v0.525.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-
-
-const __iconNode$2 = [
-  ["path", { d: "M12 6v6l4 2", key: "mmk7yg" }],
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
-];
-const Clock = createLucideIcon("clock", __iconNode$2);
-
-/**
- * @license lucide-react v0.525.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-
-
-const __iconNode$1 = [
-  [
-    "path",
-    {
-      d: "M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z",
-      key: "r04s7s"
-    }
-  ]
-];
-const Star = createLucideIcon("star", __iconNode$1);
-
-/**
- * @license lucide-react v0.525.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-
-
-const __iconNode = [
-  ["path", { d: "M16 7h6v6", key: "box55l" }],
-  ["path", { d: "m22 7-8.5 8.5-5-5L2 17", key: "1t1m79" }]
-];
-const TrendingUp = createLucideIcon("trending-up", __iconNode);
-
-const falsyToString = (value)=>typeof value === "boolean" ? `${value}` : value === 0 ? "0" : value;
-const cx = clsx;
-const cva = (base, config)=>(props)=>{
-        var _config_compoundVariants;
-        if ((config === null || config === void 0 ? void 0 : config.variants) == null) return cx(base, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
-        const { variants, defaultVariants } = config;
-        const getVariantClassNames = Object.keys(variants).map((variant)=>{
-            const variantProp = props === null || props === void 0 ? void 0 : props[variant];
-            const defaultVariantProp = defaultVariants === null || defaultVariants === void 0 ? void 0 : defaultVariants[variant];
-            if (variantProp === null) return null;
-            const variantKey = falsyToString(variantProp) || falsyToString(defaultVariantProp);
-            return variants[variant][variantKey];
-        });
-        const propsWithoutUndefined = props && Object.entries(props).reduce((acc, param)=>{
-            let [key, value] = param;
-            if (value === undefined) {
-                return acc;
-            }
-            acc[key] = value;
-            return acc;
-        }, {});
-        const getCompoundVariantClassNames = config === null || config === void 0 ? void 0 : (_config_compoundVariants = config.compoundVariants) === null || _config_compoundVariants === void 0 ? void 0 : _config_compoundVariants.reduce((acc, param)=>{
-            let { class: cvClass, className: cvClassName, ...compoundVariantOptions } = param;
-            return Object.entries(compoundVariantOptions).every((param)=>{
-                let [key, value] = param;
-                return Array.isArray(value) ? value.includes({
-                    ...defaultVariants,
-                    ...propsWithoutUndefined
-                }[key]) : ({
-                    ...defaultVariants,
-                    ...propsWithoutUndefined
-                })[key] === value;
-            }) ? [
-                ...acc,
-                cvClass,
-                cvClassName
-            ] : acc;
-        }, []);
-        return cx(base, getVariantClassNames, getCompoundVariantClassNames, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
-    };
-
-await importShared('react');
-const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-  {
-    variants: {
-      variant: {
-        default: "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
-        destructive: "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
-        outline: "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
-        secondary: "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline"
-      },
-      size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        icon: "size-9"
-      }
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default"
-    }
-  }
-);
-function Button({
-  className,
-  variant,
-  size,
-  asChild = false,
-  ...props
-}) {
-  const Comp = asChild ? Slot$1 : "button";
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Comp,
-    {
-      "data-slot": "button",
-      className: cn(buttonVariants({ variant, size, className })),
-      ...props
-    }
-  );
-}
-
-const React$3 = await importShared('react');
-const CarouselContext = React$3.createContext(null);
+const React$4 = await importShared('react');
+const CarouselContext = React$4.createContext(null);
 function useCarousel() {
-  const context = React$3.useContext(CarouselContext);
+  const context = React$4.useContext(CarouselContext);
   if (!context) {
     throw new Error("useCarousel must be used within a <Carousel />");
   }
@@ -1956,20 +1844,20 @@ function Carousel({
     ...opts,
     axis: orientation === "horizontal" ? "x" : "y"
   }, plugins);
-  const [canScrollPrev, setCanScrollPrev] = React$3.useState(false);
-  const [canScrollNext, setCanScrollNext] = React$3.useState(false);
-  const onSelect = React$3.useCallback((api2) => {
+  const [canScrollPrev, setCanScrollPrev] = React$4.useState(false);
+  const [canScrollNext, setCanScrollNext] = React$4.useState(false);
+  const onSelect = React$4.useCallback((api2) => {
     if (!api2) return;
     setCanScrollPrev(api2.canScrollPrev());
     setCanScrollNext(api2.canScrollNext());
   }, []);
-  const scrollPrev = React$3.useCallback(() => {
+  const scrollPrev = React$4.useCallback(() => {
     api?.scrollPrev();
   }, [api]);
-  const scrollNext = React$3.useCallback(() => {
+  const scrollNext = React$4.useCallback(() => {
     api?.scrollNext();
   }, [api]);
-  const handleKeyDown = React$3.useCallback((event) => {
+  const handleKeyDown = React$4.useCallback((event) => {
     if (event.key === "ArrowLeft") {
       event.preventDefault();
       scrollPrev();
@@ -1978,11 +1866,11 @@ function Carousel({
       scrollNext();
     }
   }, [scrollPrev, scrollNext]);
-  React$3.useEffect(() => {
+  React$4.useEffect(() => {
     if (!api || !setApi) return;
     setApi(api);
   }, [api, setApi]);
-  React$3.useEffect(() => {
+  React$4.useEffect(() => {
     if (!api) return;
     onSelect(api);
     api.on("reInit", onSelect);
@@ -2118,22 +2006,8 @@ function clamp(value, [min, max]) {
   return Math.min(max, Math.max(min, value));
 }
 
-// packages/react/use-previous/src/use-previous.tsx
-const React$2 = await importShared('react');
-
-function usePrevious(value) {
-  const ref = React$2.useRef({ value, previous: value });
-  return React$2.useMemo(() => {
-    if (ref.current.value !== value) {
-      ref.current.previous = ref.current.value;
-      ref.current.value = value;
-    }
-    return ref.current.previous;
-  }, [value]);
-}
-
 // src/visually-hidden.tsx
-const React$1 = await importShared('react');
+const React$3 = await importShared('react');
 var VISUALLY_HIDDEN_STYLES = Object.freeze({
   // See: https://github.com/twbs/bootstrap/blob/main/scss/mixins/_visually-hidden.scss
   position: "absolute",
@@ -2148,7 +2022,7 @@ var VISUALLY_HIDDEN_STYLES = Object.freeze({
   wordWrap: "normal"
 });
 var NAME = "VisuallyHidden";
-var VisuallyHidden = React$1.forwardRef(
+var VisuallyHidden = React$3.forwardRef(
   (props, forwardedRef) => {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Primitive.span,
@@ -2163,7 +2037,7 @@ var VisuallyHidden = React$1.forwardRef(
 VisuallyHidden.displayName = NAME;
 
 // src/select.tsx
-const React = await importShared('react');
+const React$2 = await importShared('react');
 
 const ReactDOM = await importShared('react-dom');
 var OPEN_KEYS = [" ", "Enter", "ArrowUp", "ArrowDown"];
@@ -2195,9 +2069,9 @@ var Select$1 = (props) => {
     form
   } = props;
   const popperScope = usePopperScope(__scopeSelect);
-  const [trigger, setTrigger] = React.useState(null);
-  const [valueNode, setValueNode] = React.useState(null);
-  const [valueNodeHasChildren, setValueNodeHasChildren] = React.useState(false);
+  const [trigger, setTrigger] = React$2.useState(null);
+  const [valueNode, setValueNode] = React$2.useState(null);
+  const [valueNodeHasChildren, setValueNodeHasChildren] = React$2.useState(false);
   const direction = useDirection(dir);
   const [open, setOpen] = useControllableState({
     prop: openProp,
@@ -2211,9 +2085,9 @@ var Select$1 = (props) => {
     onChange: onValueChange,
     caller: SELECT_NAME
   });
-  const triggerPointerDownPosRef = React.useRef(null);
+  const triggerPointerDownPosRef = React$2.useRef(null);
   const isFormControl = trigger ? form || !!trigger.closest("form") : true;
-  const [nativeOptionsSet, setNativeOptionsSet] = React.useState(/* @__PURE__ */ new Set());
+  const [nativeOptionsSet, setNativeOptionsSet] = React$2.useState(/* @__PURE__ */ new Set());
   const nativeSelectKey = Array.from(nativeOptionsSet).map((option) => option.props.value).join(";");
   return /* @__PURE__ */ jsxRuntimeExports.jsx(Root2$1, { ...popperScope, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
     SelectProvider,
@@ -2239,10 +2113,10 @@ var Select$1 = (props) => {
           SelectNativeOptionsProvider,
           {
             scope: props.__scopeSelect,
-            onNativeOptionAdd: React.useCallback((option) => {
+            onNativeOptionAdd: React$2.useCallback((option) => {
               setNativeOptionsSet((prev) => new Set(prev).add(option));
             }, []),
-            onNativeOptionRemove: React.useCallback((option) => {
+            onNativeOptionRemove: React$2.useCallback((option) => {
               setNativeOptionsSet((prev) => {
                 const optionsSet = new Set(prev);
                 optionsSet.delete(option);
@@ -2277,7 +2151,7 @@ var Select$1 = (props) => {
 };
 Select$1.displayName = SELECT_NAME;
 var TRIGGER_NAME = "SelectTrigger";
-var SelectTrigger$1 = React.forwardRef(
+var SelectTrigger$1 = React$2.forwardRef(
   (props, forwardedRef) => {
     const { __scopeSelect, disabled = false, ...triggerProps } = props;
     const popperScope = usePopperScope(__scopeSelect);
@@ -2285,7 +2159,7 @@ var SelectTrigger$1 = React.forwardRef(
     const isDisabled = context.disabled || disabled;
     const composedRefs = useComposedRefs(forwardedRef, context.onTriggerChange);
     const getItems = useCollection(__scopeSelect);
-    const pointerTypeRef = React.useRef("touch");
+    const pointerTypeRef = React$2.useRef("touch");
     const [searchRef, handleTypeaheadSearch, resetTypeahead] = useTypeaheadSearch((search) => {
       const enabledItems = getItems().filter((item) => !item.disabled);
       const currentItem = enabledItems.find((item) => item.value === context.value);
@@ -2355,7 +2229,7 @@ var SelectTrigger$1 = React.forwardRef(
 );
 SelectTrigger$1.displayName = TRIGGER_NAME;
 var VALUE_NAME = "SelectValue";
-var SelectValue$1 = React.forwardRef(
+var SelectValue$1 = React$2.forwardRef(
   (props, forwardedRef) => {
     const { __scopeSelect, className, style, children, placeholder = "", ...valueProps } = props;
     const context = useSelectContext(VALUE_NAME, __scopeSelect);
@@ -2378,7 +2252,7 @@ var SelectValue$1 = React.forwardRef(
 );
 SelectValue$1.displayName = VALUE_NAME;
 var ICON_NAME = "SelectIcon";
-var SelectIcon = React.forwardRef(
+var SelectIcon = React$2.forwardRef(
   (props, forwardedRef) => {
     const { __scopeSelect, children, ...iconProps } = props;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.span, { "aria-hidden": true, ...iconProps, ref: forwardedRef, children: children || "\u25BC" });
@@ -2391,10 +2265,10 @@ var SelectPortal = (props) => {
 };
 SelectPortal.displayName = PORTAL_NAME;
 var CONTENT_NAME = "SelectContent";
-var SelectContent$1 = React.forwardRef(
+var SelectContent$1 = React$2.forwardRef(
   (props, forwardedRef) => {
     const context = useSelectContext(CONTENT_NAME, props.__scopeSelect);
-    const [fragment, setFragment] = React.useState();
+    const [fragment, setFragment] = React$2.useState();
     useLayoutEffect2(() => {
       setFragment(new DocumentFragment());
     }, []);
@@ -2413,7 +2287,7 @@ var CONTENT_MARGIN = 10;
 var [SelectContentProvider, useSelectContentContext] = createSelectContext(CONTENT_NAME);
 var CONTENT_IMPL_NAME = "SelectContentImpl";
 var Slot = createSlot("SelectContent.RemoveScroll");
-var SelectContentImpl = React.forwardRef(
+var SelectContentImpl = React$2.forwardRef(
   (props, forwardedRef) => {
     const {
       __scopeSelect,
@@ -2437,21 +2311,21 @@ var SelectContentImpl = React.forwardRef(
       ...contentProps
     } = props;
     const context = useSelectContext(CONTENT_NAME, __scopeSelect);
-    const [content, setContent] = React.useState(null);
-    const [viewport, setViewport] = React.useState(null);
+    const [content, setContent] = React$2.useState(null);
+    const [viewport, setViewport] = React$2.useState(null);
     const composedRefs = useComposedRefs(forwardedRef, (node) => setContent(node));
-    const [selectedItem, setSelectedItem] = React.useState(null);
-    const [selectedItemText, setSelectedItemText] = React.useState(
+    const [selectedItem, setSelectedItem] = React$2.useState(null);
+    const [selectedItemText, setSelectedItemText] = React$2.useState(
       null
     );
     const getItems = useCollection(__scopeSelect);
-    const [isPositioned, setIsPositioned] = React.useState(false);
-    const firstValidItemFoundRef = React.useRef(false);
-    React.useEffect(() => {
+    const [isPositioned, setIsPositioned] = React$2.useState(false);
+    const firstValidItemFoundRef = React$2.useRef(false);
+    React$2.useEffect(() => {
       if (content) return hideOthers(content);
     }, [content]);
     useFocusGuards();
-    const focusFirst = React.useCallback(
+    const focusFirst = React$2.useCallback(
       (candidates) => {
         const [firstItem, ...restItems] = getItems().map((item) => item.ref.current);
         const [lastItem] = restItems.slice(-1);
@@ -2467,17 +2341,17 @@ var SelectContentImpl = React.forwardRef(
       },
       [getItems, viewport]
     );
-    const focusSelectedItem = React.useCallback(
+    const focusSelectedItem = React$2.useCallback(
       () => focusFirst([selectedItem, content]),
       [focusFirst, selectedItem, content]
     );
-    React.useEffect(() => {
+    React$2.useEffect(() => {
       if (isPositioned) {
         focusSelectedItem();
       }
     }, [isPositioned, focusSelectedItem]);
     const { onOpenChange, triggerPointerDownPosRef } = context;
-    React.useEffect(() => {
+    React$2.useEffect(() => {
       if (content) {
         let pointerMoveDelta = { x: 0, y: 0 };
         const handlePointerMove = (event) => {
@@ -2507,7 +2381,7 @@ var SelectContentImpl = React.forwardRef(
         };
       }
     }, [content, onOpenChange, triggerPointerDownPosRef]);
-    React.useEffect(() => {
+    React$2.useEffect(() => {
       const close = () => onOpenChange(false);
       window.addEventListener("blur", close);
       window.addEventListener("resize", close);
@@ -2524,7 +2398,7 @@ var SelectContentImpl = React.forwardRef(
         setTimeout(() => nextItem.ref.current.focus());
       }
     });
-    const itemRefCallback = React.useCallback(
+    const itemRefCallback = React$2.useCallback(
       (node, value, disabled) => {
         const isFirstValidItem = !firstValidItemFoundRef.current && !disabled;
         const isSelectedItem = context.value !== void 0 && context.value === value;
@@ -2535,8 +2409,8 @@ var SelectContentImpl = React.forwardRef(
       },
       [context.value]
     );
-    const handleItemLeave = React.useCallback(() => content?.focus(), [content]);
-    const itemTextRefCallback = React.useCallback(
+    const handleItemLeave = React$2.useCallback(() => content?.focus(), [content]);
+    const itemTextRefCallback = React$2.useCallback(
       (node, value, disabled) => {
         const isFirstValidItem = !firstValidItemFoundRef.current && !disabled;
         const isSelectedItem = context.value !== void 0 && context.value === value;
@@ -2647,18 +2521,18 @@ var SelectContentImpl = React.forwardRef(
 );
 SelectContentImpl.displayName = CONTENT_IMPL_NAME;
 var ITEM_ALIGNED_POSITION_NAME = "SelectItemAlignedPosition";
-var SelectItemAlignedPosition = React.forwardRef((props, forwardedRef) => {
+var SelectItemAlignedPosition = React$2.forwardRef((props, forwardedRef) => {
   const { __scopeSelect, onPlaced, ...popperProps } = props;
   const context = useSelectContext(CONTENT_NAME, __scopeSelect);
   const contentContext = useSelectContentContext(CONTENT_NAME, __scopeSelect);
-  const [contentWrapper, setContentWrapper] = React.useState(null);
-  const [content, setContent] = React.useState(null);
+  const [contentWrapper, setContentWrapper] = React$2.useState(null);
+  const [content, setContent] = React$2.useState(null);
   const composedRefs = useComposedRefs(forwardedRef, (node) => setContent(node));
   const getItems = useCollection(__scopeSelect);
-  const shouldExpandOnScrollRef = React.useRef(false);
-  const shouldRepositionRef = React.useRef(true);
+  const shouldExpandOnScrollRef = React$2.useRef(false);
+  const shouldRepositionRef = React$2.useRef(true);
   const { viewport, selectedItem, selectedItemText, focusSelectedItem } = contentContext;
-  const position = React.useCallback(() => {
+  const position = React$2.useCallback(() => {
     if (context.trigger && context.valueNode && contentWrapper && content && viewport && selectedItem && selectedItemText) {
       const triggerRect = context.trigger.getBoundingClientRect();
       const contentRect = content.getBoundingClientRect();
@@ -2758,11 +2632,11 @@ var SelectItemAlignedPosition = React.forwardRef((props, forwardedRef) => {
     onPlaced
   ]);
   useLayoutEffect2(() => position(), [position]);
-  const [contentZIndex, setContentZIndex] = React.useState();
+  const [contentZIndex, setContentZIndex] = React$2.useState();
   useLayoutEffect2(() => {
     if (content) setContentZIndex(window.getComputedStyle(content).zIndex);
   }, [content]);
-  const handleScrollButtonChange = React.useCallback(
+  const handleScrollButtonChange = React$2.useCallback(
     (node) => {
       if (node && shouldRepositionRef.current === true) {
         position();
@@ -2811,7 +2685,7 @@ var SelectItemAlignedPosition = React.forwardRef((props, forwardedRef) => {
 });
 SelectItemAlignedPosition.displayName = ITEM_ALIGNED_POSITION_NAME;
 var POPPER_POSITION_NAME = "SelectPopperPosition";
-var SelectPopperPosition = React.forwardRef((props, forwardedRef) => {
+var SelectPopperPosition = React$2.forwardRef((props, forwardedRef) => {
   const {
     __scopeSelect,
     align = "start",
@@ -2846,13 +2720,13 @@ var SelectPopperPosition = React.forwardRef((props, forwardedRef) => {
 SelectPopperPosition.displayName = POPPER_POSITION_NAME;
 var [SelectViewportProvider, useSelectViewportContext] = createSelectContext(CONTENT_NAME, {});
 var VIEWPORT_NAME = "SelectViewport";
-var SelectViewport = React.forwardRef(
+var SelectViewport = React$2.forwardRef(
   (props, forwardedRef) => {
     const { __scopeSelect, nonce, ...viewportProps } = props;
     const contentContext = useSelectContentContext(VIEWPORT_NAME, __scopeSelect);
     const viewportContext = useSelectViewportContext(VIEWPORT_NAME, __scopeSelect);
     const composedRefs = useComposedRefs(forwardedRef, contentContext.onViewportChange);
-    const prevScrollTopRef = React.useRef(0);
+    const prevScrollTopRef = React$2.useRef(0);
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "style",
@@ -2915,26 +2789,26 @@ var SelectViewport = React.forwardRef(
 SelectViewport.displayName = VIEWPORT_NAME;
 var GROUP_NAME = "SelectGroup";
 var [SelectGroupContextProvider, useSelectGroupContext] = createSelectContext(GROUP_NAME);
-var SelectGroup = React.forwardRef(
+var SelectGroup$1 = React$2.forwardRef(
   (props, forwardedRef) => {
     const { __scopeSelect, ...groupProps } = props;
     const groupId = useId();
     return /* @__PURE__ */ jsxRuntimeExports.jsx(SelectGroupContextProvider, { scope: __scopeSelect, id: groupId, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { role: "group", "aria-labelledby": groupId, ...groupProps, ref: forwardedRef }) });
   }
 );
-SelectGroup.displayName = GROUP_NAME;
+SelectGroup$1.displayName = GROUP_NAME;
 var LABEL_NAME = "SelectLabel";
-var SelectLabel = React.forwardRef(
+var SelectLabel$1 = React$2.forwardRef(
   (props, forwardedRef) => {
     const { __scopeSelect, ...labelProps } = props;
     const groupContext = useSelectGroupContext(LABEL_NAME, __scopeSelect);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { id: groupContext.id, ...labelProps, ref: forwardedRef });
   }
 );
-SelectLabel.displayName = LABEL_NAME;
+SelectLabel$1.displayName = LABEL_NAME;
 var ITEM_NAME = "SelectItem";
 var [SelectItemContextProvider, useSelectItemContext] = createSelectContext(ITEM_NAME);
-var SelectItem$1 = React.forwardRef(
+var SelectItem$1 = React$2.forwardRef(
   (props, forwardedRef) => {
     const {
       __scopeSelect,
@@ -2946,14 +2820,14 @@ var SelectItem$1 = React.forwardRef(
     const context = useSelectContext(ITEM_NAME, __scopeSelect);
     const contentContext = useSelectContentContext(ITEM_NAME, __scopeSelect);
     const isSelected = context.value === value;
-    const [textValue, setTextValue] = React.useState(textValueProp ?? "");
-    const [isFocused, setIsFocused] = React.useState(false);
+    const [textValue, setTextValue] = React$2.useState(textValueProp ?? "");
+    const [isFocused, setIsFocused] = React$2.useState(false);
     const composedRefs = useComposedRefs(
       forwardedRef,
       (node) => contentContext.itemRefCallback?.(node, value, disabled)
     );
     const textId = useId();
-    const pointerTypeRef = React.useRef("touch");
+    const pointerTypeRef = React$2.useRef("touch");
     const handleSelect = () => {
       if (!disabled) {
         context.onValueChange(value);
@@ -2973,7 +2847,7 @@ var SelectItem$1 = React.forwardRef(
         disabled,
         textId,
         isSelected,
-        onItemTextChange: React.useCallback((node) => {
+        onItemTextChange: React$2.useCallback((node) => {
           setTextValue((prevTextValue) => prevTextValue || (node?.textContent ?? "").trim());
         }, []),
         children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -3036,14 +2910,14 @@ var SelectItem$1 = React.forwardRef(
 );
 SelectItem$1.displayName = ITEM_NAME;
 var ITEM_TEXT_NAME = "SelectItemText";
-var SelectItemText = React.forwardRef(
+var SelectItemText = React$2.forwardRef(
   (props, forwardedRef) => {
     const { __scopeSelect, className, style, ...itemTextProps } = props;
     const context = useSelectContext(ITEM_TEXT_NAME, __scopeSelect);
     const contentContext = useSelectContentContext(ITEM_TEXT_NAME, __scopeSelect);
     const itemContext = useSelectItemContext(ITEM_TEXT_NAME, __scopeSelect);
     const nativeOptionsContext = useSelectNativeOptionsContext(ITEM_TEXT_NAME, __scopeSelect);
-    const [itemTextNode, setItemTextNode] = React.useState(null);
+    const [itemTextNode, setItemTextNode] = React$2.useState(null);
     const composedRefs = useComposedRefs(
       forwardedRef,
       (node) => setItemTextNode(node),
@@ -3051,7 +2925,7 @@ var SelectItemText = React.forwardRef(
       (node) => contentContext.itemTextRefCallback?.(node, itemContext.value, itemContext.disabled)
     );
     const textContent = itemTextNode?.textContent;
-    const nativeOption = React.useMemo(
+    const nativeOption = React$2.useMemo(
       () => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: itemContext.value, disabled: itemContext.disabled, children: textContent }, itemContext.value),
       [itemContext.disabled, itemContext.value, textContent]
     );
@@ -3068,7 +2942,7 @@ var SelectItemText = React.forwardRef(
 );
 SelectItemText.displayName = ITEM_TEXT_NAME;
 var ITEM_INDICATOR_NAME = "SelectItemIndicator";
-var SelectItemIndicator = React.forwardRef(
+var SelectItemIndicator = React$2.forwardRef(
   (props, forwardedRef) => {
     const { __scopeSelect, ...itemIndicatorProps } = props;
     const itemContext = useSelectItemContext(ITEM_INDICATOR_NAME, __scopeSelect);
@@ -3077,10 +2951,10 @@ var SelectItemIndicator = React.forwardRef(
 );
 SelectItemIndicator.displayName = ITEM_INDICATOR_NAME;
 var SCROLL_UP_BUTTON_NAME = "SelectScrollUpButton";
-var SelectScrollUpButton$1 = React.forwardRef((props, forwardedRef) => {
+var SelectScrollUpButton$1 = React$2.forwardRef((props, forwardedRef) => {
   const contentContext = useSelectContentContext(SCROLL_UP_BUTTON_NAME, props.__scopeSelect);
   const viewportContext = useSelectViewportContext(SCROLL_UP_BUTTON_NAME, props.__scopeSelect);
-  const [canScrollUp, setCanScrollUp] = React.useState(false);
+  const [canScrollUp, setCanScrollUp] = React$2.useState(false);
   const composedRefs = useComposedRefs(forwardedRef, viewportContext.onScrollButtonChange);
   useLayoutEffect2(() => {
     if (contentContext.viewport && contentContext.isPositioned) {
@@ -3110,10 +2984,10 @@ var SelectScrollUpButton$1 = React.forwardRef((props, forwardedRef) => {
 });
 SelectScrollUpButton$1.displayName = SCROLL_UP_BUTTON_NAME;
 var SCROLL_DOWN_BUTTON_NAME = "SelectScrollDownButton";
-var SelectScrollDownButton$1 = React.forwardRef((props, forwardedRef) => {
+var SelectScrollDownButton$1 = React$2.forwardRef((props, forwardedRef) => {
   const contentContext = useSelectContentContext(SCROLL_DOWN_BUTTON_NAME, props.__scopeSelect);
   const viewportContext = useSelectViewportContext(SCROLL_DOWN_BUTTON_NAME, props.__scopeSelect);
-  const [canScrollDown, setCanScrollDown] = React.useState(false);
+  const [canScrollDown, setCanScrollDown] = React$2.useState(false);
   const composedRefs = useComposedRefs(forwardedRef, viewportContext.onScrollButtonChange);
   useLayoutEffect2(() => {
     if (contentContext.viewport && contentContext.isPositioned) {
@@ -3143,18 +3017,18 @@ var SelectScrollDownButton$1 = React.forwardRef((props, forwardedRef) => {
   ) : null;
 });
 SelectScrollDownButton$1.displayName = SCROLL_DOWN_BUTTON_NAME;
-var SelectScrollButtonImpl = React.forwardRef((props, forwardedRef) => {
+var SelectScrollButtonImpl = React$2.forwardRef((props, forwardedRef) => {
   const { __scopeSelect, onAutoScroll, ...scrollIndicatorProps } = props;
   const contentContext = useSelectContentContext("SelectScrollButton", __scopeSelect);
-  const autoScrollTimerRef = React.useRef(null);
+  const autoScrollTimerRef = React$2.useRef(null);
   const getItems = useCollection(__scopeSelect);
-  const clearAutoScrollTimer = React.useCallback(() => {
+  const clearAutoScrollTimer = React$2.useCallback(() => {
     if (autoScrollTimerRef.current !== null) {
       window.clearInterval(autoScrollTimerRef.current);
       autoScrollTimerRef.current = null;
     }
   }, []);
-  React.useEffect(() => {
+  React$2.useEffect(() => {
     return () => clearAutoScrollTimer();
   }, [clearAutoScrollTimer]);
   useLayoutEffect2(() => {
@@ -3186,15 +3060,15 @@ var SelectScrollButtonImpl = React.forwardRef((props, forwardedRef) => {
   );
 });
 var SEPARATOR_NAME = "SelectSeparator";
-var SelectSeparator = React.forwardRef(
+var SelectSeparator$1 = React$2.forwardRef(
   (props, forwardedRef) => {
     const { __scopeSelect, ...separatorProps } = props;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { "aria-hidden": true, ...separatorProps, ref: forwardedRef });
   }
 );
-SelectSeparator.displayName = SEPARATOR_NAME;
+SelectSeparator$1.displayName = SEPARATOR_NAME;
 var ARROW_NAME = "SelectArrow";
-var SelectArrow = React.forwardRef(
+var SelectArrow = React$2.forwardRef(
   (props, forwardedRef) => {
     const { __scopeSelect, ...arrowProps } = props;
     const popperScope = usePopperScope(__scopeSelect);
@@ -3205,12 +3079,12 @@ var SelectArrow = React.forwardRef(
 );
 SelectArrow.displayName = ARROW_NAME;
 var BUBBLE_INPUT_NAME = "SelectBubbleInput";
-var SelectBubbleInput = React.forwardRef(
+var SelectBubbleInput = React$2.forwardRef(
   ({ __scopeSelect, value, ...props }, forwardedRef) => {
-    const ref = React.useRef(null);
+    const ref = React$2.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, ref);
     const prevValue = usePrevious(value);
-    React.useEffect(() => {
+    React$2.useEffect(() => {
       const select = ref.current;
       if (!select) return;
       const selectProto = window.HTMLSelectElement.prototype;
@@ -3242,9 +3116,9 @@ function shouldShowPlaceholder(value) {
 }
 function useTypeaheadSearch(onSearchChange) {
   const handleSearchChange = useCallbackRef(onSearchChange);
-  const searchRef = React.useRef("");
-  const timerRef = React.useRef(0);
-  const handleTypeaheadSearch = React.useCallback(
+  const searchRef = React$2.useRef("");
+  const timerRef = React$2.useRef(0);
+  const handleTypeaheadSearch = React$2.useCallback(
     (key) => {
       const search = searchRef.current + key;
       handleSearchChange(search);
@@ -3256,11 +3130,11 @@ function useTypeaheadSearch(onSearchChange) {
     },
     [handleSearchChange]
   );
-  const resetTypeahead = React.useCallback(() => {
+  const resetTypeahead = React$2.useCallback(() => {
     searchRef.current = "";
     window.clearTimeout(timerRef.current);
   }, []);
-  React.useEffect(() => {
+  React$2.useEffect(() => {
     return () => window.clearTimeout(timerRef.current);
   }, []);
   return [searchRef, handleTypeaheadSearch, resetTypeahead];
@@ -3287,256 +3161,286 @@ var Icon = SelectIcon;
 var Portal = SelectPortal;
 var Content2 = SelectContent$1;
 var Viewport = SelectViewport;
+var Group = SelectGroup$1;
+var Label = SelectLabel$1;
 var Item = SelectItem$1;
 var ItemText = SelectItemText;
 var ItemIndicator = SelectItemIndicator;
 var ScrollUpButton = SelectScrollUpButton$1;
 var ScrollDownButton = SelectScrollDownButton$1;
+var Separator = SelectSeparator$1;
 
-await importShared('react');
-function Select({
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root2, { "data-slot": "select", ...props });
-}
-function SelectValue({
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Value, { "data-slot": "select-value", ...props });
-}
-function SelectTrigger({
-  className,
-  size = "default",
-  children,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    Trigger,
-    {
-      "data-slot": "select-trigger",
-      "data-size": size,
-      className: cn(
-        "border-input data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex w-fit items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className
-      ),
-      ...props,
-      children: [
-        children,
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "size-4 opacity-50" }) })
-      ]
-    }
-  );
-}
-function SelectContent({
-  className,
-  children,
-  position = "popper",
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    Content2,
-    {
-      "data-slot": "select-content",
-      className: cn(
-        "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border shadow-md",
-        position === "popper" && "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
-        className
-      ),
-      position,
-      ...props,
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(SelectScrollUpButton, {}),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Viewport,
-          {
-            className: cn("p-1", position === "popper" && "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1"),
-            children
-          }
+const React$1 = await importShared('react');
+const Select = React$1.forwardRef(({ children, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsx(Root2, { ref, "data-slot": "select", ...props, children }));
+Select.displayName = "Select";
+const SelectGroup = React$1.forwardRef(({ children, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsx(Group, { ref, "data-slot": "select-group", ...props, children }));
+SelectGroup.displayName = "SelectGroup";
+const SelectValue = React$1.forwardRef(({ children, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsx(Value, { ref, "data-slot": "select-value", ...props, children }));
+SelectValue.displayName = "SelectValue";
+const SelectTrigger = React$1.forwardRef(
+  ({ className, size = "default", children, ...props }, ref) => {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      Trigger,
+      {
+        ref,
+        "data-slot": "select-trigger",
+        "data-size": size,
+        className: cn(
+          // NOTE: data-[size=default]:h-12 to match input h-12
+          "border-input data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 min-w-0 items-center justify-between gap-2 rounded-md border bg-transparent px-3 text-base whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-12 data-[size=sm]:h-10 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+          className
         ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(SelectScrollDownButton, {})
-      ]
-    }
-  ) });
-}
-function SelectItem({
-  className,
-  children,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    Item,
-    {
-      "data-slot": "select-item",
-      className: cn(
-        "focus:bg-accent focus:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
-        className
-      ),
-      ...props,
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "absolute right-2 flex size-3.5 items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ItemIndicator, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "size-4" }) }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(ItemText, { children })
-      ]
-    }
-  );
-}
-function SelectScrollUpButton({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    ScrollUpButton,
-    {
-      "data-slot": "select-scroll-up-button",
-      className: cn("flex cursor-default items-center justify-center py-1", className),
-      ...props,
-      children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronUp, { className: "size-4" })
-    }
-  );
-}
-function SelectScrollDownButton({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    ScrollDownButton,
-    {
-      "data-slot": "select-scroll-down-button",
-      className: cn("flex cursor-default items-center justify-center py-1", className),
-      ...props,
-      children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "size-4" })
-    }
-  );
+        ...props,
+        children: [
+          children,
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "h-4 w-4 opacity-50" }) })
+        ]
+      }
+    );
+  }
+);
+SelectTrigger.displayName = "SelectTrigger";
+const SelectContent = React$1.forwardRef(
+  ({ className, children, position = "popper", ...props }, ref) => {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      Content2,
+      {
+        ref,
+        "data-slot": "select-content",
+        className: cn(
+          "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border shadow-md",
+          position === "popper" && "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
+          className
+        ),
+        position,
+        ...props,
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(SelectScrollUpButton, {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Viewport,
+            {
+              className: cn(
+                "p-1",
+                position === "popper" && "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1"
+              ),
+              children
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(SelectScrollDownButton, {})
+        ]
+      }
+    ) });
+  }
+);
+SelectContent.displayName = "SelectContent";
+const SelectLabel = React$1.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+  Label,
+  {
+    ref,
+    "data-slot": "select-label",
+    className: cn("text-muted-foreground px-2 py-1.5 text-xs", className),
+    ...props
+  }
+));
+SelectLabel.displayName = "SelectLabel";
+const SelectItem = React$1.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+  Item,
+  {
+    ref,
+    "data-slot": "select-item",
+    className: cn(
+      "focus:bg-accent focus:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+      className
+    ),
+    ...props,
+    children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "absolute right-2 flex h-8 w-8 items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ItemIndicator, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "h-4 w-4" }) }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(ItemText, { children })
+    ]
+  }
+));
+SelectItem.displayName = "SelectItem";
+const SelectSeparator = React$1.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+  Separator,
+  {
+    ref,
+    "data-slot": "select-separator",
+    className: cn("bg-border pointer-events-none -mx-1 my-1 h-px", className),
+    ...props
+  }
+));
+SelectSeparator.displayName = "SelectSeparator";
+const SelectScrollUpButton = React$1.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+  ScrollUpButton,
+  {
+    ref,
+    "data-slot": "select-scroll-up-button",
+    className: cn("flex cursor-default items-center justify-center py-1", className),
+    ...props,
+    children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronUp, { className: "h-4 w-4" })
+  }
+));
+SelectScrollUpButton.displayName = "SelectScrollUpButton";
+const SelectScrollDownButton = React$1.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+  ScrollDownButton,
+  {
+    ref,
+    "data-slot": "select-scroll-down-button",
+    className: cn("flex cursor-default items-center justify-center py-1", className),
+    ...props,
+    children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "h-4 w-4" })
+  }
+));
+SelectScrollDownButton.displayName = "SelectScrollDownButton";
+
+const {useEffect: useEffect$1,useMemo,useRef,useState: useState$1} = await importShared('react');
+
+// THIS FILE IS AUTO GENERATED
+function TiEqualsOutline (props) {
+  return GenIcon({"attr":{"version":"1.2","baseProfile":"tiny","viewBox":"0 0 24 24"},"child":[{"tag":"path","attr":{"d":"M18 12h-12c-1.654 0-3-1.346-3-3s1.346-3 3-3h12c1.654 0 3 1.346 3 3s-1.346 3-3 3zm-12-4c-.552 0-1 .449-1 1s.448 1 1 1h12c.552 0 1-.449 1-1s-.448-1-1-1h-12zM18 19h-12c-1.654 0-3-1.346-3-3s1.346-3 3-3h12c1.654 0 3 1.346 3 3s-1.346 3-3 3zm-12-4c-.552 0-1 .449-1 1s.448 1 1 1h12c.552 0 1-.449 1-1s-.448-1-1-1h-12z"},"child":[]}]})(props);
 }
 
 await importShared('react');
 
-const {useState} = await importShared('react');
-function Component() {
-  const [selectedTimeFilter, setSelectedTimeFilter] = useState("0-15M");
-  const matches = [
-    {
-      id: 1,
-      date: "22.07.25, 14:30",
-      team1: "Pohang Steelers",
-      team2: "Suwon FC",
-      additionalMarkets: "+373",
-      odds: { w1: "1.90", x: "3.40", w2: "3.59" },
-      isFavorite: false
-    },
-    {
-      id: 2,
-      date: "22.07.25, 14:30",
-      team1: "Gwangju FC",
-      team2: "Gimcheon Sangmu FC",
-      additionalMarkets: "+383",
-      odds: { w1: "2.32", x: "3.17", w2: "2.84" },
-      isFavorite: true
-    },
-    {
-      id: 3,
-      date: "22.07.25, 14:30",
-      team1: "FC Anyang",
-      team2: "Daegu FC",
-      additionalMarkets: "+375",
-      odds: { w1: "2.11", x: "3.34", w2: "3.07" },
-      isFavorite: true
-    },
-    {
-      id: 4,
-      date: "22.07.25, 14:30",
-      team1: "Celta de Vigo",
-      team2: "CD Nacional Madeira",
-      additionalMarkets: "+225",
-      odds: { w1: "1.41", x: "4.50", w2: "5.90" },
-      isFavorite: true
+const React = await importShared('react');
+const {useState,useEffect} = React;
+function ImageCardGrid({ images, heading }) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [activeGame, setActiveGame] = useState(null);
+  const [favorites, setFavorites] = useState({});
+  const [activeTab, setActiveTab] = useState("jackpot");
+  const [jackpotNumbers, setJackpotNumbers] = useState([1, 1, 1]);
+  const toggleFavorite = (id) => {
+    setFavorites((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+  const openModal = (game) => {
+    setActiveGame(game);
+    setModalOpen(true);
+    setActiveTab("jackpot");
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+  useEffect(() => {
+    let interval;
+    if (activeTab === "jackpot" && modalOpen) {
+      interval = setInterval(() => {
+        setJackpotNumbers([
+          Math.floor(Math.random() * 9) + 1,
+          Math.floor(Math.random() * 9) + 1,
+          Math.floor(Math.random() * 9) + 1
+        ]);
+      }, 100);
+      setTimeout(() => clearInterval(interval), 2e3);
     }
-  ];
-  const timeFilters = ["0-15M", "15-30M", "30-60M"];
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#3f3e3e] text-white", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between p-4 border-b border-gray-700", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-lg font-semibold", children: "UPCOMING MATCHES" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-2" }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-1", children: timeFilters.map((filter) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Button,
-          {
-            variant: selectedTimeFilter === filter ? "default" : "outline",
-            size: "sm",
-            onClick: () => setSelectedTimeFilter(filter),
-            className: `text-xs ${selectedTimeFilter === filter ? "bg-white text-black hover:bg-white" : "bg-transparent border-gray-600 text-white hover:bg-white"}`,
-            children: filter
-          },
-          filter
-        )) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(Button, { variant: "ghost", size: "sm", className: "text-white hover:bg-gray-800 hover:text-white", children: [
-          "More ",
-          /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { className: "w-4 h-4 ml-1" })
-        ] })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-4 border-b border-gray-700 ", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Select, { defaultValue: "winner", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(SelectTrigger, { className: "w-32 bg-gray-800 border-gray-600 text-white", children: /* @__PURE__ */ jsxRuntimeExports.jsx(SelectValue, {}) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(SelectContent, { className: "bg-gray-800 border-gray-600", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: "winner", className: "text-white", children: "Winner" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: "handicap", className: "text-white", children: "Handicap" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: "over-under", className: "text-white", children: "Total" })
-      ] })
-    ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-end px-5 py-2 border-b border-gray-700 bg-[#3f3e3e]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-4 text-sm font-medium", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 bg-[#505050] flex items-center justify-center h-12 text-center", children: "W1" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 bg-[#505050] flex items-center justify-center h-12 text-center", children: "X" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 bg-[#505050] flex items-center justify-center h-12 text-center", children: "W2" })
-    ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col divide-gray-700", children: matches.map((match) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "rounded-sm m-2 flex items-center justify-between p-4 bg-[#505050] hover:bg-gray-800 transition-colors", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-4 flex-1 ", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm text-gray-400 h-full", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, { className: "w-4 h-4" }),
-          match.date
+    return () => clearInterval(interval);
+  }, [activeTab, modalOpen]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "p-4 max-w-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-white font-semibold mb-4", children: heading }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4", children: images.map(({ id, name, src, description }) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "group relative rounded-md overflow-hidden cursor-pointer w-full",
+        style: { height: "230px" },
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "img",
+            {
+              src,
+              alt: name,
+              className: "w-full h-full object-cover rounded-md transition-transform duration-300 group-hover:scale-105"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-2 right-2 z-10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            FaInfoCircle,
+            {
+              className: "text-white cursor-pointer",
+              onClick: () => openModal({ id, name, src, description })
+            }
+          ) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-2 left-2 z-10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            FaStar,
+            {
+              className: `cursor-pointer ${favorites[id] ? "text-yellow-400" : "text-white"}`,
+              onClick: () => toggleFavorite(id)
+            }
+          ) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "image-overlay rounded-md", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-lg font-semibold flex-grow flex items-center justify-center", children: name }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn-primary-bg btn-primary-text btn-primary-hover px-4 py-2 rounded-md font-semibold cursor-pointer", children: "Play" })
+          ] })
+        ]
+      },
+      id
+    )) }),
+    modalOpen && activeGame && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-center gap-0.5 p-4 modal-content relative", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-muted-foreground rounded-md p-6 w-[360px] h-[360px] text-card relative z-10", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-lg font-semibold flex-grow flex items-center justify-center", children: "Game Info" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "img",
+            {
+              src: activeGame.src,
+              alt: activeGame.name,
+              className: "w-full h-40 object-cover rounded-md"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "my-2 h-px bg-gradient-to-r from-transparent via-ring to-transparent" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center mb-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-secondary text-lg font-semibold", children: activeGame.name }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn-primary-bg btn-primary-text btn-primary-hover px-4 py-1 rounded-md text-sm", children: "Play" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-ring text-sm", children: "Sample Description" })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-medium", children: match.team1 }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-medium", children: match.team2 })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mr-3 ", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-gray-400", children: match.additionalMarkets }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(TrendingUp, { className: "w-4 h-4 text-gray-400" }),
-          match.isFavorite && /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 text-yellow-500 fill-current" })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "z-20 relative -mx-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(TiEqualsOutline, { className: "text-yellow-400 text-5xl bg-background p-2 rounded-full shadow-md" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-muted-foreground rounded-md p-4 w-[260px] h-[360px] text-card relative z-10 flex flex-col ", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex  mb-4 transition-all ", children: ["jackpot", "tournaments"].map((tab) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              onClick: () => setActiveTab(tab),
+              className: `flex-1 text-center cursor-pointer py-2 text-sm font-semibold transition-all duration-300 ${activeTab === tab ? "border-b-2 border-button-primary-bg text-secondary" : "text-ring"}`,
+              children: tab.charAt(0).toUpperCase() + tab.slice(1)
+            },
+            tab
+          )) }),
+          activeTab === "jackpot" ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-grow flex justify-center items-center gap-3 text-2xl font-bold", children: jackpotNumbers.map((num, idx) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              className: "w-12 h-12 flex items-center justify-center bg-card text-black rounded-md shadow-inner transition-all duration-300 animate-[verticalScroll_0.6s_ease-in-out]",
+              children: num
+            },
+            idx
+          )) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "flex-grow flex items-center justify-center text-ring text-sm text-center", children: "No tournaments available." })
         ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3 h-full", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Button,
-          {
-            variant: "ghost",
-            size: "sm",
-            className: "w-16 h-12 rounded-none bg-gray-500 hover:bg-yellow-500 text-yellow-500 hover:text-black font-semibold text-sm",
-            children: match.odds.w1
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Button,
-          {
-            variant: "ghost",
-            size: "sm",
-            className: "w-16 h-12 rounded-none bg-gray-500 hover:bg-yellow-500 text-yellow-500 hover:text-black font-semibold text-sm",
-            children: match.odds.x
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Button,
-          {
-            variant: "ghost",
-            size: "sm",
-            className: "w-16 h-12 rounded-none bg-gray-500 hover:bg-yellow-500 text-yellow-500 hover:text-black font-semibold text-sm",
-            children: match.odds.w2
-          }
-        )
-      ] })
-    ] }, match.id)) })
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "div",
+        {
+          className: "absolute inset-0",
+          onClick: closeModal,
+          "aria-hidden": "true"
+        }
+      )
+    ] })
   ] });
 }
 
+const img1 = "/assets/img1.jpg";
+
+const img2 = "/assets/img2.jpg";
+
+const img3 = "/assets/img3.jpg";
+
+const img4 = "/assets/img4.jpg";
+
 await importShared('react');
+const images = [
+  { id: 1, src: img1, name: "Game One" },
+  { id: 2, src: img2, name: "Game Two" },
+  { id: 3, src: img3, name: "Game Three" },
+  { id: 4, src: img4, name: "Game Four" },
+  { id: 5, src: img4, name: "Game Five" }
+];
 const Home = () => {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full  mx-auto px-2 py-2 ", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full  h-full rounded-lg overflow-hidden shadow-lg", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Carousel, { className: "w-full h-full", children: [
@@ -3554,14 +3458,22 @@ const Home = () => {
       /* @__PURE__ */ jsxRuntimeExports.jsx(CarouselPrevious, { className: "left-4 bg-[white] w-[40px] h-[40px] rounded-full flex items-center justify-center" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(CarouselNext, { className: "right-4 bg-[white] w-[40px] h-[40px] rounded-full flex items-center justify-center" })
     ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mx-1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Component, {}) })
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mx-1" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mx-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(ImageCardGrid, { images, heading: "CASINO GAMES" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(ImageCardGrid, { images, heading: "LIVE GAMES" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(ImageCardGrid, { images, heading: "GAMES" })
+    ] })
   ] });
 };
 
 await importShared('react');
 
 const Homepage = () => {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Home, {}) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Home, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, {})
+  ] });
 };
 
 export { Homepage as default };

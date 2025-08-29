@@ -48,6 +48,10 @@ const MobileNavbar = () => {
       <RegisterModal 
         isOpen={isRegisterModalOpen} 
         onClose={() => setIsRegisterModalOpen(false)} 
+        onCloseAll={() => {
+          setIsRegisterModalOpen(false);
+          setIsLoginModalOpen(false);
+        }}
       />
     </>
   )

@@ -380,6 +380,10 @@ const LiveCalender = () => {
       <RegisterModal 
         isOpen={isRegisterModalOpen}
         onClose={() => setIsRegisterModalOpen(false)}
+        onCloseAll={() => {
+          setIsRegisterModalOpen(false);
+          setIsLoginModalOpen(false);
+        }}
       />
     </div>
   );

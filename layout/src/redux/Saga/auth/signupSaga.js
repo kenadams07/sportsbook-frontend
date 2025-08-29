@@ -24,7 +24,7 @@ function* signupRequest(action) {
         successDuration: 4000,
         onSuccess: (res) => {
          
-          console.log("Signup succeeded:", res.data);
+      
         },
         onError: (err) => {
           console.log("Signup failed:", err);

@@ -8,7 +8,6 @@ import { Calendar as CalendarIcon } from "lucide-react";
 import { Calendar } from "../components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover";
 import { format } from "date-fns";
-import { Input } from "../components/ui/input";
 
 import {
   Dialog,
@@ -24,8 +23,9 @@ import { Paths } from "../routes/path";
 
 import { useDispatch } from "react-redux";
 import { signup } from "../redux/Action/auth/signupAction";
+import { Input } from "../components/ui/input";
 
-export default function RegisterModal({ isOpen, onClose }) {
+export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -51,9 +51,51 @@ export default function RegisterModal({ isOpen, onClose }) {
     }
   }, [shouldReopenRegister, isLoginModalOpen]);
 
+  // Clear errors and form data when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setErrors({});
+      setFormData({
+        username: "",
+        name: "",
+        email: "",
+        birthdate: "",
+        currency: "GBP",
+        password: "",
+        confirmPassword: "",
+      });
+      setDate(null);
+    }
+  }, [isOpen]);
+
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
+  const handleClose = () => {
+    // Clear all errors and form data when closing modal
+    setErrors({});
+    setFormData({
+      username: "",
+      name: "",
+      email: "",
+      birthdate: "",
+      currency: "GBP",
+      password: "",
+      confirmPassword: "",
+    });
+    setDate(null);
+    
+    // Close the embedded login modal if it's open
+    setIsLoginModalOpen(false);
+    
+    // Call the appropriate close function
+    if (onCloseAll) {
+      onCloseAll();
+    } else {
+      onClose();
+    }
   };
 
   const validateForm = () => {
@@ -86,7 +128,7 @@ export default function RegisterModal({ isOpen, onClose }) {
         payload: formDataWithDate
       }, (response) => {
         console.log("Signup successful, response:", response);
-        onClose();
+        handleClose();
         navigate(Paths.verifyEmail);
       })
     );
@@ -95,15 +137,11 @@ export default function RegisterModal({ isOpen, onClose }) {
 
   const handleSwitchToLogin = () => {
     setIsLoginModalOpen(true);
-
   };
-
-  const fieldClass =
-    "bg-[#404040] border-[#404040] text-white placeholder:text-gray-400 h-12 text-base w-full px-3 flex items-center justify-between";
 
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={onClose}>
+      <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent className="max-w-4xl w-full mx-auto bg-[#2a2a2a] text-white p-0 max-h-[85vh] overflow-hidden">
           <DialogHeader className="flex flex-row items-center justify-between p-4 sm:p-6 border-b border-gray-600">
             <div className="flex items-center gap-2">
@@ -140,132 +178,112 @@ export default function RegisterModal({ isOpen, onClose }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 {/* Left Column */}
                 <div className="space-y-6">
-                  {/* Username with Floating Label */}
-                  <div className="floating-input-container">
-                    <input
-                      type="text"
-                      placeholder="Username"
-                      value={formData.username}
-                      onChange={(e) => handleInputChange("username", e.target.value)}
-                      className={`floating-input ${formData.username ? 'has-value' : ''}`}
-                    />
-                    <label className="floating-label">Username</label>
-                    {errors.username && (
-                      <p className="text-red-500 text-sm mt-1">{errors.username}</p>
-                    )}
-                  </div>
+                  {/* Username */}
+                  <Input
+                    type="text"
+                    placeholder="Username"
+                    value={formData.username}
+                    error={errors.username}
+                    onChange={(e) => handleInputChange("username", e.target.value)}
+                  />
 
-                  {/* Name with Floating Label */}
-                  <div className="floating-input-container">
-                    <input
-                      type="text"
-                      placeholder="Name"
-                      value={formData.name}
-                      onChange={(e) => handleInputChange("name", e.target.value)}
-                      className={`floating-input ${formData.name ? 'has-value' : ''}`}
-                    />
-                    <label className="floating-label">Name</label>
-                    {errors.name && (
-                      <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-                    )}
-                  </div>
+                  {/* Email */}
+                  <Input
+                    type="email"
+                    placeholder="E-mail"
+                    value={formData.email}
+                    error={errors.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
+                  />
 
-                  {/* Email with Floating Label */}
-                  <div className="floating-input-container">
-                    <input
-                      type="email"
-                      placeholder="E-mail"
-                      value={formData.email}
-                      onChange={(e) => handleInputChange("email", e.target.value)}
-                      className={`floating-input ${formData.email ? 'has-value' : ''}`}
-                    />
-                    <label className="floating-label">E-mail</label>
-                    {errors.email && (
-                      <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-                    )}
-                  </div>
+                  {/* Password */}
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    value={formData.password}
+                    error={errors.password}
+                    onChange={(e) => handleInputChange("password", e.target.value)}
+                  />
                 </div>
 
                 {/* Right Column */}
                 <div className="space-y-6">
-                  {/* Calendar Picker with Floating Label Style */}
-                  <div className="floating-input-container">
-                    <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className="floating-input justify-start text-left font-normal border-[#404040] hover:bg-[#404040] bg-[#404040]"
+                  {/* Name */}
+                  <Input
+                    type="text"
+                    placeholder="Name"
+                    value={formData.name}
+                    error={errors.name}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
+                  />
+
+                  {/* Calendar Picker */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Birth Date
+                    </label>
+                    <div className="relative">
+                      <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className={`justify-start text-left font-normal border-[#404040] hover:bg-[#404040] bg-[#404040] h-12 w-full rounded-md px-3 ${
+                              errors.birthdate ? "border-destructive" : ""
+                            }`}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {date ? format(date, "PPP") : <span className="text-gray-400">Select birth date</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                          className="w-full max-w-[350px] p-0 bg-[#2a2a2a] border-gray-600"
+                          align="start"
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {date ? format(date, "PPP") : <span className="text-transparent">Birth Date</span>}
-                        </Button>
-                      </PopoverTrigger>
-                      <label className={`floating-label ${date ? 'top-0 text-xs text-yellow-500 bg-[#2a2a2a] px-1' : ''}`}>
-                        Birth Date
-                      </label>
-
-                      <PopoverContent
-                        className="w-full max-w-[350px] p-0 bg-[#2a2a2a] border-gray-600"
-                        align="start"
-                      >
-                        <Calendar
-                          mode="single"
-                          selected={date}
-                          onSelect={(selectedDate) => {
-                            if (selectedDate) {
-                              setDate(selectedDate);
-                              handleInputChange("birthdate", format(selectedDate, "yyyy-MM-dd"));
-                              setIsCalendarOpen(false);
-                            }
-                          }}
-                          initialFocus
-                          className="bg-[#2a2a2a] text-white"
-                          classNames={{
-                            day_selected: "bg-yellow-500 text-black hover:bg-yellow-600 hover:text-black",
-                            day_today: "border border-yellow-500",
-                            day_outside: "text-gray-500",
-                            day_disabled: "text-gray-700",
-                            head_cell: "text-gray-400",
-                            button: "hover:bg-[#404040]",
-                            nav_button: "border-gray-600 hover:bg-[#404040]",
-                          }}
-                        />
-                      </PopoverContent>
-                    </Popover>
-
+                          <Calendar
+                            mode="single"
+                            selected={date}
+                            onSelect={(selectedDate) => {
+                              if (selectedDate) {
+                                setDate(selectedDate);
+                                handleInputChange("birthdate", format(selectedDate, "yyyy-MM-dd"));
+                                setIsCalendarOpen(false);
+                              }
+                            }}
+                            initialFocus
+                            className="bg-[#2a2a2a] text-white"
+                            classNames={{
+                              day_selected: "bg-yellow-500 text-black hover:bg-yellow-600 hover:text-black",
+                              day_today: "border border-yellow-500",
+                              day_outside: "text-gray-500",
+                              day_disabled: "text-gray-700",
+                              head_cell: "text-gray-400",
+                              button: "hover:bg-[#404040]",
+                              nav_button: "border-gray-600 hover:bg-[#404040]",
+                            }}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
                     {errors.birthdate && (
-                      <p className="text-red-500 text-sm mt-1">{errors.birthdate}</p>
+                      <p className="input-error mt-1">
+                        {errors.birthdate}
+                      </p>
                     )}
                   </div>
 
-                  {/* Password with Floating Label */}
-                  <div className="floating-input-container">
-                    <input
-                      type="password"
-                      placeholder="Password"
-                      value={formData.password}
-                      onChange={(e) => handleInputChange("password", e.target.value)}
-                      className={`floating-input ${formData.password ? 'has-value' : ''}`}
-                    />
-                    <label className="floating-label">Password</label>
-                    {errors.password && (
-                      <p className="text-red-500 text-sm mt-1">{errors.password}</p>
-                    )}
-                  </div>
-
-                  {/* Confirm Password with Floating Label */}
-                  <div className="floating-input-container">
-                    <input
+                  {/* Confirm Password */}
+                  <div>
+                    <Input
                       type="password"
                       placeholder="Confirm password"
                       value={formData.confirmPassword}
+                      error={errors.confirmPassword}
                       onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
-                      className={`floating-input ${formData.confirmPassword ? 'has-value' : ''}`}
                     />
-                    <label className="floating-label">Confirm password</label>
-                    {errors.confirmPassword && (
-                      <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
+                    {/* Adding an empty div with the same height as an error message to maintain alignment when no error is present */}
+                    {!errors.confirmPassword && (
+                      <div className="h-[1.25rem] mt-1"></div>
                     )}
                   </div>
                 </div>
@@ -283,7 +301,7 @@ export default function RegisterModal({ isOpen, onClose }) {
             </form>
 
             <div className="flex items-center justify-center mt-6 pt-4 border-t border-gray-600">
-              <Button variant="ghost" className="text-gray-400 hover:text-white text-sm">
+              <Button variant="ghost" className="text-gray-400 hover:text-white text-sm hover:bg-[#404040]">
                 <User className="w-4 h-4 mr-2" />
                 Contact support
               </Button>

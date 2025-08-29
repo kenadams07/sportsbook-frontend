@@ -109,6 +109,10 @@ const MainNavbar = () => {
             <RegisterModal
                 isOpen={isRegisterModalOpen}
                 onClose={() => setIsRegisterModalOpen(false)}
+                onCloseAll={() => {
+                    setIsRegisterModalOpen(false);
+                    setIsLoginModalOpen(false);
+                }}
             />
             <LoginModal
                 isOpen={isLoginModalOpen}

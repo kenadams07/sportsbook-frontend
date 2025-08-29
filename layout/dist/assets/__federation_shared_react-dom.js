@@ -1,1 +1,1 @@
-export { i as default } from './index2.js';
+export { i as default } from './index4.js';

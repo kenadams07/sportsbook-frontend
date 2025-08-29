@@ -1,6 +1,6 @@
 import { importShared } from './__federation_fn_import.js';
-import { j as jsxRuntimeExports, u as useNavigate, O as Outlet } from './__federation_expose_LayoutApp.js';
-import { c as createLucideIcon, u as useComposedRefs, a as useLayoutEffect2, b as createContextScope, d as createCollection, e as useId, P as Primitive, f as composeEventHandlers, g as useDirection, h as useControllableState, i as useCallbackRef, j as createPopperScope, R as Root2, A as Anchor, k as Portal$1, l as hideOthers, m as dispatchDiscreteCustomEvent, n as ReactRemoveScroll, o as useFocusGuards, p as createSlot, F as FocusScope, D as DismissableLayer, C as Content, q as Arrow, r as composeRefs, s as cn, t as buildExports, v as ChevronDown } from './Combination.js';
+import { b as createLucideIcon, j as jsxRuntimeExports, c as createContextScope, d as useId, P as Primitive, e as composeEventHandlers, u as useComposedRefs, f as useControllableState, g as useCallbackRef, h as createPopperScope, R as Root2, A as Anchor, i as Presence, k as Portal$1, l as hideOthers, m as dispatchDiscreteCustomEvent, n as ReactRemoveScroll, o as useFocusGuards, a as createSlot, F as FocusScope, D as DismissableLayer, C as Content, p as Arrow, q as composeRefs, r as cn, s as useNavigate, t as useLocation, v as ChevronDown, X, L as Link, w as RegisterModal, x as LoginModal, T as Toaster$1, N as NavLink, O as Outlet } from './__federation_expose_LayoutApp.js';
+import { c as createCollection, u as useDirection, b as buildExports } from './index2.js';
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -11,145 +11,38 @@ import { c as createLucideIcon, u as useComposedRefs, a as useLayoutEffect2, b a
 
 
 const __iconNode = [
-  ["circle", { cx: "12", cy: "12", r: "1", key: "41hilf" }],
-  ["circle", { cx: "12", cy: "5", r: "1", key: "gxeob9" }],
-  ["circle", { cx: "12", cy: "19", r: "1", key: "lyex9k" }]
+  ["path", { d: "M4 12h16", key: "1lakjw" }],
+  ["path", { d: "M4 18h16", key: "19g7jn" }],
+  ["path", { d: "M4 6h16", key: "1o0s65" }]
 ];
-const EllipsisVertical = createLucideIcon("ellipsis-vertical", __iconNode);
+const Menu$2 = createLucideIcon("menu", __iconNode);
 
-// src/presence.tsx
-const React2 = await importShared('react');
+const React$7 = await importShared('react');
+const {useEffect: useEffect$1,useState: useState$3} = React$7;
 
-// src/use-state-machine.tsx
-const React$4 = await importShared('react');
-
-function useStateMachine(initialState, machine) {
-  return React$4.useReducer((state, event) => {
-    const nextState = machine[state][event];
-    return nextState ?? state;
-  }, initialState);
-}
-
-// src/presence.tsx
-var Presence = (props) => {
-  const { present, children } = props;
-  const presence = usePresence(present);
-  const child = typeof children === "function" ? children({ present: presence.isPresent }) : React2.Children.only(children);
-  const ref = useComposedRefs(presence.ref, getElementRef(child));
-  const forceMount = typeof children === "function";
-  return forceMount || presence.isPresent ? React2.cloneElement(child, { ref }) : null;
-};
-Presence.displayName = "Presence";
-function usePresence(present) {
-  const [node, setNode] = React2.useState();
-  const stylesRef = React2.useRef(null);
-  const prevPresentRef = React2.useRef(present);
-  const prevAnimationNameRef = React2.useRef("none");
-  const initialState = present ? "mounted" : "unmounted";
-  const [state, send] = useStateMachine(initialState, {
-    mounted: {
-      UNMOUNT: "unmounted",
-      ANIMATION_OUT: "unmountSuspended"
-    },
-    unmountSuspended: {
-      MOUNT: "mounted",
-      ANIMATION_END: "unmounted"
-    },
-    unmounted: {
-      MOUNT: "mounted"
-    }
-  });
-  React2.useEffect(() => {
-    const currentAnimationName = getAnimationName(stylesRef.current);
-    prevAnimationNameRef.current = state === "mounted" ? currentAnimationName : "none";
-  }, [state]);
-  useLayoutEffect2(() => {
-    const styles = stylesRef.current;
-    const wasPresent = prevPresentRef.current;
-    const hasPresentChanged = wasPresent !== present;
-    if (hasPresentChanged) {
-      const prevAnimationName = prevAnimationNameRef.current;
-      const currentAnimationName = getAnimationName(styles);
-      if (present) {
-        send("MOUNT");
-      } else if (currentAnimationName === "none" || styles?.display === "none") {
-        send("UNMOUNT");
-      } else {
-        const isAnimating = prevAnimationName !== currentAnimationName;
-        if (wasPresent && isAnimating) {
-          send("ANIMATION_OUT");
-        } else {
-          send("UNMOUNT");
-        }
-      }
-      prevPresentRef.current = present;
-    }
-  }, [present, send]);
-  useLayoutEffect2(() => {
-    if (node) {
-      let timeoutId;
-      const ownerWindow = node.ownerDocument.defaultView ?? window;
-      const handleAnimationEnd = (event) => {
-        const currentAnimationName = getAnimationName(stylesRef.current);
-        const isCurrentAnimation = currentAnimationName.includes(event.animationName);
-        if (event.target === node && isCurrentAnimation) {
-          send("ANIMATION_END");
-          if (!prevPresentRef.current) {
-            const currentFillMode = node.style.animationFillMode;
-            node.style.animationFillMode = "forwards";
-            timeoutId = ownerWindow.setTimeout(() => {
-              if (node.style.animationFillMode === "forwards") {
-                node.style.animationFillMode = currentFillMode;
-              }
-            });
-          }
-        }
-      };
-      const handleAnimationStart = (event) => {
-        if (event.target === node) {
-          prevAnimationNameRef.current = getAnimationName(stylesRef.current);
-        }
-      };
-      node.addEventListener("animationstart", handleAnimationStart);
-      node.addEventListener("animationcancel", handleAnimationEnd);
-      node.addEventListener("animationend", handleAnimationEnd);
-      return () => {
-        ownerWindow.clearTimeout(timeoutId);
-        node.removeEventListener("animationstart", handleAnimationStart);
-        node.removeEventListener("animationcancel", handleAnimationEnd);
-        node.removeEventListener("animationend", handleAnimationEnd);
-      };
-    } else {
-      send("ANIMATION_END");
-    }
-  }, [node, send]);
-  return {
-    isPresent: ["mounted", "unmountSuspended"].includes(state),
-    ref: React2.useCallback((node2) => {
-      stylesRef.current = node2 ? getComputedStyle(node2) : null;
-      setNode(node2);
-    }, [])
-  };
-}
-function getAnimationName(styles) {
-  return styles?.animationName || "none";
-}
-function getElementRef(element) {
-  let getter = Object.getOwnPropertyDescriptor(element.props, "ref")?.get;
-  let mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
-  if (mayWarn) {
-    return element.ref;
-  }
-  getter = Object.getOwnPropertyDescriptor(element, "ref")?.get;
-  mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
-  if (mayWarn) {
-    return element.props.ref;
-  }
-  return element.props.ref || element.ref;
-}
+const Clock = React$7.memo(() => {
+  const [currentTime, setCurrentTime] = useState$3("");
+  useEffect$1(() => {
+    const updateTime = () => {
+      const now = /* @__PURE__ */ new Date();
+      let hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, "0");
+      const seconds = now.getSeconds().toString().padStart(2, "0");
+      const ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12 || 12;
+      const paddedHour = hours.toString().padStart(2, "0");
+      const formattedTime = `${paddedHour}:${minutes}:${seconds} ${ampm}`;
+      setCurrentTime(formattedTime);
+    };
+    updateTime();
+    const timer = setInterval(updateTime, 1e3);
+    return () => clearInterval(timer);
+  }, []);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-clock-bg text-white text-sm py-1 px-1 md:px-3 rounded-md border border-gray-500", children: currentTime });
+});
 
 // src/roving-focus-group.tsx
-const React$3 = await importShared('react');
+const React$6 = await importShared('react');
 var ENTRY_FOCUS = "rovingFocusGroup.onEntryFocus";
 var EVENT_OPTIONS = { bubbles: false, cancelable: true };
 var GROUP_NAME$2 = "RovingFocusGroup";
@@ -159,13 +52,13 @@ var [createRovingFocusGroupContext, createRovingFocusGroupScope] = createContext
   [createCollectionScope$2]
 );
 var [RovingFocusProvider, useRovingFocusContext] = createRovingFocusGroupContext(GROUP_NAME$2);
-var RovingFocusGroup = React$3.forwardRef(
+var RovingFocusGroup = React$6.forwardRef(
   (props, forwardedRef) => {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Collection$2.Provider, { scope: props.__scopeRovingFocusGroup, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Collection$2.Slot, { scope: props.__scopeRovingFocusGroup, children: /* @__PURE__ */ jsxRuntimeExports.jsx(RovingFocusGroupImpl, { ...props, ref: forwardedRef }) }) });
   }
 );
 RovingFocusGroup.displayName = GROUP_NAME$2;
-var RovingFocusGroupImpl = React$3.forwardRef((props, forwardedRef) => {
+var RovingFocusGroupImpl = React$6.forwardRef((props, forwardedRef) => {
   const {
     __scopeRovingFocusGroup,
     orientation,
@@ -178,7 +71,7 @@ var RovingFocusGroupImpl = React$3.forwardRef((props, forwardedRef) => {
     preventScrollOnEntryFocus = false,
     ...groupProps
   } = props;
-  const ref = React$3.useRef(null);
+  const ref = React$6.useRef(null);
   const composedRefs = useComposedRefs(forwardedRef, ref);
   const direction = useDirection(dir);
   const [currentTabStopId, setCurrentTabStopId] = useControllableState({
@@ -187,12 +80,12 @@ var RovingFocusGroupImpl = React$3.forwardRef((props, forwardedRef) => {
     onChange: onCurrentTabStopIdChange,
     caller: GROUP_NAME$2
   });
-  const [isTabbingBackOut, setIsTabbingBackOut] = React$3.useState(false);
+  const [isTabbingBackOut, setIsTabbingBackOut] = React$6.useState(false);
   const handleEntryFocus = useCallbackRef(onEntryFocus);
   const getItems = useCollection$2(__scopeRovingFocusGroup);
-  const isClickFocusRef = React$3.useRef(false);
-  const [focusableItemsCount, setFocusableItemsCount] = React$3.useState(0);
-  React$3.useEffect(() => {
+  const isClickFocusRef = React$6.useRef(false);
+  const [focusableItemsCount, setFocusableItemsCount] = React$6.useState(0);
+  React$6.useEffect(() => {
     const node = ref.current;
     if (node) {
       node.addEventListener(ENTRY_FOCUS, handleEntryFocus);
@@ -207,16 +100,16 @@ var RovingFocusGroupImpl = React$3.forwardRef((props, forwardedRef) => {
       dir: direction,
       loop,
       currentTabStopId,
-      onItemFocus: React$3.useCallback(
+      onItemFocus: React$6.useCallback(
         (tabStopId) => setCurrentTabStopId(tabStopId),
         [setCurrentTabStopId]
       ),
-      onItemShiftTab: React$3.useCallback(() => setIsTabbingBackOut(true), []),
-      onFocusableItemAdd: React$3.useCallback(
+      onItemShiftTab: React$6.useCallback(() => setIsTabbingBackOut(true), []),
+      onFocusableItemAdd: React$6.useCallback(
         () => setFocusableItemsCount((prevCount) => prevCount + 1),
         []
       ),
-      onFocusableItemRemove: React$3.useCallback(
+      onFocusableItemRemove: React$6.useCallback(
         () => setFocusableItemsCount((prevCount) => prevCount - 1),
         []
       ),
@@ -256,7 +149,7 @@ var RovingFocusGroupImpl = React$3.forwardRef((props, forwardedRef) => {
   );
 });
 var ITEM_NAME$2 = "RovingFocusGroupItem";
-var RovingFocusGroupItem = React$3.forwardRef(
+var RovingFocusGroupItem = React$6.forwardRef(
   (props, forwardedRef) => {
     const {
       __scopeRovingFocusGroup,
@@ -272,7 +165,7 @@ var RovingFocusGroupItem = React$3.forwardRef(
     const isCurrentTabStop = context.currentTabStopId === id;
     const getItems = useCollection$2(__scopeRovingFocusGroup);
     const { onFocusableItemAdd, onFocusableItemRemove, currentTabStopId } = context;
-    React$3.useEffect(() => {
+    React$6.useEffect(() => {
       if (focusable) {
         onFocusableItemAdd();
         return () => onFocusableItemRemove();
@@ -361,7 +254,7 @@ var Root = RovingFocusGroup;
 var Item = RovingFocusGroupItem;
 
 // src/menu.tsx
-const React$2 = await importShared('react');
+const React$5 = await importShared('react');
 var SELECTION_KEYS = ["Enter", " "];
 var FIRST_KEYS = ["ArrowDown", "PageUp", "Home"];
 var LAST_KEYS = ["ArrowUp", "PageDown", "End"];
@@ -388,11 +281,11 @@ var [MenuRootProvider, useMenuRootContext] = createMenuContext(MENU_NAME$1);
 var Menu$1 = (props) => {
   const { __scopeMenu, open = false, children, dir, onOpenChange, modal = true } = props;
   const popperScope = usePopperScope(__scopeMenu);
-  const [content, setContent] = React$2.useState(null);
-  const isUsingKeyboardRef = React$2.useRef(false);
+  const [content, setContent] = React$5.useState(null);
+  const isUsingKeyboardRef = React$5.useRef(false);
   const handleOpenChange = useCallbackRef(onOpenChange);
   const direction = useDirection(dir);
-  React$2.useEffect(() => {
+  React$5.useEffect(() => {
     const handleKeyDown = () => {
       isUsingKeyboardRef.current = true;
       document.addEventListener("pointerdown", handlePointer, { capture: true, once: true });
@@ -418,7 +311,7 @@ var Menu$1 = (props) => {
         MenuRootProvider,
         {
           scope: __scopeMenu,
-          onClose: React$2.useCallback(() => handleOpenChange(false), [handleOpenChange]),
+          onClose: React$5.useCallback(() => handleOpenChange(false), [handleOpenChange]),
           isUsingKeyboardRef,
           dir: direction,
           modal,
@@ -430,7 +323,7 @@ var Menu$1 = (props) => {
 };
 Menu$1.displayName = MENU_NAME$1;
 var ANCHOR_NAME = "MenuAnchor";
-var MenuAnchor = React$2.forwardRef(
+var MenuAnchor = React$5.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, ...anchorProps } = props;
     const popperScope = usePopperScope(__scopeMenu);
@@ -450,7 +343,7 @@ var MenuPortal = (props) => {
 MenuPortal.displayName = PORTAL_NAME$1;
 var CONTENT_NAME$1 = "MenuContent";
 var [MenuContentProvider, useMenuContentContext] = createMenuContext(CONTENT_NAME$1);
-var MenuContent = React$2.forwardRef(
+var MenuContent = React$5.forwardRef(
   (props, forwardedRef) => {
     const portalContext = usePortalContext(CONTENT_NAME$1, props.__scopeMenu);
     const { forceMount = portalContext.forceMount, ...contentProps } = props;
@@ -459,12 +352,12 @@ var MenuContent = React$2.forwardRef(
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Collection$1.Provider, { scope: props.__scopeMenu, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Collection$1.Slot, { scope: props.__scopeMenu, children: rootContext.modal ? /* @__PURE__ */ jsxRuntimeExports.jsx(MenuRootContentModal, { ...contentProps, ref: forwardedRef }) : /* @__PURE__ */ jsxRuntimeExports.jsx(MenuRootContentNonModal, { ...contentProps, ref: forwardedRef }) }) }) });
   }
 );
-var MenuRootContentModal = React$2.forwardRef(
+var MenuRootContentModal = React$5.forwardRef(
   (props, forwardedRef) => {
     const context = useMenuContext(CONTENT_NAME$1, props.__scopeMenu);
-    const ref = React$2.useRef(null);
+    const ref = React$5.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, ref);
-    React$2.useEffect(() => {
+    React$5.useEffect(() => {
       const content = ref.current;
       if (content) return hideOthers(content);
     }, []);
@@ -486,7 +379,7 @@ var MenuRootContentModal = React$2.forwardRef(
     );
   }
 );
-var MenuRootContentNonModal = React$2.forwardRef((props, forwardedRef) => {
+var MenuRootContentNonModal = React$5.forwardRef((props, forwardedRef) => {
   const context = useMenuContext(CONTENT_NAME$1, props.__scopeMenu);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     MenuContentImpl,
@@ -501,7 +394,7 @@ var MenuRootContentNonModal = React$2.forwardRef((props, forwardedRef) => {
   );
 });
 var Slot = createSlot("MenuContent.ScrollLock");
-var MenuContentImpl = React$2.forwardRef(
+var MenuContentImpl = React$5.forwardRef(
   (props, forwardedRef) => {
     const {
       __scopeMenu,
@@ -524,16 +417,16 @@ var MenuContentImpl = React$2.forwardRef(
     const popperScope = usePopperScope(__scopeMenu);
     const rovingFocusGroupScope = useRovingFocusGroupScope$1(__scopeMenu);
     const getItems = useCollection$1(__scopeMenu);
-    const [currentItemId, setCurrentItemId] = React$2.useState(null);
-    const contentRef = React$2.useRef(null);
+    const [currentItemId, setCurrentItemId] = React$5.useState(null);
+    const contentRef = React$5.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, contentRef, context.onContentChange);
-    const timerRef = React$2.useRef(0);
-    const searchRef = React$2.useRef("");
-    const pointerGraceTimerRef = React$2.useRef(0);
-    const pointerGraceIntentRef = React$2.useRef(null);
-    const pointerDirRef = React$2.useRef("right");
-    const lastPointerXRef = React$2.useRef(0);
-    const ScrollLockWrapper = disableOutsideScroll ? ReactRemoveScroll : React$2.Fragment;
+    const timerRef = React$5.useRef(0);
+    const searchRef = React$5.useRef("");
+    const pointerGraceTimerRef = React$5.useRef(0);
+    const pointerGraceIntentRef = React$5.useRef(null);
+    const pointerDirRef = React$5.useRef("right");
+    const lastPointerXRef = React$5.useRef(0);
+    const ScrollLockWrapper = disableOutsideScroll ? ReactRemoveScroll : React$5.Fragment;
     const scrollLockWrapperProps = disableOutsideScroll ? { as: Slot, allowPinchZoom: true } : void 0;
     const handleTypeaheadSearch = (key) => {
       const search = searchRef.current + key;
@@ -552,11 +445,11 @@ var MenuContentImpl = React$2.forwardRef(
         setTimeout(() => newItem.focus());
       }
     };
-    React$2.useEffect(() => {
+    React$5.useEffect(() => {
       return () => window.clearTimeout(timerRef.current);
     }, []);
     useFocusGuards();
-    const isPointerMovingToSubmenu = React$2.useCallback((event) => {
+    const isPointerMovingToSubmenu = React$5.useCallback((event) => {
       const isMovingTowards = pointerDirRef.current === pointerGraceIntentRef.current?.side;
       return isMovingTowards && isPointerInGraceArea(event, pointerGraceIntentRef.current?.area);
     }, []);
@@ -565,13 +458,13 @@ var MenuContentImpl = React$2.forwardRef(
       {
         scope: __scopeMenu,
         searchRef,
-        onItemEnter: React$2.useCallback(
+        onItemEnter: React$5.useCallback(
           (event) => {
             if (isPointerMovingToSubmenu(event)) event.preventDefault();
           },
           [isPointerMovingToSubmenu]
         ),
-        onItemLeave: React$2.useCallback(
+        onItemLeave: React$5.useCallback(
           (event) => {
             if (isPointerMovingToSubmenu(event)) return;
             contentRef.current?.focus();
@@ -579,14 +472,14 @@ var MenuContentImpl = React$2.forwardRef(
           },
           [isPointerMovingToSubmenu]
         ),
-        onTriggerLeave: React$2.useCallback(
+        onTriggerLeave: React$5.useCallback(
           (event) => {
             if (isPointerMovingToSubmenu(event)) event.preventDefault();
           },
           [isPointerMovingToSubmenu]
         ),
         pointerGraceTimerRef,
-        onPointerGraceIntentChange: React$2.useCallback((intent) => {
+        onPointerGraceIntentChange: React$5.useCallback((intent) => {
           pointerGraceIntentRef.current = intent;
         }, []),
         children: /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollLockWrapper, { ...scrollLockWrapperProps, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -685,7 +578,7 @@ var MenuContentImpl = React$2.forwardRef(
 );
 MenuContent.displayName = CONTENT_NAME$1;
 var GROUP_NAME$1 = "MenuGroup";
-var MenuGroup = React$2.forwardRef(
+var MenuGroup = React$5.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, ...groupProps } = props;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { role: "group", ...groupProps, ref: forwardedRef });
@@ -693,7 +586,7 @@ var MenuGroup = React$2.forwardRef(
 );
 MenuGroup.displayName = GROUP_NAME$1;
 var LABEL_NAME$1 = "MenuLabel";
-var MenuLabel = React$2.forwardRef(
+var MenuLabel = React$5.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, ...labelProps } = props;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { ...labelProps, ref: forwardedRef });
@@ -702,14 +595,14 @@ var MenuLabel = React$2.forwardRef(
 MenuLabel.displayName = LABEL_NAME$1;
 var ITEM_NAME$1 = "MenuItem";
 var ITEM_SELECT = "menu.itemSelect";
-var MenuItem = React$2.forwardRef(
+var MenuItem = React$5.forwardRef(
   (props, forwardedRef) => {
     const { disabled = false, onSelect, ...itemProps } = props;
-    const ref = React$2.useRef(null);
+    const ref = React$5.useRef(null);
     const rootContext = useMenuRootContext(ITEM_NAME$1, props.__scopeMenu);
     const contentContext = useMenuContentContext(ITEM_NAME$1, props.__scopeMenu);
     const composedRefs = useComposedRefs(forwardedRef, ref);
-    const isPointerDownRef = React$2.useRef(false);
+    const isPointerDownRef = React$5.useRef(false);
     const handleSelect = () => {
       const menuItem = ref.current;
       if (!disabled && menuItem) {
@@ -750,16 +643,16 @@ var MenuItem = React$2.forwardRef(
   }
 );
 MenuItem.displayName = ITEM_NAME$1;
-var MenuItemImpl = React$2.forwardRef(
+var MenuItemImpl = React$5.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, disabled = false, textValue, ...itemProps } = props;
     const contentContext = useMenuContentContext(ITEM_NAME$1, __scopeMenu);
     const rovingFocusGroupScope = useRovingFocusGroupScope$1(__scopeMenu);
-    const ref = React$2.useRef(null);
+    const ref = React$5.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, ref);
-    const [isFocused, setIsFocused] = React$2.useState(false);
-    const [textContent, setTextContent] = React$2.useState("");
-    React$2.useEffect(() => {
+    const [isFocused, setIsFocused] = React$5.useState(false);
+    const [textContent, setTextContent] = React$5.useState("");
+    React$5.useEffect(() => {
       const menuItem = ref.current;
       if (menuItem) {
         setTextContent((menuItem.textContent ?? "").trim());
@@ -807,7 +700,7 @@ var MenuItemImpl = React$2.forwardRef(
   }
 );
 var CHECKBOX_ITEM_NAME$1 = "MenuCheckboxItem";
-var MenuCheckboxItem = React$2.forwardRef(
+var MenuCheckboxItem = React$5.forwardRef(
   (props, forwardedRef) => {
     const { checked = false, onCheckedChange, ...checkboxItemProps } = props;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(ItemIndicatorProvider, { scope: props.__scopeMenu, checked, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -834,7 +727,7 @@ var [RadioGroupProvider, useRadioGroupContext] = createMenuContext(
   { value: void 0, onValueChange: () => {
   } }
 );
-var MenuRadioGroup = React$2.forwardRef(
+var MenuRadioGroup = React$5.forwardRef(
   (props, forwardedRef) => {
     const { value, onValueChange, ...groupProps } = props;
     const handleValueChange = useCallbackRef(onValueChange);
@@ -843,7 +736,7 @@ var MenuRadioGroup = React$2.forwardRef(
 );
 MenuRadioGroup.displayName = RADIO_GROUP_NAME$1;
 var RADIO_ITEM_NAME$1 = "MenuRadioItem";
-var MenuRadioItem = React$2.forwardRef(
+var MenuRadioItem = React$5.forwardRef(
   (props, forwardedRef) => {
     const { value, ...radioItemProps } = props;
     const context = useRadioGroupContext(RADIO_ITEM_NAME$1, props.__scopeMenu);
@@ -871,7 +764,7 @@ var [ItemIndicatorProvider, useItemIndicatorContext] = createMenuContext(
   ITEM_INDICATOR_NAME,
   { checked: false }
 );
-var MenuItemIndicator = React$2.forwardRef(
+var MenuItemIndicator = React$5.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, forceMount, ...itemIndicatorProps } = props;
     const indicatorContext = useItemIndicatorContext(ITEM_INDICATOR_NAME, __scopeMenu);
@@ -893,7 +786,7 @@ var MenuItemIndicator = React$2.forwardRef(
 );
 MenuItemIndicator.displayName = ITEM_INDICATOR_NAME;
 var SEPARATOR_NAME$1 = "MenuSeparator";
-var MenuSeparator = React$2.forwardRef(
+var MenuSeparator = React$5.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, ...separatorProps } = props;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -909,7 +802,7 @@ var MenuSeparator = React$2.forwardRef(
 );
 MenuSeparator.displayName = SEPARATOR_NAME$1;
 var ARROW_NAME$1 = "MenuArrow";
-var MenuArrow = React$2.forwardRef(
+var MenuArrow = React$5.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, ...arrowProps } = props;
     const popperScope = usePopperScope(__scopeMenu);
@@ -920,21 +813,21 @@ MenuArrow.displayName = ARROW_NAME$1;
 var SUB_NAME = "MenuSub";
 var [MenuSubProvider, useMenuSubContext] = createMenuContext(SUB_NAME);
 var SUB_TRIGGER_NAME$1 = "MenuSubTrigger";
-var MenuSubTrigger = React$2.forwardRef(
+var MenuSubTrigger = React$5.forwardRef(
   (props, forwardedRef) => {
     const context = useMenuContext(SUB_TRIGGER_NAME$1, props.__scopeMenu);
     const rootContext = useMenuRootContext(SUB_TRIGGER_NAME$1, props.__scopeMenu);
     const subContext = useMenuSubContext(SUB_TRIGGER_NAME$1, props.__scopeMenu);
     const contentContext = useMenuContentContext(SUB_TRIGGER_NAME$1, props.__scopeMenu);
-    const openTimerRef = React$2.useRef(null);
+    const openTimerRef = React$5.useRef(null);
     const { pointerGraceTimerRef, onPointerGraceIntentChange } = contentContext;
     const scope = { __scopeMenu: props.__scopeMenu };
-    const clearOpenTimer = React$2.useCallback(() => {
+    const clearOpenTimer = React$5.useCallback(() => {
       if (openTimerRef.current) window.clearTimeout(openTimerRef.current);
       openTimerRef.current = null;
     }, []);
-    React$2.useEffect(() => clearOpenTimer, [clearOpenTimer]);
-    React$2.useEffect(() => {
+    React$5.useEffect(() => clearOpenTimer, [clearOpenTimer]);
+    React$5.useEffect(() => {
       const pointerGraceTimer = pointerGraceTimerRef.current;
       return () => {
         window.clearTimeout(pointerGraceTimer);
@@ -1021,14 +914,14 @@ var MenuSubTrigger = React$2.forwardRef(
 );
 MenuSubTrigger.displayName = SUB_TRIGGER_NAME$1;
 var SUB_CONTENT_NAME$1 = "MenuSubContent";
-var MenuSubContent = React$2.forwardRef(
+var MenuSubContent = React$5.forwardRef(
   (props, forwardedRef) => {
     const portalContext = usePortalContext(CONTENT_NAME$1, props.__scopeMenu);
     const { forceMount = portalContext.forceMount, ...subContentProps } = props;
     const context = useMenuContext(CONTENT_NAME$1, props.__scopeMenu);
     const rootContext = useMenuRootContext(CONTENT_NAME$1, props.__scopeMenu);
     const subContext = useMenuSubContext(SUB_CONTENT_NAME$1, props.__scopeMenu);
-    const ref = React$2.useRef(null);
+    const ref = React$5.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, ref);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Collection$1.Provider, { scope: props.__scopeMenu, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Collection$1.Slot, { scope: props.__scopeMenu, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       MenuContentImpl,
@@ -1140,7 +1033,7 @@ var SubTrigger = MenuSubTrigger;
 var SubContent = MenuSubContent;
 
 // src/menubar.tsx
-const React$1 = await importShared('react');
+const React$4 = await importShared('react');
 var MENUBAR_NAME = "Menubar";
 var [Collection, useCollection, createCollectionScope] = createCollection(MENUBAR_NAME);
 var [createMenubarContext, createMenubarScope] = createContextScope(MENUBAR_NAME, [
@@ -1150,7 +1043,7 @@ var [createMenubarContext, createMenubarScope] = createContextScope(MENUBAR_NAME
 var useMenuScope = createMenuScope();
 var useRovingFocusGroupScope = createRovingFocusGroupScope();
 var [MenubarContextProvider, useMenubarContext] = createMenubarContext(MENUBAR_NAME);
-var Menubar$1 = React$1.forwardRef(
+var Menubar$1 = React$4.forwardRef(
   (props, forwardedRef) => {
     const {
       __scopeMenubar,
@@ -1169,21 +1062,21 @@ var Menubar$1 = React$1.forwardRef(
       defaultProp: defaultValue ?? "",
       caller: MENUBAR_NAME
     });
-    const [currentTabStopId, setCurrentTabStopId] = React$1.useState(null);
+    const [currentTabStopId, setCurrentTabStopId] = React$4.useState(null);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       MenubarContextProvider,
       {
         scope: __scopeMenubar,
         value,
-        onMenuOpen: React$1.useCallback(
+        onMenuOpen: React$4.useCallback(
           (value2) => {
             setValue(value2);
             setCurrentTabStopId(value2);
           },
           [setValue]
         ),
-        onMenuClose: React$1.useCallback(() => setValue(""), [setValue]),
-        onMenuToggle: React$1.useCallback(
+        onMenuClose: React$4.useCallback(() => setValue(""), [setValue]),
+        onMenuToggle: React$4.useCallback(
           (value2) => {
             setValue((prevValue) => prevValue ? "" : value2);
             setCurrentTabStopId(value2);
@@ -1218,10 +1111,10 @@ var MenubarMenu$1 = (props) => {
   const value = valueProp || autoValue || "LEGACY_REACT_AUTO_VALUE";
   const context = useMenubarContext(MENU_NAME, __scopeMenubar);
   const menuScope = useMenuScope(__scopeMenubar);
-  const triggerRef = React$1.useRef(null);
-  const wasKeyboardTriggerOpenRef = React$1.useRef(false);
+  const triggerRef = React$4.useRef(null);
+  const wasKeyboardTriggerOpenRef = React$4.useRef(false);
   const open = context.value === value;
-  React$1.useEffect(() => {
+  React$4.useEffect(() => {
     if (!open) wasKeyboardTriggerOpenRef.current = false;
   }, [open]);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -1251,16 +1144,16 @@ var MenubarMenu$1 = (props) => {
 };
 MenubarMenu$1.displayName = MENU_NAME;
 var TRIGGER_NAME = "MenubarTrigger";
-var MenubarTrigger$1 = React$1.forwardRef(
+var MenubarTrigger$1 = React$4.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, disabled = false, ...triggerProps } = props;
     const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeMenubar);
     const menuScope = useMenuScope(__scopeMenubar);
     const context = useMenubarContext(TRIGGER_NAME, __scopeMenubar);
     const menuContext = useMenubarMenuContext(TRIGGER_NAME, __scopeMenubar);
-    const ref = React$1.useRef(null);
+    const ref = React$4.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, ref, menuContext.triggerRef);
-    const [isFocused, setIsFocused] = React$1.useState(false);
+    const [isFocused, setIsFocused] = React$4.useState(false);
     const open = context.value === menuContext.value;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Collection.ItemSlot, { scope: __scopeMenubar, value: menuContext.value, disabled, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       Item,
@@ -1323,14 +1216,14 @@ var MenubarPortal$1 = (props) => {
 };
 MenubarPortal$1.displayName = PORTAL_NAME;
 var CONTENT_NAME = "MenubarContent";
-var MenubarContent$1 = React$1.forwardRef(
+var MenubarContent$1 = React$4.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, align = "start", ...contentProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
     const context = useMenubarContext(CONTENT_NAME, __scopeMenubar);
     const menuContext = useMenubarMenuContext(CONTENT_NAME, __scopeMenubar);
     const getItems = useCollection(__scopeMenubar);
-    const hasInteractedOutsideRef = React$1.useRef(false);
+    const hasInteractedOutsideRef = React$4.useRef(false);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Content2$1,
       {
@@ -1400,7 +1293,7 @@ var MenubarContent$1 = React$1.forwardRef(
 );
 MenubarContent$1.displayName = CONTENT_NAME;
 var GROUP_NAME = "MenubarGroup";
-var MenubarGroup = React$1.forwardRef(
+var MenubarGroup = React$4.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...groupProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1409,7 +1302,7 @@ var MenubarGroup = React$1.forwardRef(
 );
 MenubarGroup.displayName = GROUP_NAME;
 var LABEL_NAME = "MenubarLabel";
-var MenubarLabel = React$1.forwardRef(
+var MenubarLabel = React$4.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...labelProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1418,7 +1311,7 @@ var MenubarLabel = React$1.forwardRef(
 );
 MenubarLabel.displayName = LABEL_NAME;
 var ITEM_NAME = "MenubarItem";
-var MenubarItem$1 = React$1.forwardRef(
+var MenubarItem$1 = React$4.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...itemProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1427,7 +1320,7 @@ var MenubarItem$1 = React$1.forwardRef(
 );
 MenubarItem$1.displayName = ITEM_NAME;
 var CHECKBOX_ITEM_NAME = "MenubarCheckboxItem";
-var MenubarCheckboxItem = React$1.forwardRef(
+var MenubarCheckboxItem = React$4.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...checkboxItemProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1436,7 +1329,7 @@ var MenubarCheckboxItem = React$1.forwardRef(
 );
 MenubarCheckboxItem.displayName = CHECKBOX_ITEM_NAME;
 var RADIO_GROUP_NAME = "MenubarRadioGroup";
-var MenubarRadioGroup = React$1.forwardRef(
+var MenubarRadioGroup = React$4.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...radioGroupProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1445,7 +1338,7 @@ var MenubarRadioGroup = React$1.forwardRef(
 );
 MenubarRadioGroup.displayName = RADIO_GROUP_NAME;
 var RADIO_ITEM_NAME = "MenubarRadioItem";
-var MenubarRadioItem = React$1.forwardRef(
+var MenubarRadioItem = React$4.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...radioItemProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1454,14 +1347,14 @@ var MenubarRadioItem = React$1.forwardRef(
 );
 MenubarRadioItem.displayName = RADIO_ITEM_NAME;
 var INDICATOR_NAME = "MenubarItemIndicator";
-var MenubarItemIndicator = React$1.forwardRef((props, forwardedRef) => {
+var MenubarItemIndicator = React$4.forwardRef((props, forwardedRef) => {
   const { __scopeMenubar, ...itemIndicatorProps } = props;
   const menuScope = useMenuScope(__scopeMenubar);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(ItemIndicator, { ...menuScope, ...itemIndicatorProps, ref: forwardedRef });
 });
 MenubarItemIndicator.displayName = INDICATOR_NAME;
 var SEPARATOR_NAME = "MenubarSeparator";
-var MenubarSeparator = React$1.forwardRef(
+var MenubarSeparator = React$4.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...separatorProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1470,7 +1363,7 @@ var MenubarSeparator = React$1.forwardRef(
 );
 MenubarSeparator.displayName = SEPARATOR_NAME;
 var ARROW_NAME = "MenubarArrow";
-var MenubarArrow = React$1.forwardRef(
+var MenubarArrow = React$4.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...arrowProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1479,7 +1372,7 @@ var MenubarArrow = React$1.forwardRef(
 );
 MenubarArrow.displayName = ARROW_NAME;
 var SUB_TRIGGER_NAME = "MenubarSubTrigger";
-var MenubarSubTrigger = React$1.forwardRef(
+var MenubarSubTrigger = React$4.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...subTriggerProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1496,7 +1389,7 @@ var MenubarSubTrigger = React$1.forwardRef(
 );
 MenubarSubTrigger.displayName = SUB_TRIGGER_NAME;
 var SUB_CONTENT_NAME = "MenubarSubContent";
-var MenubarSubContent = React$1.forwardRef(
+var MenubarSubContent = React$4.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...subContentProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1619,119 +1512,329 @@ function MenubarItem({
   );
 }
 
-const React = await importShared('react');
-const {useState,useEffect} = React;
-const navItems = [
-  {
-    label: "Sports",
-    items: [
-      { label: "Football", href: "/sports/football" },
-      { label: "Basketball", href: "/sports/basketball" },
-      { label: "Tennis", href: "/sports/tennis" },
-      { label: "Cricket", href: "/sports/cricket" },
-      { label: "All Sports", href: "/sports/all" }
-    ]
-  },
+const React$3 = await importShared('react');
+const DesktopNav = ({ navItems }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isMenuActive = (item) => item.items && item.items.some((sub) => location.pathname === sub.href);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hidden md:block w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Menubar, { className: "bg-transparent flex justify-start gap-2 border-none text-navbar-text h-10", children: navItems.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsxs(MenubarMenu, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      MenubarTrigger,
+      {
+        className: `
+                h-full px-3 rounded-none cursor-pointer flex items-center gap-1 transition-colors duration-200
+                ${isMenuActive(item) ? "border-b-2 border-yellow-400 text-white font-bold bg-black" : "hover:bg-black hover:border-b-2 hover:border-yellow-400 hover:text-white"}
+              `,
+        children: [
+          item.label,
+          /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "h-4 w-4" })
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      MenubarContent,
+      {
+        className: "min-w-[200px] bg-navbar-dropdown border-navbar-border rounded-sm",
+        sideOffset: 5,
+        side: "bottom",
+        children: item.items.map((subItem) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+          MenubarItem,
+          {
+            className: `text-navbar-text rounded-sm bg-mobile-menu my-2 hover:bg-navbar-dropdown-hover hover:border-l-2 hover:border-l-navbar-highlight cursor-pointer ${location.pathname === subItem.href ? "bg-navbar-dropdown-hover border-l-2 border-yellow-400 text-white font-bold" : ""}`,
+            onClick: () => navigate(subItem.href),
+            children: subItem.label
+          },
+          subItem.href
+        ))
+      }
+    )
+  ] }, item.label)) }) });
+};
+const DesktopNav$1 = React$3.memo(DesktopNav);
+
+const React$2 = await importShared('react');
+const {useState: useState$2} = React$2;
+const MobileNav = ({ isOpen, toggleOpen, navItems }) => {
+  const [expandedIndex, setExpandedIndex] = useState$2(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const toggleExpand = (index) => {
+    setExpandedIndex((prev) => prev === index ? null : index);
+  };
+  const isMenuActive = (item) => item.items && item.items.some((sub) => location.pathname === sub.href);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "md:hidden relative w-full flex items-center justify-start", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        onClick: toggleOpen,
+        className: "flex items-center justify-center w-10 h-10 text-navbar-text hover:bg-navbar-dropdown-hover rounded",
+        "aria-label": isOpen ? "Close menu" : "Open menu",
+        children: isOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 24 }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Menu$2, { size: 24 })
+      }
+    ),
+    isOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mobile-menu-container absolute left-0 top-10 mt-2 w-56 bg-mobile-menu rounded-md shadow-lg z-50", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "py-1", children: navItems.map((item, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "border-b border-navbar-border last:border-b-0",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "div",
+            {
+              className: `px-4 py-2 text-navbar-text font-medium cursor-pointer flex justify-between items-center ${isMenuActive(item) ? "border-b-2 border-yellow-400 text-white font-bold bg-black" : ""}`,
+              onClick: () => toggleExpand(index),
+              role: "button",
+              tabIndex: 0,
+              onKeyDown: (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  toggleExpand(index);
+                }
+              },
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label }),
+                item.items && item.items.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "ml-2 text-sm", children: expandedIndex === index ? "-" : "+" })
+              ]
+            }
+          ),
+          expandedIndex === index && item.items && item.items.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-navbar-dropdown-hover", children: item.items.map((subItem) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              onClick: () => {
+                navigate(subItem.href);
+                toggleOpen();
+              },
+              className: `block px-8 py-2 text-navbar-text text-sm hover:bg-navbar-dropdown-hover cursor-pointer ${location.pathname === subItem.href ? "border-l-2 border-yellow-400 text-white font-bold bg-navbar-dropdown-hover" : ""}`,
+              children: subItem.label
+            },
+            subItem.label
+          )) })
+        ]
+      },
+      item.label
+    )) }) })
+  ] });
+};
+const MobileNav$1 = React$2.memo(MobileNav);
+
+const React$1 = await importShared('react');
+const {useState: useState$1,useEffect,useCallback} = React$1;
+const navItems$1 = [
   {
     label: "Live",
     items: [
-      { label: "In-Play", href: "/live/in-play" },
-      { label: "Live Streaming", href: "/live/streaming" },
-      { label: "Live Scores", href: "/live/scores" }
+      { label: "Event View", href: "/live_events/event-view" },
+      { label: "Live Calendar", href: "/live_events/live-calendar" },
+      { label: "Results", href: "/live_events/results" },
+      { label: "Statistics", href: "/live_events/statistics" }
     ]
   },
-  {
-    label: "Casino",
-    items: [
-      { label: "Slots", href: "/casino/slots" },
-      { label: "Live Casino", href: "/casino/live" },
-      { label: "Table Games", href: "/casino/table-games" },
-      { label: "Jackpots", href: "/casino/jackpots" }
-    ]
-  },
-  {
-    label: "Promotions",
-    items: [
-      { label: "Welcome Bonus", href: "/promotions/welcome" },
-      { label: "Free Bets", href: "/promotions/free-bets" },
-      { label: "Reload Bonus", href: "/promotions/reload" },
-      { label: "VIP Program", href: "/promotions/vip" }
-    ]
-  },
-  {
-    label: "Virtual Sports",
-    items: [
-      { label: "Virtual Football", href: "/virtual/football" },
-      { label: "Virtual Horse Racing", href: "/virtual/horse-racing" },
-      { label: "Virtual Tennis", href: "/virtual/tennis" }
-    ]
-  },
-  {
-    label: "Esports",
-    items: [
-      { label: "CS:GO", href: "/esports/csgo" },
-      { label: "Dota 2", href: "/esports/dota2" },
-      { label: "League of Legends", href: "/esports/lol" },
-      { label: "Valorant", href: "/esports/valorant" }
-    ]
-  }
+  { label: "Sports", items: [{ label: "Event View", href: "/live/in-play" }, { label: "Live Calendar", href: "/live/streaming" }, { label: "Results", href: "/live/scores" }, { label: "Statistics", href: "/live/scores" }] },
+  { label: "Casino", items: [{ label: "Home", href: "/casino/slots" }, { label: "Tournaments", href: "/casino/testimonials" }] },
+  { label: "Promotions", items: [{ label: "Sports Bonus", href: "/promotions/sports" }, { label: "Casino Bonus", href: "/promotions/casino" }, { label: "VIP Program", href: "/promotions/vip" }] },
+  { label: "Virtual Sports", items: [{ label: "Virtual Football", href: "/virtual/football" }, { label: "Virtual Horse Racing", href: "/virtual/horse-racing" }, { label: "Virtual Tennis", href: "/virtual/tennis" }] },
+  { label: "Esports", items: [{ label: "CS:GO", href: "/esports/csgo" }, { label: "Dota 2", href: "/esports/dota2" }, { label: "League of Legends", href: "/esports/lol" }, { label: "Valorant", href: "/esports/valorant" }] },
+  { label: "PlayTech", items: [{ label: "Slots", href: "/playtech/slots" }, { label: "Live Casino", href: "/playtech/live" }, { label: "Table Games", href: "/playtech/table" }] }
 ];
 const MainNavbar = () => {
-  const navigate = useNavigate();
-  const [currentTime, setCurrentTime] = useState((/* @__PURE__ */ new Date()).toLocaleTimeString());
+  const [isScrolled, setIsScrolled] = useState$1(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState$1(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState$1(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState$1(false);
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime((/* @__PURE__ */ new Date()).toLocaleTimeString());
-    }, 1e3);
-    return () => clearInterval(timer);
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    const handleClickOutside = (e) => {
+      if (isMobileMenuOpen && !e.target.closest(".mobile-menu-container")) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
+  const toggleMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen((prev) => !prev);
   }, []);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#AF0000] text-white h-28 relative w-full", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full mx-auto px-4 py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between h-full w-full", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          buildExports.LazyLoadImage,
-          {
-            src: "https://myxxexchbucket.s3.ap-south-1.amazonaws.com/Logo/betxasia.co/betxasia.co-light.jpeg",
-            alt: "Logo",
-            className: "rounded-full w-20 h-12 bg-yellow-500 p-1"
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-black md:text-white text-xl font-bold cursor-pointer  hover:text-yellow-500", children: "Sportsboo" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-yellow-500 text-black font-bold h-10 py-2 px-6 rounded-md text-sm", children: "DEPOSIT" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-white text-sm underline hover:no-underline", children: "SIGN IN" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-yellow-500 text-black font-bold h-10 py-2 px-6 rounded-md text-sm", children: "REGISTER" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-1 cursor-pointer", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm", children: "ENG" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "h-4 w-4" })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-red-700 text-white text-sm py-1 px-3 rounded-md", children: currentTime }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-red-700 p-2 rounded-md cursor-pointer", children: /* @__PURE__ */ jsxRuntimeExports.jsx(EllipsisVertical, { className: "h-5 w-5 text-white" }) })
-      ] })
-    ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-[#505050] h-10 w-[95%] rounded-t-sm mt-2 mx-auto absolute bottom-0 left-1/2 transform -translate-x-1/2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full h-full ", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Menubar, { className: "bg-transparent flex justify-start gap-5 border-none text-white h-full", children: navItems.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsxs(MenubarMenu, { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(MenubarTrigger, { className: "h-full rounded-none text-white hover:bg-gray-900 data-[state=open]:bg-gray-900 data-[state=open]:text-white data-[state=open]:border-t-2 data-[state=open]:border-t-amber-400 cursor-pointer", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 ", children: [
-        item.label,
-        /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "h-4 w-4" })
-      ] }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(MenubarContent, { className: "min-w-[200px] hover:text-white bg-gray-900 border-gray-700 rounded-sm", children: item.items.map((subItem) => /* @__PURE__ */ jsxRuntimeExports.jsx(React.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        MenubarItem,
-        {
-          className: "text-white rounded-sm bg-[#424242] my-2 hover:bg-gray-700 hover:border-l-amber-400 hover:border-l-2 cursor-pointer",
-          onClick: () => navigate(subItem.href),
-          children: subItem.label
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        className: `fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? "backdrop-blur-md bg-black/70 shadow-lg" : "bg-navbar-main"}`,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-navbar-text h-28 w-full relative", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full mx-auto px-4 py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between h-full w-full", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Link, { to: "/", className: "flex items-center gap-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                buildExports.LazyLoadImage,
+                {
+                  src: "https://myxxexchbucket.s3.ap-south-1.amazonaws.com/Logo/betxasia.co/betxasia.co-light.jpeg",
+                  alt: "Logo",
+                  className: "rounded-full w-20 h-12 bg-yellow-500 p-1"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-card text-brand cursor-pointer hover:text-chart-5", children: "Sportsbook" })
+            ] }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center md:gap-4 gap-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-yellow-500 hidden md:block text-black font-bold h-10 py-2 px-6 rounded-md text-sm", children: "DEPOSIT" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "p",
+                {
+                  onClick: () => setIsLoginModalOpen(true),
+                  className: "hidden md:block text-navbar-text text-sm underline hover:no-underline cursor-pointer",
+                  children: "Login"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  onClick: () => setIsRegisterModalOpen(true),
+                  className: "bg-yellow-500 hidden md:block text-black font-bold h-10 py-2 px-6 rounded-md text-sm",
+                  children: "Register"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, {})
+            ] })
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-10 w-[95%] absolute bottom-0 left-1/2 transform -translate-x-1/2 z-20 bg-muted-foreground rounded-t-lg", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto h-full flex items-center px-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              MobileNav$1,
+              {
+                isOpen: isMobileMenuOpen,
+                toggleOpen: toggleMobileMenu,
+                navItems: navItems$1
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(DesktopNav$1, { navItems: navItems$1 })
+          ] }) })
+        ] })
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-28" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      RegisterModal,
+      {
+        isOpen: isRegisterModalOpen,
+        onClose: () => setIsRegisterModalOpen(false)
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      LoginModal,
+      {
+        isOpen: isLoginModalOpen,
+        onClose: () => setIsLoginModalOpen(false),
+        onSwitchToRegister: () => {
+          setIsLoginModalOpen(false);
+          setIsRegisterModalOpen(true);
         }
-      ) }, subItem.href)) })
-    ] }, item.label)) }) }) })
-  ] }) });
+      }
+    )
+  ] });
+};
+
+const React = await importShared('react');
+const {useState} = React;
+const MobileNavbar = () => {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const navLinks = [
+    {
+      label: "Deposit",
+      onClick: () => console.log("Open deposit modal")
+    },
+    {
+      label: "Login",
+      onClick: () => setIsLoginModalOpen(true)
+    },
+    {
+      label: "Register",
+      onClick: () => setIsRegisterModalOpen(true)
+    }
+  ];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-h-[3.5rem] px-2 pb-5 fixed inset-x-0 bottom-0 rounded-t-md z-[100] bg-[#f13636]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-around items-center gap-2", children: navLinks.map((link) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "p",
+      {
+        className: "block py-2 text-white hover:text-yellow-500 cursor-pointer",
+        onClick: link.onClick,
+        children: link.label
+      },
+      link.label
+    )) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      LoginModal,
+      {
+        isOpen: isLoginModalOpen,
+        onClose: () => setIsLoginModalOpen(false),
+        onSwitchToRegister: () => {
+          setIsLoginModalOpen(false);
+          setIsRegisterModalOpen(true);
+        }
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      RegisterModal,
+      {
+        isOpen: isRegisterModalOpen,
+        onClose: () => setIsRegisterModalOpen(false)
+      }
+    )
+  ] });
+};
+
+const t = await importShared('react');
+var M=(e,i,s,u,m,a,l,h)=>{let d=document.documentElement,w=["light","dark"];function p(n){(Array.isArray(e)?e:[e]).forEach(y=>{let k=y==="class",S=k&&a?m.map(f=>a[f]||f):m;k?(d.classList.remove(...S),d.classList.add(a&&a[n]?a[n]:n)):d.setAttribute(y,n);}),R(n);}function R(n){h&&w.includes(n)&&(d.style.colorScheme=n);}function c(){return window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(u)p(u);else try{let n=localStorage.getItem(i)||s,y=l&&n==="system"?c():n;p(y);}catch(n){}};var x=t.createContext(void 0),U={setTheme:e=>{},themes:[]},z=()=>{var e;return (e=t.useContext(x))!=null?e:U};t.memo(({forcedTheme:e,storageKey:i,attribute:s,enableSystem:u,enableColorScheme:m,defaultTheme:a,value:l,themes:h,nonce:d,scriptProps:w})=>{let p=JSON.stringify([s,i,a,e,h,l,u,m]).slice(1,-1);return t.createElement("script",{...w,suppressHydrationWarning:true,nonce:typeof window=="undefined"?d:"",dangerouslySetInnerHTML:{__html:`(${M.toString()})(${p})`}})});
+
+const Toaster = ({
+  ...props
+}) => {
+  const { theme = "system" } = z();
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Toaster$1,
+    {
+      theme,
+      className: "toaster group",
+      style: {
+        "--normal-bg": "var(--popover)",
+        "--normal-text": "var(--popover-foreground)",
+        "--normal-border": "var(--border)"
+      },
+      ...props
+    }
+  );
 };
 
 await importShared('react');
+const navItems = [
+  { label: "Event View", to: "/live_events/event-view" },
+  { label: "Live Calendar", to: "/live_events/live-calendar" },
+  { label: "Results", to: "/live_events/results" },
+  { label: "Statistics", to: "/live_events/statistics" }
+];
+function SecondaryLiveNavbar() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "flex bg-live-secondary border-b border-live px-6 h-12 items-center gap-2", children: navItems.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+    NavLink,
+    {
+      to: item.to,
+      className: ({ isActive }) => `h-full flex items-center px-5 text-base font-semibold transition-colors duration-200 border-b-2 ${isActive ? "text-live-primary border-live-accent bg-live-secondary font-bold" : "text-live-muted border-transparent hover:text-live-primary hover:border-live-accent"}`,
+      end: true,
+      children: item.label
+    },
+    item.to
+  )) });
+}
+
+await importShared('react');
 const Layout = () => {
+  const location = useLocation();
+  const showLiveNavbar = location.pathname === "/live_events" || location.pathname.startsWith("/live_events/");
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(MainNavbar, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
+    showLiveNavbar && /* @__PURE__ */ jsxRuntimeExports.jsx(SecondaryLiveNavbar, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {}) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Toaster, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mx-auto px-6 lg:hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx(MobileNavbar, {}) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-20 lg:hidden" })
   ] });
 };
 
