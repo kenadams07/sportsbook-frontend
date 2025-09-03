@@ -27,26 +27,34 @@ const DesktopNav = ({ navItems }) => {
                 h-full px-3 rounded-none cursor-pointer flex items-center gap-1 transition-colors duration-200
                 ${isMenuActive(item) ? 'border-b-2 border-yellow-400 text-white font-bold bg-black' : 'hover:bg-black hover:border-b-2 hover:border-yellow-400 hover:text-white'}
               `}
+              // If item has href but no items, navigate directly when clicked
+              {...(!item.items && item.href ? { onClick: () => navigate(item.href) } : {})}
             >
               {item.label}
-              <ChevronDown className="h-4 w-4" />
+              {/* Only show dropdown indicator if item has sub-items */}
+              {item.items && item.items.length > 0 && (
+                <ChevronDown className="h-4 w-4" />
+              )}
             </MenubarTrigger>
 
-            <MenubarContent
-              className="min-w-[200px] bg-navbar-dropdown border-navbar-border rounded-sm"
-              sideOffset={5}
-              side="bottom"
-            >
-              {item.items.map((subItem) => (
-                <MenubarItem
-                  key={subItem.href}
-                  className={`text-navbar-text rounded-sm bg-mobile-menu my-2 hover:bg-navbar-dropdown-hover hover:border-l-2 hover:border-l-navbar-highlight cursor-pointer ${location.pathname === subItem.href ? 'bg-navbar-dropdown-hover border-l-2 border-yellow-400 text-white font-bold' : ''}`}
-                  onClick={() => navigate(subItem.href)}
-                >
-                  {subItem.label}
-                </MenubarItem>
-              ))}
-            </MenubarContent>
+            {/* Only show dropdown content if item has sub-items */}
+            {item.items && item.items.length > 0 && (
+              <MenubarContent
+                className="min-w-[200px] bg-navbar-dropdown border-navbar-border rounded-sm"
+                sideOffset={5}
+                side="bottom"
+              >
+                {item.items.map((subItem) => (
+                  <MenubarItem
+                    key={subItem.href}
+                    className={`text-navbar-text rounded-sm bg-mobile-menu my-2 hover:bg-navbar-dropdown-hover hover:border-l-2 hover:border-l-navbar-highlight cursor-pointer ${location.pathname === subItem.href ? 'bg-navbar-dropdown-hover border-l-2 border-yellow-400 text-white font-bold' : ''}`}
+                    onClick={() => navigate(subItem.href)}
+                  >
+                    {subItem.label}
+                  </MenubarItem>
+                ))}
+              </MenubarContent>
+            )}
           </MenubarMenu>
         ))}
       </Menubar>

@@ -36,18 +36,26 @@ const MobileNav = ({ isOpen, toggleOpen, navItems }) => {
               >
                 <div
                   className={`px-4 py-2 text-navbar-text font-medium cursor-pointer flex justify-between items-center ${isMenuActive(item) ? 'border-b-2 border-yellow-400 text-white font-bold bg-black' : ''}`}
-                  onClick={() => toggleExpand(index)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      toggleExpand(index);
+                  // If item has href but no items, navigate directly when clicked
+                  {...(!item.items && item.href ? { 
+                    onClick: () => {
+                      navigate(item.href);
+                      toggleOpen();
                     }
-                  }}
+                  } : { 
+                    onClick: () => toggleExpand(index),
+                    role: "button",
+                    tabIndex: 0,
+                    onKeyDown: (e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleExpand(index);
+                      }
+                    }
+                  })}
                 >
                   <span>{item.label}</span>
-                  {/* Show indicator for expandable */}
+                  {/* Show indicator for expandable items only */}
                   {item.items && item.items.length > 0 && (
                     <span className="ml-2 text-sm">{expandedIndex === index ? '-' : '+'}</span>
                   )}

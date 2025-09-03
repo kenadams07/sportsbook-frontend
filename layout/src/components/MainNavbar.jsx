@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import RegisterModal from '../modals/RegisterModal';
 import LoginModal from '../modals/LoginModal';
@@ -17,14 +18,16 @@ const navItems = [
     },
     { label: 'Sports', items: [{ label: 'Event View', href: '/live/in-play' }, { label: 'Live Calendar', href: '/live/streaming' }, { label: 'Results', href: '/live/scores' }, { label: 'Statistics', href: '/live/scores' }] },
 
-    { label: 'Casino', items: [{ label: 'Home', href: '/casino/slots' }, { label: 'Tournaments', href: '/casino/testimonials' }] },
+    { label: 'Casino', items: [{ label: 'Home', href: '/casino/slots' }, { label: 'Tournaments', href: '/casino/tournaments' }] }, 
+     { label: 'Games', href: '/games'},
     { label: 'Promotions', items: [{ label: 'Sports Bonus', href: '/promotions/sports' }, { label: 'Casino Bonus', href: '/promotions/casino' }, { label: 'VIP Program', href: '/promotions/vip' }] },
     { label: 'Virtual Sports', items: [{ label: 'Virtual Football', href: '/virtual/football' }, { label: 'Virtual Horse Racing', href: '/virtual/horse-racing' }, { label: 'Virtual Tennis', href: '/virtual/tennis' }] },
-    { label: 'Esports', items: [{ label: 'CS:GO', href: '/esports/csgo' }, { label: 'Dota 2', href: '/esports/dota2' }, { label: 'League of Legends', href: '/esports/lol' }, { label: 'Valorant', href: '/esports/valorant' }] },
+    { label: 'Esports', items: [{ label: 'Event View', href: '/esports/event-view' }, { label: 'Live Calendar', href: '/esports/live-calendar' }, { label: 'Results', href: '/esports/results' }, { label: 'Statistics', href: '/esports/statistics' }] },
     { label: 'PlayTech', items: [{ label: 'Slots', href: '/playtech/slots' }, { label: 'Live Casino', href: '/playtech/live' }, { label: 'Table Games', href: '/playtech/table' }] }
 ];
 
 const MainNavbar = () => {
+    const location = useLocation();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
@@ -44,6 +47,16 @@ const MainNavbar = () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [isMobileMenuOpen]);
+
+    // Check for login parameter in URL to auto-open login modal
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        if (searchParams.get('login') === 'true') {
+            setIsLoginModalOpen(true);
+            // Remove the parameter from URL without refreshing the page
+            window.history.replaceState({}, document.title, location.pathname);
+        }
+    }, [location]);
 
     const toggleMobileMenu = useCallback(() => {
         setIsMobileMenuOpen((prev) => !prev);

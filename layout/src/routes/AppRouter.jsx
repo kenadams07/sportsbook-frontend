@@ -5,16 +5,21 @@ import { Paths } from './path'
 import { domainConfig } from '../utils/getDomainConfig';
 import Loader from '../components/Loader/Loader';
 import Casino from '../pages/Casino';
+import CasinoTournaments from '../pages/CasinoTournaments';
 import MainLiveSection from '../components/Live-section/MainLiveSection';
 import LeftSidebarEventView from '../components/Live-section/LeftSidebarEventView';
 import LiveCalender from '../components/Live-section/LiveCalender';
 import Results from '../components/Live-section/Results';
 import VerifyEmail from '../pages/VerifyEmail';
+import ResetPassword from '../pages/ResetPassword';
+import Games from '../components/Games';
+import MainEsportsSection from '../components/Esports-section/MainEsportsSection';
+import EsportsCalendar from '../components/Esports-section/EsportsCalendar';
+import EsportsResults from '../components/Esports-section/EsportsResults';
+import EsportsStatistics from '../components/Esports-section/EsportsStatistics';
 
 const Homepage = lazy(() => import('../pages/Homepage'));
 const NotFound = lazy(() => import('../components/Error/NotFound'));
-
-
 
 const Statistics = () => <div style={{color: 'white', padding: 24}}>Statistics Page</div>;
 
@@ -35,12 +40,19 @@ const AppRouter = () => {
             <Route path="/" element={<Navigate to={Paths.home} replace={true} />} />
             <Route path={Paths.home} element={<Homepage />} />
             <Route path={Paths.casino} element={<Casino />} /> 
+            <Route path={Paths.casinoTournaments} element={<CasinoTournaments />} />
             <Route path={Paths.eventView} element={<MainLiveSection />} />
             <Route path={Paths.liveCalendar} element={<LiveCalender />} />
             <Route path={Paths.results} element={<Results />} />
             <Route path={Paths.statistics} element={<Statistics />} />
+            <Route path={Paths.games} element={<Games />} />
+            <Route path={Paths.esportsEventView} element={<MainEsportsSection />} />
+            <Route path={Paths.esportsLiveCalendar} element={<EsportsCalendar />} />
+            <Route path={Paths.esportsResults} element={<EsportsResults />} />
+            <Route path={Paths.esportsStatistics} element={<EsportsStatistics />} />
           </Route>
           <Route path={Paths.verifyEmail} element={<VerifyEmail />} />
+          <Route path={Paths.resetPassword} element={<ResetPassword />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </Suspense>

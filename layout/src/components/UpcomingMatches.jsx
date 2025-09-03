@@ -339,7 +339,7 @@ export default function UpcomingMatches() {
                 onClick={() => handleGameClick(match.id, match.sportKey)}
                 className={`cursor-pointer flex items-center justify-between gap-3 px-3 py-2 m-1 rounded-md transition-all duration-300 ${
                   backgroundClass
-                } ${textColor} ${isSelected ? 'shadow-lg transform scale-[1.02] border-2 border-white/20' : ''}`}
+                } ${textColor} ${isSelected ? 'shadow-md transform scale-[1.01] border border-white/20' : ''}`}
               >
                 {/* Left: time + teams */}
                 <div className="flex items-center gap-3 min-w-0 flex-1">

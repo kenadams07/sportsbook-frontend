@@ -7,6 +7,8 @@ import { Checkbox } from "../components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "../components/ui/dialog";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/Action/auth/loginAction";
+import { verifyEmail } from "../redux/Action/auth/verifyEmailAction";
+import { notifyError } from "../utils/notificationService";
 
 export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
   const {
@@ -52,16 +54,28 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
   };
 
   const onSubmit = (data) => {
-    console.log("Login Data:", data);
-    
     // Dispatch login action with callback
     dispatch(
       login({
         payload: data
       }, (response) => {
         console.log("Login successful, response:", response);
-        // Handle successful login here
-          
+      })
+    );
+  };
+
+  const handleForgotPassword = () => {
+    // Check if email is provided
+    if (!emailOrUsername) {
+      notifyError("Please enter email");
+      return;
+    }
+    console.log("emailOrUsername",emailOrUsername)
+    // Dispatch forgot password action
+    dispatch(
+      verifyEmail({
+        payload: { email: emailOrUsername },
+        route: "FP" // Forget Password route
       })
     );
   };
@@ -117,16 +131,25 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
                 })}
               />
 
-              {/* Remember me */}
-              <div className="flex items-center space-x-2 py-2">
-                <Checkbox
-                  id="remember"
-                  className="border-gray-400 data-[state=checked]:bg-yellow-500 data-[state=checked]:border-yellow-500"
-                  {...register("rememberMe")}
-                />
-                <label htmlFor="remember" className="text-sm text-gray-300 cursor-pointer">
-                  Remember me
-                </label>
+              {/* Remember me and Forgot Password */}
+              <div className="flex items-center justify-between py-2">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="remember"
+                    className="border-gray-400 data-[state=checked]:bg-yellow-500 data-[state=checked]:border-yellow-500"
+                    {...register("rememberMe")}
+                  />
+                  <label htmlFor="remember" className="text-sm text-gray-300 cursor-pointer">
+                    Remember me
+                  </label>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="text-sm text-gray-400 hover:text-yellow-500 cursor-pointer underline"
+                >
+                  Forgot Password?
+                </button>
               </div>
 
               {/* Submit Button */}
@@ -177,7 +200,11 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
 
             {/* Forgot Password */}
             <div className="mt-6 pt-4 border-t border-gray-600 text-center">
-              <Button variant="ghost" className="text-gray-400 hover:text-white text-sm font-medium hover:bg-[#404040]">
+              <Button 
+                variant="ghost" 
+                className="text-gray-400 hover:text-white text-sm font-medium hover:bg-[#404040]"
+                onClick={handleForgotPassword}
+              >
                 FORGOT YOUR PASSWORD?
               </Button>
             </div>
