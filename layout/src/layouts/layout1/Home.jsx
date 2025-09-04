@@ -1,25 +1,47 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../../components/ui/carousel'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import UpcomingMatches from '../../components/UpcomingMatches'
 import ImageCardGrid from '../../components/ImageCardGamesGrid'
 import img1 from "/assets/img1.jpg"
 import img2 from "/assets/img2.jpg"
 import img3 from "/assets/img3.jpg"
 import img4 from "/assets/img4.jpg"
+import WelcomeComponent from '../../components/WelcomeComponent'
+import { getLocalStorageItem, setLocalStorageItem } from '../../utils/Helper'
+
 const images = [
   { id: 1, src: img1, name: "Game One" },
   { id: 2, src: img2, name: "Game Two" },
   { id: 3, src: img3, name: "Game Three" },
   { id: 4, src: img4, name: "Game Four" },
   { id: 5, src: img4, name: "Game Five" },
-
 ];
+
 const Home = () => {
+  const [showWelcome, setShowWelcome] = useState(false);
+
+  useEffect(() => {
+    // Check if we should show the welcome modal
+    const shouldShowWelcome = getLocalStorageItem('showWelcomeModal');
+    if (shouldShowWelcome === 'true') {
+      setShowWelcome(true);
+      // Remove the flag so it doesn't show again
+      setLocalStorageItem('showWelcomeModal', 'false');
+    }
+  }, []);
+
+  const handleCloseWelcome = () => {
+    setShowWelcome(false);
+  };
+
   return (
-    <div className='w-full  mx-auto px-2 py-2 '>
+    <div className='w-full mx-auto px-2 py-2'>
+      {/* Welcome Modal */}
+      {showWelcome && <WelcomeComponent onClose={handleCloseWelcome} showDepositButton={true} />}
+
       {/* Carousel Container */}
-      <div className='w-full  h-full rounded-lg overflow-hidden shadow-lg'>
+      <div className='w-full h-full rounded-lg overflow-hidden shadow-lg'>
         <Carousel className='w-full h-full'>
           <CarouselContent className='h-full'>
             {['slider1', 'slider2', 'slider3'].map((item) => (

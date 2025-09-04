@@ -4,6 +4,35 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Add custom animations for the welcome component */
+@keyframes flyIn {
+  0% {
+    transform: translateX(100%) rotate(45deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes bounceCustom {
+  0%, 100% {
+    transform: translateY(0) rotate(45deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(45deg);
+  }
+}
+
+.animate-fly-in {
+  animation: flyIn 0.8s ease-out forwards;
+}
+
+.animate-bounce-custom {
+  animation: bounceCustom 1.5s infinite;
+}
+
 html,
 body {
   width: 100%;

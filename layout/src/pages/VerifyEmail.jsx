@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Mail, Check, RefreshCw, ArrowLeft, Send } from "lucide-react";
 import { Button } from "../components/ui/button";
-import { OTPInput } from "../components/ui/otp-input"; // Changed from regular Input to OTPInput
+import { OTPInput } from "../components/ui/otp-input";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyEmail } from "../redux/Action/auth/verifyEmailAction";
 import { Paths } from "../routes/path";
+import { setLocalStorageItem } from "../utils/Helper";
 
 export default function VerifyEmail() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [verificationCode, setVerificationCode] = useState(""); // This will now be a string of digits
+  const [verificationCode, setVerificationCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
@@ -36,7 +37,7 @@ export default function VerifyEmail() {
       return;
     }
 
-    setVerificationCode(""); // Reset the verification code
+    setVerificationCode("");
     setIsInputDisabled(false);
     setIsTimerOn(true);
     setTimeLeft(120);
@@ -46,7 +47,6 @@ export default function VerifyEmail() {
       route: "VE",
     };
 
-    // Remove the callback function from the dispatch
     dispatch(
       verifyEmail({
         payload,
@@ -54,8 +54,6 @@ export default function VerifyEmail() {
       })
     );
   };
-
-  // Removed handleChangeOTP as it's no longer needed with the OTPInput component
 
   const handleVerifyCode = async (e) => {
     e.preventDefault();
@@ -83,7 +81,6 @@ export default function VerifyEmail() {
       otp: verificationCode,
     };
 
-    // Remove the callback function from the dispatch
     dispatch(
       verifyEmail({
         payload,
@@ -91,12 +88,14 @@ export default function VerifyEmail() {
       }, (response) => {
         console.log("verified otp", response);
         if (response?.code == 200) {
+          // Set flag in localStorage to show welcome modal on homepage
+          setLocalStorageItem('showWelcomeModal', 'true');
+          
+          // Navigate to the home page directly
           navigate(Paths.home);
         }
-
       })
     );
-
   };
 
   useEffect(() => {
@@ -144,9 +143,14 @@ export default function VerifyEmail() {
         setVerificationStatus("Verification Success");
         setIsVerified(true);
         toast.success("Email verified successfully!");
+        
+        // Set flag in localStorage to show welcome modal on homepage
+        setLocalStorageItem('showWelcomeModal', 'true');
+        
+        // Navigate to the home page
         setTimeout(() => {
-          navigate("/");
-        }, 2000);
+          navigate(Paths.home);
+        }, 1000);
       }
     } else if (verifyEmailState?.error) {
       if (!verifyEmailState?.data?.hasOwnProperty("otp")) {
@@ -173,7 +177,7 @@ export default function VerifyEmail() {
             <p className="text-gray-400 mb-6">
               Your email has been successfully verified. You can now access all features of SportsBook.
             </p>
-            <div className="text-sm text-gray-500">Redirecting you to login...</div>
+            <div className="text-sm text-gray-500">Redirecting you to home page...</div>
           </div>
         </div>
       </div>

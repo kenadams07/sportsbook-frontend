@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import { useEffect } from "react";
-import { User } from "lucide-react";
+import { User, Calendar as CalendarIcon } from "lucide-react";
 import { Button } from "../components/ui/button";
-import { Calendar as CalendarIcon } from "lucide-react";
 import { Calendar } from "../components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover";
 import { format } from "date-fns";
@@ -223,7 +222,7 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
                       Birth Date
                     </label>
                     <div className="relative">
-                      <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+                      <Popover modal={true} open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                         <PopoverTrigger asChild>
                           <Button
                             type="button"
@@ -237,7 +236,7 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent
-                          className="w-full max-w-[350px] p-0 bg-[#2a2a2a] border-gray-600"
+                          className="w-full max-w-[350px] p-0 bg-[#2a2a2a] border-gray-600 z-[100]"
                           align="start"
                         >
                           <Calendar

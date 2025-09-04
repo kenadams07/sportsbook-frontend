@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import RegisterModal from '../modals/RegisterModal';
 import LoginModal from '../modals/LoginModal';
+import DepositModal from '../components/DepositModal';
 import { Clock } from './ui/clock';
 import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
@@ -32,6 +33,7 @@ const MainNavbar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -84,7 +86,10 @@ const MainNavbar = () => {
                                 </Link>
                             </div>
                             <div className="flex items-center md:gap-4 gap-2">
-                                <button className="bg-yellow-500 hidden md:block text-black font-bold h-10 py-2 px-6 rounded-md text-sm">
+                                <button 
+                                    className="bg-yellow-500 hidden md:block text-black font-bold h-10 py-2 px-6 rounded-md text-sm"
+                                    onClick={() => setIsDepositModalOpen(true)}
+                                >
                                     DEPOSIT
                                 </button>
                                 <p
@@ -134,6 +139,10 @@ const MainNavbar = () => {
                     setIsLoginModalOpen(false);
                     setIsRegisterModalOpen(true);
                 }}
+            />
+            <DepositModal 
+                isOpen={isDepositModalOpen}
+                onClose={() => setIsDepositModalOpen(false)}
             />
         </>
     );

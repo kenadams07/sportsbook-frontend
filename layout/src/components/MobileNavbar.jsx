@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 import RegisterModal from '../modals/RegisterModal';
 import LoginModal from '../modals/LoginModal';
+import DepositModal from '../components/DepositModal';
 
 const MobileNavbar = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
 
   const navLinks = [
     {
       label: "Deposit",
-      onClick: () => console.log("Open deposit modal")
+      onClick: () => setIsDepositModalOpen(true)
     },
     {
       label: "Login",
@@ -45,16 +47,22 @@ const MobileNavbar = () => {
           setIsRegisterModalOpen(true);
         }}
       />
-      <RegisterModal 
-        isOpen={isRegisterModalOpen} 
-        onClose={() => setIsRegisterModalOpen(false)} 
+      
+      <RegisterModal
+        isOpen={isRegisterModalOpen}
+        onClose={() => setIsRegisterModalOpen(false)}
         onCloseAll={() => {
           setIsRegisterModalOpen(false);
           setIsLoginModalOpen(false);
         }}
       />
+      
+      <DepositModal 
+        isOpen={isDepositModalOpen}
+        onClose={() => setIsDepositModalOpen(false)}
+      />
     </>
-  )
-}
+  );
+};
 
-export default MobileNavbar
+export default MobileNavbar;
