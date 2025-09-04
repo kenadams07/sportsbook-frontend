@@ -102,6 +102,12 @@ export class Users {
   @Column({ default: true })
   betAllow: boolean;
 
+  @Column({ type: 'varchar', nullable: true })
+  resetToken: string | null;
+
+  @Column({ type: 'timestamp', nullable: true })
+  resetTokenExpiry: Date | null;
+
   @OneToMany(() => SportBets, (sportsBet) => sportsBet.user)
   sportsBets: SportBets[];
 

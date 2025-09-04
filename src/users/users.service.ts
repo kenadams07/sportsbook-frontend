@@ -1,10 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException, BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from './users.entity';
 import { EmailService } from '../email/email.service';
 import * as jwt from 'jsonwebtoken';
+import * as bcrypt from 'bcrypt';
 import { USERS_CONSTANTS } from './users.constants';
+import { LoginDto } from './dto/login.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class UsersService {
@@ -28,6 +31,45 @@ export class UsersService {
 
   async findOneByEmail(email: string): Promise<Users | null> {
     return this.usersRepository.findOne({ where: { email } });
+  }
+
+  async findOneByUsername(username: string): Promise<Users | null> {
+    return this.usersRepository.findOne({ where: { username } });
+  }
+
+  async findOneByEmailOrUsername(emailOrUsername: string): Promise<Users | null> {
+    // Try to find by email first
+    let user = await this.findOneByEmail(emailOrUsername);
+    if (user) {
+      return user;
+    }
+    
+    // If not found by email, try to find by username
+    user = await this.findOneByUsername(emailOrUsername);
+    return user;
+  }
+
+  async validateUserCredentials(loginDto: LoginDto): Promise<Users | null> {
+    const { emailOrUsername, password } = loginDto;
+    
+    // Find user by email or username
+    const user = await this.findOneByEmailOrUsername(emailOrUsername);
+    
+    // If user not found, return null
+    if (!user) {
+      return null;
+    }
+    
+    // Compare password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    
+    // If password is valid, return user
+    if (isPasswordValid) {
+      return user;
+    }
+    
+    // If password is invalid, return null
+    return null;
   }
 
   generateOTP(): string {
@@ -123,5 +165,86 @@ export class UsersService {
 
   async updateToken(userId: string, token: string): Promise<void> {
     await this.usersRepository.update({ id: userId }, { token });
+  }
+
+  async generateResetToken(email: string): Promise<string | null> {
+    const user = await this.findOneByEmail(email);
+    if (!user) {
+      // For security reasons, we don't reveal if the email exists
+      return null;
+    }
+
+    // Generate reset token
+    const resetToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    
+    // Set token expiry (1 hour from now)
+    const expiry = new Date();
+    expiry.setHours(expiry.getHours() + 1);
+
+    // Save token and expiry to user
+    user.resetToken = resetToken;
+    user.resetTokenExpiry = expiry;
+    await this.usersRepository.save(user);
+
+    return resetToken;
+  }
+
+  async validateResetToken(token: string): Promise<Users | null> {
+    const user = await this.usersRepository.findOne({ where: { resetToken: token } });
+    
+    if (!user) {
+      return null;
+    }
+
+    // Check if token is expired
+    if (!user.resetTokenExpiry || new Date() > user.resetTokenExpiry) {
+      return null;
+    }
+
+    return user;
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<boolean> {
+    const { token, newPassword } = resetPasswordDto;
+    
+    // Validate token
+    const user = await this.validateResetToken(token);
+    if (!user) {
+      throw new BadRequestException('Invalid or expired reset token');
+    }
+
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    
+    // Update user password
+    user.password = hashedPassword;
+    user.passwordText = newPassword;
+    
+    // Clear reset token
+    user.resetToken = null;
+    user.resetTokenExpiry = null;
+    
+    // Save user
+    await this.usersRepository.save(user);
+    
+    return true;
+  }
+
+  async sendPasswordResetEmail(email: string, resetToken: string): Promise<boolean> {
+    try {
+      this.logger.log(`Sending password reset email to ${email}`);
+      const result = await this.emailService.sendPasswordResetEmail(email, resetToken);
+      
+      if (result) {
+        this.logger.log(`Password reset email sent successfully to ${email}`);
+      } else {
+        this.logger.warn(`Failed to send password reset email to ${email}`);
+      }
+      
+      return result;
+    } catch (error) {
+      this.logger.error(`Error sending password reset email to ${email}:`, error);
+      return false;
+    }
   }
 }
