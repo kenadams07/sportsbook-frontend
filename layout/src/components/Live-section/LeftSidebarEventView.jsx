@@ -20,7 +20,7 @@ function extractOddsW1W2(markets) {
   };
 }
 
-export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setSelectedSport = () => {}, selectedMatch }) {
+export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setSelectedSport = () => {}, selectedMatch, onSelectedMatchOddsUpdate = () => {} }) {
   const [search, setSearch] = useState("");
   const [expanded, setExpanded] = useState({});
   const [selectedType, setSelectedType] = useState("live"); 
@@ -77,6 +77,15 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
                 w1: prevOdds.w1 !== newOdds.w1,
                 w2: prevOdds.w2 !== newOdds.w2,
               };
+              
+              // If this is the currently selected match, update its odds
+              if (selectedMatch && selectedMatch.eventId === e.eventId) {
+                onSelectedMatchOddsUpdate({
+                  ...selectedMatch,
+                  odds: newOdds,
+                  markets: e.markets
+                });
+              }
             }
             setOddsByEventId(oddsMap);
             setHighlightedOdds(highlights);
@@ -89,7 +98,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
     }
     intervalId = setInterval(pollOdds, 1000);
     return () => clearInterval(intervalId);
-  }, [selectedType, oddsByEventId, expanded]);
+  }, [selectedType, oddsByEventId, expanded, selectedMatch, onSelectedMatchOddsUpdate]);
 
   const toggleExpand = (sport) => {
     setExpanded((prev) => ({ ...prev, [sport]: !prev[sport] }));
@@ -220,10 +229,13 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
                           highlight={isSelected}
                           oddsHighlight={highlight}
                           onClick={() => {
+                            // Get the latest odds for this match
+                            const latestOdds = oddsByEventId[match.eventId] || extractOddsW1W2(match.markets);
                             setSelectedMatch({
                               ...match,
                               team1,
                               team2,
+                              odds: latestOdds, // Include the latest odds in the selected match data
                             });
                             setSelectedSport(sport);
                           }}

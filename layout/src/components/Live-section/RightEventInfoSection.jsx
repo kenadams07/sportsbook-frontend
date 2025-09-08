@@ -24,6 +24,24 @@ const formatDateTime = (timestamp) => {
   return date.toLocaleDateString('en-US', options);
 };
 
+// Function to extract W1 odds from markets data
+const extractW1Odds = (markets) => {
+  if (!markets) return '-';
+  const mo = markets?.matchOdds?.[0];
+  const r0 = mo?.runners?.[0];
+  const w1 = r0?.backPrices?.[0]?.price;
+  return typeof w1 === "number" ? w1.toFixed(2) : '-';
+};
+
+// Function to extract W2 odds from markets data
+const extractW2Odds = (markets) => {
+  if (!markets) return '-';
+  const mo = markets?.matchOdds?.[0];
+  const r1 = mo?.runners?.[1];
+  const w2 = r1?.backPrices?.[0]?.price;
+  return typeof w2 === "number" ? w2.toFixed(2) : '-';
+};
+
 export default function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = false }) {
   const [oddsOption, setOddsOption] = useState('always ask');
 
@@ -41,54 +59,72 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
 
   if (isCompact) {
     return (
-      <div className="p-3 m-2 bg-live-primary rounded-lg border border-live-accent shadow-live flex flex-col gap-3 text-live-primary">
+      <div className="p-2.5 m-1.5 bg-live-primary rounded-lg border border-live-accent shadow-live flex flex-col gap-2 text-live-primary">
         {/* MY TEAMS Section */}
-        <div className="space-y-2">
-          <h3 className="text-sm font-bold text-live-primary">MY TEAMS</h3>
-          <button className="w-full flex items-center gap-2 bg-live-primary hover:bg-live-hover px-3 py-2 rounded text-sm">
+        <div className="space-y-1.5">
+          <h3 className="text-xs font-bold text-live-primary">MY TEAMS</h3>
+          <button className="w-full flex items-center gap-1.5 bg-live-primary hover:bg-live-hover px-2 py-1.5 rounded text-xs">
             <span className="text-live-accent">★</span>
             <span>Add Your Favorites</span>
           </button>
         </div>
 
         {/* Empty Content Area */}
-        <div className="bg-live-secondary rounded p-4 flex items-center justify-center">
-          <div className="text-live-muted text-xs">Empty content area</div>
+        <div className="bg-live-secondary rounded p-3 flex items-center justify-center">
+          <div className="text-live-muted text-[10px]">Empty content area</div>
         </div>
 
         {/* BetSlip Section */}
-        <div className="space-y-2">
-          <div className="bg-live-tertiary px-3 py-2 rounded border border-live-accent text-center">
-            <span className="text-sm font-bold text-live-accent">BetSlip</span>
+        <div className="space-y-1.5">
+          <div className="bg-live-tertiary px-2 py-1 rounded border border-live-accent text-center">
+            <span className="text-xs font-bold text-live-accent">BetSlip</span>
           </div>
-          <div className="bg-live-tertiary px-3 py-2 rounded border border-live flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-live-accent">⚙️</span>
-              <span className="text-sm text-live-primary">Always ask</span>
-            </div>
-            <span className="text-live-accent">▾</span>
+          
+          {/* Bet Info */}
+          <div className="bg-live-tertiary px-2 py-1 rounded border border-live">
+            <div className="text-[10px] mb-1 font-bold text-live-primary">{selectedGame?.competitionName}</div>
+            <div className="text-[10px] mb-1 font-bold text-live-primary">{selectedGame?.team1} ({extractW1Odds(selectedGame?.markets)})</div>
+            <div className="text-[10px] mb-1 font-bold text-live-primary">{selectedGame?.team2} ({extractW2Odds(selectedGame?.markets)})</div>
+            <div className="text-[10px] text-live-secondary mb-1">{selectedGame?.team1} - {selectedGame?.team2}</div>
+            <div className="text-[10px] text-live-secondary">{formatDateTime(selectedGame?.openDate)}</div>
           </div>
-          <div className="bg-live-tertiary px-3 py-2 rounded border border-live text-center">
-            <span className="text-xs text-live-secondary">Your betslip is empty</span>
+          
+          {/* Stake Input */}
+          <div className="bg-live-tertiary px-2 py-1 rounded border border-live">
+            <input 
+              type="text"
+              placeholder="Enter stake"
+              className="w-full h-7 bg-live-hover border-0 rounded px-2 py-1 text-[10px] text-live-primary placeholder-live-secondary"
+            />
           </div>
-          <div className="bg-live-tertiary px-3 py-2 rounded border border-live flex items-center gap-1 text-xs whitespace-nowrap">
-            <span className="text-live-warning">⚠️</span>
-            <span className="text-live-primary">To place your bet, please</span>
-            <button onClick={onLogin} className="text-live-info underline hover:text-live-accent">Sign in</button>
-            <span className="text-live-primary">or</span>
-            <button onClick={onRegister} className="text-live-info underline hover:text-live-accent">Register</button>
+          
+          {/* Possible Win */}
+          <div className="flex justify-between items-center bg-live-tertiary px-2 py-1 rounded border border-live">
+            <span className="text-[10px] text-live-primary">Possible win:</span>
+            <span className="text-[10px] text-live-accent font-bold">0 €</span>
           </div>
+          
+          {/* Quick Stake Buttons */}
+          <div className="flex gap-1.5">
+            <button className="flex-1 bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-[10px] font-medium text-live-primary transition-colors">5</button>
+            <button className="flex-1 bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-[10px] font-medium text-live-primary transition-colors">10</button>
+            <button className="flex-1 bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-[10px] font-medium text-live-primary transition-colors">50</button>
+            <button className="bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-[10px] font-medium text-live-primary transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-2.5 w-2.5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+            </button>
+          </div>
+          
+          {/* BET Button */}
+          <button className="w-full bg-live-accent hover:bg-live-warning border border-live-accent text-live-dark px-2 py-1.5 rounded text-xs font-bold transition-colors">
+            BET
+          </button>
         </div>
 
-        {/* Betting Controls */}
-        <div className="space-y-2">
-          <div className="flex gap-2">
-            <button className="flex-1 bg-live-tertiary hover:bg-live-hover border border-live px-3 py-2 rounded text-sm font-medium text-live-primary transition-colors">5</button>
-            <button className="flex-1 bg-live-tertiary hover:bg-live-hover border border-live px-3 py-2 rounded text-sm font-medium text-live-primary transition-colors">10</button>
-            <button className="flex-1 bg-live-tertiary hover:bg-live-hover border border-live px-3 py-2 rounded text-sm font-medium text-live-primary transition-colors">50</button>
-            <button className="bg-live-tertiary hover:bg-live-hover border border-live px-3 py-2 rounded text-sm font-medium text-live-primary transition-colors">✏️</button>
-          </div>
-          <button className="w-full bg-live-accent hover:bg-live-warning border border-live-accent text-live-dark px-3 py-2 rounded text-sm font-bold transition-colors">BET</button>
+        {/* Placeholder for Additional Stats - Moved after BET button */}
+        <div className="bg-live-secondary rounded p-3 flex items-center justify-center">
+          <div className="text-live-muted text-[10px]">Empty content area</div>
         </div>
       </div>
     );
@@ -107,7 +143,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
         <div className="flex flex-col items-center gap-2 p-3 bg-live-tertiary rounded-lg border border-live shadow-live">
           <div className="bg-live-hover p-2 rounded-full border border-live-accent">
             <svg className="w-5 h-5 text-live-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
             </svg>
           </div>
           <span className="text-xs font-medium text-live-accent">Gold Tier</span>
@@ -127,54 +163,77 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
     
 
       {/* BetSlip Separator */}
-      <div className="flex flex-col gap-3 py-2">
-        <div className="flex items-center gap-3 py-2">
+      <div className="flex flex-col gap-2 py-1">
+        <div className="flex items-center gap-2 py-1">
           <div className="h-px flex-1 bg-live-accent opacity-30"></div>
-          <span className="text-sm font-bold text-live-accent px-3 py-1 bg-live-tertiary rounded-full border border-live-accent">
+          <span className="text-sm font-bold text-live-accent px-2 py-0.5 bg-live-tertiary rounded-full border border-live-accent">
             BetSlip
           </span>
           <div className="h-px flex-1 bg-live-accent opacity-30"></div>
         </div>
 
-        {/* Login/Register CTA */}
-        <div className="text-center text-xs text-live-muted bg-live-tertiary p-3 rounded-lg border border-live">
+        {/* Login/Register CTA - Moved here and fixed layout */}
+        <div className="text-center text-xs text-live-muted bg-live-tertiary p-2 rounded-lg border border-live">
           <p>If you want to place a bet, please<LinkTo onClick={onLogin} text="login" /> or<LinkTo onClick={onRegister} text="register" /></p>
         </div>
       </div>
 
-              {/* Event Info Section */}
-        <div className="bg-live-tertiary p-4 rounded-lg border border-live-accent shadow-live">
-          <div className="space-y-3">
-            <div className="flex justify-between items-center py-2 border-b border-live">
-              <span className="text-live-secondary text-sm font-medium">Team 1:</span>
-              <span className="text-sm text-live-accent font-semibold">{selectedGame.team1}</span>
-            </div>
-            <div className="flex justify-between items-center py-2 border-b border-live">
-              <span className="text-live-secondary text-sm font-medium">Team 2:</span>
-              <span className="text-sm text-live-accent font-semibold">{selectedGame.team2}</span>
-            </div>
-            <div className="flex justify-between items-center py-2 border-b border-live">
-              <span className="text-live-secondary text-sm font-medium">Time:</span>
-              <span className="text-sm text-live-accent font-semibold">{formatDateTime(selectedGame.timeLabel)}</span>
-            </div>
-            <div className="flex justify-between items-center py-2">
-              <span className="text-live-secondary text-sm font-medium">Odds:</span>
-              <span className="text-sm text-live-accent font-semibold">
-                W1: {selectedGame.odds.w1} | W2: {selectedGame.odds.w2}
-              </span>
-            </div>
-          </div>
-        </div>
+   
 
-      {/* Placeholder for Additional Stats */}
-      <div className="bg-live-tertiary p-6 rounded-lg border border-live-accent shadow-live flex items-center justify-center text-center h-28">
-        <div className="space-y-2">
-          <div className="w-12 h-12 bg-live-hover rounded-full flex items-center justify-center mx-auto border border-live-accent">
-            <span className="text-live-accent text-xl">📊</span>
+      {/* BetSlip Section - Using actual game data instead of static data */}
+      <div className="space-y-1.5">
+        {/* Bet Info - Using actual game data */}
+        <div className="bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
+          <div className="text-xs mb-1 font-bold text-live-primary">{selectedGame?.competitionName}</div>
+          <div className="text-xs mb-1 font-bold text-live-primary">{selectedGame?.team1} ({extractW1Odds(selectedGame?.markets)})</div>
+          <div className="text-xs mb-1 font-bold text-live-primary">{selectedGame?.team2} ({extractW2Odds(selectedGame?.markets)})</div>
+          
+          <div className="text-xs text-live-secondary mb-1">{selectedGame?.team1} - {selectedGame?.team2}</div>
+          <div className="text-xs text-live-secondary">{formatDateTime(selectedGame?.openDate)}</div>
+        </div>
+        
+        {/* Stake Input */}
+        <div className="bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
+          <input 
+            type="text"
+            placeholder="Enter stake"
+            className="w-full h-7 bg-live-hover border-0 rounded px-2.5 py-1 text-xs text-live-primary placeholder-live-secondary"
+          />
+        </div>
+        
+        {/* Possible Win */}
+        <div className="flex justify-between items-center bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
+          <span className="text-xs text-live-primary">Possible win:</span>
+          <span className="text-xs text-live-accent font-bold">0 €</span>
+        </div>
+        
+        {/* Quick Stake Buttons */}
+        <div className="flex gap-1.5">
+          <button className="flex-1 bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-xs font-medium text-live-primary transition-colors">5</button>
+          <button className="flex-1 bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-xs font-medium text-live-primary transition-colors">10</button>
+          <button className="flex-1 bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-xs font-medium text-live-primary transition-colors">50</button>
+          <button className="bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-xs font-medium text-live-primary transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+            </svg>
+          </button>
+        </div>
+        
+        {/* BET Button */}
+        <button className="w-full bg-live-accent hover:bg-live-warning border border-live-accent text-live-dark px-2.5 py-1.5 rounded text-sm font-bold transition-colors">
+          BET
+        </button>
+      </div>
+
+      {/* Placeholder for Additional Stats - Moved after BET button */}
+      <div className="bg-live-tertiary p-4 rounded-lg border border-live-accent shadow-live flex items-center justify-center text-center h-24">
+        <div className="space-y-1">
+          <div className="w-10 h-10 bg-live-hover rounded-full flex items-center justify-center mx-auto border border-live-accent">
+            <span className="text-live-accent text-lg">📊</span>
           </div>
           <div>
-            <span className="block text-sm font-medium text-live-primary">Advanced Match Analytics</span>
-            <span className="block text-xs text-live-muted">Team Stats + Predictions</span>
+            <span className="block text-xs font-medium text-live-primary">Advanced Match Analytics</span>
+            <span className="block text-[10px] text-live-muted">Team Stats + Predictions</span>
           </div>
         </div>
       </div>

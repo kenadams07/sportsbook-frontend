@@ -42,37 +42,38 @@ const footerData = [
     },
 ];
 
-// Partner images data
+// Partner images data - using actual sponsor logos with uniform sizes
 const partners = [
-    { title: "OFFICIAL MAIN SPONSOR", image: "https://placehold.co/60x60/2a2a2a/green" },
-    { title: "SPONSOR & OFFICIAL BETTING PARTNER", image: "https://placehold.co/60x60/2a2a2a/blue" },
-    { title: "OFFICIAL BETTING PARTNER", image: "https://placehold.co/60x60/2a2a2a/yellow" },
-    { title: "OFFICIAL BETTING PARTNER", image: "https://placehold.co/60x60/2a2a2a/darkblue" },
-    { title: "OFFICIAL PARTNER", image: "https://placehold.co/60x60/2a2a2a/white" },
-    { title: "OFFICIAL PARTNER", image: "https://placehold.co/60x60/2a2a2a/pink" },
-    { title: "OFFICIAL PARTNER", image: "https://placehold.co/60x60/2a2a2a/purple" },
-    { title: "OFFICIAL BETTING PARTNER", image: "https://placehold.co/60x60/2a2a2a/blue" },
-    { title: "OFFICIAL PARTNER", image: "https://placehold.co/60x60/2a2a2a/green" },
-    { title: "OFFICIAL PARTNER", image: "https://placehold.co/60x60/2a2a2a/orange" },
-    { title: "OFFICIAL PARTNER", image: "https://placehold.co/60x60/2a2a2a/white" },
-    { title: "OFFICIAL PARTNER", image: "https://placehold.co/60x60/2a2a2a/orange" },
+    { title: "OFFICIAL MAIN SPONSOR", image: "/sponsor logo/sponsor logo/173937252_1193271851126219_8062574705595154570_n.png" },
+    { title: "SPONSOR & OFFICIAL BETTING PARTNER", image: "/sponsor logo/sponsor logo/200x200-01 (1).png" },
+    { title: "OFFICIAL BETTING PARTNER", image: "/sponsor logo/sponsor logo/200x200-01.png" },
+    { title: "OFFICIAL BETTING PARTNER", image: "/sponsor logo/sponsor logo/200x200_deportivo-alaves.png" },
+    { title: "OFFICIAL PARTNER", image: "/sponsor logo/sponsor logo/200x200_derbyshire.png" },
+    { title: "OFFICIAL PARTNER", image: "/sponsor logo/sponsor logo/200x200_durham.png" },
+    { title: "OFFICIAL PARTNER", image: "/sponsor logo/sponsor logo/200x200_leicestershire.png" },
+    { title: "OFFICIAL BETTING PARTNER", image: "/sponsor logo/sponsor logo/200x200_northamptonshire.png" },
+    { title: "OFFICIAL PARTNER", image: "/sponsor logo/sponsor logo/200x200_somerset-ccc-white.png" },
+    { title: "OFFICIAL PARTNER", image: "/sponsor logo/sponsor logo/200x200_sussex.png" },
+    { title: "OFFICIAL PARTNER", image: "/sponsor logo/sponsor logo/celtic-logo.png" },
+    { title: "OFFICIAL PARTNER", image: "/sponsor logo/sponsor logo/logo-joburg-super-kings.png" },
 ];
 
-// Regulatory and payment logos
+// Regulatory logos - using actual logos from buttom logo folder with uniform sizes
 const regulatoryLogos = [
-    { name: "Gambling Commission", image: "https://placehold.co/100x30/2a2a2a/white" },
-    { name: "GambleAware", image: "https://placehold.co/100x30/2a2a2a/white" },
-    { name: "GamCare", image: "https://placehold.co/100x30/2a2a2a/white" },
-    { name: "IBAS", image: "https://placehold.co/100x30/2a2a2a/white" },
-    { name: "Gambling Therapy", image: "https://placehold.co/100x30/2a2a2a/white" },
-    { name: "GamStop", image: "https://placehold.co/100x30/2a2a2a/white" },
+    { name: "Logo 1", image: "/buttom logo/buttom logo/logo-icon.png" },
+    { name: "Logo 2", image: "/buttom logo/buttom logo/logo-icon2.png" },
+    { name: "Logo 3", image: "/buttom logo/buttom logo/logo-icon3.png" },
+    { name: "Logo 4", image: "/buttom logo/buttom logo/logo-icon4.png" },
+    { name: "Logo 5", image: "/buttom logo/buttom logo/logo-icon5.png" },
+    { name: "Logo 6", image: "/buttom logo/buttom logo/logo-icon6.png" },
 ];
 
+// Payment method logos - using actual logos from payments folder with uniform sizes
 const paymentMethods = [
-    { name: "Visa", image: "https://placehold.co/80x30/2a2a2a/white" },
-    { name: "MasterCard", image: "https://placehold.co/80x30/2a2a2a/white" },
-    { name: "PayPal", image: "https://placehold.co/80x30/2a2a2a/white" },
-    { name: "Neteller", image: "https://placehold.co/80x30/2a2a2a/white" },
+    { name: "Skrill", image: "/payments/skrill-preview.png" },
+    { name: "Neteller", image: "/payments/neteller-preview.png" },
+    { name: "SafeCharge", image: "/payments/safecharge-preview.png" },
+    { name: "MuchBetter", image: "/payments/MUHBTR.png" },
 ];
 
 export default function Footer() {
@@ -107,15 +108,7 @@ export default function Footer() {
                 ))}
             </div>
 
-            {/* Responsible Gambling Message */}
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 text-muted-foreground text-lg">
-                <div className="flex items-center justify-center w-8 h-8 rounded-full border border-pink-500 text-pink-500 text-xs font-bold">
-                    18+
-                </div>
-                <span className="text-center sm:text-left">
-                    Gambling can be addictive, play responsibly
-                </span>
-            </div>
+          
 
             {/* REGULATIONS & PARTNERS SECTION - New addition */}
             <div className="mt-12 max-w-6xl mx-auto">
@@ -125,28 +118,40 @@ export default function Footer() {
                     <h2 className="text-lg font-semibold text-gray-300">OUR PARTNERS</h2>
                 </div>
                 
-                {/* Partners Grid */}
+                {/* Partners Grid with uniform logo sizes */}
                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 justify-items-center mb-10">
                     {partners.map((partner, index) => (
                         <div key={index} className="flex flex-col items-center">
                             <p className="text-[8px] text-center text-gray-500 mb-1 h-8 flex items-center">
                                 {partner.title}
                             </p>
-                            <img src={partner.image} alt={partner.title} className="h-12 w-12" />
+                            <img 
+                                src={partner.image} 
+                                alt={partner.title} 
+                                className="h-12 w-12 object-contain" 
+                            />
                         </div>
                     ))}
                 </div>
-
+                  {/* Responsible Gambling Message */}
+            <div className="m   -8 flex flex-col sm:flex-row items-center justify-center gap-3 text-muted-foreground text-lg">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full border border-pink-500 text-pink-500 text-xs font-bold">
+                    18+
+                </div>
+                <span className="text-center sm:text-left">
+                    Gambling can be addictive, play responsibly
+                </span>
+            </div>
              
                 
-                {/* Regulatory Logos */}
+                {/* Regulatory Logos with uniform sizes */}
                 <div className="flex flex-wrap justify-center gap-6 mb-10">
                     {regulatoryLogos.map((logo, index) => (
                         <img 
                             key={index} 
                             src={logo.image} 
                             alt={logo.name} 
-                            className="h-8 grayscale opacity-60 hover:opacity-100 transition-opacity" 
+                            className="h-15 w-25 object-contain opacity-80 hover:opacity-100 transition-opacity" 
                         />
                     ))}
                 </div>
@@ -160,7 +165,7 @@ export default function Footer() {
                     the awareness of problem gambling and improving prevention, intervention and treatment. Gambling can be addictive, please play responsibly.
                 </p>
                 
-                {/* Payment Methods */}
+                {/* Payment Methods with uniform sizes */}
                 <div className="mb-8">
                     <h3 className="text-center text-xs uppercase tracking-wider text-gray-400 mb-4">PAYMENTS</h3>
                     <div className="flex flex-wrap justify-center gap-4">
@@ -169,7 +174,7 @@ export default function Footer() {
                                 key={index} 
                                 src={method.image} 
                                 alt={method.name} 
-                                className="h-8 grayscale opacity-70 hover:opacity-100 transition-opacity"
+                                className="h-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
                             />
                         ))}
                     </div>

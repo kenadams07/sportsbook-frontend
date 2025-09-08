@@ -8,6 +8,8 @@ import { Clock } from './ui/clock';
 import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
 import { Link } from 'react-router-dom';
+import { ChevronDown, User } from 'lucide-react';
+
 const navItems = [
     {
         label: 'Live', items: [
@@ -27,19 +29,24 @@ const navItems = [
     { label: 'PlayTech', items: [{ label: 'Slots', href: '/playtech/slots' }, { label: 'Live Casino', href: '/playtech/live' }, { label: 'Table Games', href: '/playtech/table' }] }
 ];
 
-const MainNavbar = () => {
+export default function MainNavbar() {
     const location = useLocation();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 10);
         const handleClickOutside = (e) => {
             if (isMobileMenuOpen && !e.target.closest('.mobile-menu-container')) {
                 setIsMobileMenuOpen(false);
+            }
+            // Close user menu when clicking outside
+            if (isUserMenuOpen && !e.target.closest('.user-menu-container')) {
+                setIsUserMenuOpen(false);
             }
         };
         window.addEventListener('scroll', handleScroll);
@@ -48,7 +55,7 @@ const MainNavbar = () => {
             window.removeEventListener('scroll', handleScroll);
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [isMobileMenuOpen]);
+    }, [isMobileMenuOpen, isUserMenuOpen]); // Added isUserMenuOpen to dependency array
 
     // Check for login parameter in URL to auto-open login modal
     useEffect(() => {
@@ -75,10 +82,10 @@ const MainNavbar = () => {
                         <div className="flex items-center justify-between h-full w-full">
                             <div className="flex items-center gap-4">
                                 <Link to="/" className="flex items-center gap-4">
-                                    <LazyLoadImage
-                                        src="https://myxxexchbucket.s3.ap-south-1.amazonaws.com/Logo/betxasia.co/betxasia.co-light.jpeg"
+                                    <img
+                                        src="/appLogo/LOGOICON.png"
                                         alt="Logo"
-                                        className="rounded-full w-20 h-12 bg-yellow-500 p-1"
+                                        className="w-16 h-16 object-contain"
                                     />
                                     <p className="text-muted-card text-brand cursor-pointer hover:text-chart-5">
                                         Sportsbook
@@ -86,6 +93,11 @@ const MainNavbar = () => {
                                 </Link>
                             </div>
                             <div className="flex items-center md:gap-4 gap-2">
+                                <div className="hidden md:flex items-center gap-4 text-white font-bold">
+                                    <span>Balance: 0</span>
+                                    <span>|</span>
+                                    <span>Exposure: 0</span>
+                                </div>
                                 <button 
                                     className="bg-yellow-500 hidden md:block text-black font-bold h-10 py-2 px-6 rounded-md text-sm"
                                     onClick={() => setIsDepositModalOpen(true)}
@@ -104,6 +116,45 @@ const MainNavbar = () => {
                                 >
                                     Register
                                 </button>
+
+                                {/* User Icon with Dropdown Menu */}
+                                <div className="relative user-menu-container">
+                                    <button
+                                        onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                                        className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors"
+                                    >
+                                        <User className="w-5 h-5 text-gray-700" />
+                                    </button>
+
+                                    {/* Dropdown Menu */}
+                                    {isUserMenuOpen && (
+                                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                                            <Link
+                                                to="/profile"
+                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                onClick={() => setIsUserMenuOpen(false)}
+                                            >
+                                                Profile
+                                            </Link>
+                                            <Link
+                                                to="/change-password"
+                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                onClick={() => setIsUserMenuOpen(false)}
+                                            >
+                                                Change Password
+                                            </Link>
+                                            <button
+                                                onClick={() => {
+                                                    // TODO: Implement logout functionality
+                                                    setIsUserMenuOpen(false);
+                                                }}
+                                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            >
+                                                Logout
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
 
                                 <Clock />
                             </div>
@@ -147,5 +198,3 @@ const MainNavbar = () => {
         </>
     );
 };
-
-export default MainNavbar;

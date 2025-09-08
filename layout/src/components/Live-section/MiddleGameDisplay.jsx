@@ -201,12 +201,12 @@ function MarketSection({ marketItems }) {
   const items = Array.isArray(marketItems) && marketItems.length ? marketItems : defaults;
 
   // Parent only toggles child states; the two-column layout preserves column positions
-  const [isMarketOpen, setIsMarketOpen] = useState(true);
+  const [isMarketOpen, setIsMarketOpen] = useState(false);
 
   // Track expanded state per child panel
   const [expandedById, setExpandedById] = useState(() => {
     const init = {};
-    items.forEach((it) => (init[it.id] = true));
+    items.forEach((it) => (init[it.id] = false));
     return init;
   });
 
@@ -272,52 +272,52 @@ function MarketSection({ marketItems }) {
 
   return (
     <div className="text-live-primary">
-      {/* Parent Market Header - Keep existing functionality */}
+      {/* Parent Market Header - Enhanced styling with theme colors */}
       <button
         type="button"
         onClick={toggleMarket}
-        className="w-full flex items-center justify-between px-4 py-3 hover:opacity-90 transition-opacity bg-live-primary border border-live-accent rounded-t-md"
+        className="w-full flex items-center justify-between px-3 py-2 hover:opacity-90 transition-opacity bg-gradient-to-r from-live-primary to-live-secondary shadow-md"
         aria-expanded={isMarketOpen}
       >
         <span className="text-sm font-bold tracking-wide text-live-accent">Market</span>
         <div className="flex items-center gap-3">
-          <span className="text-[11px] opacity-80 text-live-accent">{items.length} panels</span>
+          <span className="text-xs opacity-80 text-live-accent">{items.length} panels</span>
           {isMarketOpen ? <IoChevronUp className="w-5 h-5 text-live-accent" /> : <IoChevronDown className="w-5 h-5 text-live-accent" />}
         </div>
       </button>
 
       {/* Responsive 2-column layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-2  rounded-b-md bg-live-tertiary">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-2 bg-gradient-to-br from-live-tertiary to-live-secondary rounded-b-md">
         {/* Left column */}
-        <div className="space-y-1">
+        <div className="space-y-2">
           {leftColumn.map((it) => {
             const open = !!expandedById[it.id];
             const measured = heights[it.id] ?? 0;
             return (
               <div
                 key={it.id}
-                className="transition-colors overflow-hidden bg-live-primary  rounded-md"
+                className="transition-colors overflow-hidden bg-gradient-to-r from-live-primary to-live-tertiary shadow rounded"
               >
-                {/* Market item header */}
+                {/* Market item header - Uniform extra small text size */}
                 <button
                   type="button"
                   onClick={() => toggleItem(it.id)}
-                  className="w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-live-hover transition-colors"
+                  className="w-full flex items-center justify-between px-3 py-2.5 text-xs hover:bg-live-hover transition-colors"
                   aria-expanded={open}
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-live-accent">⭐</span>
-                    <span className="text-live-primary font-medium truncate">{it.title}</span>
+                    <span className="text-live-accent text-xs">⭐</span>
+                    <span className="text-live-primary font-medium truncate text-xs">{it.title}</span>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    <span className="text-live-dark text-xs px-2 py-1 bg-live-accent rounded">🔗</span>
-                    <span className="text-live-accent text-sm">1</span>
-                    <span className="text-live-accent text-lg">📊</span>
+                    <span className="text-live-dark text-[10px] px-2 py-1 bg-live-accent rounded">🔗</span>
+                    <span className="text-live-accent text-xs">1</span>
+                    <span className="text-live-accent text-sm">📊</span>
                     {open ? <IoChevronUp className="w-4 h-4 text-live-primary" /> : <IoChevronDown className="w-4 h-4 text-live-primary" />}
                   </div>
                 </button>
 
-                {/* Collapsible content */}
+                {/* Collapsible content - Uniform extra small text size */}
                 <div
                   style={{
                     maxHeight: open ? `${measured}px` : "0px",
@@ -332,21 +332,21 @@ function MarketSection({ marketItems }) {
                       contentRefs.current[it.id] = el;
                     }}
                   >
-                    <div className="px-4 pb-3 pt-2">
-                      <ul className="text-sm text-live-primary space-y-1">
+                    <div className="px-3 pb-2.5 pt-1.5">
+                      <ul className="text-xs text-live-primary space-y-1.5">
                         {(it.rows || []).map((r, idx) => (
                           <li
                             key={idx}
-                            className="flex items-center justify-between py-2 px-3 rounded bg-live-hover"
+                            className="flex items-center justify-between py-1.5 px-2 bg-live-hover rounded"
                           >
-                            <span className="text-live-primary truncate">{r.label}</span>
-                            <span className="text-sm px-3 py-1 rounded font-medium flex-shrink-0 bg-live-tertiary text-live-primary">
+                            <span className="text-live-primary truncate text-xs">{r.label}</span>
+                            <span className="text-xs px-2 py-1 rounded font-medium flex-shrink-0 bg-live-tertiary text-live-primary">
                               {r.value}
                             </span>
                           </li>
                         ))}
                         {!it.rows?.length && (
-                          <li className="px-3 py-2 text-live-secondary">No data available</li>
+                          <li className="px-2 py-1.5 text-live-secondary text-xs">No data available</li>
                         )}
                       </ul>
                     </div>
@@ -358,35 +358,35 @@ function MarketSection({ marketItems }) {
         </div>
 
         {/* Right column */}
-        <div className="space-y-1">
+        <div className="space-y-2">
           {rightColumn.map((it) => {
             const open = !!expandedById[it.id];
             const measured = heights[it.id] ?? 0;
             return (
               <div
                 key={it.id}
-                className="transition-colors overflow-hidden bg-live-primary  rounded-md"
+                className="transition-colors overflow-hidden bg-gradient-to-r from-live-primary to-live-tertiary shadow rounded"
               >
-                {/* Market item header */}
+                {/* Market item header - Uniform extra small text size */}
                 <button
                   type="button"
                   onClick={() => toggleItem(it.id)}
-                  className="w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-live-hover transition-colors"
+                  className="w-full flex items-center justify-between px-3 py-2.5 text-xs hover:bg-live-hover transition-colors"
                   aria-expanded={open}
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-live-accent">⭐</span>
-                    <span className="text-live-primary font-medium truncate">{it.title}</span>
+                    <span className="text-live-accent text-xs">⭐</span>
+                    <span className="text-live-primary font-medium truncate text-xs">{it.title}</span>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    <span className="text-live-dark text-xs px-2 py-1 bg-live-accent rounded">🔗</span>
-                    <span className="text-live-accent text-sm">1</span>
-                    <span className="text-live-accent text-lg">📊</span>
+                    <span className="text-live-dark text-[10px] px-2 py-1 bg-live-accent rounded">🔗</span>
+                    <span className="text-live-accent text-xs">1</span>
+                    <span className="text-live-accent text-sm">📊</span>
                     {open ? <IoChevronUp className="w-4 h-4 text-live-primary" /> : <IoChevronDown className="w-4 h-4 text-live-primary" />}
                   </div>
                 </button>
 
-                {/* Collapsible content */}
+                {/* Collapsible content - Uniform extra small text size */}
                 <div
                   style={{
                     maxHeight: open ? `${measured}px` : "0px",
@@ -401,21 +401,21 @@ function MarketSection({ marketItems }) {
                       contentRefs.current[it.id] = el;
                     }}
                   >
-                    <div className="px-4 pb-3 pt-2">
-                      <ul className="text-sm text-live-primary space-y-1">
+                    <div className="px-3 pb-2.5 pt-1.5">
+                      <ul className="text-xs text-live-primary space-y-1.5">
                         {(it.rows || []).map((r, idx) => (
                           <li
                             key={idx}
-                            className="flex items-center justify-between py-2 px-3 rounded bg-live-hover"
+                            className="flex items-center justify-between py-1.5 px-2 bg-live-hover rounded"
                           >
-                            <span className="text-live-primary truncate">{r.label}</span>
-                            <span className="text-sm px-3 py-1 rounded font-medium flex-shrink-0 bg-live-tertiary text-live-primary">
+                            <span className="text-live-primary truncate text-xs">{r.label}</span>
+                            <span className="text-xs px-2 py-1 rounded font-medium flex-shrink-0 bg-live-tertiary text-live-primary">
                               {r.value}
                             </span>
                           </li>
                         ))}
                         {!it.rows?.length && (
-                          <li className="px-3 py-2 text-live-secondary">No data available</li>
+                          <li className="px-2 py-1.5 text-live-secondary text-xs">No data available</li>
                         )}
                       </ul>
                     </div>
@@ -439,7 +439,7 @@ function SleekNavbar() {
 
   return (
     <div
-      className={`sleek-navbar shadow-md rounded-md p-2 flex items-center gap-4 transition-all duration-300 bg-live-hover ${
+      className={`sleek-navbar shadow-md p-2 flex items-center gap-4 transition-all duration-300 bg-live-hover ${
         searchActive ? "navbar-search-active" : ""
       }`}
     >
@@ -447,7 +447,7 @@ function SleekNavbar() {
         <>
           {/* Search Icon */}
           <button
-            className="search-icon-btn flex items-center justify-center w-9 h-9 rounded-md hover:bg-live-primary transition-colors"
+            className="search-icon-btn flex items-center justify-center w-9 h-9 hover:bg-live-primary transition-colors"
             onClick={() => setSearchActive(true)}
             aria-label="Search"
           >
@@ -494,7 +494,7 @@ function SleekNavbar() {
         <>
           {/* Close Icon - replaces search icon when search is active */}
           <button
-            className="search-icon-btn flex items-center justify-center w-9 h-9 rounded-md hover:bg-live-primary transition-colors"
+            className="search-icon-btn flex items-center justify-center w-9 h-9 hover:bg-live-primary transition-colors"
             onClick={() => {
               setSearchActive(false);
               setSearchValue("");
@@ -511,7 +511,7 @@ function SleekNavbar() {
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               placeholder="Search..."
-              className="w-full p-2 pl-10 pr-4 rounded-md border border-live-accent focus:outline-none focus:ring-1 focus:ring-live-accent focus:border-live-accent bg-live-tertiary text-live-primary transition-all duration-300"
+              className="w-full p-2 pl-10 pr-4 border border-live-accent focus:outline-none focus:ring-1 focus:ring-live-accent focus:border-live-accent bg-live-tertiary text-live-primary transition-all duration-300"
             />
             <span className="absolute left-3 top-2.5 text-live-muted">
               <IoSearchOutline className="h-5 w-5" />

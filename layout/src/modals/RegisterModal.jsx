@@ -149,7 +149,7 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
               </div>
               <DialogTitle className="text-xl font-bold m-0">SportsBook</DialogTitle>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 mr-4">
               <Button
                 onClick={handleSwitchToLogin}
                 variant="ghost"
