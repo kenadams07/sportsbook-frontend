@@ -1,27 +1,48 @@
 import React, { useState } from 'react'
+// Added useSelector to access authentication state
+import { useSelector } from 'react-redux';
 import RegisterModal from '../modals/RegisterModal';
 import LoginModal from '../modals/LoginModal';
 import DepositModal from '../components/DepositModal';
 
 const MobileNavbar = () => {
+  // Accessing authentication state from Redux store
+  const isAuthenticated = useSelector((state) => state?.Login?.isAuthenticated);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
 
-  const navLinks = [
-    {
-      label: "Deposit",
-      onClick: () => setIsDepositModalOpen(true)
-    },
-    {
+  // Define navigation links based on authentication status
+  const navLinks = [];
+  
+  // Deposit option is always shown but behaves differently based on authentication
+  const handleDepositClick = () => {
+    if (isAuthenticated) {
+      // User is authenticated, show deposit modal
+      setIsDepositModalOpen(true);
+    } else {
+      // User is not authenticated, show login modal
+      setIsLoginModalOpen(true);
+    }
+  };
+
+  navLinks.push({
+    label: "Deposit",
+    onClick: handleDepositClick
+  });
+
+  if (!isAuthenticated) {
+    // Show login and register options only for non-authenticated users
+    navLinks.push({
       label: "Login",
       onClick: () => setIsLoginModalOpen(true)
-    },
-    {
+    });
+    
+    navLinks.push({
       label: "Register",
       onClick: () => setIsRegisterModalOpen(true)
-    }
-  ];
+    });
+  }
 
   return (
     <>

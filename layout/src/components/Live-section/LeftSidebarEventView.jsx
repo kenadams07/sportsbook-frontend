@@ -3,6 +3,8 @@ import { ChevronDown, ChevronUp, Search, Globe, Monitor } from "lucide-react";
 import { SPORTS, SPORT_ID_BY_KEY } from "../../utils/CommonExports";
 import { Button } from "../ui/button";
 import GameCard from "./GameCard";
+import { useLocation, useNavigate } from "react-router-dom";
+import SkeletonLoader from "../ui/SkeletonLoader";
 
 function normalize(str = "") {
   return str.trim().toLowerCase();
@@ -21,6 +23,8 @@ function extractOddsW1W2(markets) {
 }
 
 export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setSelectedSport = () => {}, selectedMatch, onSelectedMatchOddsUpdate = () => {} }) {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [expanded, setExpanded] = useState({});
   const [selectedType, setSelectedType] = useState("live"); 
@@ -28,7 +32,16 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
   const [loadingBySport, setLoadingBySport] = useState({});
   const [oddsByEventId, setOddsByEventId] = useState({});
   const [highlightedOdds, setHighlightedOdds] = useState({});
+  const [pendingSelection, setPendingSelection] = useState(null); // Track pending game selection
   const oddsPrevRef = useRef({});
+
+  // Clear location state on component mount to prevent issues with subsequent navigation
+  useEffect(() => {
+    if (location.state) {
+      // We'll process the state in the other useEffect, but we don't want to clear it immediately
+      // as it might be needed for the initial render
+    }
+  }, []);
 
   useEffect(() => {
     SPORTS.forEach((sport) => {
@@ -52,7 +65,24 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
         .catch(() => setMatchesBySport((prev) => ({ ...prev, [sport.key]: [] })))
         .finally(() => setLoadingBySport((prev) => ({ ...prev, [sport.key]: false })));
     });
-  }, [selectedType]);
+    
+    // Check if there's navigation state to pre-select a game
+    const { selectedGameId, selectedSportKey } = location.state || {};
+    if (selectedGameId && selectedSportKey) {
+      // Set the sport as expanded
+      setExpanded(prev => ({ ...prev, [selectedSportKey]: true }));
+      // Set the selected sport
+      const sport = SPORTS.find(s => s.key === selectedSportKey);
+      if (sport) {
+        setSelectedSport(sport);
+      }
+      // Clear the location state to prevent issues with subsequent navigation
+      if (location.state) {
+        // Use navigate with replace to properly clear the location state
+        navigate(location.pathname, { replace: true, state: {} });
+      }
+    }
+  }, [selectedType, location.key]);
 
   // Only poll odds for the expanded sport
   useEffect(() => {
@@ -100,26 +130,123 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
     return () => clearInterval(intervalId);
   }, [selectedType, oddsByEventId, expanded, selectedMatch, onSelectedMatchOddsUpdate]);
 
-  const toggleExpand = (sport) => {
-    setExpanded((prev) => ({ ...prev, [sport]: !prev[sport] }));
+  const toggleExpand = (sportKey) => {
+    // Toggle the expanded state for this sport
+    setExpanded(prevExpanded => {
+      const isCurrentlyExpanded = prevExpanded[sportKey];
+      
+      // If currently expanded, collapse it
+      if (isCurrentlyExpanded) {
+        return {
+          ...prevExpanded,
+          [sportKey]: false
+        };
+      } 
+      // If currently collapsed, expand it
+      else {
+        return {
+          ...prevExpanded,
+          [sportKey]: true
+        };
+      }
+    });
   };
 
   useEffect(() => {
-    // On mount, set default expanded sport and select first game
-    for (const sport of SPORTS) {
-      const matches = matchesBySport[sport.key] || [];
-      if (matches.length > 0) {
-        setExpanded((prev) => ({ ...prev, [sport.key]: true }));
-        setSelectedMatch({
-          ...matches[0],
-          team1: matches[0].eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '',
-          team2: matches[0].eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '',
-        });
+    // Check if there's navigation state to pre-select a game
+    const { selectedGameId, selectedSportKey } = location.state || {};
+    
+    // Only process location state if it exists
+    if (selectedGameId && selectedSportKey) {
+      // Set the sport as expanded
+      setExpanded(prev => ({ ...prev, [selectedSportKey]: true }));
+      
+      // Set the selected sport
+      const sport = SPORTS.find(s => s.key === selectedSportKey);
+      if (sport) {
         setSelectedSport(sport);
-        break;
+      }
+      
+      // Check if matches data is available for this sport
+      const matches = matchesBySport[selectedSportKey] || [];
+      if (matches.length > 0) {
+        // If matches are loaded, try to find and select the game
+        const selectedGame = matches.find(match => match.eventId === selectedGameId);
+        if (selectedGame) {
+          const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
+          const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
+          setSelectedMatch({
+            ...selectedGame,
+            team1,
+            team2,
+          });
+        }
+        
+        // Clear the location state to prevent issues with subsequent navigation
+        navigate(location.pathname, { replace: true, state: {} });
+      } else {
+        // If matches aren't loaded yet, store the selection for later
+        setPendingSelection({ selectedGameId, selectedSportKey });
       }
     }
-  }, [matchesBySport]);
+    // Default behavior - only expand the first sport with matches
+    else if (!selectedGameId && !selectedSportKey) {
+      // Only expand the first sport with matches, not all sports
+      for (const sport of SPORTS) {
+        const matches = matchesBySport[sport.key] || [];
+        if (matches.length > 0) {
+          setExpanded((prev) => {
+            // Check if any sport is already expanded
+            const isAnySportExpanded = Object.keys(prev).length > 0 && Object.values(prev).some(val => val);
+            // If no sport is expanded yet, expand the first one with matches
+            if (!isAnySportExpanded && !prev.hasOwnProperty(sport.key)) {
+              return { [sport.key]: true };
+            }
+            return prev;
+          });
+          
+          // Select the first game of the first sport with matches (only if no match is already selected)
+          if (!selectedMatch) {
+            setSelectedMatch({
+              ...matches[0],
+              team1: matches[0].eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '',
+              team2: matches[0].eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '',
+            });
+            setSelectedSport(sport);
+          }
+          break; // Exit after handling the first sport with matches
+        }
+      }
+    }
+  }, [matchesBySport, location.state, location.key, selectedMatch, setSelectedMatch, setSelectedSport]);
+
+  // Handle pending selection when matches data is loaded
+  useEffect(() => {
+    if (pendingSelection) {
+      const { selectedGameId, selectedSportKey } = pendingSelection;
+      const matches = matchesBySport[selectedSportKey] || [];
+      
+      if (matches.length > 0) {
+        // Try to find and select the game
+        const selectedGame = matches.find(match => match.eventId === selectedGameId);
+        if (selectedGame) {
+          const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
+          const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
+          setSelectedMatch({
+            ...selectedGame,
+            team1,
+            team2,
+          });
+        }
+        
+        // Clear pending selection
+        setPendingSelection(null);
+        
+        // Clear the location state to prevent issues with subsequent navigation
+        navigate(location.pathname, { replace: true, state: {} });
+      }
+    }
+  }, [matchesBySport, pendingSelection, setSelectedMatch, location.pathname]);
 
   return (
     <aside className="flex-1 bg-live-secondary h-full flex flex-col p-2 min-w-0">
@@ -198,51 +325,52 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
               {expanded[sport.key] && (
                 <div className="pl-2 pb-2">
                   {loadingBySport[sport.key] ? (
-                    <div className="text-xs text-live-muted px-2 py-2">Loading…</div>
-                  ) : matchCount === 0 ? (
-                    <div className="text-xs text-live-muted px-2 py-2">No matches</div>
-                  ) : (
-                    matches.map((match, idx) => {
-                      // Robustly extract team names
-                      let team1 = '';
-                      let team2 = '';
-                      if (match.eventName) {
-                        const parts = match.eventName.split(/\s+vs\.?\s+/i);
-                        team1 = parts[0]?.trim() || '';
-                        team2 = parts[1]?.trim() || '';
-                      }
-                      const isSelected = selectedMatch && (selectedMatch.eventId === match.eventId);
-                      const odds = oddsByEventId[match.eventId] || extractOddsW1W2(match.markets);
-                      const highlight = highlightedOdds[match.eventId] || { w1: false, w2: false };
-                      return (
-                        <GameCard
-                          key={match.eventId || idx}
-                          team1={team1}
-                          team2={team2}
-                          score1={match.homeScore}
-                          score2={match.awayScore}
-                          matchStatus={match.status}
-                          time={match.openDate}
-                          odds={odds}
-                          league={match.competitionName}
-                          sport={sport.key}
-                          highlight={isSelected}
-                          oddsHighlight={highlight}
-                          onClick={() => {
-                            // Get the latest odds for this match
-                            const latestOdds = oddsByEventId[match.eventId] || extractOddsW1W2(match.markets);
-                            setSelectedMatch({
-                              ...match,
-                              team1,
-                              team2,
-                              odds: latestOdds, // Include the latest odds in the selected match data
-                            });
-                            setSelectedSport(sport);
-                          }}
-                        />
-                      );
-                    })
-                  )}
+                      <SkeletonLoader type="game-card" count={3} />
+                    ) : matchCount === 0 ? (
+                      <div className="text-xs text-live-muted px-2 py-2">No matches</div>
+                    ) : (
+                      matches.map((match, idx) => {
+                        // Robustly extract team names
+                        let team1 = '';
+                        let team2 = '';
+                        if (match.eventName) {
+                          const parts = match.eventName.split(/\s+vs\.?\s+/i);
+                          team1 = parts[0]?.trim() || '';
+                          team2 = parts[1]?.trim() || '';
+                        }
+                        const isSelected = selectedMatch && (selectedMatch.eventId === match.eventId);
+                        const odds = oddsByEventId[match.eventId] || extractOddsW1W2(match.markets);
+                        const highlight = highlightedOdds[match.eventId] || { w1: false, w2: false };
+                        return (
+                          <GameCard
+                            key={match.eventId || idx}
+                            team1={team1}
+                            team2={team2}
+                            score1={match.homeScore}
+                            score2={match.awayScore}
+                            matchStatus={match.status}
+                            time={match.openDate}
+                            odds={odds}
+                            league={match.competitionName}
+                            sport={sport.key}
+                            highlight={isSelected}
+                            oddsHighlight={highlight}
+                            onClick={() => {
+                              // Get the latest odds for this match
+                              const latestOdds = oddsByEventId[match.eventId] || extractOddsW1W2(match.markets);
+                              setSelectedMatch({
+                                ...match,
+                                team1,
+                                team2,
+                                odds: latestOdds, // Include the latest odds in the selected match data
+                              });
+                              setSelectedSport(sport);
+                            }}
+                          />
+                        );
+                      })
+                    )
+                  }
                 </div>
               )}
             </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import RegisterModal from '../modals/RegisterModal';
 import LoginModal from '../modals/LoginModal';
@@ -9,6 +9,9 @@ import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
 import { Link } from 'react-router-dom';
 import { ChevronDown, User } from 'lucide-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserData } from '../redux/Action';
+import { logout } from '../redux/Action/auth/logoutAction';
 
 const navItems = [
     {
@@ -30,15 +33,20 @@ const navItems = [
 ];
 
 export default function MainNavbar() {
-    const location = useLocation();
-    const [isScrolled, setIsScrolled] = useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-    const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
-    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // Added selector to get authentication state
+  const { isAuthenticated, userData } = useSelector(state => state.Login);
+  const { userData: profileData, loading } = useSelector(state => state.GetUserData);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
-    useEffect(() => {
+  useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 10);
         const handleClickOutside = (e) => {
             if (isMobileMenuOpen && !e.target.closest('.mobile-menu-container')) {
@@ -67,9 +75,25 @@ export default function MainNavbar() {
         }
     }, [location]);
 
+    // Fetch user data when authenticated
+    useEffect(() => {
+        if (isAuthenticated) {
+            dispatch(getUserData());
+        }
+    }, [isAuthenticated, dispatch]);
+
     const toggleMobileMenu = useCallback(() => {
         setIsMobileMenuOpen((prev) => !prev);
     }, []);
+
+    // Loading skeleton component for user data
+    const UserDataSkeleton = () => (
+        <div className="hidden md:flex items-center gap-4">
+            <div className="h-4 w-20 bg-gray-400 rounded animate-pulse"></div>
+            <div className="h-4 w-1 bg-gray-400 rounded"></div>
+            <div className="h-4 w-20 bg-gray-400 rounded animate-pulse"></div>
+        </div>
+    );
 
     return (
         <>
@@ -93,68 +117,81 @@ export default function MainNavbar() {
                                 </Link>
                             </div>
                             <div className="flex items-center md:gap-4 gap-2">
-                                <div className="hidden md:flex items-center gap-4 text-white font-bold">
-                                    <span>Balance: 0</span>
-                                    <span>|</span>
-                                    <span>Exposure: 0</span>
-                                </div>
-                                <button 
-                                    className="bg-yellow-500 hidden md:block text-black font-bold h-10 py-2 px-6 rounded-md text-sm"
-                                    onClick={() => setIsDepositModalOpen(true)}
-                                >
-                                    DEPOSIT
-                                </button>
-                                <p
-                                    onClick={() => setIsLoginModalOpen(true)}
-                                    className="hidden md:block text-navbar-text text-sm underline hover:no-underline cursor-pointer"
-                                >
-                                    Login
-                                </p>
-                                <button
-                                    onClick={() => setIsRegisterModalOpen(true)}
-                                    className="bg-yellow-500 hidden md:block text-black font-bold h-10 py-2 px-6 rounded-md text-sm"
-                                >
-                                    Register
-                                </button>
-
-                                {/* User Icon with Dropdown Menu */}
-                                <div className="relative user-menu-container">
-                                    <button
-                                        onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                                        className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors"
+                                {/* Show balance and exposure only when authenticated */}
+                                {isAuthenticated && loading && <UserDataSkeleton />}
+                                {isAuthenticated && !loading && (
+                                    <div className="hidden md:flex items-center gap-4 text-white font-bold">
+                                        <span>Balance: {profileData?.balance || userData?.balance || 0}</span>
+                                        <span>|</span>
+                                        <span>Exposure: {profileData?.exposure || userData?.exposure || 0}</span>
+                                    </div>
+                                )}
+                                {/* Show deposit button only when authenticated */}
+                                {isAuthenticated && (
+                                    <button 
+                                        className="bg-yellow-500 hidden md:block text-black font-bold h-10 py-2 px-6 rounded-md text-sm"
+                                        onClick={() => setIsDepositModalOpen(true)}
                                     >
-                                        <User className="w-5 h-5 text-gray-700" />
+                                        DEPOSIT
                                     </button>
+                                )}
+                                {!isAuthenticated && (
+                                    <p
+                                        onClick={() => setIsLoginModalOpen(true)}
+                                        className="hidden md:block text-navbar-text text-sm underline hover:no-underline cursor-pointer"
+                                    >
+                                        Login
+                                    </p>
+                                )}
+                                {!isAuthenticated && (
+                                    <button
+                                        onClick={() => setIsRegisterModalOpen(true)}
+                                        className="bg-yellow-500 hidden md:block text-black font-bold h-10 py-2 px-6 rounded-md text-sm"
+                                    >
+                                        Register
+                                    </button>
+                                )}
 
-                                    {/* Dropdown Menu */}
-                                    {isUserMenuOpen && (
-                                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                                            <Link
-                                                to="/profile"
-                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                onClick={() => setIsUserMenuOpen(false)}
-                                            >
-                                                Profile
-                                            </Link>
-                                            <Link
-                                                to="/change-password"
-                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                onClick={() => setIsUserMenuOpen(false)}
-                                            >
-                                                Change Password
-                                            </Link>
-                                            <button
-                                                onClick={() => {
-                                                    // TODO: Implement logout functionality
-                                                    setIsUserMenuOpen(false);
-                                                }}
-                                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            >
-                                                Logout
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
+                                {/* Show user menu icon only when authenticated */}
+                                {isAuthenticated && (
+                                    <div className="relative user-menu-container">
+                                        <button
+                                            onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                                            className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors"
+                                        >
+                                            <User className="w-5 h-5 text-gray-700" />
+                                        </button>
+
+                                        {/* Dropdown Menu */}
+                                        {isUserMenuOpen && (
+                                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                                                <Link
+                                                    to="/profile"
+                                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    onClick={() => setIsUserMenuOpen(false)}
+                                                >
+                                                    Profile
+                                                </Link>
+                                                <Link
+                                                    to="/change-password"
+                                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    onClick={() => setIsUserMenuOpen(false)}
+                                                >
+                                                    Change Password
+                                                </Link>
+                                                <button
+                                                    onClick={() => {
+                                                        dispatch(logout());
+                                                        setIsUserMenuOpen(false);
+                                                    }}
+                                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                >
+                                                    Logout
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
 
                                 <Clock />
                             </div>

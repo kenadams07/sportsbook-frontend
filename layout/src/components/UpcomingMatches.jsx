@@ -2,12 +2,13 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import { Clock, ChevronRight } from "lucide-react"
-
+import { useNavigate } from "react-router-dom"
 
 import { Button } from "./ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 import { API_BASE } from "../utils/Constants"
 import { SPORT_ID_BY_KEY, SPORTS } from "../utils/CommonExports"
+import SkeletonLoader from "./ui/SkeletonLoader"
 
 function formatDateOrInPlay(status, openDateMs) {
   if (status === "IN_PLAY") return "IN PLAY"
@@ -55,6 +56,7 @@ function findSportKeyByName(sportName) {
 }
 
 export default function UpcomingMatches() {
+  const navigate = useNavigate()
   const [selectedTimeFilter, setSelectedTimeFilter] = useState("0-15M")
   const [selectedSportKey, setSelectedSportKey] = useState("soccer")
   const [selectedGameId, setSelectedGameId] = useState(null)
@@ -171,6 +173,14 @@ export default function UpcomingMatches() {
   const handleGameClick = (id, sportKey) => {
     setSelectedGameId(id)
     setSelectedGameSportKey(sportKey || null)
+    
+    // Navigate to the Live section with the selected game and sport
+    navigate('/live_events/event-view', {
+      state: {
+        selectedGameId: id,
+        selectedSportKey: sportKey || selectedSportKey
+      }
+    })
   }
 
   return (
@@ -247,31 +257,38 @@ export default function UpcomingMatches() {
       {/* Sports Icons bar */}
       {/* Mobile: fixed small chips scrollable; sm+: chips expand evenly */}
       <div className="flex w-full gap-2 overflow-x-auto scrollbar-hide px-2 py-2">
-        {SPORTS.map((sport) => {
-          const Icon = sport.icon
-          const isSelected = selectedSportKey === sport.key
-          // Extract background color class from sport.color
-          const colorClass = sport.color.split(' ').find(cls => cls.startsWith('bg-chart-')) || 'bg-gray-600'
-          return (
-            <div
-              key={sport.key}
-              onClick={() => setSelectedSportKey(sport.key)}
-              className={`snap-start flex-shrink-0 sm:flex-1 flex flex-col items-center justify-center gap-1 cursor-pointer border rounded-md sport-icon-box ${
-                isSelected 
+        {loading ? (
+          // Using SkeletonLoader for sport icons when loading
+          Array.from({ length: 8 }).map((_, index) => (
+            <SkeletonLoader key={index} type="sport-icon" />
+          ))
+        ) : (
+          SPORTS.map((sport) => {
+            const Icon = sport.icon
+            const isSelected = selectedSportKey === sport.key
+            // Extract background color class from sport.color
+            const colorClass = sport.color.split(' ').find(cls => cls.startsWith('bg-chart-')) || 'bg-gray-600'
+            return (
+              <div
+                key={sport.key}
+                onClick={() => setSelectedSportKey(sport.key)}
+                className={`snap-start flex-shrink-0 sm:flex-1 flex flex-col items-center justify-center gap-1 cursor-pointer border rounded-md sport-icon-box ${
+                  isSelected 
                   ? `${colorClass} selected border-white` 
                   : "border-gray-600 bg-gray-700 text-white hover:bg-gray-600"
-              }`}
-              // mobile min width to keep chips touch-friendly, but allow grow from sm+
-              style={{ padding: "0.45rem 0.7rem", minWidth: "64px" }}
-              title={sport.sportNames[0]}
-            >
-              <Icon className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 mx-auto" />
-              <span className="text-[11px] sm:text-[13px] truncate max-w-[90%] text-center font-medium">
-                {sport.sportNames[0]}
-              </span>
-            </div>
-          )
-        })}
+                }`}
+                // mobile min width to keep chips touch-friendly, but allow grow from sm+
+                style={{ padding: "0.45rem 0.7rem", minWidth: "64px" }}
+                title={sport.sportNames[0]}
+              >
+                <Icon className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 mx-auto" />
+                <span className="text-[11px] sm:text-[13px] truncate max-w-[90%] text-center font-medium">
+                  {sport.sportNames[0]}
+                </span>
+              </div>
+            )
+          })
+        )}
       </div>
 
       {/* Winner dropdown and W1/W2 header */}
@@ -302,7 +319,12 @@ export default function UpcomingMatches() {
       </div>
 
       {/* Loading / Error / Empty states */}
-      {loading && <div className="px-4 py-3 text-sm text-muted-foreground">Loading live events…</div>}
+      {loading && (
+        <div className="flex flex-col px-2">
+          {/* Using SkeletonLoader for match rows when loading */}
+          <SkeletonLoader type="row" count={5} />
+        </div>
+      )}
       {error && <div className="px-4 py-3 text-sm text-red-400">Error: {error}</div>}
       {!loading && !error && matches.length === 0 && (
         <div className="px-4 py-10 text-center text-sm text-muted-foreground">Currently no matches to display</div>

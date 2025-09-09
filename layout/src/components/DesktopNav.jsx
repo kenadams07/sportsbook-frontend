@@ -12,7 +12,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 const DesktopNav = ({ navItems }) => {
   const navigate = useNavigate();
   const location = useLocation();
-
+ 
   // Helper to check if a nav item or its subitems are active
   const isMenuActive = (item) =>
     item.items && item.items.some((sub) => location.pathname === sub.href);
@@ -21,6 +21,9 @@ const DesktopNav = ({ navItems }) => {
     <div className="hidden md:block w-full">
       <Menubar className="bg-transparent flex justify-start gap-2 border-none text-navbar-text h-10">
         {navItems.map((item) => (
+          
+          
+          
           <MenubarMenu key={item.label}>
             <MenubarTrigger
               className={`

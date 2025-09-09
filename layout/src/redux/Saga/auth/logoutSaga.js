@@ -1,26 +1,23 @@
-import { all, call, put, takeEvery } from "redux-saga/effects";
-import API from "../../../utils/api";
-import { notifyPromise } from "../../../utils/Helper";
+import { all, put, takeEvery } from "redux-saga/effects";
+import { removeLocalStorageItem } from "../../../utils/Helper";
 import { logoutSuccess, logoutFailure } from "../../Action/auth/logoutAction";
 import { LOGOUT } from "../../Action/actionTypes";
 
 function* logoutRequest(action) {
   try {
-    const { data } = yield notifyPromise(
-      API.post("/logout", action?.payload?.payload)
-    );
+    // Remove token and userData from localStorage
+    removeLocalStorageItem("token");
+    removeLocalStorageItem("userData");
     
-    if (data?.meta?.code === 200) {
-      yield put(logoutSuccess());
-      
-      // Execute callback if provided
-      if (action.callback && typeof action.callback === 'function') {
-        yield call(action.callback, data);
-      }
-    } else {
-      yield put(logoutFailure());
+    // Dispatch logout success action
+    yield put(logoutSuccess());
+    
+    // Execute callback if provided
+    if (action.callback && typeof action.callback === 'function') {
+      action.callback();
     }
   } catch (error) {
+    console.error("Logout error:", error);
     yield put(logoutFailure());
   }
 }

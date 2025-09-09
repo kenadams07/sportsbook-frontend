@@ -249,13 +249,14 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
                                 setIsCalendarOpen(false);
                               }
                             }}
+                            disabled={(date) => date > new Date()}
                             initialFocus
                             className="bg-[#2a2a2a] text-white"
                             classNames={{
                               day_selected: "bg-yellow-500 text-black hover:bg-yellow-600 hover:text-black",
                               day_today: "border border-yellow-500",
                               day_outside: "text-gray-500",
-                              day_disabled: "text-gray-700",
+                              day_disabled: "text-gray-700 opacity-50 cursor-not-allowed",
                               head_cell: "text-gray-400",
                               button: "hover:bg-[#404040]",
                               nav_button: "border-gray-600 hover:bg-[#404040]",

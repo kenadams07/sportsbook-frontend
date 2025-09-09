@@ -44,10 +44,89 @@ const extractW2Odds = (markets) => {
 
 export default function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = false }) {
   const [oddsOption, setOddsOption] = useState('always ask');
-
   const [isOpen, setIsOpen] = useState(false);
+  const [betAmounts, setBetAmounts] = useState([500, 1000, 5000]); // Updated bet amounts
+  const [editableIndex, setEditableIndex] = useState(null); // Track which bet amount is being edited
+  const [editValue, setEditValue] = useState(''); // Track the value being edited
+  const [isEditingMode, setIsEditingMode] = useState(false); // Track if we're in editing mode
+  const [stakeValue, setStakeValue] = useState(''); // Track the stake input value
+  const editInputRef = useRef(null); // Ref for the edit input
+  const containerRef = useRef(null); // Ref for the container to detect clicks outside
 
   const toggleDropdown = () => setIsOpen(!isOpen);
+
+  // Handle clicks outside to exit edit mode
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
+        // Clicked outside, exit edit mode
+        setIsEditingMode(false);
+        setEditableIndex(null);
+        setEditValue('');
+      }
+    };
+
+    if (isEditingMode) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isEditingMode]);
+
+  // Focus the input when it becomes editable
+  useEffect(() => {
+    if (editableIndex !== null && editInputRef.current) {
+      editInputRef.current.focus();
+    }
+  }, [editableIndex]);
+
+  // Handle edit submission
+  const handleEditSubmit = (index) => {
+    if (editValue && !isNaN(editValue) && Number(editValue) > 0) {
+      const newBetAmounts = [...betAmounts];
+      newBetAmounts[index] = Number(editValue);
+      setBetAmounts(newBetAmounts);
+    }
+    setEditableIndex(null);
+    setEditValue('');
+    // Exit edit mode after submission
+    setIsEditingMode(false);
+  };
+
+  // Handle key press in edit input
+  const handleEditKeyPress = (e, index) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Prevent form submission
+      handleEditSubmit(index);
+    } else if (e.key === 'Escape') {
+      setEditableIndex(null);
+      setEditValue('');
+      // Exit edit mode on escape
+      setIsEditingMode(false);
+    }
+  };
+
+  // Handle chip click to set stake value
+  const handleChipClick = (amount) => {
+    setStakeValue(amount.toString());
+  };
+
+  // Handle stake input change
+  const handleStakeChange = (e) => {
+    setStakeValue(e.target.value);
+  };
+
+  // Toggle edit mode
+  const toggleEditMode = () => {
+    setIsEditingMode(!isEditingMode);
+    // Reset any active editing when toggling mode
+    if (isEditingMode) {
+      setEditableIndex(null);
+      setEditValue('');
+    }
+  };
 
   if (!selectedGame) {
     return (
@@ -94,6 +173,8 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
             <input 
               type="text"
               placeholder="Enter stake"
+              value={stakeValue}
+              onChange={handleStakeChange}
               className="w-full h-7 bg-live-hover border-0 rounded px-2 py-1 text-[10px] text-live-primary placeholder-live-secondary"
             />
           </div>
@@ -105,12 +186,46 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           </div>
           
           {/* Quick Stake Buttons */}
-          <div className="flex gap-1.5">
-            <button className="flex-1 bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-[10px] font-medium text-live-primary transition-colors">5</button>
-            <button className="flex-1 bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-[10px] font-medium text-live-primary transition-colors">10</button>
-            <button className="flex-1 bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-[10px] font-medium text-live-primary transition-colors">50</button>
-            <button className="bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-[10px] font-medium text-live-primary transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-2.5 w-2.5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="flex gap-1.5" ref={containerRef}>
+            {betAmounts.map((amount, index) => (
+              <div key={index} className="flex-1">
+                {editableIndex === index ? (
+                  <input
+                    ref={editInputRef}
+                    type="number"
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
+                    onBlur={() => handleEditSubmit(index)}
+                    onKeyPress={(e) => handleEditKeyPress(e, index)}
+                    className="w-full bg-live-hover border border-live rounded px-1.5 py-1 text-[10px] text-live-primary placeholder-live-secondary [-webkit-appearance:none] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                ) : (
+                  <button 
+                    className="w-full bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-[10px] font-medium text-live-primary transition-colors"
+                    onClick={() => {
+                      if (isEditingMode) {
+                        setEditableIndex(index);
+                        setEditValue(amount.toString());
+                      } else {
+                        // Set the stake value when clicking on a chip
+                        handleChipClick(amount);
+                      }
+                    }}
+                  >
+                    {amount}
+                  </button>
+                )}
+              </div>
+            ))}
+            <button 
+              className={`border px-1.5 py-1 rounded text-[10px] font-medium transition-colors flex items-center justify-center ${
+                isEditingMode 
+                  ? 'bg-live-accent border-live-accent text-live-dark' 
+                  : 'bg-live-tertiary hover:bg-live-hover border-live text-live-primary'
+              }`}
+              onClick={toggleEditMode}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className={`h-2.5 w-2.5 mx-auto ${isEditingMode ? 'text-live-dark' : 'text-live-primary'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
               </svg>
             </button>
@@ -129,7 +244,8 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
       </div>
     );
   }
-  console.log("selectedGame",selectedGame);
+  
+
   return (
     <div className="p-4 m-2 bg-live-primary rounded-lg shadow-lg shadow-black/50 flex flex-col gap-4 text-live-primary">
       {/* Header Section */}
@@ -197,6 +313,8 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           <input 
             type="text"
             placeholder="Enter stake"
+            value={stakeValue}
+            onChange={handleStakeChange}
             className="w-full h-7 bg-live-hover border-0 rounded px-2.5 py-1 text-xs text-live-primary placeholder-live-secondary"
           />
         </div>
@@ -208,12 +326,46 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
         </div>
         
         {/* Quick Stake Buttons */}
-        <div className="flex gap-1.5">
-          <button className="flex-1 bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-xs font-medium text-live-primary transition-colors">5</button>
-          <button className="flex-1 bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-xs font-medium text-live-primary transition-colors">10</button>
-          <button className="flex-1 bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-xs font-medium text-live-primary transition-colors">50</button>
-          <button className="bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-xs font-medium text-live-primary transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="flex gap-1.5" ref={containerRef}>
+          {betAmounts.map((amount, index) => (
+            <div key={index} className="flex-1">
+              {editableIndex === index ? (
+                <input
+                  ref={editInputRef}
+                  type="number"
+                  value={editValue}
+                  onChange={(e) => setEditValue(e.target.value)}
+                  onBlur={() => handleEditSubmit(index)}
+                  onKeyPress={(e) => handleEditKeyPress(e, index)}
+                  className="w-full bg-live-hover border border-live rounded px-1.5 py-1 text-xs text-live-primary placeholder-live-secondary [-webkit-appearance:none] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                />
+              ) : (
+                <button 
+                  className="w-full bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-xs font-medium text-live-primary transition-colors"
+                  onClick={() => {
+                    if (isEditingMode) {
+                      setEditableIndex(index);
+                      setEditValue(amount.toString());
+                    } else {
+                      // Set the stake value when clicking on a chip
+                      handleChipClick(amount);
+                    }
+                  }}
+                >
+                  {amount}
+                </button>
+              )}
+            </div>
+          ))}
+          <button 
+            className={`border px-1.5 py-1 rounded text-xs font-medium transition-colors flex items-center justify-center ${
+              isEditingMode 
+                ? 'bg-live-accent border-live-accent text-live-dark' 
+                : 'bg-live-tertiary hover:bg-live-hover border-live text-live-primary'
+            }`}
+            onClick={toggleEditMode}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 mx-auto ${isEditingMode ? 'text-live-dark' : 'text-live-primary'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
             </svg>
           </button>
