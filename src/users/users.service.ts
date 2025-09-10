@@ -247,4 +247,43 @@ export class UsersService {
       return false;
     }
   }
+
+  /**
+   * Find user by JWT token
+   * @param token JWT token
+   * @returns User object without sensitive fields
+   */
+  async findUserByToken(token: string): Promise<Users | null> {
+    try {
+      // Verify the JWT token
+      const decoded = jwt.verify(token, USERS_CONSTANTS.JWT_SECRET) as {
+        id: string;
+        email: string;
+        role: number;
+        name: string;
+      };
+
+      // Find user by ID from the decoded token
+      const user = await this.usersRepository.findOne({
+        where: { id: decoded.id },
+        relations: ['currency']
+      });
+
+      if (!user) {
+        return null;
+      }
+
+      // Remove sensitive fields
+      delete (user as any).password;
+      delete (user as any).passwordText;
+      delete (user as any).token;
+      delete (user as any).resetToken;
+      delete (user as any).resetTokenExpiry;
+
+      return user;
+    } catch (error) {
+      this.logger.error('Error verifying token:', error);
+      return null;
+    }
+  }
 }

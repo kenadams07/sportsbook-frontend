@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, BadRequestException, HttpException, HttpStatus, Res, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Body, BadRequestException, HttpException, HttpStatus, Res, Logger, Req, Headers } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Users } from './users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -26,6 +26,69 @@ export class UsersController {
   @Get()
   findAll(): Promise<Users[]> {
     return this.usersService.findAll();
+  }
+
+  @Get('profile')
+  async getProfile(@Headers('authorization') authHeader: string, @Res() res) {
+    try {
+      // Extract token from Authorization header (Bearer token)
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json(errorResponse('Authorization token is required', 401));
+      }
+
+      const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+      
+      // Find user by token
+      const user = await this.usersService.findUserByToken(token);
+      
+      if (!user) {
+        return res.status(401).json(errorResponse('Invalid or expired token', 401));
+      }
+
+      // Prepare response data
+      const response = {
+        _id: user.id,
+        email: user.email,
+        role: user.role,
+        emailVerify: user.emailVerify,
+        username: user.username,
+        zipcode: user.zipcode,
+        name: user.name,
+        address: user.address,
+        middlename: user.middlename,
+        occupation: user.occupation,
+        salaryLevel: user.salaryLevel,
+        surname: user.surname,
+        gender: user.gender,
+        birthdate: user.birthdate,
+        clientShare: user.clientShare,
+        creditReference: user.creditReference,
+        balance: user.balance,
+        system_ip: user.system_ip,
+        browser_ip: user.browser_ip,
+        status: user.status,
+        betAllow: user.betAllow,
+        // Include currency details if available
+        currency: user.currency ? {
+          id: user.currency.id,
+          name: user.currency.name,
+          code: user.currency.code
+        } : null
+      };
+
+      return res.status(200).json({
+        success: true,
+        message: 'Profile retrieved successfully',
+        data: response
+      });
+    } catch (error) {
+      return res.status(500).json(
+        errorResponse(
+          error.response?.message || error.message || 'Something went wrong',
+          error.status || 500
+        )
+      );
+    }
   }
 
   @Post('signup')
