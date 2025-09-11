@@ -6,11 +6,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Currency } from 'src/currency/currency.entity';
-import { Users } from 'src/users/users.entity';
-import { Markets } from 'src/markets/markets.entity';
-import { Sports } from 'src/sports/sports.entity';
-import { Events } from 'src/events/events.entity';
+import { Currency } from '../currency/currency.entity';
+import { Users } from '../users/users.entity';
+import { Markets } from '../markets/markets.entity';
+import { Sports } from '../sports/sports.entity';
+import { Events } from '../events/events.entity';
 
 export enum BettingType {
   ODDS = 'ODDS',

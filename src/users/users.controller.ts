@@ -5,13 +5,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Currency } from '../currency/currency.entity';
 import * as bcrypt from 'bcrypt';
-import { errorResponse, successResponse } from 'src/utils/helper';
+import { errorResponse, successResponse } from '../utils/helper';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { ForgetPasswordDto } from './dto/forget-password.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { LoginDto } from './dto/login.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { validate } from 'class-validator';
+import { ExposureService } from '../exposure/exposure.service';
+import { Exposure } from '../exposure/exposure.entity';
 
 @Controller('users')
 export class UsersController {
@@ -21,6 +23,7 @@ export class UsersController {
     private readonly usersService: UsersService,
     @InjectRepository(Currency)
     private readonly currencyRepo: Repository<Currency>,
+    private readonly exposureService: ExposureService,
   ) { }
 
   @Get()
@@ -43,6 +46,15 @@ export class UsersController {
       
       if (!user) {
         return res.status(401).json(errorResponse('Invalid or expired token', 401));
+      }
+
+      // Fetch exposure data for the user
+      let exposures: Exposure[] = [];
+      try {
+        exposures = await this.exposureService.findAllByUserId(user.id);
+      } catch (exposureError) {
+        this.logger.error('Error fetching exposure data', exposureError.stack);
+        // Don't fail the whole request if exposure data can't be fetched
       }
 
       // Prepare response data
@@ -68,6 +80,14 @@ export class UsersController {
         browser_ip: user.browser_ip,
         status: user.status,
         betAllow: user.betAllow,
+        // Include exposure data
+        exposures: exposures.map(exposure => ({
+          id: exposure.id,
+          marketId: exposure.marketId,
+          is_clear: exposure.is_clear,
+          marketType: exposure.marketType,
+          exposure: exposure.exposure,
+        })),
         // Include currency details if available
         currency: user.currency ? {
           id: user.currency.id,

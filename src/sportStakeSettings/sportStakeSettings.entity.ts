@@ -1,6 +1,6 @@
-import { Currency } from 'src/currency/currency.entity';
-import { Sports } from 'src/sports/sports.entity';
-import { WhiteLabel } from 'src/whiteLabel/whiteLabel.entity';
+import { Currency } from '../currency/currency.entity';
+import { Sports } from '../sports/sports.entity';
+import { WhiteLabel } from '../whiteLabel/whiteLabel.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

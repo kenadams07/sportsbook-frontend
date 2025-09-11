@@ -8,5 +8,6 @@ import { Markets } from './markets.entity';
   imports: [TypeOrmModule.forFeature([Markets])],
   providers: [MarketsService],
   controllers: [MarketsController],
+  exports: [MarketsService, TypeOrmModule],
 })
 export class MarketModule {}
