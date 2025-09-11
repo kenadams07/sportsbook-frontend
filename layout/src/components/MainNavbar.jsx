@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import RegisterModal from '../modals/RegisterModal';
@@ -45,6 +45,76 @@ export default function MainNavbar() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [forceUpdate, setForceUpdate] = useState(0); // State to force re-render
+
+  // Calculate total exposure from exposures array
+  const calculateTotalExposure = useCallback((exposures) => {
+ 
+    if (!exposures || !Array.isArray(exposures)) {
+     
+      return 0;
+    }
+    
+    const total = exposures.reduce((total, exposureObj) => {
+      const exposureValue = parseFloat(exposureObj?.exposure) || 0;
+
+      return total + exposureValue;
+    }, 0);
+    
+
+    return total;
+  }, []);
+
+  // New function to calculate only active (non-cleared) exposures for display
+  const calculateActiveExposure = useCallback((exposures) => {
+ 
+    if (!exposures || !Array.isArray(exposures)) {
+     
+      return 0;
+    }
+    
+    const total = exposures.reduce((total, exposureObj) => {
+      // Only calculate exposure when is_clear is false
+      if (exposureObj?.is_clear === "true" || exposureObj?.is_clear === true) {
+        return total;
+      }
+      const exposureValue = parseFloat(exposureObj?.exposure) || 0;
+
+      return total + exposureValue;
+    }, 0);
+    
+
+    return total;
+  }, []);
+
+  // Get exposure value to display
+  const getTotalExposure = useMemo(() => {
+    // Use the most recently updated data (from Login reducer when available)
+    const sourceData = userData || profileData || {};
+    
+    // First try to calculate from exposures array
+    if (sourceData?.exposures) {
+      return calculateActiveExposure(sourceData.exposures);
+    } 
+    // Fallback to single exposure value
+    else if (sourceData?.exposure) {
+      return parseFloat(sourceData.exposure) || 0;
+    }
+ 
+    return 0;
+  }, [profileData, userData, calculateActiveExposure]);
+
+  // Get balance value to display
+  const getBalance = useMemo(() => {
+    // Use the most recently updated data (from Login reducer when available)
+    const sourceData = userData || profileData || {};
+    
+    const balance = parseFloat(sourceData?.balance) || 0;
+    // Use active exposure (excluding cleared exposures) for balance calculation
+    const activeExposure = getTotalExposure;
+    
+    return balance - activeExposure;
+  }, [profileData, userData, getTotalExposure]);
 
   useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -81,6 +151,43 @@ export default function MainNavbar() {
             dispatch(getUserData());
         }
     }, [isAuthenticated, dispatch]);
+
+    // Log when profileData or userData changes for debugging
+  useEffect(() => {
+    console.log("profileData changed:", profileData);
+  }, [profileData]);
+
+  useEffect(() => {
+    console.log("userData changed:", userData);
+    // Calculate exposures for debugging
+    const sourceData = userData || profileData || {};
+    const totalExposure = calculateTotalExposure(sourceData?.exposures) || parseFloat(sourceData?.exposure) || 0;
+    const activeExposure = getTotalExposure;
+    
+    console.log("getBalance value:", getBalance);
+    console.log("getTotalExposure value (active only):", activeExposure);
+    console.log("Total exposure (including cleared):", totalExposure);
+    console.log("Balance calculation details:", {
+      sourceBalance: userData?.balance,
+      sourceExposure: userData?.exposure,
+      calculatedBalance: parseFloat(userData?.balance) || 0,
+      calculatedExposure: parseFloat(userData?.exposure) || 0,
+      totalExposure: totalExposure,
+      activeExposure: activeExposure,
+      finalBalance: (parseFloat(userData?.balance) || 0) - activeExposure  // Use active exposure for balance
+    });
+  }, [userData, getBalance, getTotalExposure, calculateTotalExposure]);
+    
+    // Listen for changes in profileData (from GetUserData reducer) to trigger re-render
+    useEffect(() => {
+        console.log("profileData updated, triggering force update");
+        setForceUpdate(prev => prev + 1);
+    }, [profileData]);
+    
+    // Log when forceUpdate changes
+    useEffect(() => {
+        console.log("forceUpdate changed:", forceUpdate);
+    }, [forceUpdate]);
 
     const toggleMobileMenu = useCallback(() => {
         setIsMobileMenuOpen((prev) => !prev);
@@ -121,9 +228,9 @@ export default function MainNavbar() {
                                 {isAuthenticated && loading && <UserDataSkeleton />}
                                 {isAuthenticated && !loading && (
                                     <div className="hidden md:flex items-center gap-4 text-white font-bold">
-                                        <span>Balance: {profileData?.balance || userData?.balance || 0}</span>
+                                        <span>Balance: {getBalance}</span>
                                         <span>|</span>
-                                        <span>Exposure: {profileData?.exposure || userData?.exposure || 0}</span>
+                                        <span>Exposure: {getTotalExposure}</span>
                                     </div>
                                 )}
                                 {/* Show deposit button only when authenticated */}

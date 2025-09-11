@@ -1,5 +1,5 @@
 import { all, put, takeEvery } from "redux-saga/effects";
-import { removeLocalStorageItem } from "../../../utils/Helper";
+import { removeLocalStorageItem, setLocalStorageItem } from "../../../utils/Helper";
 import { logoutSuccess, logoutFailure } from "../../Action/auth/logoutAction";
 import { LOGOUT } from "../../Action/actionTypes";
 
@@ -9,6 +9,9 @@ function* logoutRequest(action) {
     removeLocalStorageItem("token");
     removeLocalStorageItem("userData");
     
+    // Store logout success message in localStorage
+    setLocalStorageItem("logoutMessage", "Logout successful");
+    
     // Dispatch logout success action
     yield put(logoutSuccess());
     
@@ -16,6 +19,9 @@ function* logoutRequest(action) {
     if (action.callback && typeof action.callback === 'function') {
       action.callback();
     }
+    
+    // Redirect to home page immediately
+    window.location.href = "/home";
   } catch (error) {
     console.error("Logout error:", error);
     yield put(logoutFailure());

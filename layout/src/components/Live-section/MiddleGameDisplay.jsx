@@ -42,6 +42,10 @@ export default function MiddleGameDisplay({ match, sport, marketItems }) {
   const team1 = teamNames[0] || 'Team 1';
   const team2 = teamNames[1] || 'Team 2';
 
+  // Use real-time scores from match prop
+  const homeScore = match.homeScore ?? 0;
+  const awayScore = match.awayScore ?? 0;
+
   return (
     <div className="p-2 flex flex-col gap-4 h-full min-w-0">
       {/* Top Section with Background Image */}
@@ -95,14 +99,14 @@ export default function MiddleGameDisplay({ match, sport, marketItems }) {
               {/* Center - Score display */}
               <div className="text-center">
                 <div className="text-live-primary text-lg font-bold">
-                  {match.homeScore ?? '3'}-{match.awayScore ?? '2'} (2-1) (1-1) 81'
+                  {homeScore}-{awayScore} (2-1) (1-1) 81'
                 </div>
               </div>
 
               {/* Right side - Current scores */}
               <div className="text-right space-y-3">
-                <div className="text-live-primary text-2xl font-bold">{match.homeScore ?? '3'}</div>
-                <div className="text-live-primary text-2xl font-bold">{match.awayScore ?? '2'}</div>
+                <div className="text-live-primary text-2xl font-bold">{homeScore}</div>
+                <div className="text-live-primary text-2xl font-bold">{awayScore}</div>
               </div>
             </div>
           </div>

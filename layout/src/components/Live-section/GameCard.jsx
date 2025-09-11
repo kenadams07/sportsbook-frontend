@@ -33,7 +33,11 @@ export default function GameCard({
 
   return (
     <div
-      className={`bg-live-primary rounded-md p-2 mb-2 shadow border border-live ${highlight ? 'ring-2 ring-live-accent' : ''} cursor-pointer hover:bg-live-hover transition`}
+      className={`bg-live-primary rounded-md p-2 mb-2 border transition-all duration-300 ease-in-out transform ${
+        highlight 
+          ? 'border-live-accent shadow-[0_0_12px_var(--live-accent-primary)] scale-[1.02]' 
+          : 'border-live shadow-md hover:shadow-lg'
+      } cursor-pointer hover:bg-live-hover hover:scale-[1.01]`}
       onClick={onClick}
     >
       {/* League and status vertically */}
@@ -56,17 +60,25 @@ export default function GameCard({
       </div>
       {/* Odds */}
       <div className="flex gap-2 mt-2">
-        <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1">
+        <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105">
           <span className="text-xs text-live-muted">W1</span>
-          <span className={`text-base font-bold px-2 py-1 rounded odds-value ${oddsHighlight?.w1 ? 'odds-highlight' : ''}`}>{odds.w1}</span>
+          <span className={`text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${
+            oddsHighlight?.w1 
+              ? 'odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110' 
+              : 'hover:shadow-md'
+          }`}>{odds.w1}</span>
         </div>
-        <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1">
+        <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105">
           <span className="text-xs text-live-muted">X</span>
-          <span className="text-base text-live-accent font-bold">{odds.x}</span>
+          <span className="text-base text-live-accent font-bold transition-all duration-300 hover:shadow-md">{odds.x}</span>
         </div>
-        <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1">
+        <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105">
           <span className="text-xs text-live-muted">W2</span>
-          <span className={`text-base font-bold px-2 py-1 rounded odds-value ${oddsHighlight?.w2 ? 'odds-highlight' : ''}`}>{odds.w2}</span>
+          <span className={`text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${
+            oddsHighlight?.w2 
+              ? 'odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110' 
+              : 'hover:shadow-md'
+          }`}>{odds.w2}</span>
         </div>
       </div>
     </div>

@@ -1,6 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateUserBalanceExposure } from '../../redux/Action/auth/updateUserBalanceExposureAction';
+import { notifyError } from '../../utils/notificationService';
+import API from '../../utils/api';
 
 // Utility function to format timestamp to readable date and time
 const formatDateTime = (timestamp) => {
@@ -24,8 +28,30 @@ const formatDateTime = (timestamp) => {
   return date.toLocaleDateString('en-US', options);
 };
 
-// Function to extract W1 odds from markets data
-const extractW1Odds = (markets) => {
+// Function to calculate active exposure (excluding cleared exposures)
+const calculateActiveExposure = (exposures) => {
+  if (!exposures || !Array.isArray(exposures)) {
+    return 0;
+  }
+  
+  return exposures.reduce((total, exposureObj) => {
+    // Only calculate exposure when is_clear is false
+    if (exposureObj?.is_clear === "true" || exposureObj?.is_clear === true) {
+      return total;
+    }
+    const exposureValue = parseFloat(exposureObj?.exposure) || 0;
+    return total + exposureValue;
+  }, 0);
+};
+
+// Function to extract W1 odds from markets data or use passed odds
+const extractW1Odds = (markets, passedOdds = null) => {
+  // If we have passed odds, use those
+  if (passedOdds && passedOdds.w1) {
+    return passedOdds.w1 !== "-" ? parseFloat(passedOdds.w1).toFixed(2) : "-";
+  }
+  
+  // Otherwise extract from markets
   if (!markets) return '-';
   const mo = markets?.matchOdds?.[0];
   const r0 = mo?.runners?.[0];
@@ -33,8 +59,35 @@ const extractW1Odds = (markets) => {
   return typeof w1 === "number" ? w1.toFixed(2) : '-';
 };
 
-// Function to extract W2 odds from markets data
-const extractW2Odds = (markets) => {
+// Function to extract X (draw) odds from markets data or use passed odds
+const extractXOdds = (markets, passedOdds = null) => {
+  // If we have passed odds, use those
+  if (passedOdds && passedOdds.x) {
+    return passedOdds.x !== "-" ? parseFloat(passedOdds.x).toFixed(2) : "-";
+  }
+  
+  // Otherwise extract from markets by looking for a runner with name "draw"
+  if (!markets) return '-';
+  const mo = markets?.matchOdds?.[0];
+  const runners = mo?.runners || [];
+  
+  // Look for draw runner by name "draw" (case insensitive)
+  const drawRunner = runners.find(runner => 
+    runner.runnerName && runner.runnerName.toLowerCase() === "draw"
+  );
+  
+  const x = drawRunner?.backPrices?.[0]?.price;
+  return typeof x === "number" ? x.toFixed(2) : '-';
+};
+
+// Function to extract W2 odds from markets data or use passed odds
+const extractW2Odds = (markets, passedOdds = null) => {
+  // If we have passed odds, use those
+  if (passedOdds && passedOdds.w2) {
+    return passedOdds.w2 !== "-" ? parseFloat(passedOdds.w2).toFixed(2) : "-";
+  }
+  
+  // Otherwise extract from markets
   if (!markets) return '-';
   const mo = markets?.matchOdds?.[0];
   const r1 = mo?.runners?.[1];
@@ -43,17 +96,33 @@ const extractW2Odds = (markets) => {
 };
 
 export default function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = false }) {
+  const dispatch = useDispatch();
+  const { isAuthenticated, userData } = useSelector(state => state.Login);
+  const { loading: exposureLoading, error: exposureError } = useSelector(state => state.UpdateUserBalanceExposure);
   const [oddsOption, setOddsOption] = useState('always ask');
   const [isOpen, setIsOpen] = useState(false);
-  const [betAmounts, setBetAmounts] = useState([500, 1000, 5000]); // Updated bet amounts
-  const [editableIndex, setEditableIndex] = useState(null); // Track which bet amount is being edited
-  const [editValue, setEditValue] = useState(''); // Track the value being edited
-  const [isEditingMode, setIsEditingMode] = useState(false); // Track if we're in editing mode
-  const [stakeValue, setStakeValue] = useState(''); // Track the stake input value
-  const editInputRef = useRef(null); // Ref for the edit input
-  const containerRef = useRef(null); // Ref for the container to detect clicks outside
+  const [betAmounts, setBetAmounts] = useState([500, 1000, 5000]);
+  const [editableIndex, setEditableIndex] = useState(null);
+  const [editValue, setEditValue] = useState('');
+  const [isEditingMode, setIsEditingMode] = useState(false);
+  const [stakeValue, setStakeValue] = useState('');
+  const [selectedTeam, setSelectedTeam] = useState(null);
+  const [selectedOdd, setSelectedOdd] = useState(null);
+  const [previousOdds, setPreviousOdds] = useState({ w1: null, x: null, w2: null }); // Track previous odds for highlighting
+  const [highlightedOdds, setHighlightedOdds] = useState({ w1: false, x: false, w2: false }); // Track which odds to highlight
+  const editInputRef = useRef(null);
+  const containerRef = useRef(null);
 
-  const toggleDropdown = () => setIsOpen(!isOpen);
+  // Log userData changes for debugging
+  useEffect(() => {
+  
+    if (userData) {
+      const activeExposure = calculateActiveExposure(userData.exposures);
+
+    }
+  }, [userData]);
+
+  const toggleDropdown = () => setIsOpen(!isOpen); 
 
   // Handle clicks outside to exit edit mode
   useEffect(() => {
@@ -128,6 +197,229 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
     }
   };
 
+  // Handle team selection
+  const handleTeamSelect = (teamName, oddValue) => {
+    // Extract the latest odds for the selected team
+    let latestOddValue = oddValue;
+    
+    if (teamName === selectedGame?.team1) {
+      latestOddValue = extractW1Odds(selectedGame?.markets, selectedGame?.odds);
+    } else if (teamName === 'Draw') {
+      latestOddValue = extractXOdds(selectedGame?.markets, selectedGame?.odds);
+    } else if (teamName === selectedGame?.team2) {
+      latestOddValue = extractW2Odds(selectedGame?.markets, selectedGame?.odds);
+    }
+    
+    setSelectedTeam(teamName);
+    setSelectedOdd(latestOddValue);
+    setStakeValue('');
+  };
+
+  // Handle placing a bet
+  const handlePlaceBet = async () => {
+  
+    if (!isAuthenticated || !selectedTeam || !stakeValue) {
+     
+      return;
+    }
+    
+    const stake = parseFloat(stakeValue);
+    if (isNaN(stake) || stake <= 0) {
+
+      return;
+    }
+    
+    // Fetch fresh user data before placing the bet to ensure accurate balance check
+    try {
+      const response = await API.get("/users/profile");
+   
+      
+      if (response?.data?.success === true || 
+          response?.data?.meta?.code === 200 || 
+          response?.data?.code === 200) {
+        
+        const freshUserData = response.data?.data || response.data;
+    
+        
+        // Get current balance and calculate active exposure from fresh user data
+        const currentBalance = parseFloat(freshUserData?.balance) || 0;
+        const activeExposure = calculateActiveExposure(freshUserData?.exposures) || parseFloat(freshUserData?.exposure) || 0;
+        
+        // Calculate available balance using the same logic as MainNavbar
+        const availableBalance = currentBalance - activeExposure;
+        
+        // Check if user has sufficient available balance
+        if (stake > availableBalance) {
+          // Show error message using the notification service
+          notifyError("Insufficient balance to place this bet");
+          return;
+        }
+        
+        // Calculate new values using the same logic as MainNavbar
+        // For exposure, we add the stake amount for this individual bet
+        const newExposure = activeExposure + stake;
+        // For balance, we deduct the stake from the current balance
+        const newBalance = currentBalance - stake;
+    
+
+     
+        dispatch(updateUserBalanceExposure({
+          balance: newBalance,
+          exposure: newExposure,
+          eventId: selectedGame?.eventId || null,
+          marketId: selectedGame?.markets?.matchOdds?.[0]?.marketId || null,
+          is_clear: false,
+          marketType: "matchOdds",
+          stake: stake
+        }));
+      
+      } else {
+        // Fallback to using existing userData if fresh data fetch fails
+      
+        
+        // Get current balance and calculate active exposure from existing userData
+        const currentBalance = parseFloat(userData?.balance) || 0;
+        const activeExposure = calculateActiveExposure(userData?.exposures) || parseFloat(userData?.exposure) || 0;
+        
+        // Calculate available balance using the same logic as MainNavbar
+        const availableBalance = currentBalance - activeExposure;
+        
+        // Check if user has sufficient available balance
+        if (stake > availableBalance) {
+          // Show error message using the notification service
+          notifyError("Insufficient balance to place this bet");
+          return;
+        }
+        
+        // Calculate new values using the same logic as MainNavbar
+        // For exposure, we add the stake amount for this individual bet
+        const newExposure = activeExposure + stake;
+        // For balance, we deduct the stake from the current balance
+        const newBalance = currentBalance - stake;
+        
+     
+
+ 
+        dispatch(updateUserBalanceExposure({
+          balance: newBalance,
+          exposure: newExposure,
+          eventId: selectedGame?.eventId || null,
+          marketId: selectedGame?.markets?.matchOdds?.[0]?.marketId || null,
+          is_clear: false,
+          marketType: "matchOdds",
+          stake: stake
+        }));
+    
+      }
+    } catch (error) {
+
+      
+      // Get current balance and calculate active exposure from existing userData
+      const currentBalance = parseFloat(userData?.balance) || 0;
+      const activeExposure = calculateActiveExposure(userData?.exposures) || parseFloat(userData?.exposure) || 0;
+      
+      // Calculate available balance using the same logic as MainNavbar
+      const availableBalance = currentBalance - activeExposure;
+      
+      // Check if user has sufficient available balance
+      if (stake > availableBalance) {
+        // Show error message using the notification service
+        notifyError("Insufficient balance to place this bet");
+        return;
+      }
+      
+      // Calculate new values using the same logic as MainNavbar
+      // For exposure, we add the stake amount for this individual bet
+      const newExposure = activeExposure + stake;
+      // For balance, we deduct the stake from the current balance
+      const newBalance = currentBalance - stake;
+      
+  
+
+  
+
+      dispatch(updateUserBalanceExposure({
+        balance: newBalance,
+        exposure: newExposure,
+        eventId: selectedGame?.eventId || null,
+        marketId: selectedGame?.markets?.matchOdds?.[0]?.marketId || null,
+        is_clear: false,
+        marketType: "matchOdds",
+        stake: stake
+      }));
+ 
+    }
+  };
+
+  // Handle post-bet placement logic
+  useEffect(() => {
+
+    // Check if the exposure update was successful
+    if (!exposureLoading && !exposureError) {
+     
+      // Update the local state immediately for UI feedback
+      setSelectedTeam(null);
+      setSelectedOdd(null);
+      setStakeValue('');
+    } else if (exposureError) {
+  
+      // You might want to show an error message to the user here
+    }
+  }, [exposureLoading, exposureError]);
+
+  // Calculate possible win amount
+  const calculatePossibleWin = () => {
+    if (!stakeValue || !selectedOdd || isNaN(stakeValue) || isNaN(selectedOdd)) return '0.00';
+    const stake = parseFloat(stakeValue);
+    const odd = parseFloat(selectedOdd);
+    const possibleWin = (odd - 1) * stake;
+    return possibleWin.toFixed(2);
+  };
+
+  // Update previous odds when game data changes and trigger highlighting
+  useEffect(() => {
+    if (selectedGame) {
+      // Use passed odds if available, otherwise extract from markets
+      const w1Odds = extractW1Odds(selectedGame.markets, selectedGame.odds);
+      const xOdds = extractXOdds(selectedGame.markets, selectedGame.odds);
+      const w2Odds = extractW2Odds(selectedGame.markets, selectedGame.odds);
+      
+      // Check if odds have changed
+      const w1Changed = previousOdds.w1 !== null && w1Odds !== '-' && w1Odds !== previousOdds.w1;
+      const xChanged = previousOdds.x !== null && xOdds !== '-' && xOdds !== previousOdds.x;
+      const w2Changed = previousOdds.w2 !== null && w2Odds !== '-' && w2Odds !== previousOdds.w2;
+      
+      if (w1Changed || xChanged || w2Changed) {
+        setHighlightedOdds({
+          w1: w1Changed,
+          x: xChanged,
+          w2: w2Changed
+        });
+        
+        // Update selectedOdd if the selected team's odds have changed
+        if (selectedTeam === selectedGame?.team1 && w1Changed) {
+          setSelectedOdd(w1Odds);
+        } else if (selectedTeam === 'Draw' && xChanged) {
+          setSelectedOdd(xOdds);
+        } else if (selectedTeam === selectedGame?.team2 && w2Changed) {
+          setSelectedOdd(w2Odds);
+        }
+        
+        // Clear highlighting after animation duration
+        setTimeout(() => {
+          setHighlightedOdds({ w1: false, x: false, w2: false });
+        }, 1000);
+      }
+      
+      // Update previous odds
+      setPreviousOdds({
+        w1: w1Odds,
+        x: xOdds,
+        w2: w2Odds
+      });
+    }
+  }, [selectedGame]); // Depend on the entire selectedGame object to catch odds updates
+
   if (!selectedGame) {
     return (
       <div className="flex items-center justify-center h-full text-live-muted text-sm bg-gradient-to-b from-live-tertiary to-live-secondary rounded p-4 shadow-md">
@@ -159,80 +451,194 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
             <span className="text-xs font-bold text-live-accent">BetSlip</span>
           </div>
           
+          {/* Login/Register CTA - Only visible when not authenticated */}
+          {!isAuthenticated && (
+            <div className="text-center text-[10px] text-live-muted bg-live-tertiary p-2 rounded-lg border border-live">
+              <p>If you want to place a bet, please <LinkTo onClick={onLogin} text="login" /> or <LinkTo onClick={onRegister} text="register" /></p>
+            </div>
+          )}
+          
           {/* Bet Info */}
           <div className="bg-live-tertiary px-2 py-1 rounded border border-live">
             <div className="text-[10px] mb-1 font-bold text-live-primary">{selectedGame?.competitionName}</div>
-            <div className="text-[10px] mb-1 font-bold text-live-primary">{selectedGame?.team1} ({extractW1Odds(selectedGame?.markets)})</div>
-            <div className="text-[10px] mb-1 font-bold text-live-primary">{selectedGame?.team2} ({extractW2Odds(selectedGame?.markets)})</div>
+            
+            {/* Team selection boxes for compact view */}
+            <div className="flex flex-col gap-1 my-1">
+              {/* Team 1 with odds */}
+              <div 
+                className={`flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${
+                  selectedTeam === selectedGame?.team1 
+                    ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]' 
+                    : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
+                }`}
+                onClick={() => {
+                  const w1Odds = extractW1Odds(selectedGame?.markets, selectedGame?.odds);
+                  if (w1Odds !== '-') {
+                    handleTeamSelect(selectedGame?.team1, w1Odds);
+                  }
+                }}
+              >
+                <span className={`font-medium text-[9px] truncate ${selectedTeam === selectedGame?.team1 ? 'text-live-dark' : 'text-live-primary'}`}>
+                  {selectedGame?.team1}
+                </span>
+                <div 
+                  className={`min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] ${
+                    selectedTeam === selectedGame?.team1 
+                      ? 'bg-live-dark text-live-accent border border-live-accent' 
+                      : 'bg-live-odds text-live-accent border border-live'
+                  } ${
+                    highlightedOdds.w1 ? 'odds-highlight' : ''
+                  }`}
+                >
+                  {extractW1Odds(selectedGame?.markets, selectedGame?.odds)}
+                </div>
+              </div>
+              
+              {/* Draw (X) odds */}
+              <div 
+                className={`flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${
+                  selectedTeam === 'Draw' 
+                    ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]' 
+                    : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
+                }`}
+                onClick={() => {
+                  const xOdds = extractXOdds(selectedGame?.markets, selectedGame?.odds);
+                  if (xOdds !== '-') {
+                    handleTeamSelect('Draw', xOdds);
+                  }
+                }}
+              >
+                <span className={`font-medium text-[9px] truncate ${selectedTeam === 'Draw' ? 'text-live-dark' : 'text-live-primary'}`}>
+                  Draw
+                </span>
+                <div 
+                  className={`min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] ${
+                    selectedTeam === 'Draw' 
+                      ? 'bg-live-dark text-live-accent border border-live-accent' 
+                      : 'bg-live-odds text-live-accent border border-live'
+                  } ${
+                    highlightedOdds.x ? 'odds-highlight' : ''
+                  }`}
+                >
+                  {extractXOdds(selectedGame?.markets, selectedGame?.odds)}
+                </div>
+              </div>
+              
+              {/* Team 2 with odds */}
+              <div 
+                className={`flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${
+                  selectedTeam === selectedGame?.team2 
+                    ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]' 
+                    : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
+                }`}
+                onClick={() => {
+                  const w2Odds = extractW2Odds(selectedGame?.markets, selectedGame?.odds);
+                  if (w2Odds !== '-') {
+                    handleTeamSelect(selectedGame?.team2, w2Odds);
+                  }
+                }}
+              >
+                <span className={`font-medium text-[9px] truncate ${selectedTeam === selectedGame?.team2 ? 'text-live-dark' : 'text-live-primary'}`}>
+                  {selectedGame?.team2}
+                </span>
+                <div 
+                  className={`min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] ${
+                    selectedTeam === selectedGame?.team2 
+                      ? 'bg-live-dark text-live-accent border border-live-accent' 
+                      : 'bg-live-odds text-live-accent border border-live'
+                  } ${
+                    highlightedOdds.w2 ? 'odds-highlight' : ''
+                  }`}
+                >
+                  {extractW2Odds(selectedGame?.markets, selectedGame?.odds)}
+                </div>
+              </div>
+            </div>
+            
             <div className="text-[10px] text-live-secondary mb-1">{selectedGame?.team1} - {selectedGame?.team2}</div>
             <div className="text-[10px] text-live-secondary">{formatDateTime(selectedGame?.openDate)}</div>
           </div>
           
-          {/* Stake Input */}
-          <div className="bg-live-tertiary px-2 py-1 rounded border border-live">
-            <input 
-              type="text"
-              placeholder="Enter stake"
-              value={stakeValue}
-              onChange={handleStakeChange}
-              className="w-full h-7 bg-live-hover border-0 rounded px-2 py-1 text-[10px] text-live-primary placeholder-live-secondary"
-            />
-          </div>
-          
-          {/* Possible Win */}
-          <div className="flex justify-between items-center bg-live-tertiary px-2 py-1 rounded border border-live">
-            <span className="text-[10px] text-live-primary">Possible win:</span>
-            <span className="text-[10px] text-live-accent font-bold">0 €</span>
-          </div>
-          
-          {/* Quick Stake Buttons */}
-          <div className="flex gap-1.5" ref={containerRef}>
-            {betAmounts.map((amount, index) => (
-              <div key={index} className="flex-1">
-                {editableIndex === index ? (
-                  <input
-                    ref={editInputRef}
-                    type="number"
-                    value={editValue}
-                    onChange={(e) => setEditValue(e.target.value)}
-                    onBlur={() => handleEditSubmit(index)}
-                    onKeyPress={(e) => handleEditKeyPress(e, index)}
-                    className="w-full bg-live-hover border border-live rounded px-1.5 py-1 text-[10px] text-live-primary placeholder-live-secondary [-webkit-appearance:none] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  />
-                ) : (
-                  <button 
-                    className="w-full bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-[10px] font-medium text-live-primary transition-colors"
-                    onClick={() => {
-                      if (isEditingMode) {
-                        setEditableIndex(index);
-                        setEditValue(amount.toString());
-                      } else {
-                        // Set the stake value when clicking on a chip
-                        handleChipClick(amount);
-                      }
-                    }}
-                  >
-                    {amount}
-                  </button>
-                )}
+          {/* Stake Input and Possible Win - Only show when a team is selected */}
+          {selectedTeam && (
+            <>
+              {/* Stake Input */}
+              <div className="bg-live-tertiary px-2 py-1 rounded border border-live">
+                <input 
+                  type="number"
+                  placeholder="Enter stake"
+                  value={stakeValue}
+                  onChange={handleStakeChange}
+                  className="w-full h-7 bg-live-hover border-0 rounded px-2 py-1 text-[10px] text-live-primary placeholder-live-secondary"
+                />
               </div>
-            ))}
-            <button 
-              className={`border px-1.5 py-1 rounded text-[10px] font-medium transition-colors flex items-center justify-center ${
-                isEditingMode 
-                  ? 'bg-live-accent border-live-accent text-live-dark' 
-                  : 'bg-live-tertiary hover:bg-live-hover border-live text-live-primary'
-              }`}
-              onClick={toggleEditMode}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className={`h-2.5 w-2.5 mx-auto ${isEditingMode ? 'text-live-dark' : 'text-live-primary'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-              </svg>
-            </button>
-          </div>
+              
+              {/* Possible Win */}
+              <div className="flex justify-between items-center bg-live-tertiary px-2 py-1 rounded border border-live">
+                <span className="text-[10px] text-live-primary">Possible win:</span>
+                <span className="text-[10px] text-live-accent font-bold">{calculatePossibleWin()} €</span>
+              </div>
+            </>
+          )}
           
-          {/* BET Button */}
-          <button className="w-full bg-live-accent hover:bg-live-warning border border-live-accent text-live-dark px-2 py-1.5 rounded text-xs font-bold transition-colors">
+          {/* Quick Stake Buttons - Only show when a team is selected */}
+          {selectedTeam && (
+            <div className="flex gap-1.5" ref={containerRef}>
+              {betAmounts.map((amount, index) => (
+                <div key={index} className="flex-1">
+                  {editableIndex === index ? (
+                    <input
+                      ref={editInputRef}
+                      type="number"
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      onBlur={() => handleEditSubmit(index)}
+                      onKeyPress={(e) => handleEditKeyPress(e, index)}
+                      className="w-full bg-live-hover border border-live rounded px-1.5 py-1 text-[10px] text-live-primary placeholder-live-secondary [-webkit-appearance:none] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                  ) : (
+                    <button 
+                      className="w-full bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-[10px] font-medium text-live-primary transition-colors"
+                      onClick={() => {
+                        if (isEditingMode) {
+                          setEditableIndex(index);
+                          setEditValue(amount.toString());
+                        } else {
+                          // Set the stake value when clicking on a chip
+                          handleChipClick(amount);
+                        }
+                      }}
+                    >
+                      {amount}
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button 
+                className={`border px-1.5 py-1 rounded text-[10px] font-medium transition-colors flex items-center justify-center ${
+                  isEditingMode 
+                    ? 'bg-live-accent border-live-accent text-live-dark' 
+                    : 'bg-live-tertiary hover:bg-live-hover border-live text-live-primary'
+                }`}
+                onClick={toggleEditMode}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className={`h-2.5 w-2.5 mx-auto ${isEditingMode ? 'text-live-dark' : 'text-live-primary'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+              </button>
+            </div>
+          )}
+          
+          {/* BET Button - Only enabled when a team is selected and authenticated */}
+          <button 
+            className={`w-full px-2 py-1 rounded text-[10px] font-bold transition-colors cursor-pointer ${
+              isAuthenticated && selectedTeam 
+                ? 'bg-live-accent hover:bg-live-warning border border-live-accent text-live-accent hover:text-live-dark' 
+                : 'bg-live-tertiary border border-live text-live-accent cursor-not-allowed opacity-50'
+            }`}
+            disabled={!isAuthenticated || !selectedTeam}
+            onClick={handlePlaceBet}
+          >
             BET
           </button>
         </div>
@@ -244,7 +650,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
       </div>
     );
   }
-  
 
   return (
     <div className="p-4 m-2 bg-live-primary rounded-lg shadow-lg shadow-black/50 flex flex-col gap-4 text-live-primary">
@@ -288,10 +693,12 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           <div className="h-px flex-1 bg-live-accent opacity-30"></div>
         </div>
 
-        {/* Login/Register CTA - Moved here and fixed layout */}
-        <div className="text-center text-xs text-live-muted bg-live-tertiary p-2 rounded-lg border border-live">
-          <p>If you want to place a bet, please<LinkTo onClick={onLogin} text="login" /> or<LinkTo onClick={onRegister} text="register" /></p>
-        </div>
+        {/* Login/Register CTA - Only visible when not authenticated */}
+        {!isAuthenticated && (
+          <div className="text-center text-xs text-live-muted bg-live-tertiary p-2 rounded-lg border border-live">
+            <p>If you want to place a bet, please<LinkTo onClick={onLogin} text="login" /> or<LinkTo onClick={onRegister} text="register" /></p>
+          </div>
+        )}
       </div>
 
    
@@ -301,78 +708,184 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
         {/* Bet Info - Using actual game data */}
         <div className="bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
           <div className="text-xs mb-1 font-bold text-live-primary">{selectedGame?.competitionName}</div>
-          <div className="text-xs mb-1 font-bold text-live-primary">{selectedGame?.team1} ({extractW1Odds(selectedGame?.markets)})</div>
-          <div className="text-xs mb-1 font-bold text-live-primary">{selectedGame?.team2} ({extractW2Odds(selectedGame?.markets)})</div>
+          
+          {/* Team selection boxes */}
+          <div className="flex flex-col gap-2 my-2">
+            {/* Team 1 with odds */}
+            <div 
+              className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${
+                selectedTeam === selectedGame?.team1 
+                  ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]' 
+                  : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
+              }`}
+              onClick={() => {
+                const w1Odds = extractW1Odds(selectedGame?.markets, selectedGame?.odds);
+                if (w1Odds !== '-') {
+                  handleTeamSelect(selectedGame?.team1, w1Odds);
+                }
+              }}
+            >
+              <span className={`font-medium text-xs truncate ${selectedTeam === selectedGame?.team1 ? 'text-live-dark' : 'text-live-primary'}`}>
+                {selectedGame?.team1}
+              </span>
+              <div 
+                className={`min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${
+                  selectedTeam === selectedGame?.team1 
+                    ? 'bg-live-dark text-live-accent border border-live-accent' 
+                    : 'bg-live-odds text-live-accent border border-live'
+                } ${
+                  highlightedOdds.w1 ? 'odds-highlight' : ''
+                }`}
+              >
+                {extractW1Odds(selectedGame?.markets, selectedGame?.odds)}
+              </div>
+            </div>
+            
+            {/* Draw (X) odds */}
+            <div 
+              className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${
+                selectedTeam === 'Draw' 
+                  ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]' 
+                  : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
+              }`}
+              onClick={() => {
+                const xOdds = extractXOdds(selectedGame?.markets, selectedGame?.odds);
+                if (xOdds !== '-') {
+                  handleTeamSelect('Draw', xOdds);
+                }
+              }}
+            >
+              <span className={`font-medium text-xs truncate ${selectedTeam === 'Draw' ? 'text-live-dark' : 'text-live-primary'}`}>
+                Draw
+              </span>
+              <div 
+                className={`min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${
+                  selectedTeam === 'Draw' 
+                    ? 'bg-live-dark text-live-accent border border-live-accent' 
+                    : 'bg-live-odds text-live-accent border border-live'
+                } ${
+                  highlightedOdds.x ? 'odds-highlight' : ''
+                }`}
+              >
+                {extractXOdds(selectedGame?.markets, selectedGame?.odds)}
+              </div>
+            </div>
+            
+            {/* Team 2 with odds */}
+            <div 
+              className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${
+                selectedTeam === selectedGame?.team2 
+                  ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]' 
+                  : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
+              }`}
+              onClick={() => {
+                const w2Odds = extractW2Odds(selectedGame?.markets, selectedGame?.odds);
+                if (w2Odds !== '-') {
+                  handleTeamSelect(selectedGame?.team2, w2Odds);
+                }
+              }}
+            >
+              <span className={`font-medium text-xs truncate ${selectedTeam === selectedGame?.team2 ? 'text-live-dark' : 'text-live-primary'}`}>
+                {selectedGame?.team2}
+              </span>
+              <div 
+                className={`min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${
+                  selectedTeam === selectedGame?.team2 
+                    ? 'bg-live-dark text-live-accent border border-live-accent' 
+                    : 'bg-live-odds text-live-accent border border-live'
+                } ${
+                  highlightedOdds.w2 ? 'odds-highlight' : ''
+                }`}
+              >
+                {extractW2Odds(selectedGame?.markets, selectedGame?.odds)}
+              </div>
+            </div>
+          </div>
           
           <div className="text-xs text-live-secondary mb-1">{selectedGame?.team1} - {selectedGame?.team2}</div>
           <div className="text-xs text-live-secondary">{formatDateTime(selectedGame?.openDate)}</div>
         </div>
         
-        {/* Stake Input */}
-        <div className="bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
-          <input 
-            type="text"
-            placeholder="Enter stake"
-            value={stakeValue}
-            onChange={handleStakeChange}
-            className="w-full h-7 bg-live-hover border-0 rounded px-2.5 py-1 text-xs text-live-primary placeholder-live-secondary"
-          />
-        </div>
-        
-        {/* Possible Win */}
-        <div className="flex justify-between items-center bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
-          <span className="text-xs text-live-primary">Possible win:</span>
-          <span className="text-xs text-live-accent font-bold">0 €</span>
-        </div>
-        
-        {/* Quick Stake Buttons */}
-        <div className="flex gap-1.5" ref={containerRef}>
-          {betAmounts.map((amount, index) => (
-            <div key={index} className="flex-1">
-              {editableIndex === index ? (
-                <input
-                  ref={editInputRef}
-                  type="number"
-                  value={editValue}
-                  onChange={(e) => setEditValue(e.target.value)}
-                  onBlur={() => handleEditSubmit(index)}
-                  onKeyPress={(e) => handleEditKeyPress(e, index)}
-                  className="w-full bg-live-hover border border-live rounded px-1.5 py-1 text-xs text-live-primary placeholder-live-secondary [-webkit-appearance:none] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                />
-              ) : (
-                <button 
-                  className="w-full bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-xs font-medium text-live-primary transition-colors"
-                  onClick={() => {
-                    if (isEditingMode) {
-                      setEditableIndex(index);
-                      setEditValue(amount.toString());
-                    } else {
-                      // Set the stake value when clicking on a chip
-                      handleChipClick(amount);
-                    }
-                  }}
-                >
-                  {amount}
-                </button>
-              )}
+        {/* Stake Input and Possible Win - Only show when a team is selected */}
+        {selectedTeam && (
+          <>
+            {/* Stake Input */}
+            <div className="bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
+              <input 
+                type="number"
+                placeholder="Enter stake"
+                value={stakeValue}
+                onChange={handleStakeChange}
+                className="w-full h-7 bg-live-hover border-0 rounded px-2.5 py-1 text-xs text-live-primary placeholder-live-secondary"
+              />
             </div>
-          ))}
-          <button 
-            className={`border px-1.5 py-1 rounded text-xs font-medium transition-colors flex items-center justify-center ${
-              isEditingMode 
-                ? 'bg-live-accent border-live-accent text-live-dark' 
-                : 'bg-live-tertiary hover:bg-live-hover border-live text-live-primary'
-            }`}
-            onClick={toggleEditMode}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 mx-auto ${isEditingMode ? 'text-live-dark' : 'text-live-primary'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-            </svg>
-          </button>
-        </div>
+            
+            {/* Possible Win */}
+            <div className="flex justify-between items-center bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
+              <span className="text-xs text-live-primary">Possible win:</span>
+              <span className="text-xs text-live-accent font-bold">{calculatePossibleWin()}</span>
+            </div>
+          </>
+        )}
         
-        {/* BET Button */}
-        <button className="w-full bg-live-accent hover:bg-live-warning border border-live-accent text-live-dark px-2.5 py-1.5 rounded text-sm font-bold transition-colors">
+        {/* Quick Stake Buttons - Only show when a team is selected */}
+        {selectedTeam && (
+          <div className="flex gap-1.5" ref={containerRef}>
+            {betAmounts.map((amount, index) => (
+              <div key={index} className="flex-1">
+                {editableIndex === index ? (
+                  <input
+                    ref={editInputRef}
+                    type="number"
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
+                    onBlur={() => handleEditSubmit(index)}
+                    onKeyPress={(e) => handleEditKeyPress(e, index)}
+                    className="w-full bg-live-hover border border-live rounded px-1.5 py-1 text-xs text-live-primary placeholder-live-secondary [-webkit-appearance:none] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                ) : (
+                  <button 
+                    className="w-full bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-xs font-medium text-live-primary transition-colors"
+                    onClick={() => {
+                      if (isEditingMode) {
+                        setEditableIndex(index);
+                        setEditValue(amount.toString());
+                      } else {
+                        // Set the stake value when clicking on a chip
+                        handleChipClick(amount);
+                      }
+                    }}
+                  >
+                    {amount}
+                  </button>
+                )}
+              </div>
+            ))}
+            <button 
+              className={`border px-1.5 py-1 rounded text-xs font-medium transition-colors flex items-center justify-center ${
+                isEditingMode 
+                  ? 'bg-live-accent border-live-accent text-live-dark' 
+                  : 'bg-live-tertiary hover:bg-live-hover border-live text-live-primary'
+              }`}
+              onClick={toggleEditMode}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 mx-auto ${isEditingMode ? 'text-live-dark' : 'text-live-primary'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+            </button>
+          </div>
+        )}
+        
+        {/* BET Button - Only enabled when a team is selected and authenticated */}
+        <button 
+          className={`w-full px-2.5 py-1.5 rounded text-sm font-bold transition-colors cursor-pointer color-yellowborder-solid transition-all duration-200 ${
+            isAuthenticated && selectedTeam 
+              ? 'bg-live-accent hover:bg-live-warning border border-live-accent text-live-accent hover:text-live-dark hover:scale-[1.02] hover:shadow-[0_0_8px_var(--live-accent-primary)]' 
+              : 'bg-live-tertiary border border-live text-live-accent cursor-not-allowed opacity-50'
+          }`}
+          disabled={!isAuthenticated || !selectedTeam}
+          onClick={handlePlaceBet}
+        >
           BET
         </button>
       </div>

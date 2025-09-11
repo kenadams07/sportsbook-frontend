@@ -12,13 +12,33 @@ function normalize(str = "") {
 
 function extractOddsW1W2(markets) {
   const mo = markets?.matchOdds?.[0];
-  const r0 = mo?.runners?.[0];
-  const r1 = mo?.runners?.[1];
-  const w1 = r0?.backPrices?.[0]?.price;
-  const w2 = r1?.backPrices?.[0]?.price;
+  const runners = mo?.runners || [];
+  
+  // Find runners by their IDs or by name for draw
+  let w1Runner, drawRunner, w2Runner;
+  
+  // Look for draw runner by name "draw" (case insensitive)
+  drawRunner = runners.find(runner => 
+    runner.runnerName && runner.runnerName.toLowerCase() === "draw"
+  );
+  
+  // For W1 and W2, we'll take the first and last runners that aren't the draw
+  const nonDrawRunners = runners.filter(runner => 
+    !runner.runnerName || runner.runnerName.toLowerCase() !== "draw"
+  );
+  
+  w1Runner = nonDrawRunners[0];
+  w2Runner = nonDrawRunners.length > 1 ? nonDrawRunners[nonDrawRunners.length - 1] : nonDrawRunners[0];
+  
+  // Extract odds from back prices
+  const w1 = w1Runner?.backPrices?.[0]?.price;
+  const x = drawRunner?.backPrices?.[0]?.price;
+  const w2 = w2Runner?.backPrices?.[0]?.price;
+  
   return {
-    w1: typeof w1 === "number" ? w1.toString() : "-",
-    w2: typeof w2 === "number" ? w2.toString() : "-",
+    w1: typeof w1 === "number" ? w1.toFixed(2) : "-",
+    x: typeof x === "number" ? x.toFixed(2) : "-",
+    w2: typeof w2 === "number" ? w2.toFixed(2) : "-",
   };
 }
 
@@ -31,6 +51,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
   const [matchesBySport, setMatchesBySport] = useState({});
   const [loadingBySport, setLoadingBySport] = useState({});
   const [oddsByEventId, setOddsByEventId] = useState({});
+  const [scoresByEventId, setScoresByEventId] = useState({}); // New state for scores
   const [highlightedOdds, setHighlightedOdds] = useState({});
   const [pendingSelection, setPendingSelection] = useState(null); // Track pending game selection
   const oddsPrevRef = useRef({});
@@ -54,12 +75,18 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
         .then((json) => {
           const list = json?.sports ?? [];
           setMatchesBySport((prev) => ({ ...prev, [sport.key]: Array.isArray(list) ? list : [] }));
-          // Set initial odds
+          // Set initial odds and scores
           const oddsMap = { ...oddsByEventId };
+          const scoresMap = { ...scoresByEventId };
           for (const e of list) {
             oddsMap[e.eventId] = extractOddsW1W2(e.markets);
+            scoresMap[e.eventId] = {
+              homeScore: e.homeScore || 0,
+              awayScore: e.awayScore || 0
+            };
           }
           setOddsByEventId(oddsMap);
+          setScoresByEventId(scoresMap);
           oddsPrevRef.current = oddsMap;
         })
         .catch(() => setMatchesBySport((prev) => ({ ...prev, [sport.key]: [] })))
@@ -84,7 +111,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
     }
   }, [selectedType, location.key]);
 
-  // Only poll odds for the expanded sport
+  // Only poll odds and scores for the expanded sport
   useEffect(() => {
     let intervalId;
     function pollOdds() {
@@ -98,11 +125,16 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
           .then((json) => {
             const list = json?.sports ?? [];
             const oddsMap = { ...oddsByEventId };
+            const scoresMap = { ...scoresByEventId }; // New scores map
             const highlights = { ...highlightedOdds };
             for (const e of list) {
               const newOdds = extractOddsW1W2(e.markets);
               const prevOdds = oddsPrevRef.current[e.eventId] || {};
               oddsMap[e.eventId] = newOdds;
+              scoresMap[e.eventId] = { // Update scores
+                homeScore: e.homeScore || 0,
+                awayScore: e.awayScore || 0
+              };
               highlights[e.eventId] = {
                 w1: prevOdds.w1 !== newOdds.w1,
                 w2: prevOdds.w2 !== newOdds.w2,
@@ -118,6 +150,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
               }
             }
             setOddsByEventId(oddsMap);
+            setScoresByEventId(scoresMap); // Set updated scores
             setHighlightedOdds(highlights);
             oddsPrevRef.current = oddsMap;
             setTimeout(() => {
@@ -128,7 +161,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
     }
     intervalId = setInterval(pollOdds, 1000);
     return () => clearInterval(intervalId);
-  }, [selectedType, oddsByEventId, expanded, selectedMatch, onSelectedMatchOddsUpdate]);
+  }, [selectedType, oddsByEventId, scoresByEventId, expanded, selectedMatch, onSelectedMatchOddsUpdate]);
 
   const toggleExpand = (sportKey) => {
     // Toggle the expanded state for this sport
@@ -340,14 +373,16 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
                         }
                         const isSelected = selectedMatch && (selectedMatch.eventId === match.eventId);
                         const odds = oddsByEventId[match.eventId] || extractOddsW1W2(match.markets);
+                        const scores = scoresByEventId[match.eventId] || { homeScore: 0, awayScore: 0 }; // Get scores from state
+                  
                         const highlight = highlightedOdds[match.eventId] || { w1: false, w2: false };
                         return (
                           <GameCard
                             key={match.eventId || idx}
                             team1={team1}
                             team2={team2}
-                            score1={match.homeScore}
-                            score2={match.awayScore}
+                            score1={scores.homeScore} // Use real-time score
+                            score2={scores.awayScore} // Use real-time score
                             matchStatus={match.status}
                             time={match.openDate}
                             odds={odds}

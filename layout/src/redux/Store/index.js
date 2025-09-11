@@ -14,7 +14,12 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
-import { VERIFY_EMAIL } from "../Action/actionTypes";
+import { 
+  VERIFY_EMAIL,
+  UPDATE_USER_BALANCE_EXPOSURE,
+  UPDATE_USER_BALANCE_EXPOSURE_SUCCESS,
+  UPDATE_USER_BALANCE_EXPOSURE_FAILURE
+} from "../Action/actionTypes";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -34,7 +39,18 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these redux-persist action types in serializable check
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER, VERIFY_EMAIL],
+        ignoredActions: [
+          FLUSH, 
+          REHYDRATE, 
+          PAUSE, 
+          PERSIST, 
+          PURGE, 
+          REGISTER, 
+          VERIFY_EMAIL,
+          UPDATE_USER_BALANCE_EXPOSURE,
+          UPDATE_USER_BALANCE_EXPOSURE_SUCCESS,
+          UPDATE_USER_BALANCE_EXPOSURE_FAILURE
+        ],
       },
     }).concat(sagaMiddleware),
 });
