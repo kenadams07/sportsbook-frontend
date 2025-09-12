@@ -1,6 +1,7 @@
 import { importShared } from './__federation_fn_import.js';
-import { b as createLucideIcon, j as jsxRuntimeExports, c as createContextScope, d as useId, P as Primitive, e as composeEventHandlers, u as useComposedRefs, f as useControllableState, g as useCallbackRef, h as createPopperScope, R as Root2, A as Anchor, i as Presence, k as Portal$1, l as hideOthers, m as dispatchDiscreteCustomEvent, n as ReactRemoveScroll, o as useFocusGuards, a as createSlot, F as FocusScope, D as DismissableLayer, C as Content, p as Arrow, q as composeRefs, r as cn, s as useNavigate, t as useLocation, v as ChevronDown, X, L as Link, w as RegisterModal, x as LoginModal, T as Toaster$1, N as NavLink, O as Outlet } from './__federation_expose_LayoutApp.js';
-import { c as createCollection, u as useDirection, b as buildExports } from './index2.js';
+import { e as createLucideIcon, j as jsxRuntimeExports, f as createContextScope, l as useId, m as Primitive, n as composeEventHandlers, u as useComposedRefs, o as useControllableState, p as useCallbackRef, q as createPopperScope, r as Root2, A as Anchor, s as Presence, t as Portal$1, v as hideOthers, w as dispatchDiscreteCustomEvent, x as ReactRemoveScroll, y as useFocusGuards, g as createSlot, F as FocusScope, D as DismissableLayer, z as Content, H as Arrow, J as composeRefs, h as cn, K as useNavigate, M as useLocation, N as ChevronDown, X, Q as useDispatch, S as useSelector, T as Link, U as User, V as RegisterModal, W as LoginModal, Y as Toaster$1, Z as NavLink, _ as Outlet } from './__federation_expose_LayoutApp.js';
+import { c as createCollection, u as useDirection, D as DepositModal } from './DepositModal.js';
+import { g as getUserData, l as logout } from './getUserDataAction.js';
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -1525,13 +1526,14 @@ const DesktopNav = ({ navItems }) => {
                 h-full px-3 rounded-none cursor-pointer flex items-center gap-1 transition-colors duration-200
                 ${isMenuActive(item) ? "border-b-2 border-yellow-400 text-white font-bold bg-black" : "hover:bg-black hover:border-b-2 hover:border-yellow-400 hover:text-white"}
               `,
+        ...!item.items && item.href ? { onClick: () => navigate(item.href) } : {},
         children: [
           item.label,
-          /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "h-4 w-4" })
+          item.items && item.items.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "h-4 w-4" })
         ]
       }
     ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
+    item.items && item.items.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
       MenubarContent,
       {
         className: "min-w-[200px] bg-navbar-dropdown border-navbar-border rounded-sm",
@@ -1581,13 +1583,20 @@ const MobileNav = ({ isOpen, toggleOpen, navItems }) => {
             "div",
             {
               className: `px-4 py-2 text-navbar-text font-medium cursor-pointer flex justify-between items-center ${isMenuActive(item) ? "border-b-2 border-yellow-400 text-white font-bold bg-black" : ""}`,
-              onClick: () => toggleExpand(index),
-              role: "button",
-              tabIndex: 0,
-              onKeyDown: (e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  toggleExpand(index);
+              ...!item.items && item.href ? {
+                onClick: () => {
+                  navigate(item.href);
+                  toggleOpen();
+                }
+              } : {
+                onClick: () => toggleExpand(index),
+                role: "button",
+                tabIndex: 0,
+                onKeyDown: (e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    toggleExpand(index);
+                  }
                 }
               },
               children: [
@@ -1617,7 +1626,7 @@ const MobileNav = ({ isOpen, toggleOpen, navItems }) => {
 const MobileNav$1 = React$2.memo(MobileNav);
 
 const React$1 = await importShared('react');
-const {useState: useState$1,useEffect,useCallback} = React$1;
+const {useState: useState$1,useEffect,useCallback,useMemo} = React$1;
 const navItems$1 = [
   {
     label: "Live",
@@ -1629,22 +1638,62 @@ const navItems$1 = [
     ]
   },
   { label: "Sports", items: [{ label: "Event View", href: "/live/in-play" }, { label: "Live Calendar", href: "/live/streaming" }, { label: "Results", href: "/live/scores" }, { label: "Statistics", href: "/live/scores" }] },
-  { label: "Casino", items: [{ label: "Home", href: "/casino/slots" }, { label: "Tournaments", href: "/casino/testimonials" }] },
+  { label: "Casino", items: [{ label: "Home", href: "/casino/slots" }, { label: "Tournaments", href: "/casino/tournaments" }] },
+  { label: "Games", href: "/games" },
   { label: "Promotions", items: [{ label: "Sports Bonus", href: "/promotions/sports" }, { label: "Casino Bonus", href: "/promotions/casino" }, { label: "VIP Program", href: "/promotions/vip" }] },
   { label: "Virtual Sports", items: [{ label: "Virtual Football", href: "/virtual/football" }, { label: "Virtual Horse Racing", href: "/virtual/horse-racing" }, { label: "Virtual Tennis", href: "/virtual/tennis" }] },
-  { label: "Esports", items: [{ label: "CS:GO", href: "/esports/csgo" }, { label: "Dota 2", href: "/esports/dota2" }, { label: "League of Legends", href: "/esports/lol" }, { label: "Valorant", href: "/esports/valorant" }] },
+  { label: "Esports", items: [{ label: "Event View", href: "/esports/event-view" }, { label: "Live Calendar", href: "/esports/live-calendar" }, { label: "Results", href: "/esports/results" }, { label: "Statistics", href: "/esports/statistics" }] },
   { label: "PlayTech", items: [{ label: "Slots", href: "/playtech/slots" }, { label: "Live Casino", href: "/playtech/live" }, { label: "Table Games", href: "/playtech/table" }] }
 ];
-const MainNavbar = () => {
+function MainNavbar() {
+  const location = useLocation();
+  useNavigate();
+  const dispatch = useDispatch();
+  const { isAuthenticated, userData } = useSelector((state) => state.Login);
+  const { userData: profileData, loading } = useSelector((state) => state.GetUserData);
   const [isScrolled, setIsScrolled] = useState$1(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState$1(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState$1(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState$1(false);
+  const [isDepositModalOpen, setIsDepositModalOpen] = useState$1(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState$1(false);
+  const [forceUpdate, setForceUpdate] = useState$1(0);
+  const calculateActiveExposure = useCallback((exposures) => {
+    if (!exposures || !Array.isArray(exposures)) {
+      return 0;
+    }
+    const total = exposures.reduce((total2, exposureObj) => {
+      if (exposureObj?.is_clear === "true" || exposureObj?.is_clear === true) {
+        return total2;
+      }
+      const exposureValue = parseFloat(exposureObj?.exposure) || 0;
+      return total2 + exposureValue;
+    }, 0);
+    return total;
+  }, []);
+  const getTotalExposure = useMemo(() => {
+    const sourceData = userData || profileData || {};
+    if (sourceData?.exposures) {
+      return calculateActiveExposure(sourceData.exposures);
+    } else if (sourceData?.exposure) {
+      return parseFloat(sourceData.exposure) || 0;
+    }
+    return 0;
+  }, [profileData, userData, calculateActiveExposure]);
+  const getBalance = useMemo(() => {
+    const sourceData = userData || profileData || {};
+    const balance = parseFloat(sourceData?.balance) || 0;
+    const activeExposure = getTotalExposure;
+    return balance - activeExposure;
+  }, [profileData, userData, getTotalExposure]);
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
     const handleClickOutside = (e) => {
       if (isMobileMenuOpen && !e.target.closest(".mobile-menu-container")) {
         setIsMobileMenuOpen(false);
+      }
+      if (isUserMenuOpen && !e.target.closest(".user-menu-container")) {
+        setIsUserMenuOpen(false);
       }
     };
     window.addEventListener("scroll", handleScroll);
@@ -1653,10 +1702,56 @@ const MainNavbar = () => {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isMobileMenuOpen]);
+  }, [isMobileMenuOpen, isUserMenuOpen]);
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.get("login") === "true") {
+      setIsLoginModalOpen(true);
+      window.history.replaceState({}, document.title, location.pathname);
+    }
+  }, [location]);
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(getUserData());
+    }
+  }, [isAuthenticated, dispatch]);
+  useEffect(() => {
+    console.log("profileData changed:", profileData);
+  }, [profileData]);
+  useEffect(() => {
+    console.log("userData changed:", userData);
+    const sourceData = userData || profileData || {};
+    const totalExposure = calculateActiveExposure(sourceData?.exposures) || parseFloat(sourceData?.exposure) || 0;
+    const activeExposure = getTotalExposure;
+    console.log("getBalance value:", getBalance);
+    console.log("getTotalExposure value (active only):", activeExposure);
+    console.log("Total exposure (including cleared):", totalExposure);
+    console.log("Balance calculation details:", {
+      sourceBalance: userData?.balance,
+      sourceExposure: userData?.exposure,
+      calculatedBalance: parseFloat(userData?.balance) || 0,
+      calculatedExposure: parseFloat(userData?.exposure) || 0,
+      totalExposure,
+      activeExposure,
+      finalBalance: (parseFloat(userData?.balance) || 0) - activeExposure
+      // Use active exposure for balance
+    });
+  }, [userData, getBalance, getTotalExposure, calculateActiveExposure]);
+  useEffect(() => {
+    console.log("profileData updated, triggering force update");
+    setForceUpdate((prev) => prev + 1);
+  }, [profileData]);
+  useEffect(() => {
+    console.log("forceUpdate changed:", forceUpdate);
+  }, [forceUpdate]);
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen((prev) => !prev);
   }, []);
+  const UserDataSkeleton = () => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden md:flex items-center gap-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-4 w-20 bg-gray-400 rounded animate-pulse" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-4 w-1 bg-gray-400 rounded" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-4 w-20 bg-gray-400 rounded animate-pulse" })
+  ] });
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
@@ -1666,18 +1761,37 @@ const MainNavbar = () => {
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full mx-auto px-4 py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between h-full w-full", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Link, { to: "/", className: "flex items-center gap-4", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(
-                buildExports.LazyLoadImage,
+                "img",
                 {
-                  src: "https://myxxexchbucket.s3.ap-south-1.amazonaws.com/Logo/betxasia.co/betxasia.co-light.jpeg",
+                  src: "/appLogo/LOGOICON.png",
                   alt: "Logo",
-                  className: "rounded-full w-20 h-12 bg-yellow-500 p-1"
+                  className: "w-16 h-16 object-contain"
                 }
               ),
               /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-card text-brand cursor-pointer hover:text-chart-5", children: "Sportsbook" })
             ] }) }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center md:gap-4 gap-2", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-yellow-500 hidden md:block text-black font-bold h-10 py-2 px-6 rounded-md text-sm", children: "DEPOSIT" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
+              isAuthenticated && loading && /* @__PURE__ */ jsxRuntimeExports.jsx(UserDataSkeleton, {}),
+              isAuthenticated && !loading && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden md:flex items-center gap-4 text-white font-bold", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+                  "Balance: ",
+                  getBalance
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "|" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+                  "Exposure: ",
+                  getTotalExposure
+                ] })
+              ] }),
+              isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  className: "bg-yellow-500 hidden md:block text-black font-bold h-10 py-2 px-6 rounded-md text-sm",
+                  onClick: () => setIsDepositModalOpen(true),
+                  children: "DEPOSIT"
+                }
+              ),
+              !isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "p",
                 {
                   onClick: () => setIsLoginModalOpen(true),
@@ -1685,7 +1799,7 @@ const MainNavbar = () => {
                   children: "Login"
                 }
               ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
+              !isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "button",
                 {
                   onClick: () => setIsRegisterModalOpen(true),
@@ -1693,6 +1807,47 @@ const MainNavbar = () => {
                   children: "Register"
                 }
               ),
+              isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative user-menu-container", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    onClick: () => setIsUserMenuOpen(!isUserMenuOpen),
+                    className: "flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors",
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(User, { className: "w-5 h-5 text-gray-700" })
+                  }
+                ),
+                isUserMenuOpen && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Link,
+                    {
+                      to: "/profile",
+                      className: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
+                      onClick: () => setIsUserMenuOpen(false),
+                      children: "Profile"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Link,
+                    {
+                      to: "/change-password",
+                      className: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
+                      onClick: () => setIsUserMenuOpen(false),
+                      children: "Change Password"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
+                    {
+                      onClick: () => {
+                        dispatch(logout());
+                        setIsUserMenuOpen(false);
+                      },
+                      className: "block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
+                      children: "Logout"
+                    }
+                  )
+                ] })
+              ] }),
               /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, {})
             ] })
           ] }) }),
@@ -1715,7 +1870,11 @@ const MainNavbar = () => {
       RegisterModal,
       {
         isOpen: isRegisterModalOpen,
-        onClose: () => setIsRegisterModalOpen(false)
+        onClose: () => setIsRegisterModalOpen(false),
+        onCloseAll: () => {
+          setIsRegisterModalOpen(false);
+          setIsLoginModalOpen(false);
+        }
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -1728,29 +1887,46 @@ const MainNavbar = () => {
           setIsRegisterModalOpen(true);
         }
       }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      DepositModal,
+      {
+        isOpen: isDepositModalOpen,
+        onClose: () => setIsDepositModalOpen(false)
+      }
     )
   ] });
-};
+}
 
 const React = await importShared('react');
 const {useState} = React;
 const MobileNavbar = () => {
+  const isAuthenticated = useSelector((state) => state?.Login?.isAuthenticated);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-  const navLinks = [
-    {
-      label: "Deposit",
-      onClick: () => console.log("Open deposit modal")
-    },
-    {
+  const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
+  const navLinks = [];
+  const handleDepositClick = () => {
+    if (isAuthenticated) {
+      setIsDepositModalOpen(true);
+    } else {
+      setIsLoginModalOpen(true);
+    }
+  };
+  navLinks.push({
+    label: "Deposit",
+    onClick: handleDepositClick
+  });
+  if (!isAuthenticated) {
+    navLinks.push({
       label: "Login",
       onClick: () => setIsLoginModalOpen(true)
-    },
-    {
+    });
+    navLinks.push({
       label: "Register",
       onClick: () => setIsRegisterModalOpen(true)
-    }
-  ];
+    });
+  }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-h-[3.5rem] px-2 pb-5 fixed inset-x-0 bottom-0 rounded-t-md z-[100] bg-[#f13636]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-around items-center gap-2", children: navLinks.map((link) => /* @__PURE__ */ jsxRuntimeExports.jsx(
       "p",
@@ -1776,7 +1952,18 @@ const MobileNavbar = () => {
       RegisterModal,
       {
         isOpen: isRegisterModalOpen,
-        onClose: () => setIsRegisterModalOpen(false)
+        onClose: () => setIsRegisterModalOpen(false),
+        onCloseAll: () => {
+          setIsRegisterModalOpen(false);
+          setIsLoginModalOpen(false);
+        }
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      DepositModal,
+      {
+        isOpen: isDepositModalOpen,
+        onClose: () => setIsDepositModalOpen(false)
       }
     )
   ] });
