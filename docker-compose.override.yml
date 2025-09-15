@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  user-service:
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./user-service:/app
+      - /app/node_modules
+    command: npm run start:dev
+
+  admin-service:
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./admin-service:/app
+      - /app/node_modules
+    command: npm run start:dev
+
+  match-odds-service:
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./match-odds-service:/app
+      - /app/node_modules
+    command: npm run start:dev
