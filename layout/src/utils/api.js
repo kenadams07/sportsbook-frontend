@@ -8,6 +8,7 @@ import { BACKEND_API } from "./Constants";
 
 const api = axios.create({
   baseURL: BACKEND_API,
+  timeout: 10000, // Add a 10 second timeout
 });
 
 api.interceptors.request.use(
@@ -32,10 +33,12 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (
-      error?.response?.status === 401 ||
-      error?.response?.data?.meta?.status === 401
-    ) {
+    if (error.code === 'ECONNABORTED') {
+      console.error('Request timeout');
+      return Promise.reject(new Error('Request timeout. Please try again.'));
+    }
+    
+    if (error?.response?.status === 401 || error?.response?.data?.meta?.status === 401) {
       handleUnauthorized("Please login again.");
     }
     return Promise.reject(error);

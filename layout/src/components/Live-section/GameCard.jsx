@@ -31,6 +31,9 @@ export default function GameCard({
     displayTime = dateObj.toLocaleString();
   }
 
+  // Check if market is suspended
+  const isSuspended = odds.w1 === "SUSPENDED" && odds.x === "SUSPENDED" && odds.w2 === "SUSPENDED";
+
   return (
     <div
       className={`bg-live-primary rounded-md p-2 mb-2 border transition-all duration-300 ease-in-out transform ${
@@ -60,26 +63,36 @@ export default function GameCard({
       </div>
       {/* Odds */}
       <div className="flex gap-2 mt-2">
-        <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105">
-          <span className="text-xs text-live-muted">W1</span>
-          <span className={`text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${
-            oddsHighlight?.w1 
-              ? 'odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110' 
-              : 'hover:shadow-md'
-          }`}>{odds.w1}</span>
-        </div>
-        <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105">
-          <span className="text-xs text-live-muted">X</span>
-          <span className="text-base text-live-accent font-bold transition-all duration-300 hover:shadow-md">{odds.x}</span>
-        </div>
-        <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105">
-          <span className="text-xs text-live-muted">W2</span>
-          <span className={`text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${
-            oddsHighlight?.w2 
-              ? 'odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110' 
-              : 'hover:shadow-md'
-          }`}>{odds.w2}</span>
-        </div>
+        {isSuspended ? (
+          // Display full suspended box
+          <div className="w-full flex items-center justify-center bg-live-odds rounded p-2">
+            <span className="text-sm font-bold text-live-primary">SUSPENDED</span>
+          </div>
+        ) : (
+          // Display regular odds
+          <>
+            <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105">
+              <span className="text-xs text-live-muted">W1</span>
+              <span className={`text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${
+                oddsHighlight?.w1 
+                  ? 'odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110' 
+                  : 'hover:shadow-md'
+              }`}>{odds.w1}</span>
+            </div>
+            <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105">
+              <span className="text-xs text-live-muted">X</span>
+              <span className="text-base text-live-accent font-bold transition-all duration-300 hover:shadow-md">{odds.x}</span>
+            </div>
+            <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105">
+              <span className="text-xs text-live-muted">W2</span>
+              <span className={`text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${
+                oddsHighlight?.w2 
+                  ? 'odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110' 
+                  : 'hover:shadow-md'
+              }`}>{odds.w2}</span>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

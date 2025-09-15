@@ -12,6 +12,16 @@ function normalize(str = "") {
 
 function extractOddsW1W2(markets) {
   const mo = markets?.matchOdds?.[0];
+  
+  // Check if market is suspended
+  if (mo?.status === "SUSPENDED") {
+    return {
+      w1: "SUSPENDED",
+      x: "SUSPENDED",
+      w2: "SUSPENDED"
+    };
+  }
+  
   const runners = mo?.runners || [];
   
   // Find runners by their IDs or by name for draw

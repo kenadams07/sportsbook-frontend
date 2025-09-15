@@ -20,7 +20,7 @@ import LoginModal from "./LoginModal";
 import { useNavigate } from "react-router-dom";
 import { Paths } from "../routes/path";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signup } from "../redux/Action/auth/signupAction";
 import { Input } from "../components/ui/input";
 
@@ -121,7 +121,8 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
       ...formData,
       birthdate: date ? format(date, "yyyy-MM-dd") : "",
     };
-
+    console.log("formDataWithDate",formDataWithDate)
+   
     dispatch(
       signup({
         payload: formDataWithDate
@@ -131,7 +132,6 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
         navigate(Paths.verifyEmail);
       })
     );
-
   };
 
   const handleSwitchToLogin = () => {

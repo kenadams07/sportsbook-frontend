@@ -48,27 +48,52 @@ const calculateActiveExposure = (exposures) => {
 const extractW1Odds = (markets, passedOdds = null) => {
   // If we have passed odds, use those
   if (passedOdds && passedOdds.w1) {
-    return passedOdds.w1 !== "-" ? parseFloat(passedOdds.w1).toFixed(2) : "-";
+    const parsedOdds = parseFloat(passedOdds.w1);
+    if (!isNaN(parsedOdds) && passedOdds.w1 !== "-") {
+      return parsedOdds.toFixed(2);
+    }
+    return "-";
   }
   
   // Otherwise extract from markets
   if (!markets) return '-';
   const mo = markets?.matchOdds?.[0];
+  
+  // Check if market is suspended
+  if (mo?.status === "SUSPENDED") {
+    return "-";
+  }
+  
   const r0 = mo?.runners?.[0];
   const w1 = r0?.backPrices?.[0]?.price;
-  return typeof w1 === "number" ? w1.toFixed(2) : '-';
+  
+  // Check if w1 is a valid number
+  if (typeof w1 === "number" && !isNaN(w1)) {
+    return w1.toFixed(2);
+  }
+  return '-';
 };
 
 // Function to extract X (draw) odds from markets data or use passed odds
 const extractXOdds = (markets, passedOdds = null) => {
   // If we have passed odds, use those
   if (passedOdds && passedOdds.x) {
-    return passedOdds.x !== "-" ? parseFloat(passedOdds.x).toFixed(2) : "-";
+    const parsedOdds = parseFloat(passedOdds.x);
+    if (!isNaN(parsedOdds) && passedOdds.x !== "-") {
+      return parsedOdds.toFixed(2);
+    }
+    return "-";
   }
   
   // Otherwise extract from markets by looking for a runner with name "draw"
   if (!markets) return '-';
   const mo = markets?.matchOdds?.[0];
+  
+  // Check if market is suspended
+  if (mo?.status === "SUSPENDED") {
+    return "-";
+  }
+  
   const runners = mo?.runners || [];
   
   // Look for draw runner by name "draw" (case insensitive)
@@ -77,22 +102,42 @@ const extractXOdds = (markets, passedOdds = null) => {
   );
   
   const x = drawRunner?.backPrices?.[0]?.price;
-  return typeof x === "number" ? x.toFixed(2) : '-';
+  
+  // Check if x is a valid number
+  if (typeof x === "number" && !isNaN(x)) {
+    return x.toFixed(2);
+  }
+  return '-';
 };
 
 // Function to extract W2 odds from markets data or use passed odds
 const extractW2Odds = (markets, passedOdds = null) => {
   // If we have passed odds, use those
   if (passedOdds && passedOdds.w2) {
-    return passedOdds.w2 !== "-" ? parseFloat(passedOdds.w2).toFixed(2) : "-";
+    const parsedOdds = parseFloat(passedOdds.w2);
+    if (!isNaN(parsedOdds) && passedOdds.w2 !== "-") {
+      return parsedOdds.toFixed(2);
+    }
+    return "-";
   }
   
   // Otherwise extract from markets
   if (!markets) return '-';
   const mo = markets?.matchOdds?.[0];
+  
+  // Check if market is suspended
+  if (mo?.status === "SUSPENDED") {
+    return "-";
+  }
+  
   const r1 = mo?.runners?.[1];
   const w2 = r1?.backPrices?.[0]?.price;
-  return typeof w2 === "number" ? w2.toFixed(2) : '-';
+  
+  // Check if w2 is a valid number
+  if (typeof w2 === "number" && !isNaN(w2)) {
+    return w2.toFixed(2);
+  }
+  return '-';
 };
 
 export default function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = false }) {
@@ -369,9 +414,10 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
 
   // Calculate possible win amount
   const calculatePossibleWin = () => {
-    if (!stakeValue || !selectedOdd || isNaN(stakeValue) || isNaN(selectedOdd)) return '0.00';
+    if (!stakeValue || !selectedOdd || isNaN(stakeValue) || selectedOdd === "-" || isNaN(parseFloat(selectedOdd))) return '0.00';
     const stake = parseFloat(stakeValue);
     const odd = parseFloat(selectedOdd);
+    if (isNaN(stake) || isNaN(odd)) return '0.00';
     const possibleWin = (odd - 1) * stake;
     return possibleWin.toFixed(2);
   };
@@ -478,7 +524,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
                   }
                 }}
               >
-                <span className={`font-medium text-[9px] truncate ${selectedTeam === selectedGame?.team1 ? 'text-live-dark' : 'text-live-primary'}`}>
+                <span className={`font-medium text-[9px] truncate ${selectedTeam === selectedGame?.team1 ? 'text-white' : 'text-live-primary'}`}>
                   {selectedGame?.team1}
                 </span>
                 <div 
@@ -508,7 +554,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
                   }
                 }}
               >
-                <span className={`font-medium text-[9px] truncate ${selectedTeam === 'Draw' ? 'text-live-dark' : 'text-live-primary'}`}>
+                <span className={`font-medium text-[9px] truncate ${selectedTeam === 'Draw' ? 'text-white' : 'text-live-primary'}`}>
                   Draw
                 </span>
                 <div 
@@ -538,7 +584,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
                   }
                 }}
               >
-                <span className={`font-medium text-[9px] truncate ${selectedTeam === selectedGame?.team2 ? 'text-live-dark' : 'text-live-primary'}`}>
+                <span className={`font-medium text-[9px] truncate ${selectedTeam === selectedGame?.team2 ? 'text-white' : 'text-live-primary'}`}>
                   {selectedGame?.team2}
                 </span>
                 <div 
@@ -725,7 +771,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
                 }
               }}
             >
-              <span className={`font-medium text-xs truncate ${selectedTeam === selectedGame?.team1 ? 'text-live-dark' : 'text-live-primary'}`}>
+              <span className={`font-medium text-xs truncate ${selectedTeam === selectedGame?.team1 ? 'text-white' : 'text-live-primary'}`}>
                 {selectedGame?.team1}
               </span>
               <div 
@@ -755,7 +801,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
                 }
               }}
             >
-              <span className={`font-medium text-xs truncate ${selectedTeam === 'Draw' ? 'text-live-dark' : 'text-live-primary'}`}>
+              <span className={`font-medium text-xs truncate ${selectedTeam === 'Draw' ? 'text-white' : 'text-live-primary'}`}>
                 Draw
               </span>
               <div 
@@ -785,7 +831,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
                 }
               }}
             >
-              <span className={`font-medium text-xs truncate ${selectedTeam === selectedGame?.team2 ? 'text-live-dark' : 'text-live-primary'}`}>
+              <span className={`font-medium text-xs truncate ${selectedTeam === selectedGame?.team2 ? 'text-white' : 'text-live-primary'}`}>
                 {selectedGame?.team2}
               </span>
               <div 

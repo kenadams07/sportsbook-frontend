@@ -41,7 +41,6 @@ export default function NotificationProvider({ children }) {
     error: (message, title = "Error", duration = 6000) => _add({ type: "error", title, message, duration }),
     info: (message, title = "Info", duration = DEFAULT_DURATION) => _add({ type: "info", title, message, duration }),
     loading: (message = "Loading...", title = "", ) => _add({ type: "loading", title, message, duration: null, dismissible: false }),
-    dismiss: (id) => _remove(id),
     notifyPromise: async (promise, options = {}) => {
       const loadingText = options.loadingText || "Please wait...";
       const getSuccessMessage = options.getSuccessMessage || ((res) => (res?.data?.meta?.message || res?.data?.message || "Success"));
@@ -63,6 +62,7 @@ export default function NotificationProvider({ children }) {
         const errorMsg = getErrorMessage(err);
         _add({ type: "error", title: options.errorTitle || "Error", message: errorMsg, duration: options.errorDuration ?? 6000 });
         if (typeof options.onError === "function") options.onError(err);
+        // Re-throw the error so it can be caught by calling code
         throw err;
       }
     }
