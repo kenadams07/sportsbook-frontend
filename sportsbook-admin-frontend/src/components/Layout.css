@@ -1,0 +1,29 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.layout-main {
+  flex: 1;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.layout-main.with-sidebar {
+  margin-left: 250px;
+}
+
+.layout-main.with-sidebar.collapsed {
+  margin-left: 70px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .layout-main.with-sidebar {
+    margin-left: 70px;
+  }
+  
+  .layout-main.with-sidebar:not(.collapsed) {
+    margin-left: 250px;
+  }
+}
