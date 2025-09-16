@@ -154,7 +154,7 @@ export default function MainNavbar() {
 
     // Log when profileData or userData changes for debugging
   useEffect(() => {
-    console.log("profileData changed:", profileData);
+   
   }, [profileData]);
 
   useEffect(() => {
@@ -186,7 +186,7 @@ export default function MainNavbar() {
     
     // Log when forceUpdate changes
     useEffect(() => {
-        console.log("forceUpdate changed:", forceUpdate);
+      
     }, [forceUpdate]);
 
     const toggleMobileMenu = useCallback(() => {

@@ -1716,7 +1716,7 @@ function MainNavbar() {
     }
   }, [isAuthenticated, dispatch]);
   useEffect(() => {
-    console.log("profileData changed:", profileData);
+   
   }, [profileData]);
   useEffect(() => {
     console.log("userData changed:", userData);
@@ -1742,7 +1742,7 @@ function MainNavbar() {
     setForceUpdate((prev) => prev + 1);
   }, [profileData]);
   useEffect(() => {
-    console.log("forceUpdate changed:", forceUpdate);
+    
   }, [forceUpdate]);
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen((prev) => !prev);

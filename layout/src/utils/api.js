@@ -13,17 +13,24 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
+    // Log request for debugging
+    console.log("API Request:", config.method?.toUpperCase(), config.url, config.data);
     const token = getLocalStorageItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    console.error("API Request Error:", error);
+    return Promise.reject(error);
+  }
 );
 
 api.interceptors.response.use(
   (response) => {
+    // Log successful response for debugging
+    console.log("API Response:", response.status, response.data);
     if (response?.data?.meta?.status === 401) {
       handleUnauthorized(response.data.meta.message);
       return Promise.reject(
@@ -33,6 +40,9 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
+    // Log error response for debugging
+    console.error("API Error Response:", error.response?.status, error.response?.data, error.message);
+    
     if (error.code === 'ECONNABORTED') {
       console.error('Request timeout');
       return Promise.reject(new Error('Request timeout. Please try again.'));

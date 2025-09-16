@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import GameCard from "./GameCard";
 import { useLocation, useNavigate } from "react-router-dom";
 import SkeletonLoader from "../ui/SkeletonLoader";
+import { fetchSportsEvents } from "../../utils/sportsEventsApi";
 
 function normalize(str = "") {
   return str.trim().toLowerCase();
@@ -79,9 +80,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
       const sportId = SPORT_ID_BY_KEY[sport.key];
       if (!sportId) return;
       setLoadingBySport((prev) => ({ ...prev, [sport.key]: true }));
-      const url = `/events?sport_id=${sportId}&live_matches=${selectedType === "live"}`;
-      fetch(url, { headers: { accept: "application/json" } })
-        .then((res) => res.json())
+      fetchSportsEvents(sportId, selectedType === "live")
         .then((json) => {
           const list = json?.sports ?? [];
           setMatchesBySport((prev) => ({ ...prev, [sport.key]: Array.isArray(list) ? list : [] }));
@@ -129,9 +128,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
       expandedSportKeys.forEach((sportKey) => {
         const sportId = SPORT_ID_BY_KEY[sportKey];
         if (!sportId) return;
-        const url = `/events?sport_id=${sportId}&live_matches=${selectedType === "live"}`;
-        fetch(url, { headers: { accept: "application/json" } })
-          .then((res) => res.json())
+        fetchSportsEvents(sportId, selectedType === "live")
           .then((json) => {
             const list = json?.sports ?? [];
             const oddsMap = { ...oddsByEventId };
@@ -166,6 +163,9 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
             setTimeout(() => {
               setHighlightedOdds({});
             }, 1000);
+          })
+          .catch(error => {
+            console.error(`Error polling odds for sport ${sportKey}:`, error);
           });
       });
     }

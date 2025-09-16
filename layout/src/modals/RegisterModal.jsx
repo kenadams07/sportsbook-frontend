@@ -121,16 +121,16 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
       ...formData,
       birthdate: date ? format(date, "yyyy-MM-dd") : "",
     };
-    console.log("formDataWithDate",formDataWithDate)
-   
+  
     dispatch(
-      signup({
-        payload: formDataWithDate
-      }, (response) => {
-        console.log("Signup successful, response:", response);
-        handleClose();
-        navigate(Paths.verifyEmail);
-      })
+      signup(
+        formDataWithDate,  // Pass the form data directly, not nested
+        (response) => {
+          console.log("Signup successful, response:", response);
+          handleClose();
+          navigate(Paths.verifyEmail);
+        }
+      )
     );
   };
 

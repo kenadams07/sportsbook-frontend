@@ -3,6 +3,7 @@ import { SPORTS, SPORT_ID_BY_KEY } from "../../utils/CommonExports";
 import RightEventInfoSection from './RightEventInfoSection';
 import LoginModal from '../../modals/LoginModal';
 import RegisterModal from '../../modals/RegisterModal';
+import { fetchSportsEvents } from "../../utils/sportsEventsApi";
 
 function extractOddsW1W2(markets) {
   const mo = markets?.matchOdds?.[0];
@@ -107,9 +108,7 @@ const LiveCalender = () => {
       const sportId = SPORT_ID_BY_KEY[sportKey];
       if (!sportId) return Promise.resolve([]);
       
-      const url = `/events?sport_id=${sportId}&live_matches=false`;
-      return fetch(url, { headers: { accept: "application/json" } })
-        .then((res) => res.json())
+      return fetchSportsEvents(sportId, false) // live_matches=false for scheduled matches
         .then((json) => {
           const list = json?.sports ?? [];
           return Array.isArray(list) ? list : [];
@@ -117,21 +116,21 @@ const LiveCalender = () => {
         .catch(() => []);
     });
 
-         Promise.all(fetchPromises)
-       .then((results) => {
-         const allMatches = results.flat().map(match => {
-           // Find which sport this match belongs to
-           const sportKey = selectedSportKeys.find(key => {
-             const sportId = SPORT_ID_BY_KEY[key];
-             return match.sportId === sportId || match.sport_id === sportId;
-           });
-           return {
-             ...match,
-             sportKey: sportKey || selectedSportKeys[0]
-           };
-         });
-         setMatches(allMatches);
-       })
+    Promise.all(fetchPromises)
+      .then((results) => {
+        const allMatches = results.flat().map(match => {
+          // Find which sport this match belongs to
+          const sportKey = selectedSportKeys.find(key => {
+            const sportId = SPORT_ID_BY_KEY[key];
+            return match.sportId === sportId || match.sport_id === sportId;
+          });
+          return {
+            ...match,
+            sportKey: sportKey || selectedSportKeys[0]
+          };
+        });
+        setMatches(allMatches);
+      })
       .finally(() => setLoading(false));
   }, [selectedSportKeys]);
 

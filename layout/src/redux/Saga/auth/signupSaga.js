@@ -8,10 +8,12 @@ import { notifyPromise } from "../../../utils/notificationService";
 
 function* signupRequest(action) {
   try {
-    console.log("action.payload in signup saga",action.payload)
-  
+    // Extract the actual payload from the action
+    const  payload  = action.payload || action;
+    console.log("action.payload in signup saga", payload);
+    
     const data = yield call(() =>
-      notifyPromise(() => API.post("/users/signup", action.payload), {
+      notifyPromise(() => API.post("/users/signup", payload), {
         loadingText: "On Boarding...",
         getSuccessMessage: (res) => {
           if (res?.data?.success) return res.data.message || "On Boarding...";
@@ -22,7 +24,14 @@ function* signupRequest(action) {
           if (err?.code === 'ECONNABORTED') {
             return 'Request timeout. Please check your connection and try again.';
           }
-          return err?.response?.data?.message || err?.message || "Signup failed";
+          // More detailed error handling
+          if (err?.response?.data?.message) {
+            return err.response.data.message;
+          }
+          if (err?.response?.data?.error) {
+            return err.response.data.error;
+          }
+          return err?.message || "Signup failed";
         },
         successDuration: 4000,
         onSuccess: (res) => {

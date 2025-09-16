@@ -7,7 +7,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "mock-server": "node mockServer.js",
-    "dev:with-mock": "concurrently \"npm run mock-server\" \"npm run dev\""
+    "dev:with-mock": "concurrently \"npm run mock-server\" \"npm run dev\"",
+    "dev:with-auth-mock": "concurrently \"npm run mock-auth-server\" \"npm run dev\"",
+    "mock-auth-server": "node mockServer.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",

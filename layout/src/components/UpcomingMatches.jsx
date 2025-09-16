@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { API_BASE } from "../utils/Constants"
 import { SPORT_ID_BY_KEY, SPORTS } from "../utils/CommonExports"
 import SkeletonLoader from "./ui/SkeletonLoader"
+import { fetchSportsEvents } from "../utils/sportsEventsApi"
 
 function formatDateOrInPlay(status, openDateMs) {
   if (status === "IN_PLAY") return "IN PLAY"
@@ -79,13 +80,7 @@ export default function UpcomingMatches() {
       setError(null)
       try {
         const sportId = selectedSportKey ? SPORT_ID_BY_KEY[selectedSportKey] : undefined
-        const url = sportId ? `/events?sport_id=${sportId}&live_matches=true` : API_BASE
-        const res = await fetch(url, {
-          headers: { accept: "application/json" },
-          signal: controller.signal,
-        })
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        const json = await res.json()
+        const json = sportId ? await fetchSportsEvents(sportId, true) : await fetch(API_BASE).then(res => res.json());
         const list = json?.sports ?? []
         setEvents(Array.isArray(list) ? list : [])
         // Set initial odds
@@ -112,10 +107,7 @@ export default function UpcomingMatches() {
     async function pollOdds() {
       try {
         const sportId = selectedSportKey ? SPORT_ID_BY_KEY[selectedSportKey] : undefined
-        const url = sportId ? `/events?sport_id=${sportId}&live_matches=true` : API_BASE
-        const res = await fetch(url, { headers: { accept: "application/json" } })
-        if (!res.ok) return
-        const json = await res.json()
+        const json = sportId ? await fetchSportsEvents(sportId, true) : await fetch(API_BASE).then(res => res.json());
         const list = json?.sports ?? []
         const oddsMap = { ...oddsByEventId }
         const highlights = {}
@@ -135,7 +127,9 @@ export default function UpcomingMatches() {
         setTimeout(() => {
           setHighlightedOdds({})
         }, 1000)
-      } catch {}
+      } catch (error) {
+        console.error("Error polling odds:", error);
+      }
     }
     intervalId = setInterval(pollOdds, 1000)
     return () => clearInterval(intervalId)

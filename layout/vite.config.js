@@ -16,13 +16,9 @@ export default defineConfig({
       port: 5002,
     },
     proxy: {
-      '/events': {
-        target: 'http://89.116.20.218:2700',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/events/, '/events'),
-      },
+      // Removed /events proxy since we're now using the direct API
       '/users': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:4001',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/users/, '/users'),
       },

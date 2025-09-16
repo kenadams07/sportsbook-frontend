@@ -164,7 +164,7 @@ const Home = () => {
 
       {/* upcoming matches */}
       <div className='mx-1'>
-        {/* <UpcomingMatches /> */}
+        <UpcomingMatches />
       </div>
       <div className='mx-1'>
         <ImageCardGrid images={images} heading="CASINO GAMES" />
