@@ -59,7 +59,7 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
       login({
         payload: data
       }, (response) => {
-        console.log("Login successful, response:", response);
+       
          onClose();
       })
     );

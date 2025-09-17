@@ -275,10 +275,31 @@ export default function UpcomingMatches() {
       {/* Mobile: fixed small chips scrollable; sm+: chips expand evenly */}
       <div className="flex w-full gap-2 overflow-x-auto scrollbar-hide px-2 py-2">
         {loading ? (
-          // Using SkeletonLoader for sport icons when loading
-          Array.from({ length: 8 }).map((_, index) => (
-            <SkeletonLoader key={index} type="sport-icon" />
-          ))
+          SPORTS.map((sport) => {
+            const Icon = sport.icon
+            const isSelected = selectedSportKey === sport.key
+            // Extract background color class from sport.color
+            const colorClass = sport.color.split(' ').find(cls => cls.startsWith('bg-chart-')) || 'bg-gray-600'
+            return (
+              <div
+                key={sport.key}
+                onClick={() => setSelectedSportKey(sport.key)}
+                className={`snap-start flex-shrink-0 sm:flex-1 flex flex-col items-center justify-center gap-1 cursor-pointer border rounded-md sport-icon-box ${
+                  isSelected 
+                  ? `${colorClass} selected border-white` 
+                  : "border-gray-600 bg-gray-700 text-white hover:bg-gray-600"
+                }`}
+                // mobile min width to keep chips touch-friendly, but allow grow from sm+
+                style={{ padding: "0.45rem 0.7rem", minWidth: "64px" }}
+                title={sport.sportNames[0]}
+              >
+                <Icon className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 mx-auto" />
+                <span className="text-[11px] sm:text-[13px] truncate max-w-[90%] text-center font-medium">
+                  {sport.sportNames[0]}
+                </span>
+              </div>
+            )
+          })
         ) : (
           SPORTS.map((sport) => {
             const Icon = sport.icon

@@ -157,11 +157,12 @@ export default function VerifyEmail() {
         toast.error("Failed to send OTP. Please try again.");
         setIsInputDisabled(false);
       } else if (verifyEmailState?.data?.hasOwnProperty("otp")) {
-        toast.error("Invalid verification code. Please try again.");
-        setIsInputDisabled(false);
+        // Reset loading state and verification status when verification fails
+        setIsLoading(false);
         setVerificationStatus("");
+        toast.error(verifyEmailState?.error || "Invalid verification code. Please try again.");
+        setIsInputDisabled(false);
       }
-      setIsLoading(false);
     }
   }, [verifyEmailState, navigate]);
 

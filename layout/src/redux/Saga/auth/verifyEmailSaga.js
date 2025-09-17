@@ -82,15 +82,17 @@ function* verifyEmailRequest(action) {
                 }
 
             } else {
-                yield put(verifyEmailFailure());
+                // Pass the error data to the failure action
+                yield put(verifyEmailFailure(data));
             }
         } catch (apiError) {
             console.error("API Error:", apiError);
-            yield put(verifyEmailFailure());
+            // Pass the error to the failure action
+            yield put(verifyEmailFailure(apiError?.response?.data || apiError?.message || "Verification failed"));
         }
     } catch (error) {
         console.error("Saga Error:", error);
-        yield put(verifyEmailFailure());
+        yield put(verifyEmailFailure(error?.message || "Verification failed"));
     }
 }
 

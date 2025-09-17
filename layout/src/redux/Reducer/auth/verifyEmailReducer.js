@@ -29,11 +29,13 @@ const verifyEmailReducer = (state = initialState, action) => {
         success: true,
       };
     case VERIFY_EMAIL_FAILURE:
+      // Use the error message from the action payload if available
+      const errorMessage = action.payload?.message || action.payload || "Verification failed";
       return {
         ...state,
         loading: false,
-        data: null,
-        error: "Verification failed",
+        data: action.payload?.data || null,
+        error: errorMessage,
         success: false,
       };
     default:
