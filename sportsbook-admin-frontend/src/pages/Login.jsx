@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import './Login.css';
 
 const Login = () => {
   const { login, testLogin } = useAuth();
+  const navigate = useNavigate();
   const [credentials, setCredentials] = useState({
     email: '',
     password: ''
@@ -63,6 +65,8 @@ const Login = () => {
       const result = await login(credentials);
       if (result.success) {
         console.log('Login successful');
+        // Navigate to dashboard after successful login
+        navigate('/dashboard');
       }
     } catch (error) {
       console.error('Login failed:', error);
@@ -75,6 +79,8 @@ const Login = () => {
   // Test login function for development
   const handleTestLogin = () => {
     testLogin();
+    // Navigate to dashboard after test login
+    navigate('/dashboard');
   };
 
   return (
@@ -82,7 +88,7 @@ const Login = () => {
       <div className="login-left">
         <div className="overlay">
           <div className="logo">
-            <h1>SportsBet Admin</h1>
+            <h1 style={{ color: 'white' }}>SportsBook Admin</h1>
           </div>
           <div className="sports-illustration">
             {/* Sports image from public folder */}

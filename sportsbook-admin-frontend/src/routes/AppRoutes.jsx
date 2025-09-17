@@ -6,6 +6,7 @@ import Users from '../pages/Users';
 import Bets from '../pages/Bets';
 import Reports from '../pages/Reports';
 import Settings from '../pages/Settings';
+import Login from '../pages/Login';
 
 const AppRoutes = () => {
   return (
@@ -17,6 +18,7 @@ const AppRoutes = () => {
       <Route path="/bets" element={<Bets />} />
       <Route path="/reports" element={<Reports />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/login" element={<Login />} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );

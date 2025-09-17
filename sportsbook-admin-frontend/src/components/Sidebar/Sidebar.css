@@ -35,21 +35,21 @@
 }
 
 .toggle-btn {
-  background: rgba(255, 255, 255, 0.1);
+  background: transparent;
   border: none;
-  color: white;
+  color: rgba(255, 255, 255, 0.8);
   width: 30px;
   height: 30px;
-  border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  padding: 0;
 }
 
 .toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  color: white;
 }
 
 .sidebar-nav {
@@ -97,6 +97,11 @@
   justify-content: center;
 }
 
+.nav-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
 .nav-text {
   margin-left: 15px;
   font-size: 1rem;
@@ -110,6 +115,15 @@
 
 .logout-btn {
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.logout-btn svg {
+  width: 16px;
+  height: 16px;
 }
 
 .logout-icon {
@@ -130,6 +144,11 @@
   color: white;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 5px;
+}
+
+.logout-icon svg {
+  width: 20px;
+  height: 20px;
 }
 
 /* Responsive styles */

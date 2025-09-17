@@ -95,6 +95,7 @@
   justify-content: center;
   background: white;
   padding: 2rem;
+  overflow: auto; /* Allow scrolling if content is too tall */
 }
 
 .login-card {

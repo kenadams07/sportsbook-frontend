@@ -6,7 +6,7 @@ import './Settings.css';
 
 const Settings = () => {
   const [settings, setSettings] = useState({
-    siteName: 'SportsBet Admin',
+    siteName: 'SportsBook Admin',
     timeZone: 'UTC',
     currency: 'USD',
     notifications: true
