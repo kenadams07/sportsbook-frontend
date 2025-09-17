@@ -16,7 +16,12 @@ export default defineConfig({
       port: 5002,
     },
     proxy: {
-      // Removed /events proxy since we're now using the direct API
+      // Proxy for the backup events API to avoid CORS issues
+      '/api/events': {
+        target: 'http://89.116.20.218:2700',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/events/, '/events'),
+      },
       '/users': {
         target: 'http://localhost:4001',
         changeOrigin: true,

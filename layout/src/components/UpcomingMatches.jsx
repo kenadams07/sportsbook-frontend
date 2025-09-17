@@ -30,15 +30,24 @@ function splitEventName(eventName = "") {
 }
 
 function extractOddsW1W2(markets) {
-  const mo = markets?.matchOdds?.[0]
-  const r0 = mo?.runners?.[0]
-  const r1 = mo?.runners?.[1]
-  const w1 = r0?.backPrices?.[0]?.price
-  const w2 = r1?.backPrices?.[0]?.price
+  // Add safety checks for markets structure
+  if (!markets || !markets.matchOdds || !Array.isArray(markets.matchOdds) || markets.matchOdds.length === 0) {
+    return { w1: "-", w2: "-" };
+  }
+  
+  const mo = markets.matchOdds[0];
+  if (!mo || !mo.runners || !Array.isArray(mo.runners) || mo.runners.length < 2) {
+    return { w1: "-", w2: "-" };
+  }
+  
+  const r0 = mo.runners[0];
+  const r1 = mo.runners[1];
+  const w1 = r0?.backPrices?.[0]?.price;
+  const w2 = r1?.backPrices?.[0]?.price;
   return {
     w1: typeof w1 === "number" ? w1.toString() : "-",
     w2: typeof w2 === "number" ? w2.toString() : "-",
-  }
+  };
 }
 
 function normalize(str = "") {
@@ -80,9 +89,17 @@ export default function UpcomingMatches() {
       setError(null)
       try {
         const sportId = selectedSportKey ? SPORT_ID_BY_KEY[selectedSportKey] : undefined
-        const json = sportId ? await fetchSportsEvents(sportId, true) : await fetch(API_BASE).then(res => res.json());
-        const list = json?.sports ?? []
-        setEvents(Array.isArray(list) ? list : [])
+        // Use the fetchSportsEvents function which now directly uses the backup endpoint
+        const data = sportId ? await fetchSportsEvents(sportId, true) : { sports: [] };
+        console.log("Fetched data:", data); // Debug log
+        
+        // Check if we received valid data
+        if (!data || !Array.isArray(data.sports)) {
+          throw new Error("Invalid data format received from API");
+        }
+        
+        const list = data.sports;
+        setEvents(list)
         // Set initial odds
         const oddsMap = {}
         for (const e of list) {
@@ -92,7 +109,11 @@ export default function UpcomingMatches() {
         oddsPrevRef.current = oddsMap
         setHighlightedOdds({})
       } catch (e) {
-        if (e?.name !== "AbortError") setError(e?.message || "Failed to load events")
+        console.error("Error in fetchEvents:", e); // Debug log
+        if (e?.name !== "AbortError") {
+          const errorMessage = e?.message || "Failed to load events";
+          setError(`Error loading events: ${errorMessage}`);
+        }
       } finally {
         setLoading(false)
       }
@@ -107,8 +128,10 @@ export default function UpcomingMatches() {
     async function pollOdds() {
       try {
         const sportId = selectedSportKey ? SPORT_ID_BY_KEY[selectedSportKey] : undefined
-        const json = sportId ? await fetchSportsEvents(sportId, true) : await fetch(API_BASE).then(res => res.json());
-        const list = json?.sports ?? []
+        // Use the fetchSportsEvents function which now directly uses the backup endpoint
+        const data = sportId ? await fetchSportsEvents(sportId, true) : { sports: [] };
+        console.log("Polled data:", data); // Debug log
+        const list = data?.sports ?? []
         const oddsMap = { ...oddsByEventId }
         const highlights = {}
         for (const e of list) {
