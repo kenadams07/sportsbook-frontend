@@ -22,16 +22,21 @@ A template for production environment variables. In a real production deployment
 ### Database Configuration
 - `DB_HOST` - Database host (default: postgres)
 - `DB_PORT` - Database port (default: 5432)
-- `DB_USERNAME` - Database username (default: postgres)
-- `DB_PASSWORD` - Database password (default: 1478)
+- `DB_USER` - Database username (default: postgres)
+- `DB_PASS` - Database password (default: 1478)
 - `DB_NAME` - Database name (default: sportsbook)
 - `DB_AUTO_LOAD_ENTITIES` - Auto-load database entities (default: true)
 - `DB_SYNCHRONIZE` - Database synchronization (default: true)
+- `DATABASE_URL` - Database connection URL (default: postgres://postgres:1478@postgres:5432/sportsbook)
 
 ### Redis Configuration
+- `REDIS_HOST` - Redis host (default: redis)
+- `REDIS_PORT` - Redis port (default: 6379)
 - `REDIS_URL` - Redis connection URL (default: redis://redis:6379)
 
 ### RabbitMQ Configuration
+- `RABBITMQ_HOST` - RabbitMQ host (default: rabbitmq)
+- `RABBITMQ_PORT` - RabbitMQ port (default: 5672)
 - `RABBITMQ_DEFAULT_USER` - RabbitMQ username (default: guest)
 - `RABBITMQ_DEFAULT_PASS` - RabbitMQ password (default: guest)
 - `RABBITMQ_URL` - RabbitMQ connection URL
@@ -44,10 +49,8 @@ A template for production environment variables. In a real production deployment
 - `TOKEN_EXPIRESIN` - Token expiration time
 
 ### Service Ports
-- `USER_SERVICE_PORT` - User service port (default: 3001)
-- `ADMIN_SERVICE_PORT` - Admin service port (default: 3002)
-- `MATCH_ODDS_SERVICE_PORT` - Match odds service port (default: 3003)
-- `SOCKET_PORT` - Socket port (default: 4000)
+- `PORT` - Service port (default: varies by service)
+- `SOCKET_PORT` - Socket port (default: 3003)
 
 ### PostgreSQL Configuration
 - `POSTGRES_USER` - PostgreSQL username (default: postgres)

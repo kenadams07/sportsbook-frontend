@@ -52,8 +52,8 @@ All services use standardized environment variables from the `.env` file:
 
 - `DB_HOST` - Database host (default: postgres)
 - `DB_PORT` - Database port (default: 5432)
-- `DB_USERNAME` - Database username (default: postgres)
-- `DB_PASSWORD` - Database password (default: 1478)
+- `DB_USER` - Database username (default: postgres)
+- `DB_PASS` - Database password (default: 1478)
 - `DB_NAME` - Database name (default: sportsbook)
 - `REDIS_URL` - Redis connection URL
 - `RABBITMQ_URL` - RabbitMQ connection URL
