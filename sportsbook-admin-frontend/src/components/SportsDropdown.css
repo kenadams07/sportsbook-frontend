@@ -1,0 +1,29 @@
+.sports-dropdown {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md); /* Keep original padding */
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  transition: var(--transition);
+}
+
+.sports-dropdown:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.sports-dropdown:disabled {
+  background-color: var(--bg-secondary);
+  cursor: not-allowed;
+}
+
+.sports-dropdown-error {
+  color: var(--error-color);
+  padding: var(--spacing-sm);
+  border: 1px solid var(--error-color);
+  border-radius: var(--border-radius);
+  background-color: var(--error-bg);
+}

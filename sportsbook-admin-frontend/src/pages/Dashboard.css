@@ -1,21 +1,18 @@
 .dashboard {
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
   padding: var(--spacing-lg);
 }
 
-.dashboard-header {
+.page-header {
   margin-bottom: var(--spacing-xl);
-  text-align: center;
 }
 
-.dashboard-header h1 {
+.page-header h1 {
   font-size: var(--font-size-xxl);
   margin-bottom: var(--spacing-sm);
 }
 
-.dashboard-header p {
+.page-header p {
   font-size: var(--font-size-lg);
   color: var(--text-secondary);
   margin-bottom: 0;

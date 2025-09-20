@@ -10,6 +10,9 @@ export const useAuth = () => {
   return context;
 };
 
+// Export the AuthContext so it can be used directly
+export { AuthContext };
+
 export const AuthProvider = ({ children }) => {
   // Default to not logged in - this is the correct behavior
   const [isLoggedIn, setIsLoggedIn] = useState(false);

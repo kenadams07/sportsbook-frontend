@@ -6,6 +6,8 @@ Admin dashboard for managing sportsbook operations including events, odds, and u
 - React 18
 - Vite
 - JavaScript (ES6+)
+- Redux Toolkit
+- React Redux
 
 ## Getting Started
 
@@ -41,6 +43,14 @@ npm run build
 npm run lint
 ```
 
+### Testing
+
+```bash
+npm test
+```
+
+Note: Tests require additional configuration for ES modules. See the testing section below for more details.
+
 ## Project Structure
 
 ```
@@ -51,6 +61,14 @@ src/
 ├── pages/          # Page components (Login, Dashboard, etc.)
 ├── hooks/          # Custom React hooks
 ├── services/       # API service functions
+├── store/          # Redux store configuration
+│   ├── features/   # Feature-based Redux modules
+│   │   ├── create-event/  # Create event feature
+│   │   │   ├── createEventActions.js
+│   │   │   ├── createEventReducer.js
+│   │   │   ├── createEventTypes.js
+│   │   │   └── index.js
+│   └── index.js    # Store configuration
 ├── utils/          # Utility functions
 ├── context/        # React context providers
 ├── styles/         # Global styles and theme files
@@ -59,9 +77,10 @@ src/
 └── main.jsx        # Entry point
 ```
 
-## Available Scripts
+## Features
 
-- `npm run dev` - Starts the development server
-- `npm run build` - Builds the project for production
-- `npm run lint` - Runs ESLint
-- `npm run preview` - Previews the production build locally
+### Events Management
+- View and manage sports events
+- Filter events by sport using the dynamic sports dropdown
+- Create, edit, and delete events
+- Redux-based state management for event operations

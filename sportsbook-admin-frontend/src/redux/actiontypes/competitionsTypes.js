@@ -1,0 +1,5 @@
+// Action types for competitions feature
+export const FETCH_COMPETITIONS_REQUEST = 'competitions/FETCH_COMPETITIONS_REQUEST';
+export const FETCH_COMPETITIONS_SUCCESS = 'competitions/FETCH_COMPETITIONS_SUCCESS';
+export const FETCH_COMPETITIONS_FAILURE = 'competitions/FETCH_COMPETITIONS_FAILURE';
+export const CLEAR_COMPETITIONS_STATE = 'competitions/CLEAR_COMPETITIONS_STATE';
