@@ -22,7 +22,6 @@ import { RabbitMQListenerService } from './rabbitmq/rabbitmq-listener.service';
 import { RabbitMQListenerController } from './rabbitmq/rabbitmq-listener.controller';
 import { RedisModule } from './config/redis.module';
 import { LeaguesModule } from './leagues/leagues.module';
-import { EventsDataModule } from './events/events-data.module';
 
 @Module({
   imports: [
@@ -32,16 +31,16 @@ import { EventsDataModule } from './events/events-data.module';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get<string>('DB_HOST'),
+        host: configService.get('DB_HOST', 'localhost'),
         port: configService.get<number>('DB_PORT', 5432),
-        username: configService.get<string>('DB_USER', 'postgres'),
-        password: configService.get<string>('DB_PASS', '1478'),
-        database: configService.get<string>('DB_NAME', 'sportsbook'),
+        username: configService.get('DB_USER', 'postgres'),
+        password: configService.get('DB_PASS', '1478'),
+        database: configService.get('DB_NAME', 'sportsbook'),
         autoLoadEntities: configService.get<boolean>('DB_AUTO_LOAD_ENTITIES', true),
         synchronize: configService.get<boolean>('DB_SYNCHRONIZE', true),
       }),
       inject: [ConfigService],
-    }), 
+    }),
     RedisModule,
     SportsModule,
     EventsModule,
@@ -57,9 +56,8 @@ import { EventsDataModule } from './events/events-data.module';
     EmailModule,
     QueueTestModule,
     LeaguesModule,
-    EventsDataModule,
   ],
   controllers: [AppController, RabbitMQListenerController],
   providers: [AppService, AppGateway, RabbitMQListenerService],
 })
-export class AppModule {}
+export class AppModule { }

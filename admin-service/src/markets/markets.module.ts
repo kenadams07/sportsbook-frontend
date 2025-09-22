@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Markets } from './markets.entity';
 
 @Module({
-  // Will be expanded with controllers and providers as needed
+  imports: [TypeOrmModule.forFeature([Markets])],
+  exports: [TypeOrmModule],
 })
 export class MarketsModule {}
