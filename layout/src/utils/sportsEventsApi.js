@@ -11,7 +11,7 @@ export async function fetchSportsEvents(sportId, liveMatches = true) {
   try {
     // Use the proxy endpoint to avoid CORS issues
     const url = `${EVENTS_API_PROXY}?sport_id=${sportId}&live_matches=${liveMatches}`;
-    console.log(`Fetching sports events through proxy: ${url}`);
+ 
     
     const response = await fetch(url, {
       method: "GET",
@@ -25,7 +25,7 @@ export async function fetchSportsEvents(sportId, liveMatches = true) {
     }
 
     const data = await response.json();
-    console.log(`Successfully fetched events through proxy for sport_id=${sportId}, live_matches=${liveMatches}`);
+   
     
     // API returns data directly in { sports: [...], status: ..., errorDescription: ... } format
     return {

@@ -56,10 +56,7 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
   const onSubmit = (data) => {
     // Dispatch login action with callback
     dispatch(
-      login({
-        payload: data
-      }, (response) => {
-       
+      login(data, (response) => {
          onClose();
       })
     );

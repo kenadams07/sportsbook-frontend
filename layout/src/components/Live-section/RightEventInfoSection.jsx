@@ -269,6 +269,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
     }
     
     const stake = parseFloat(stakeValue);
+    
     if (isNaN(stake) || stake <= 0) {
 
       return;
@@ -306,7 +307,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
         // For balance, we deduct the stake from the current balance
         const newBalance = currentBalance - stake;
     
-
+        return
      
         dispatch(updateUserBalanceExposure({
           balance: newBalance,
@@ -675,18 +676,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
             </div>
           )}
           
-          {/* BET Button - Only enabled when a team is selected and authenticated */}
-          <button 
-            className={`w-full px-2 py-1 rounded text-[10px] font-bold transition-colors cursor-pointer ${
-              isAuthenticated && selectedTeam 
-                ? 'bg-live-accent hover:bg-live-warning border border-live-accent text-live-accent hover:text-live-dark' 
-                : 'bg-live-tertiary border border-live text-live-accent cursor-not-allowed opacity-50'
-            }`}
-            disabled={!isAuthenticated || !selectedTeam}
-            onClick={handlePlaceBet}
-          >
-            BET
-          </button>
+          
         </div>
 
         {/* Placeholder for Additional Stats - Moved after BET button */}

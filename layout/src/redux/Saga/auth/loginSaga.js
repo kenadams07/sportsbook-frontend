@@ -8,7 +8,7 @@ import { notifyPromise } from "../../../utils/notificationService";
 function* loginRequest(action) {
   try {
     // Extract the actual payload from the action
-    const { payload } = action.payload || action;
+    const { payload } = action;
     const data = yield call(() =>
       notifyPromise(() => API.post("/users/login", payload), {
         loadingText: "Logging in...",
