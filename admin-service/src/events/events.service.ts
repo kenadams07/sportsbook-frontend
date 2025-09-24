@@ -614,19 +614,21 @@ export class EventsService {
           for (const runnerData of market.runners) {
             // Check if runner already exists
             let runner = await this.runnersRepository.findOne({
-              where: { runnerId: runnerData.runnerId }
+              where: { selectionId: runnerData.runnerId }
             });
             
             if (!runner) {
               // Create new runner
               const newRunner = this.runnersRepository.create({
-                runnerId: runnerData.runnerId,
+                selectionId: runnerData.runnerId,
                 name: runnerData.runnerName
               });
               runner = await this.runnersRepository.save(newRunner);
             }
             
-            runners.push(runner);
+            if (runner) {
+              runners.push(runner);
+            }
           }
         }
       }

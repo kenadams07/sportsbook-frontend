@@ -10,6 +10,7 @@ import { VerifyEmailDto } from './dto/verify-email.dto';
 import { ForgetPasswordDto } from './dto/forget-password.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { SignupDto } from './dto/signup.dto';
+import { LoginDto } from './dto/login.dto';
 import { validate } from 'class-validator';
 import * as jwt from 'jsonwebtoken';
 import { USERS_CONSTANTS } from './users.constants';
@@ -20,6 +21,8 @@ export class UsersController {
   
   constructor(
     private readonly usersService: UsersService,
+    @InjectRepository(Users)
+    private readonly usersRepository: Repository<Users>,
     @InjectRepository(Currency)
     private readonly currencyRepo: Repository<Currency>,
   ) { }
@@ -146,6 +149,101 @@ export class UsersController {
 
     } catch (error) {
       this.logger.error('Error during signup', error);
+      return res.status(error.status || 500).json(
+        errorResponse(
+          error.response?.message || error.message || 'Something went wrong',
+          error.status || 500
+        )
+      );
+    }
+  }
+
+  @Post('login')
+  async login(@Body(new ValidationPipe()) loginDto: LoginDto, @Res() res) {
+    try {
+      this.logger.log('Login request received', JSON.stringify(loginDto));
+      
+      const { emailOrUsername, password, rememberMe } = loginDto;
+      
+      // Find user by email or username
+      let user: Users | null = null;
+      
+      if (emailOrUsername.includes('@')) {
+        // Treat as email
+        user = await this.usersService.findOneByEmail(emailOrUsername);
+      } else {
+        // Treat as username
+        user = await this.usersRepository.findOne({
+          where: { username: emailOrUsername },
+          relations: ['currency']
+        });
+      }
+      
+      // If user not found or password doesn't match
+      if (!user) {
+        this.logger.warn(`User not found: ${emailOrUsername}`);
+        return res.status(401).json(errorResponse('Invalid credentials', 401));
+      }
+      
+      // Compare password
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        this.logger.warn(`Invalid password for user: ${emailOrUsername}`);
+        return res.status(401).json(errorResponse('Invalid credentials', 401));
+      }
+      
+      // Generate JWT token
+      const token = this.usersService.generateJwtToken(user);
+      
+      // Update user with token
+      await this.usersService.updateToken(user.id, token);
+      
+      // Prepare response data
+      const response = {
+        _id: user.id,
+        email: user.email,
+        role: user.role,
+        emailVerify: user.emailVerify,
+        username: user.username,
+        zipcode: user.zipcode,
+        name: user.name,
+        address: user.address,
+        middlename: user.middlename,
+        occupation: user.occupation,
+        salaryLevel: user.salaryLevel,
+        surname: user.surname,
+        gender: user.gender,
+        birthdate: user.birthdate,
+        clientShare: user.clientShare,
+        creditReference: user.creditReference,
+        balance: user.balance,
+        system_ip: user.system_ip,
+        browser_ip: user.browser_ip,
+        status: user.status,
+        betAllow: user.betAllow,
+        // Include currency details if available
+        currency: user.currency ? {
+          id: user.currency.id,
+          name: user.currency.name,
+          code: user.currency.code
+        } : null
+      };
+
+      // Delete sensitive fields
+      delete (response as any).password;
+      delete (response as any).passwordText;
+      delete (response as any).token; // Don't send the token in the user data
+      
+      this.logger.log('Login completed successfully', user.id);
+      return res.status(200).json({
+        success: true,
+        message: 'Login Success.',
+        data: response,
+        token: token
+      });
+      
+    } catch (error) {
+      this.logger.error('Error during login', error);
       return res.status(error.status || 500).json(
         errorResponse(
           error.response?.message || error.message || 'Something went wrong',

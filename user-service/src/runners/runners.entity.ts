@@ -16,7 +16,7 @@ export class Runners {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 50, unique: true })
+  @Column({ type: 'varchar', length: 50, unique: true, nullable: true })
   selectionId: string;
 
   @Column({ type: 'varchar', length: 255 })
