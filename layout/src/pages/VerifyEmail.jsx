@@ -33,7 +33,8 @@ export default function VerifyEmail() {
 
   const handleSendOTP = () => {
     if (!userData?.email) {
-      toast.error("Email not found. Please try logging in again.");
+      // Removed toast notification to prevent duplication
+      // Error handling is now in the saga
       return;
     }
 
@@ -59,17 +60,20 @@ export default function VerifyEmail() {
     e.preventDefault();
 
     if (!userData?.email) {
-      toast.error("Email not found. Please try logging in again.");
+      // Removed toast notification to prevent duplication
+      // Error handling is now in the saga
       return;
     }
 
     if (!verificationCode.trim()) {
-      toast.error("Please enter the verification code");
+      // Removed toast notification to prevent duplication
+      // Error handling is now in the saga
       return;
     }
 
     if (verificationCode.length !== 6) {
-      toast.error("Please enter a 6-digit verification code");
+      // Removed toast notification to prevent duplication
+      // Error handling is now in the saga
       return;
     }
 
@@ -130,19 +134,18 @@ export default function VerifyEmail() {
 
   useEffect(() => {
     if (verifyEmailState?.loading) {
-      if (!verifyEmailState?.data?.hasOwnProperty("otp")) {
-        toast.info("Sending OTP to your email...");
-      } else if (verifyEmailState?.data?.hasOwnProperty("otp")) {
-        toast.info("Verifying your code...");
-      }
+      // Removed direct toast notifications to prevent duplicates
+      // The notifications are now handled in the saga
     } else if (verifyEmailState?.success) {
       if (!verifyEmailState?.data?.hasOwnProperty("otp")) {
-        toast.success("OTP sent to your email");
+        // Removed duplicate toast notification
+        // Notification is handled in the saga
       } else if (verifyEmailState?.data?.hasOwnProperty("otp")) {
         setIsLoading(false);
         setVerificationStatus("Verification Success");
         setIsVerified(true);
-        toast.success("Email verified successfully!");
+        // Removed duplicate toast notification
+        // Notification is handled in the saga
         
         // Set flag in localStorage to show welcome modal on homepage
         setLocalStorageItem('showWelcomeModal', 'true');
@@ -154,13 +157,15 @@ export default function VerifyEmail() {
       }
     } else if (verifyEmailState?.error) {
       if (!verifyEmailState?.data?.hasOwnProperty("otp")) {
-        toast.error("Failed to send OTP. Please try again.");
+        // Removed duplicate toast notification
+        // Notification is handled in the saga
         setIsInputDisabled(false);
       } else if (verifyEmailState?.data?.hasOwnProperty("otp")) {
         // Reset loading state and verification status when verification fails
         setIsLoading(false);
         setVerificationStatus("");
-        toast.error(verifyEmailState?.error || "Invalid verification code. Please try again.");
+        // Removed duplicate toast notification
+        // Notification is handled in the saga
         setIsInputDisabled(false);
       }
     }

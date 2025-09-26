@@ -2086,7 +2086,7 @@ function* getUserDataRequest(action) {
 
     // Handle the response structure with success field
     if (data?.success === true) {
-      console.log("getUserData success with data:", data?.data);
+ 
       yield put(getUserDataSuccess(data?.data));
       
       // Update localStorage with the new user data
@@ -2162,7 +2162,7 @@ function* updateUserBalanceExposureRequest(action) {
     // Make POST request to update exposure
     const response = yield call(() =>
       notifyPromise(
-        () => api.post("/exposures/update-exposure", payload),
+        () => api.post("/sportBets/place-bet", payload),
         {
           loadingText: "Updating exposure...",
           getSuccessMessage: (res) => {

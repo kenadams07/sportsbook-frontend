@@ -130,7 +130,7 @@ export default function UpcomingMatches() {
         const sportId = selectedSportKey ? SPORT_ID_BY_KEY[selectedSportKey] : undefined
         // Use the fetchSportsEvents function which now directly uses the backup endpoint
         const data = sportId ? await fetchSportsEvents(sportId, true) : { sports: [] };
-        console.log("Polled data:", data); // Debug log
+  
         const list = data?.sports ?? []
         const oddsMap = { ...oddsByEventId }
         const highlights = {}

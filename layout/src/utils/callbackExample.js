@@ -32,9 +32,8 @@ const useSignupWithCallback = () => {
       signup(
         { payload: userData },
         (response) => {
-          console.log("Signup successful, response:", response);
-          // Perform additional actions after successful signup
-          // e.g., navigate to verification page, show success message, etc.
+       
+        
         }
       )
     );

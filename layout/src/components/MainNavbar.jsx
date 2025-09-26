@@ -46,6 +46,45 @@ export default function MainNavbar() {
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [forceUpdate, setForceUpdate] = useState(0); // State to force re-render
+  const [exposure, setExposure] = useState(0); // State to hold exposure from WebSocket
+  const [socket, setSocket] = useState(null); // State to hold socket connection
+
+  // Initialize WebSocket connection
+  useEffect(() => {
+    if (isAuthenticated && userData?._id) {
+      const newSocket = new WebSocket('ws://localhost:3001'); // Adjust URL as needed
+      
+      newSocket.onopen = () => {
+        console.log('WebSocket connection established');
+      };
+
+      newSocket.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        
+        if (data.type === 'exposureUpdate' && data.userId === userData._id) {
+          console.log(`User ${data.userId} exposure updated to ${data.exposure}`);
+          setExposure(data.exposure);
+        }
+      };
+
+      newSocket.onclose = () => {
+        console.log('WebSocket connection closed');
+      };
+
+      newSocket.onerror = (error) => {
+        console.error('WebSocket error:', error);
+      };
+
+      setSocket(newSocket);
+
+      // Clean up function to close the socket when component unmounts or user logs out
+      return () => {
+        if (newSocket) {
+          newSocket.close();
+        }
+      };
+    }
+  }, [isAuthenticated, userData?._id]);
 
   // Calculate total exposure from exposures array
   const calculateTotalExposure = useCallback((exposures) => {
@@ -89,6 +128,11 @@ export default function MainNavbar() {
 
   // Get exposure value to display
   const getTotalExposure = useMemo(() => {
+    // Use WebSocket exposure when available, otherwise fallback to existing logic
+    if (exposure !== 0) {
+      return exposure;
+    }
+    
     // Use the most recently updated data (from Login reducer when available)
     const sourceData = userData || profileData || {};
     
@@ -102,7 +146,7 @@ export default function MainNavbar() {
     }
  
     return 0;
-  }, [profileData, userData, calculateActiveExposure]);
+  }, [profileData, userData, calculateActiveExposure, exposure]);
 
   // Get balance value to display
   const getBalance = useMemo(() => {
@@ -158,29 +202,18 @@ export default function MainNavbar() {
   }, [profileData]);
 
   useEffect(() => {
-    console.log("userData changed:", userData);
+  
     // Calculate exposures for debugging
     const sourceData = userData || profileData || {};
     const totalExposure = calculateTotalExposure(sourceData?.exposures) || parseFloat(sourceData?.exposure) || 0;
     const activeExposure = getTotalExposure;
     
-    console.log("getBalance value:", getBalance);
-    console.log("getTotalExposure value (active only):", activeExposure);
-    console.log("Total exposure (including cleared):", totalExposure);
-    console.log("Balance calculation details:", {
-      sourceBalance: userData?.balance,
-      sourceExposure: userData?.exposure,
-      calculatedBalance: parseFloat(userData?.balance) || 0,
-      calculatedExposure: parseFloat(userData?.exposure) || 0,
-      totalExposure: totalExposure,
-      activeExposure: activeExposure,
-      finalBalance: (parseFloat(userData?.balance) || 0) - activeExposure  // Use active exposure for balance
-    });
+ 
   }, [userData, getBalance, getTotalExposure, calculateTotalExposure]);
     
     // Listen for changes in profileData (from GetUserData reducer) to trigger re-render
     useEffect(() => {
-        console.log("profileData updated, triggering force update");
+     
         setForceUpdate(prev => prev + 1);
     }, [profileData]);
     
@@ -228,9 +261,9 @@ export default function MainNavbar() {
                                 {isAuthenticated && loading && <UserDataSkeleton />}
                                 {isAuthenticated && !loading && (
                                     <div className="hidden md:flex items-center gap-4 text-white font-bold">
-                                        <span>Balance: {getBalance}</span>
+                                        <span>Balance: {typeof getBalance === 'number' ? getBalance.toFixed(2) : '0.00'}</span>
                                         <span>|</span>
-                                        <span>Exposure: {getTotalExposure}</span>
+                                        <span>Exposure: {typeof getTotalExposure === 'number' ? getTotalExposure.toFixed(2) : '0.00'}</span>
                                     </div>
                                 )}
                                 {/* Show deposit button only when authenticated */}

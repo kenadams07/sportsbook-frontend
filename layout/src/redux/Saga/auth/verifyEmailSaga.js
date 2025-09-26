@@ -11,7 +11,7 @@ function* verifyEmailRequest(action) {
     try {
         // Extract the actual payload and route from the action
         const { payload, route } = action.payload || action;
-        console.log("route, payload in saga", route, payload)
+     
         let endpoint = "";
         let notificationOptions = {};
 

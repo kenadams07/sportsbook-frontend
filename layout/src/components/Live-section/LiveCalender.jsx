@@ -69,7 +69,7 @@ const LiveCalender = () => {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
   const toggleDropdown = () => {
-    console.log('toggleDropdown called, current state:', isDropdownOpen);
+
     setIsDropdownOpen(!isDropdownOpen);
   };
 

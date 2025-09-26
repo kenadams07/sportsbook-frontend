@@ -1,3 +1,15 @@
+// This component handles the bet placement logic and sends the following payload to the backend:
+// - balance: updated user balance after deducting stake
+// - eventId: ID of the selected event
+// - marketId: ID of the market
+// - is_clear: flag indicating if the bet is settled
+// - marketType: type of market (e.g., "matchOdds")
+// - stake: amount being bet
+// - sportsid: ID of the sport
+// - runnerid: ID of the selected runner
+// - runnername: name of the selected team/runner
+// - odds: odds value for the selected bet
+
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
@@ -6,16 +18,13 @@ import { updateUserBalanceExposure } from '../../redux/Action/auth/updateUserBal
 import { notifyError } from '../../utils/notificationService';
 import API from '../../utils/api';
 
-// Utility function to format timestamp to readable date and time
 const formatDateTime = (timestamp) => {
   if (!timestamp) return 'N/A';
   
   const date = new Date(parseInt(timestamp));
   
-  // Check if the date is valid
   if (isNaN(date.getTime())) return 'Invalid Date';
   
-  // Format options for date and time
   const options = {
     year: 'numeric',
     month: 'short',
@@ -28,14 +37,12 @@ const formatDateTime = (timestamp) => {
   return date.toLocaleDateString('en-US', options);
 };
 
-// Function to calculate active exposure (excluding cleared exposures)
 const calculateActiveExposure = (exposures) => {
   if (!exposures || !Array.isArray(exposures)) {
     return 0;
   }
   
   return exposures.reduce((total, exposureObj) => {
-    // Only calculate exposure when is_clear is false
     if (exposureObj?.is_clear === "true" || exposureObj?.is_clear === true) {
       return total;
     }
@@ -44,9 +51,7 @@ const calculateActiveExposure = (exposures) => {
   }, 0);
 };
 
-// Function to extract W1 odds from markets data or use passed odds
 const extractW1Odds = (markets, passedOdds = null) => {
-  // If we have passed odds, use those
   if (passedOdds && passedOdds.w1) {
     const parsedOdds = parseFloat(passedOdds.w1);
     if (!isNaN(parsedOdds) && passedOdds.w1 !== "-") {
@@ -55,11 +60,9 @@ const extractW1Odds = (markets, passedOdds = null) => {
     return "-";
   }
   
-  // Otherwise extract from markets
   if (!markets) return '-';
   const mo = markets?.matchOdds?.[0];
   
-  // Check if market is suspended
   if (mo?.status === "SUSPENDED") {
     return "-";
   }
@@ -67,16 +70,13 @@ const extractW1Odds = (markets, passedOdds = null) => {
   const r0 = mo?.runners?.[0];
   const w1 = r0?.backPrices?.[0]?.price;
   
-  // Check if w1 is a valid number
   if (typeof w1 === "number" && !isNaN(w1)) {
     return w1.toFixed(2);
   }
   return '-';
 };
 
-// Function to extract X (draw) odds from markets data or use passed odds
 const extractXOdds = (markets, passedOdds = null) => {
-  // If we have passed odds, use those
   if (passedOdds && passedOdds.x) {
     const parsedOdds = parseFloat(passedOdds.x);
     if (!isNaN(parsedOdds) && passedOdds.x !== "-") {
@@ -85,34 +85,28 @@ const extractXOdds = (markets, passedOdds = null) => {
     return "-";
   }
   
-  // Otherwise extract from markets by looking for a runner with name "draw"
   if (!markets) return '-';
   const mo = markets?.matchOdds?.[0];
   
-  // Check if market is suspended
   if (mo?.status === "SUSPENDED") {
     return "-";
   }
   
   const runners = mo?.runners || [];
   
-  // Look for draw runner by name "draw" (case insensitive)
   const drawRunner = runners.find(runner => 
     runner.runnerName && runner.runnerName.toLowerCase() === "draw"
   );
   
   const x = drawRunner?.backPrices?.[0]?.price;
   
-  // Check if x is a valid number
   if (typeof x === "number" && !isNaN(x)) {
     return x.toFixed(2);
   }
   return '-';
 };
 
-// Function to extract W2 odds from markets data or use passed odds
 const extractW2Odds = (markets, passedOdds = null) => {
-  // If we have passed odds, use those
   if (passedOdds && passedOdds.w2) {
     const parsedOdds = parseFloat(passedOdds.w2);
     if (!isNaN(parsedOdds) && passedOdds.w2 !== "-") {
@@ -121,11 +115,9 @@ const extractW2Odds = (markets, passedOdds = null) => {
     return "-";
   }
   
-  // Otherwise extract from markets
   if (!markets) return '-';
   const mo = markets?.matchOdds?.[0];
   
-  // Check if market is suspended
   if (mo?.status === "SUSPENDED") {
     return "-";
   }
@@ -133,11 +125,36 @@ const extractW2Odds = (markets, passedOdds = null) => {
   const r1 = mo?.runners?.[1];
   const w2 = r1?.backPrices?.[0]?.price;
   
-  // Check if w2 is a valid number
   if (typeof w2 === "number" && !isNaN(w2)) {
     return w2.toFixed(2);
   }
   return '-';
+};
+
+const getRunnerIdForSelectedTeam = (selectedGame, selectedTeam) => {
+  if (!selectedGame?.markets?.matchOdds?.[0]?.runners) return null;
+  
+  const runners = selectedGame.markets.matchOdds[0].runners;
+  
+  if (selectedTeam === 'Draw') {
+    const drawRunner = runners.find(runner => 
+      runner.runnerName && runner.runnerName.toLowerCase() === "draw"
+    );
+    return drawRunner ? drawRunner.runnerId : null;
+  } else if (selectedTeam === selectedGame.team1) {
+    const nonDrawRunners = runners.filter(runner => 
+      !runner.runnerName || runner.runnerName.toLowerCase() !== "draw"
+    );
+    return nonDrawRunners[0] ? nonDrawRunners[0].runnerId : null;
+  } else if (selectedTeam === selectedGame.team2) {
+    const nonDrawRunners = runners.filter(runner => 
+      !runner.runnerName || runner.runnerName.toLowerCase() !== "draw"
+    );
+    return nonDrawRunners.length > 1 ? nonDrawRunners[nonDrawRunners.length - 1].runnerId : 
+           (nonDrawRunners[0] ? nonDrawRunners[0].runnerId : null);
+  }
+  
+  return null;
 };
 
 export default function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = false }) {
@@ -153,27 +170,22 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
   const [stakeValue, setStakeValue] = useState('');
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [selectedOdd, setSelectedOdd] = useState(null);
-  const [previousOdds, setPreviousOdds] = useState({ w1: null, x: null, w2: null }); // Track previous odds for highlighting
-  const [highlightedOdds, setHighlightedOdds] = useState({ w1: false, x: false, w2: false }); // Track which odds to highlight
+  const [previousOdds, setPreviousOdds] = useState({ w1: null, x: null, w2: null });
+  const [highlightedOdds, setHighlightedOdds] = useState({ w1: false, x: false, w2: false });
   const editInputRef = useRef(null);
   const containerRef = useRef(null);
 
-  // Log userData changes for debugging
   useEffect(() => {
-  
     if (userData) {
       const activeExposure = calculateActiveExposure(userData.exposures);
-
     }
   }, [userData]);
 
   const toggleDropdown = () => setIsOpen(!isOpen); 
 
-  // Handle clicks outside to exit edit mode
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (containerRef.current && !containerRef.current.contains(event.target)) {
-        // Clicked outside, exit edit mode
         setIsEditingMode(false);
         setEditableIndex(null);
         setEditValue('');
@@ -189,14 +201,12 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
     };
   }, [isEditingMode]);
 
-  // Focus the input when it becomes editable
   useEffect(() => {
     if (editableIndex !== null && editInputRef.current) {
       editInputRef.current.focus();
     }
   }, [editableIndex]);
 
-  // Handle edit submission
   const handleEditSubmit = (index) => {
     if (editValue && !isNaN(editValue) && Number(editValue) > 0) {
       const newBetAmounts = [...betAmounts];
@@ -205,46 +215,37 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
     }
     setEditableIndex(null);
     setEditValue('');
-    // Exit edit mode after submission
     setIsEditingMode(false);
   };
 
-  // Handle key press in edit input
   const handleEditKeyPress = (e, index) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); // Prevent form submission
+      e.preventDefault();
       handleEditSubmit(index);
     } else if (e.key === 'Escape') {
       setEditableIndex(null);
       setEditValue('');
-      // Exit edit mode on escape
       setIsEditingMode(false);
     }
   };
 
-  // Handle chip click to set stake value
   const handleChipClick = (amount) => {
     setStakeValue(amount.toString());
   };
 
-  // Handle stake input change
   const handleStakeChange = (e) => {
     setStakeValue(e.target.value);
   };
 
-  // Toggle edit mode
   const toggleEditMode = () => {
     setIsEditingMode(!isEditingMode);
-    // Reset any active editing when toggling mode
     if (isEditingMode) {
       setEditableIndex(null);
       setEditValue('');
     }
   };
 
-  // Handle team selection
   const handleTeamSelect = (teamName, oddValue) => {
-    // Extract the latest odds for the selected team
     let latestOddValue = oddValue;
     
     if (teamName === selectedGame?.team1) {
@@ -260,160 +261,58 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
     setStakeValue('');
   };
 
-  // Handle placing a bet
   const handlePlaceBet = async () => {
-  
     if (!isAuthenticated || !selectedTeam || !stakeValue) {
-     
       return;
     }
     
     const stake = parseFloat(stakeValue);
     
     if (isNaN(stake) || stake <= 0) {
-
       return;
     }
     
-    // Fetch fresh user data before placing the bet to ensure accurate balance check
-    try {
-      const response = await API.get("/users/profile");
-   
-      
-      if (response?.data?.success === true || 
-          response?.data?.meta?.code === 200 || 
-          response?.data?.code === 200) {
-        
-        const freshUserData = response.data?.data || response.data;
+    // Use existing user data directly
+    const currentBalance = parseFloat(userData?.balance) || 0;
     
-        
-        // Get current balance and calculate active exposure from fresh user data
-        const currentBalance = parseFloat(freshUserData?.balance) || 0;
-        const activeExposure = calculateActiveExposure(freshUserData?.exposures) || parseFloat(freshUserData?.exposure) || 0;
-        
-        // Calculate available balance using the same logic as MainNavbar
-        const availableBalance = currentBalance - activeExposure;
-        
-        // Check if user has sufficient available balance
-        if (stake > availableBalance) {
-          // Show error message using the notification service
-          notifyError("Insufficient balance to place this bet");
-          return;
-        }
-        
-        // Calculate new values using the same logic as MainNavbar
-        // For exposure, we add the stake amount for this individual bet
-        const newExposure = activeExposure + stake;
-        // For balance, we deduct the stake from the current balance
-        const newBalance = currentBalance - stake;
-    
-        return
-     
-        dispatch(updateUserBalanceExposure({
-          balance: newBalance,
-          exposure: newExposure,
-          eventId: selectedGame?.eventId || null,
-          marketId: selectedGame?.markets?.matchOdds?.[0]?.marketId || null,
-          is_clear: false,
-          marketType: "matchOdds",
-          stake: stake
-        }));
-      
-      } else {
-        // Fallback to using existing userData if fresh data fetch fails
-      
-        
-        // Get current balance and calculate active exposure from existing userData
-        const currentBalance = parseFloat(userData?.balance) || 0;
-        const activeExposure = calculateActiveExposure(userData?.exposures) || parseFloat(userData?.exposure) || 0;
-        
-        // Calculate available balance using the same logic as MainNavbar
-        const availableBalance = currentBalance - activeExposure;
-        
-        // Check if user has sufficient available balance
-        if (stake > availableBalance) {
-          // Show error message using the notification service
-          notifyError("Insufficient balance to place this bet");
-          return;
-        }
-        
-        // Calculate new values using the same logic as MainNavbar
-        // For exposure, we add the stake amount for this individual bet
-        const newExposure = activeExposure + stake;
-        // For balance, we deduct the stake from the current balance
-        const newBalance = currentBalance - stake;
-        
-     
-
- 
-        dispatch(updateUserBalanceExposure({
-          balance: newBalance,
-          exposure: newExposure,
-          eventId: selectedGame?.eventId || null,
-          marketId: selectedGame?.markets?.matchOdds?.[0]?.marketId || null,
-          is_clear: false,
-          marketType: "matchOdds",
-          stake: stake
-        }));
-    
-      }
-    } catch (error) {
-
-      
-      // Get current balance and calculate active exposure from existing userData
-      const currentBalance = parseFloat(userData?.balance) || 0;
-      const activeExposure = calculateActiveExposure(userData?.exposures) || parseFloat(userData?.exposure) || 0;
-      
-      // Calculate available balance using the same logic as MainNavbar
-      const availableBalance = currentBalance - activeExposure;
-      
-      // Check if user has sufficient available balance
-      if (stake > availableBalance) {
-        // Show error message using the notification service
-        notifyError("Insufficient balance to place this bet");
-        return;
-      }
-      
-      // Calculate new values using the same logic as MainNavbar
-      // For exposure, we add the stake amount for this individual bet
-      const newExposure = activeExposure + stake;
-      // For balance, we deduct the stake from the current balance
-      const newBalance = currentBalance - stake;
-      
-  
-
-  
-
-      dispatch(updateUserBalanceExposure({
-        balance: newBalance,
-        exposure: newExposure,
-        eventId: selectedGame?.eventId || null,
-        marketId: selectedGame?.markets?.matchOdds?.[0]?.marketId || null,
-        is_clear: false,
-        marketType: "matchOdds",
-        stake: stake
-      }));
- 
+    // Check if user has sufficient balance
+    if (stake > currentBalance) {
+      notifyError("Insufficient balance to place this bet");
+      return;
     }
+    
+    // Extract market information
+    const market = selectedGame?.markets?.matchOdds?.[0];
+    const marketType = market?.marketType || "matchOdds"; // Use actual market name or fallback
+    const marketName = market?.marketName || "Match Odds"; // Use actual market name or fallback
+    
+    // Dispatch action with the current balance
+    dispatch(updateUserBalanceExposure({
+      balance: currentBalance,
+      eventId: selectedGame?.eventId || null,
+      marketId: market?.marketId || null,
+      is_clear: false,
+      marketType: marketType,
+      stake: stake,
+      sportsid: selectedGame?.sportId || null,
+      runnerid: getRunnerIdForSelectedTeam(selectedGame, selectedTeam),
+      runnername: selectedTeam,
+      odds: selectedOdd,
+      competitionId: selectedGame?.competitionId || null,
+      competitionName: selectedGame?.competitionName || null,
+      marketName: marketName
+    }));
   };
 
-  // Handle post-bet placement logic
   useEffect(() => {
-
-    // Check if the exposure update was successful
     if (!exposureLoading && !exposureError) {
-     
-      // Update the local state immediately for UI feedback
       setSelectedTeam(null);
       setSelectedOdd(null);
       setStakeValue('');
     } else if (exposureError) {
-  
-      // You might want to show an error message to the user here
     }
   }, [exposureLoading, exposureError]);
 
-  // Calculate possible win amount
   const calculatePossibleWin = () => {
     if (!stakeValue || !selectedOdd || isNaN(stakeValue) || selectedOdd === "-" || isNaN(parseFloat(selectedOdd))) return '0.00';
     const stake = parseFloat(stakeValue);
@@ -423,15 +322,12 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
     return possibleWin.toFixed(2);
   };
 
-  // Update previous odds when game data changes and trigger highlighting
   useEffect(() => {
     if (selectedGame) {
-      // Use passed odds if available, otherwise extract from markets
       const w1Odds = extractW1Odds(selectedGame.markets, selectedGame.odds);
       const xOdds = extractXOdds(selectedGame.markets, selectedGame.odds);
       const w2Odds = extractW2Odds(selectedGame.markets, selectedGame.odds);
       
-      // Check if odds have changed
       const w1Changed = previousOdds.w1 !== null && w1Odds !== '-' && w1Odds !== previousOdds.w1;
       const xChanged = previousOdds.x !== null && xOdds !== '-' && xOdds !== previousOdds.x;
       const w2Changed = previousOdds.w2 !== null && w2Odds !== '-' && w2Odds !== previousOdds.w2;
@@ -443,7 +339,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           w2: w2Changed
         });
         
-        // Update selectedOdd if the selected team's odds have changed
         if (selectedTeam === selectedGame?.team1 && w1Changed) {
           setSelectedOdd(w1Odds);
         } else if (selectedTeam === 'Draw' && xChanged) {
@@ -452,20 +347,18 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           setSelectedOdd(w2Odds);
         }
         
-        // Clear highlighting after animation duration
         setTimeout(() => {
           setHighlightedOdds({ w1: false, x: false, w2: false });
         }, 1000);
       }
       
-      // Update previous odds
       setPreviousOdds({
         w1: w1Odds,
         x: xOdds,
         w2: w2Odds
       });
     }
-  }, [selectedGame]); // Depend on the entire selectedGame object to catch odds updates
+  }, [selectedGame]);
 
   if (!selectedGame) {
     return (
@@ -478,7 +371,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
   if (isCompact) {
     return (
       <div className="p-2.5 m-1.5 bg-live-primary rounded-lg border border-live-accent shadow-live flex flex-col gap-2 text-live-primary">
-        {/* MY TEAMS Section */}
         <div className="space-y-1.5">
           <h3 className="text-xs font-bold text-live-primary">MY TEAMS</h3>
           <button className="w-full flex items-center gap-1.5 bg-live-primary hover:bg-live-hover px-2 py-1.5 rounded text-xs">
@@ -487,31 +379,25 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           </button>
         </div>
 
-        {/* Empty Content Area */}
         <div className="bg-live-secondary rounded p-3 flex items-center justify-center">
           <div className="text-live-muted text-[10px]">Empty content area</div>
         </div>
 
-        {/* BetSlip Section */}
         <div className="space-y-1.5">
           <div className="bg-live-tertiary px-2 py-1 rounded border border-live-accent text-center">
             <span className="text-xs font-bold text-live-accent">BetSlip</span>
           </div>
           
-          {/* Login/Register CTA - Only visible when not authenticated */}
           {!isAuthenticated && (
             <div className="text-center text-[10px] text-live-muted bg-live-tertiary p-2 rounded-lg border border-live">
               <p>If you want to place a bet, please <LinkTo onClick={onLogin} text="login" /> or <LinkTo onClick={onRegister} text="register" /></p>
             </div>
           )}
           
-          {/* Bet Info */}
           <div className="bg-live-tertiary px-2 py-1 rounded border border-live">
             <div className="text-[10px] mb-1 font-bold text-live-primary">{selectedGame?.competitionName}</div>
             
-            {/* Team selection boxes for compact view */}
             <div className="flex flex-col gap-1 my-1">
-              {/* Team 1 with odds */}
               <div 
                 className={`flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${
                   selectedTeam === selectedGame?.team1 
@@ -541,7 +427,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
                 </div>
               </div>
               
-              {/* Draw (X) odds */}
               <div 
                 className={`flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${
                   selectedTeam === 'Draw' 
@@ -571,7 +456,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
                 </div>
               </div>
               
-              {/* Team 2 with odds */}
               <div 
                 className={`flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${
                   selectedTeam === selectedGame?.team2 
@@ -606,10 +490,8 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
             <div className="text-[10px] text-live-secondary">{formatDateTime(selectedGame?.openDate)}</div>
           </div>
           
-          {/* Stake Input and Possible Win - Only show when a team is selected */}
           {selectedTeam && (
             <>
-              {/* Stake Input */}
               <div className="bg-live-tertiary px-2 py-1 rounded border border-live">
                 <input 
                   type="number"
@@ -620,7 +502,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
                 />
               </div>
               
-              {/* Possible Win */}
               <div className="flex justify-between items-center bg-live-tertiary px-2 py-1 rounded border border-live">
                 <span className="text-[10px] text-live-primary">Possible win:</span>
                 <span className="text-[10px] text-live-accent font-bold">{calculatePossibleWin()} €</span>
@@ -628,7 +509,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
             </>
           )}
           
-          {/* Quick Stake Buttons - Only show when a team is selected */}
           {selectedTeam && (
             <div className="flex gap-1.5" ref={containerRef}>
               {betAmounts.map((amount, index) => (
@@ -651,7 +531,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
                           setEditableIndex(index);
                           setEditValue(amount.toString());
                         } else {
-                          // Set the stake value when clicking on a chip
                           handleChipClick(amount);
                         }
                       }}
@@ -676,10 +555,8 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
             </div>
           )}
           
-          
         </div>
 
-        {/* Placeholder for Additional Stats - Moved after BET button */}
         <div className="bg-live-secondary rounded p-3 flex items-center justify-center">
           <div className="text-live-muted text-[10px]">Empty content area</div>
         </div>
@@ -689,13 +566,11 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
 
   return (
     <div className="p-4 m-2 bg-live-primary rounded-lg shadow-lg shadow-black/50 flex flex-col gap-4 text-live-primary">
-      {/* Header Section */}
       <div className="flex items-center gap-2 border-b border-live-accent pb-3 mb-1">
         <h2 className="text-lg font-bold text-live-accent">MY TEAMS</h2>
         <div className="h-0.5 w-8 bg-live-accent rounded-full"></div>
       </div>
 
-      {/* Badges Section */}
       <div className="grid grid-cols-2 gap-3 pb-4 border-b border-live-accent">
         <div className="flex flex-col items-center gap-2 p-3 bg-live-tertiary rounded-lg border border-live shadow-live">
           <div className="bg-live-hover p-2 rounded-full border border-live-accent">
@@ -716,10 +591,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
         </div>
       </div>
 
-      {/* Odds Settings Panel */}
-    
-
-      {/* BetSlip Separator */}
       <div className="flex flex-col gap-2 py-1">
         <div className="flex items-center gap-2 py-1">
           <div className="h-px flex-1 bg-live-accent opacity-30"></div>
@@ -729,7 +600,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           <div className="h-px flex-1 bg-live-accent opacity-30"></div>
         </div>
 
-        {/* Login/Register CTA - Only visible when not authenticated */}
         {!isAuthenticated && (
           <div className="text-center text-xs text-live-muted bg-live-tertiary p-2 rounded-lg border border-live">
             <p>If you want to place a bet, please<LinkTo onClick={onLogin} text="login" /> or<LinkTo onClick={onRegister} text="register" /></p>
@@ -737,17 +607,11 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
         )}
       </div>
 
-   
-
-      {/* BetSlip Section - Using actual game data instead of static data */}
       <div className="space-y-1.5">
-        {/* Bet Info - Using actual game data */}
         <div className="bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
           <div className="text-xs mb-1 font-bold text-live-primary">{selectedGame?.competitionName}</div>
           
-          {/* Team selection boxes */}
           <div className="flex flex-col gap-2 my-2">
-            {/* Team 1 with odds */}
             <div 
               className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${
                 selectedTeam === selectedGame?.team1 
@@ -777,7 +641,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
               </div>
             </div>
             
-            {/* Draw (X) odds */}
             <div 
               className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${
                 selectedTeam === 'Draw' 
@@ -807,7 +670,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
               </div>
             </div>
             
-            {/* Team 2 with odds */}
             <div 
               className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${
                 selectedTeam === selectedGame?.team2 
@@ -842,10 +704,8 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           <div className="text-xs text-live-secondary">{formatDateTime(selectedGame?.openDate)}</div>
         </div>
         
-        {/* Stake Input and Possible Win - Only show when a team is selected */}
         {selectedTeam && (
           <>
-            {/* Stake Input */}
             <div className="bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
               <input 
                 type="number"
@@ -856,7 +716,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
               />
             </div>
             
-            {/* Possible Win */}
             <div className="flex justify-between items-center bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
               <span className="text-xs text-live-primary">Possible win:</span>
               <span className="text-xs text-live-accent font-bold">{calculatePossibleWin()}</span>
@@ -864,7 +723,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           </>
         )}
         
-        {/* Quick Stake Buttons - Only show when a team is selected */}
         {selectedTeam && (
           <div className="flex gap-1.5" ref={containerRef}>
             {betAmounts.map((amount, index) => (
@@ -887,7 +745,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
                         setEditableIndex(index);
                         setEditValue(amount.toString());
                       } else {
-                        // Set the stake value when clicking on a chip
                         handleChipClick(amount);
                       }
                     }}
@@ -912,7 +769,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           </div>
         )}
         
-        {/* BET Button - Only enabled when a team is selected and authenticated */}
         <button 
           className={`w-full px-2.5 py-1.5 rounded text-sm font-bold transition-colors cursor-pointer color-yellowborder-solid transition-all duration-200 ${
             isAuthenticated && selectedTeam 
@@ -926,7 +782,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
         </button>
       </div>
 
-      {/* Placeholder for Additional Stats - Moved after BET button */}
       <div className="bg-live-tertiary p-4 rounded-lg border border-live-accent shadow-live flex items-center justify-center text-center h-24">
         <div className="space-y-1">
           <div className="w-10 h-10 bg-live-hover rounded-full flex items-center justify-center mx-auto border border-live-accent">
@@ -942,7 +797,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
   );
 }
 
-// Reusable link component
 const LinkTo = ({ onClick, text }) => (
   <span 
     onClick={onClick} 

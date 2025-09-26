@@ -1719,7 +1719,7 @@ function MainNavbar() {
    
   }, [profileData]);
   useEffect(() => {
-    console.log("userData changed:", userData);
+   
     const sourceData = userData || profileData || {};
     const totalExposure = calculateActiveExposure(sourceData?.exposures) || parseFloat(sourceData?.exposure) || 0;
     const activeExposure = getTotalExposure;
@@ -1738,7 +1738,7 @@ function MainNavbar() {
     });
   }, [userData, getBalance, getTotalExposure, calculateActiveExposure]);
   useEffect(() => {
-    console.log("profileData updated, triggering force update");
+   
     setForceUpdate((prev) => prev + 1);
   }, [profileData]);
   useEffect(() => {
