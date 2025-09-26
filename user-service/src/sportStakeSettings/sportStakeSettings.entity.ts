@@ -24,15 +24,13 @@ export class SportStakeSettings {
   @ManyToOne(() => WhiteLabel)
   whiteLabel: WhiteLabel;
 
-  // Array of stake size objects
   @Column('jsonb', { nullable: true })
   stakeSize: {
-    maxExch: string;      // or number if you want, but your example shows strings
+    maxExch: string;
     maxBookMaker: string;
     maxFancy: string;
   }[];
 
-  // Empty array - define structure if available, otherwise keep jsonb
   @Column('jsonb', { nullable: true })
   commission: any[];
 

@@ -9,7 +9,6 @@ import {
 import { Currency } from '../currency/currency.entity';
 import { Exposure } from 'src/exposure/exposure.entity';
 import { ResultTransaction } from 'src/resultTransaction/resultTransaction.entity';
-import { SportBets } from 'src/sportBets/sportBets.entity';
 
 @Entity()
 export class Users {
@@ -67,12 +66,12 @@ export class Users {
   @Column({ nullable: true })
   passwordHash: string;
 
-  @ManyToOne(() => Users, (user) => user.direntparent)
+  @ManyToOne('Users', 'direntparent')
   @JoinColumn({ name: 'parentId' })
-  parent: Users;
+  parent: 'Users';
 
-  @OneToMany(() => Users, (user) => user.parent, { cascade: ['remove'] })
-  direntparent: Users[];
+  @OneToMany('Users', 'parent', { cascade: ['remove'] })
+  direntparent: 'Users'[];
 
   @ManyToOne(() => Currency)
   @JoinColumn({ name: 'currency_id' })
@@ -102,12 +101,12 @@ export class Users {
   @Column({ default: true })
   betAllow: boolean;
 
-  @OneToMany(() => SportBets, (sportsBet) => sportsBet.user)
-  sportsBets: SportBets[];
+  @OneToMany('SportBets', 'user')
+  sportsBets: 'SportBets'[];
 
-  @OneToMany(() => Exposure, (exposure) => exposure.user)
-  exposure: Exposure[];
+  @OneToMany('Exposure', 'user')
+  exposure: 'Exposure'[];
 
-  @OneToMany(() => ResultTransaction, (resultTransaction) => resultTransaction.user)
-  resultTransaction: ResultTransaction[];
+  @OneToMany('ResultTransaction', 'user')
+  resultTransaction: 'ResultTransaction'[];
 }

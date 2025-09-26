@@ -16,9 +16,8 @@ import { SportStakeSettingsModule } from './sportStakeSettings/sportStakeSetting
 import { AppGateway } from './app.gateway';
 import { EmailModule } from './email/email.module';
 import { RabbitMQTriggerService } from './rabbitmq/rabbitmq-trigger.service';
-import { RabbitMQListenerService } from './rabbitmq/rabbitmq-listener.service';
 import * as redisStore from 'cache-manager-redis-store';
-import { QueueModule } from './test/testMsgQueue/QueueTest.module'; 
+import { QueueModule } from './test/testMsgQueue/QueueTest.module';
 
 @Module({
   imports: [
@@ -37,15 +36,27 @@ import { QueueModule } from './test/testMsgQueue/QueueTest.module';
       }),
       inject: [ConfigService],
     }),
-      CacheModule.register({
-      store: redisStore,
-      host: process.env.REDIS_HOST,
-      port: process.env.REDIS_PORT,
+      CacheModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => {
+        const redisHost = configService.get<string>('REDIS_HOST');
+        if (redisHost) {
+          return {
+            store: redisStore,
+            host: redisHost,
+            port: configService.get<number>('REDIS_PORT', 6379),
+          };
+        }
+        return {
+          store: 'memory',
+        };
+      },
+      inject: [ConfigService],
     }),
     UsersModule,
     WhiteLabelModule,
     CurrencyModule,
-    SportsModule, // Assuming you have a SportsModule
+    SportsModule,
     EventsModule,
     MarketModule,
     RunnersModule,

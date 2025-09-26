@@ -46,7 +46,6 @@ export class EmailController {
   @UsePipes(new ValidationPipe({ transform: true }))
   async sendPasswordReset(@Body() sendPasswordResetDto: SendPasswordResetDto): Promise<{ success: boolean; message: string }> {
     const { email } = sendPasswordResetDto;
-    // Generate a random token for this example
     const resetToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
     const result = await this.emailService.sendPasswordResetEmail(email, resetToken);

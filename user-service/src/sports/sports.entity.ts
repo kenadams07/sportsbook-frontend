@@ -16,7 +16,7 @@ import {
 export enum SportStatus {
   ONE = '1',
   TWO = '2',
-  THREE = '3', // extend as needed
+  THREE = '3',
 }
 
 @Entity()
@@ -45,11 +45,9 @@ export class Sports {
   })
   actualStatus: SportStatus;
 
-  // One sport has many events
   @OneToMany(() => Events, (event) => event.sport)
   events: Events[];
 
-  // ManyToMany relationship with markets
   @ManyToMany(() => Markets)
   @JoinTable({
     name: 'sport_markets',
@@ -58,7 +56,6 @@ export class Sports {
   })
   markets: Markets[];
 
-  // ManyToMany relationship with runners
   @ManyToMany(() => Runners)
   @JoinTable({
     name: 'sport_runners',
@@ -67,7 +64,6 @@ export class Sports {
   })
   runners: Runners[];
 
-  // ManyToMany relationship with settings
   @ManyToMany(() => SportStakeSettings)
   @JoinTable({
     name: 'sport_settings',

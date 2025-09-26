@@ -15,4 +15,9 @@ export class SportBetsController {
   create(@Body() sportBet: Partial<SportBets>): Promise<SportBets> {
     return this.sportBetsService.create(sportBet);
   }
+
+  @Post('place-bet')
+  async placeBet(@Body() betData: any): Promise<any> {
+    return this.sportBetsService.placeBet(betData);
+  }
 }

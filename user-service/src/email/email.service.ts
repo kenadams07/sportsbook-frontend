@@ -1,15 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
-import { v4 as uuidv4 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EmailService {
   private transporter: nodemailer.Transporter;
-  private readonly logger = new Logger(EmailService.name);
 
   constructor(private configService: ConfigService) {
-    // Check if required SMTP configuration is available
     const smtpHost = this.configService.get<string>('SMTP_HOST');
     const smtpPort = this.configService.get<number>('SMTP_PORT');
     const smtpUser = this.configService.get<string>('SMTP_USERNAME');
@@ -17,34 +14,28 @@ export class EmailService {
     const smtpFrom = this.configService.get<string>('SMTP_FROM_MAIL');
 
     if (!smtpHost || !smtpPort || !smtpUser || !smtpPass || !smtpFrom) {
-      this.logger.warn('SMTP configuration is incomplete. Email functionality will be disabled.');
       return;
     }
 
     this.transporter = nodemailer.createTransport({
       host: smtpHost,
       port: smtpPort,
-      secure: smtpPort === 465, // true for 465, false for other ports
+      secure: smtpPort === 465,
       auth: {
         user: smtpUser,
         pass: smtpPass,
       },
     });
     
-    // Verify transporter configuration
     this.transporter.verify((error, success) => {
       if (error) {
-        this.logger.error('SMTP configuration error:', error);
       } else {
-        this.logger.log('SMTP server is ready to take messages');
       }
     });
   }
 
   async sendOTPMail(toMailId: string, OTP: string): Promise<boolean> {
-    // Check if transporter is configured
     if (!this.transporter) {
-      this.logger.warn('Email transporter not configured. Skipping email send.');
       return false;
     }
 
@@ -77,18 +68,14 @@ export class EmailService {
       };
 
       const info = await this.transporter.sendMail(mailOptions);
-      this.logger.log('OTP email sent:', info.messageId);
       return true;
     } catch (error) {
-      this.logger.error('Error in sendOTPMail', error);
       return false;
     }
   }
 
   async sendWelcomeEmail(toMailId: string, name: string): Promise<boolean> {
-    // Check if transporter is configured
     if (!this.transporter) {
-      this.logger.warn('Email transporter not configured. Skipping email send.');
       return false;
     }
 
@@ -120,18 +107,14 @@ export class EmailService {
       };
 
       const info = await this.transporter.sendMail(mailOptions);
-      this.logger.log('Welcome email sent:', info.messageId);
       return true;
     } catch (error) {
-      this.logger.error('Error in sendWelcomeEmail', error);
       return false;
     }
   }
 
   async sendPasswordResetEmail(toMailId: string, resetToken: string): Promise<boolean> {
-    // Check if transporter is configured
     if (!this.transporter) {
-      this.logger.warn('Email transporter not configured. Skipping email send.');
       return false;
     }
 
@@ -167,10 +150,8 @@ export class EmailService {
       };
 
       const info = await this.transporter.sendMail(mailOptions);
-      this.logger.log('Password reset email sent:', info.messageId);
       return true;
     } catch (error) {
-      this.logger.error('Error in sendPasswordResetEmail', error);
       return false;
     }
   }

@@ -14,12 +14,10 @@ import { Events } from 'src/events/events.entity';
 
 export enum BettingType {
   ODDS = 'ODDS',
-  // Add other types if needed
 }
 
 export enum SelectionType {
   BACK = 'back',
-  LAY = 'lay',
 }
 
 export enum BetStatus {
@@ -29,7 +27,7 @@ export enum BetStatus {
   CANCELLED = '4',
   VOID = '5',
   SETTLED = '6',
-  OTHER = '7', // as per provided data
+  OTHER = '7',
 }
 
 @Entity()
@@ -37,29 +35,14 @@ export class SportBets {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Sports)
-  sport: Sports;
+  @Column({ type: 'varchar' })
+  eventId: string;
 
-  @ManyToOne(() => Events)
-  event: Events;
+  @Column({ type: 'varchar' })
+  sportId: string;
 
-  @ManyToOne(() => Markets)
-  market: Markets;
-
-  @ManyToOne(() => Users)
-  user: Users;
-
-  @ManyToOne(() => Currency)
-  currency: Currency;
-
-  @Column({
-    type: 'enum',
-    enum: BettingType,
-  })
-  bettingType: BettingType;
-
-  @Column({ type: 'varchar', length: 255 })
-  selection: string;
+  @Column('decimal', { precision: 15, scale: 2 })
+  stake: number;
 
   @Column({
     type: 'enum',
@@ -67,20 +50,45 @@ export class SportBets {
   })
   selectionType: SelectionType;
 
-  @Column({ type: 'varchar', length: 50 })
-  selectionId: string;
-
   @Column('decimal', { precision: 10, scale: 2 })
   odds: number;
 
-  @Column('decimal', { precision: 15, scale: 2 })
-  stake: number;
+  @Column({ type: 'varchar' })
+  marketId: string;
+
+  @Column({ type: 'varchar' })
+  selection: string;
+
+  @Column({ type: 'varchar' })
+  marketType: string;
+
+  @Column({ type: 'varchar' })
+  leagueId: string;
+
+  @Column({ type: 'varchar' })
+  selectionId: string;
+
+  @Column({ type: 'varchar' })
+  marketName: string;
+
+  @Column({
+    type: 'enum',
+    enum: BettingType,
+  })
+  bettingType: BettingType;
 
   @Column({
     type: 'enum',
     enum: BetStatus,
+    default: BetStatus.PENDING,
   })
   status: BetStatus;
+
+  @ManyToOne(() => Users)
+  user: Users;
+
+  @ManyToOne(() => Currency)
+  currency: Currency;
 
   @CreateDateColumn()
   createdAt: Date;
