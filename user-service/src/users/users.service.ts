@@ -113,4 +113,8 @@ export class UsersService {
   async updateToken(userId: string, token: string): Promise<void> {
     await this.usersRepository.update({ id: userId }, { token });
   }
+
+  async updateUserExposure(userId: string, exposure: number): Promise<void> {
+    await this.usersRepository.update({ id: userId }, { exposure });
+  }
 }

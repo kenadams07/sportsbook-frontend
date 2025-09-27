@@ -104,8 +104,8 @@ export class Users {
   @OneToMany('SportBets', 'user')
   sportsBets: 'SportBets'[];
 
-  @OneToMany('Exposure', 'user')
-  exposure: 'Exposure'[];
+  @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+  exposure: number;
 
   @OneToMany('ResultTransaction', 'user')
   resultTransaction: 'ResultTransaction'[];
