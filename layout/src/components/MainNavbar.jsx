@@ -22,7 +22,31 @@ const navItems = [
             { label: 'Statistics', href: '/live_events/statistics' }
         ]
     },
-    { label: 'Sports', items: [{ label: 'Event View', href: '/live/in-play' }, { label: 'Live Calendar', href: '/live/streaming' }, { label: 'Results', href: '/live/scores' }, { label: 'Statistics', href: '/live/scores' }] },
+    { 
+        label: 'Sports', 
+        items: [
+            { 
+                label: 'Event View', 
+                href: '/live_events/event-view',
+                state: { viewType: 'prematch' }
+            }, 
+            { 
+                label: 'Live Calendar', 
+                href: '/live_events/live-calendar',
+                state: { viewType: 'prematch' }
+            }, 
+            { 
+                label: 'Results', 
+                href: '/live_events/results',
+                state: { viewType: 'prematch' }
+            }, 
+            { 
+                label: 'Statistics', 
+                href: '/live_events/statistics',
+                state: { viewType: 'prematch' }
+            }
+        ]
+    },
 
     { label: 'Casino', items: [{ label: 'Home', href: '/casino/slots' }, { label: 'Tournaments', href: '/casino/tournaments' }] }, 
      { label: 'Games', href: '/games'},
@@ -88,42 +112,30 @@ export default function MainNavbar() {
 
   // Calculate total exposure from exposures array
   const calculateTotalExposure = useCallback((exposures) => {
- 
     if (!exposures || !Array.isArray(exposures)) {
-     
       return 0;
     }
     
-    const total = exposures.reduce((total, exposureObj) => {
+    return exposures.reduce((total, exposureObj) => {
       const exposureValue = parseFloat(exposureObj?.exposure) || 0;
-
       return total + exposureValue;
     }, 0);
-    
-
-    return total;
   }, []);
 
   // New function to calculate only active (non-cleared) exposures for display
   const calculateActiveExposure = useCallback((exposures) => {
- 
     if (!exposures || !Array.isArray(exposures)) {
-     
       return 0;
     }
     
-    const total = exposures.reduce((total, exposureObj) => {
+    return exposures.reduce((total, exposureObj) => {
       // Only calculate exposure when is_clear is false
       if (exposureObj?.is_clear === "true" || exposureObj?.is_clear === true) {
         return total;
       }
       const exposureValue = parseFloat(exposureObj?.exposure) || 0;
-
       return total + exposureValue;
     }, 0);
-    
-
-    return total;
   }, []);
 
   // Get exposure value to display
@@ -148,8 +160,8 @@ export default function MainNavbar() {
     return 0;
   }, [profileData, userData, calculateActiveExposure, exposure]);
 
-  // Get balance value to display
-  const getBalance = useMemo(() => {
+  // Get balance value to display (available balance for betting)
+  const getAvailableBalance = useMemo(() => {
     // Use the most recently updated data (from Login reducer when available)
     const sourceData = userData || profileData || {};
     
@@ -157,7 +169,8 @@ export default function MainNavbar() {
     // Use active exposure (excluding cleared exposures) for balance calculation
     const activeExposure = getTotalExposure;
     
-    return balance - activeExposure;
+    // Available balance is total balance minus active exposure
+    return Math.max(0, balance - activeExposure);
   }, [profileData, userData, getTotalExposure]);
 
   useEffect(() => {
@@ -196,7 +209,7 @@ export default function MainNavbar() {
         }
     }, [isAuthenticated, dispatch]);
 
-    // Log when profileData or userData changes for debugging
+  // Log when profileData or userData changes for debugging
   useEffect(() => {
    
   }, [profileData]);
@@ -209,7 +222,7 @@ export default function MainNavbar() {
     const activeExposure = getTotalExposure;
     
  
-  }, [userData, getBalance, getTotalExposure, calculateTotalExposure]);
+  }, [userData, getAvailableBalance, getTotalExposure, calculateTotalExposure]);
     
     // Listen for changes in profileData (from GetUserData reducer) to trigger re-render
     useEffect(() => {
@@ -261,9 +274,9 @@ export default function MainNavbar() {
                                 {isAuthenticated && loading && <UserDataSkeleton />}
                                 {isAuthenticated && !loading && (
                                     <div className="hidden md:flex items-center gap-4 text-white font-bold">
-                                        <span>Balance: {typeof getBalance === 'number' ? getBalance.toFixed(2) : '0.00'}</span>
+                                        <span>Balance: {typeof getAvailableBalance === 'number' ? getAvailableBalance.toFixed(2) : '0.00'}</span>
                                         <span>|</span>
-                                        <span>Exposure: {typeof getTotalExposure === 'number' ? getTotalExposure.toFixed(2) : '0.00'}</span>
+                                        <span>Exposure: -{typeof getTotalExposure === 'number' ? getTotalExposure.toFixed(2) : '0.00'}</span>
                                     </div>
                                 )}
                                 {/* Show deposit button only when authenticated */}

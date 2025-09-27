@@ -67,6 +67,14 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
   const [pendingSelection, setPendingSelection] = useState(null); // Track pending game selection
   const oddsPrevRef = useRef({});
 
+  // Set selectedType based on location state
+  useEffect(() => {
+    const { viewType } = location.state || {};
+    if (viewType === 'prematch') {
+      setSelectedType('prematch');
+    }
+  }, [location.state]);
+
   // Clear location state on component mount to prevent issues with subsequent navigation
   useEffect(() => {
     if (location.state) {

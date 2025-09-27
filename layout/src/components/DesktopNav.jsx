@@ -51,7 +51,7 @@ const DesktopNav = ({ navItems }) => {
                   <MenubarItem
                     key={subItem.href}
                     className={`text-navbar-text rounded-sm bg-mobile-menu my-2 hover:bg-navbar-dropdown-hover hover:border-l-2 hover:border-l-navbar-highlight cursor-pointer ${location.pathname === subItem.href ? 'bg-navbar-dropdown-hover border-l-2 border-yellow-400 text-white font-bold' : ''}`}
-                    onClick={() => navigate(subItem.href)}
+                    onClick={() => navigate(subItem.href, { state: subItem.state })}
                   >
                     {subItem.label}
                   </MenubarItem>

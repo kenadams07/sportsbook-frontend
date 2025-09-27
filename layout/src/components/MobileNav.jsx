@@ -67,7 +67,7 @@ const MobileNav = ({ isOpen, toggleOpen, navItems }) => {
                       <div
                         key={subItem.label}
                         onClick={() => {
-                          navigate(subItem.href);
+                          navigate(subItem.href, { state: subItem.state });
                           toggleOpen();
                         }}
                         className={`block px-8 py-2 text-navbar-text text-sm hover:bg-navbar-dropdown-hover cursor-pointer ${location.pathname === subItem.href ? 'border-l-2 border-yellow-400 text-white font-bold bg-navbar-dropdown-hover' : ''}`}

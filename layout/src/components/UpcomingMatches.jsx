@@ -239,7 +239,7 @@ export default function UpcomingMatches() {
             </div>
           </div>
         ) : (
-          <div className="text-sm text-muted-foreground text-center py-6">No featured game available</div>
+          <div className="text-sm text-muted-foreground text-center py-6">There is no featured games at the moment</div>
         )}
       </div>
 
@@ -368,8 +368,8 @@ export default function UpcomingMatches() {
         <div className="px-4 py-10 text-center text-sm text-muted-foreground">Currently no matches to display</div>
       )}
 
-      {/* Matches list */}
-      <div className="flex flex-col px-2">
+      {/* Matches list with scroll for more than 5 items */}
+      <div className="flex flex-col px-2 max-h-[320px] overflow-y-auto">
         {!loading &&
           matches.map((match) => {
             const isSelected = selectedGameId === match.id
