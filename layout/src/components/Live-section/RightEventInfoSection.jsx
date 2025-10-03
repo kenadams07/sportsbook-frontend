@@ -162,8 +162,28 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
   const { isAuthenticated, userData } = useSelector(state => state.Login);
   const { loading: exposureLoading, error: exposureError } = useSelector(state => state.UpdateUserBalanceExposure);
   const { userData: profileData, loading } = useSelector(state => state.GetUserData);
-  const [socketExposure, setSocketExposure] = useState(0); // State to hold exposure from WebSocket
-  const [isSocketConnected, setIsSocketConnected] = useState(false); // State to track socket connection
+  const [socketExposure, setSocketExposure] = useState(0);
+  const [isSocketConnected, setIsSocketConnected] = useState(false);
+  const [selectedRunnerInfo, setSelectedRunnerInfo] = useState(null);
+
+  // Check if this is a market runner selection
+  const isMarketRunnerSelection = selectedGame?.selectedMarket && selectedGame?.selectedRunner;
+
+  // Get the market name to display
+  const getMarketName = () => {
+    if (isMarketRunnerSelection) {
+      return selectedGame.selectedMarket.marketName;
+    }
+    
+    // For left section game card selections, use the first market name if available
+    if (selectedGame?.markets?.matchOdds?.[0]?.marketName) {
+      return selectedGame.markets.matchOdds[0].marketName;
+    }
+    
+    return "Match Odds"; // Default market name
+  };
+
+  const marketName = getMarketName();
 
   // Initialize WebSocket connection for real-time exposure updates
   useEffect(() => {
@@ -287,6 +307,11 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
   };
 
   const handleTeamSelect = (teamName, oddValue) => {
+    // Reset market runner selection when selecting a team
+    if (selectedRunnerInfo) {
+      setSelectedRunnerInfo(null);
+    }
+    
     let latestOddValue = oddValue;
 
     if (teamName === selectedGame?.team1) {
@@ -303,7 +328,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
   };
 
   const handlePlaceBet = async () => {
-    if (!isAuthenticated || !selectedTeam || !stakeValue) {
+    if (!isAuthenticated || (!selectedTeam && !isMarketRunnerSelection)) {
       return;
     }
 
@@ -314,34 +339,52 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
       return;
     }
 
-    // Ab yaha se balance - exposure check mat karo
-    // Kyunki backend already exact net exposure calculate karke reject/accept karega
-
-    // Extract market information
-    const market = selectedGame?.markets?.matchOdds?.[0];
-    const marketType = market?.marketType || "matchOdds";
-    const marketName = market?.marketName || "Match Odds";
-
     try {
-      // Dispatch action or call API
-      dispatch(updateUserBalanceExposure({
-        balance: parseFloat(userData?.balance) || 0,  // current balance as reference
-        eventId: selectedGame?.eventId || null,
-        marketId: market?.marketId || null,
-        is_clear: false,
-        marketType: marketType,
-        stake: stake,
-        sportsid: selectedGame?.sportId || null,
-        runnerid: getRunnerIdForSelectedTeam(selectedGame, selectedTeam),
-        runnername: selectedTeam,
-        odds: selectedOdd,
-        competitionId: selectedGame?.competitionId || null,
-        competitionName: selectedGame?.competitionName || null,
-        marketName: marketName,
-        runners: market?.runners?.map(runner => runner.runnerName) || []
-      }));
+      if (isMarketRunnerSelection) {
+        // Handle market runner bet
+        const market = selectedGame.selectedMarket;
+        const runner = selectedGame.selectedRunner;
+        
+        dispatch(updateUserBalanceExposure({
+          balance: parseFloat(userData?.balance) || 0,
+          eventId: selectedGame?.eventId || null,
+          marketId: market?.marketId || null,
+          is_clear: false,
+          marketType: market?.marketType || "matchOdds",
+          stake: stake,
+          sportsid: selectedGame?.sportId || null,
+          runnerid: runner?.runnerId || null,
+          runnername: runner?.runnerName || null,
+          odds: selectedGame?.selectedOdd || null,
+          competitionId: selectedGame?.competitionId || null,
+          competitionName: selectedGame?.competitionName || null,
+          marketName: market?.marketName || null,
+          runners: market?.runners?.map(r => r.runnerName) || []
+        }));
+      } else {
+        // Handle default match odds bet (existing logic)
+        const market = selectedGame?.markets?.matchOdds?.[0];
+        const marketType = market?.marketType || "matchOdds";
+        const marketName = market?.marketName || "Match Odds";
+
+        dispatch(updateUserBalanceExposure({
+          balance: parseFloat(userData?.balance) || 0,
+          eventId: selectedGame?.eventId || null,
+          marketId: market?.marketId || null,
+          is_clear: false,
+          marketType: marketType,
+          stake: stake,
+          sportsid: selectedGame?.sportId || null,
+          runnerid: getRunnerIdForSelectedTeam(selectedGame, selectedTeam),
+          runnername: selectedTeam,
+          odds: selectedOdd,
+          competitionId: selectedGame?.competitionId || null,
+          competitionName: selectedGame?.competitionName || null,
+          marketName: marketName,
+          runners: market?.runners?.map(runner => runner.runnerName) || []
+        }));
+      }
     } catch (err) {
-      // Backend se jo error aayega (e.g., "Insufficient balance") wo direct frontend pe dikhado
       notifyError(err.message || "Failed to place bet");
     }
   };
@@ -352,14 +395,19 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
       setSelectedTeam(null);
       setSelectedOdd(null);
       setStakeValue('');
+      // Don't reset market runner selection here
     } else if (exposureError) {
     }
   }, [exposureLoading, exposureError]);
 
   const calculatePossibleWin = () => {
-    if (!stakeValue || !selectedOdd || isNaN(stakeValue) || selectedOdd === "-" || isNaN(parseFloat(selectedOdd))) return '0.00';
+    // Check if this is a market runner selection
+    const isMarketRunnerSelection = selectedGame?.selectedMarket && selectedGame?.selectedRunner;
+    const oddsValue = isMarketRunnerSelection ? selectedGame?.selectedOdd : selectedOdd;
+    
+    if (!stakeValue || !oddsValue || isNaN(stakeValue) || oddsValue === "-" || isNaN(parseFloat(oddsValue))) return '0.00';
     const stake = parseFloat(stakeValue);
-    const odd = parseFloat(selectedOdd);
+    const odd = parseFloat(oddsValue);
     if (isNaN(stake) || isNaN(odd)) return '0.00';
     const possibleWin = (odd - 1) * stake;
     return possibleWin.toFixed(2);
@@ -367,6 +415,35 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
 
   useEffect(() => {
     if (selectedGame) {
+      // For market runner selections, update the odds in real-time
+      if (selectedGame.selectedMarket && selectedGame.selectedRunner) {
+        // Find the current odds for the selected runner
+        const market = selectedGame.selectedMarket;
+        const runner = selectedGame.selectedRunner;
+        
+        if (market.runners) {
+          const updatedRunner = market.runners.find(r => r && r.runnerId === runner.runnerId);
+          if (updatedRunner && updatedRunner.backPrices && updatedRunner.backPrices.length > 0) {
+            const newOdds = updatedRunner.backPrices[0].price;
+            if (newOdds !== undefined && newOdds !== null) {
+              const formattedOdds = typeof newOdds === "number" ? newOdds.toFixed(2) : newOdds.toString();
+              
+              // Only update if odds have changed
+              if (formattedOdds !== selectedOdd) {
+                setSelectedOdd(formattedOdds);
+                
+                // Highlight the odds change
+                setHighlightedOdds(prev => ({ ...prev, selected: true }));
+                setTimeout(() => {
+                  setHighlightedOdds(prev => ({ ...prev, selected: false }));
+                }, 1000);
+              }
+            }
+          }
+        }
+      }
+      
+      // For regular match odds, keep existing logic
       const w1Odds = extractW1Odds(selectedGame.markets, selectedGame.odds);
       const xOdds = extractXOdds(selectedGame.markets, selectedGame.odds);
       const w2Odds = extractW2Odds(selectedGame.markets, selectedGame.odds);
@@ -412,6 +489,9 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
   }
 
   if (isCompact) {
+    // Check if this is a market runner selection
+    // Remove duplicate declarations since they're already declared above
+
     return (
       <div className="p-2.5 m-1.5 bg-live-primary rounded-lg border border-live-accent shadow-live flex flex-col gap-2 text-live-primary">
         <div className="space-y-1.5">
@@ -439,94 +519,121 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
 
           <div className="bg-live-tertiary px-2 py-1 rounded border border-live">
             <div className="text-[10px] mb-1 font-bold text-live-primary">{selectedGame?.competitionName}</div>
+            
+            {/* Display market name for both left section and middle section selections */}
+            <div className="text-[9px] mb-1 font-medium text-live-accent opacity-80">
+              {marketName}
+            </div>
 
-            <div className="flex flex-col gap-1 my-1">
-              <div
-                className={`flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team1
-                    ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]'
-                    : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
-                  }`}
-                onClick={() => {
-                  const w1Odds = extractW1Odds(selectedGame?.markets, selectedGame?.odds);
-                  if (w1Odds !== '-') {
-                    handleTeamSelect(selectedGame?.team1, w1Odds);
-                  }
-                }}
-              >
-                <span className={`font-medium text-[9px] truncate ${selectedTeam === selectedGame?.team1 ? 'text-white' : 'text-live-primary'}`}>
-                  {selectedGame?.team1}
-                </span>
+            {/* Display runners based on selection type */}
+            {isMarketRunnerSelection ? (
+              // Market runner selection view
+              <div className="flex flex-col gap-1 my-1">
                 <div
-                  className={`min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] ${selectedTeam === selectedGame?.team1
-                      ? 'bg-live-dark text-live-accent border border-live-accent'
-                      : 'bg-live-odds text-live-accent border border-live'
-                    } ${highlightedOdds.w1 ? 'odds-highlight' : ''
-                    }`}
+                  className={`flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]`}
                 >
-                  {extractW1Odds(selectedGame?.markets, selectedGame?.odds)}
+                  <span className="font-medium text-[9px] truncate text-white">
+                    {selectedGame.selectedRunner.runnerName}
+                  </span>
+                  <div className="min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] bg-live-dark text-live-accent border border-live-accent">
+                    {selectedGame.selectedOdd}
+                  </div>
                 </div>
               </div>
-
-              {extractXOdds(selectedGame?.markets, selectedGame?.odds) !== '-' && (
+            ) : (
+              // Default match odds view
+              <div className="flex flex-col gap-1 my-1">
                 <div
-                  className={`flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${selectedTeam === 'Draw'
+                  className={`flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team1
                       ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]'
                       : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
                     }`}
                   onClick={() => {
-                    const xOdds = extractXOdds(selectedGame?.markets, selectedGame?.odds);
-                    if (xOdds !== '-') {
-                      handleTeamSelect('Draw', xOdds);
+                    const w1Odds = extractW1Odds(selectedGame?.markets, selectedGame?.odds);
+                    if (w1Odds !== '-') {
+                      handleTeamSelect(selectedGame?.team1, w1Odds);
                     }
                   }}
                 >
-                  <span className={`font-medium text-[9px] truncate ${selectedTeam === 'Draw' ? 'text-white' : 'text-live-primary'}`}>
-                    Draw
+                  <span className={`font-medium text-[9px] truncate ${selectedTeam === selectedGame?.team1 ? 'text-white' : 'text-live-primary'}`}>
+                    {selectedGame?.team1}
                   </span>
                   <div
-                    className={`min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] ${selectedTeam === 'Draw'
+                    className={`min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] ${selectedTeam === selectedGame?.team1
                         ? 'bg-live-dark text-live-accent border border-live-accent'
                         : 'bg-live-odds text-live-accent border border-live'
-                      } ${highlightedOdds.x ? 'odds-highlight' : ''
+                      } ${highlightedOdds.w1 ? 'odds-highlight' : ''
                       }`}
                   >
-                    {extractXOdds(selectedGame?.markets, selectedGame?.odds)}
+                    {extractW1Odds(selectedGame?.markets, selectedGame?.odds)}
                   </div>
                 </div>
-              )}
 
-              <div
-                className={`flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team2
-                    ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]'
-                    : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
-                  }`}
-                onClick={() => {
-                  const w2Odds = extractW2Odds(selectedGame?.markets, selectedGame?.odds);
-                  if (w2Odds !== '-') {
-                    handleTeamSelect(selectedGame?.team2, w2Odds);
-                  }
-                }}
-              >
-                <span className={`font-medium text-[9px] truncate ${selectedTeam === selectedGame?.team2 ? 'text-white' : 'text-live-primary'}`}>
-                  {selectedGame?.team2}
-                </span>
+                {extractXOdds(selectedGame?.markets, selectedGame?.odds) !== '-' && (
+                  <div
+                    className={`flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${selectedTeam === 'Draw'
+                        ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]'
+                        : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
+                      }`}
+                    onClick={() => {
+                      const xOdds = extractXOdds(selectedGame?.markets, selectedGame?.odds);
+                      if (xOdds !== '-') {
+                        handleTeamSelect('Draw', xOdds);
+                      }
+                    }}
+                  >
+                    <span className={`font-medium text-[9px] truncate ${selectedTeam === 'Draw' ? 'text-white' : 'text-live-primary'}`}>
+                      Draw
+                    </span>
+                    <div
+                      className={`min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] ${selectedTeam === 'Draw'
+                          ? 'bg-live-dark text-live-accent border border-live-accent'
+                          : 'bg-live-odds text-live-accent border border-live'
+                        } ${highlightedOdds.x ? 'odds-highlight' : ''
+                        }`}
+                    >
+                      {extractXOdds(selectedGame?.markets, selectedGame?.odds)}
+                    </div>
+                  </div>
+                )}
+
                 <div
-                  className={`min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] ${selectedTeam === selectedGame?.team2
-                      ? 'bg-live-dark text-live-accent border border-live-accent'
-                      : 'bg-live-odds text-live-accent border border-live'
-                    } ${highlightedOdds.w2 ? 'odds-highlight' : ''
+                  className={`flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team2
+                      ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]'
+                      : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
                     }`}
+                  onClick={() => {
+                    const w2Odds = extractW2Odds(selectedGame?.markets, selectedGame?.odds);
+                    if (w2Odds !== '-') {
+                      handleTeamSelect(selectedGame?.team2, w2Odds);
+                    }
+                  }}
                 >
-                  {extractW2Odds(selectedGame?.markets, selectedGame?.odds)}
+                  <span className={`font-medium text-[9px] truncate ${selectedTeam === selectedGame?.team2 ? 'text-white' : 'text-live-primary'}`}>
+                    {selectedGame?.team2}
+                  </span>
+                  <div
+                    className={`min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] ${selectedTeam === selectedGame?.team2
+                        ? 'bg-live-dark text-live-accent border border-live-accent'
+                        : 'bg-live-odds text-live-accent border border-live'
+                      } ${highlightedOdds.w2 ? 'odds-highlight' : ''
+                      }`}
+                  >
+                    {extractW2Odds(selectedGame?.markets, selectedGame?.odds)}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
-            <div className="text-[10px] text-live-secondary mb-1">{selectedGame?.team1} - {selectedGame?.team2}</div>
+            <div className="text-[10px] text-live-secondary mb-1">
+              {isMarketRunnerSelection 
+                ? `${selectedGame?.team1} - ${selectedGame?.team2}` 
+                : `${selectedGame?.team1} - ${selectedGame?.team2}`}
+            </div>
             <div className="text-[10px] text-live-secondary">{formatDateTime(selectedGame?.openDate)}</div>
           </div>
 
-          {selectedTeam && (
+          {(selectedTeam || isMarketRunnerSelection) && (
             <>
               <div className="bg-live-tertiary px-2 py-1 rounded border border-live">
                 <input
@@ -545,7 +652,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
             </>
           )}
 
-          {selectedTeam && (
+          {(selectedTeam || isMarketRunnerSelection) && (
             <div className="flex gap-1.5" ref={containerRef}>
               {betAmounts.map((amount, index) => (
                 <div key={index} className="flex-1">
@@ -645,94 +752,121 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
       <div className="space-y-1.5">
         <div className="bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
           <div className="text-xs mb-1 font-bold text-live-primary">{selectedGame?.competitionName}</div>
+          
+          {/* Display market name for both left section and middle section selections */}
+          <div className="text-[9px] mb-1 font-medium text-live-accent opacity-80">
+            {marketName}
+          </div>
 
-          <div className="flex flex-col gap-2 my-2">
-            <div
-              className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team1
-                  ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]'
-                  : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
-                }`}
-              onClick={() => {
-                const w1Odds = extractW1Odds(selectedGame?.markets, selectedGame?.odds);
-                if (w1Odds !== '-') {
-                  handleTeamSelect(selectedGame?.team1, w1Odds);
-                }
-              }}
-            >
-              <span className={`font-medium text-xs truncate ${selectedTeam === selectedGame?.team1 ? 'text-white' : 'text-live-primary'}`}>
-                {selectedGame?.team1}
-              </span>
+          {/* Display runners based on selection type */}
+          {isMarketRunnerSelection ? (
+            // Market runner selection view
+            <div className="flex flex-col gap-2 my-2">
               <div
-                className={`min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === selectedGame?.team1
-                    ? 'bg-live-dark text-live-accent border border-live-accent'
-                    : 'bg-live-odds text-live-accent border border-live'
-                  } ${highlightedOdds.w1 ? 'odds-highlight' : ''
-                  }`}
+                className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]`}
               >
-                {extractW1Odds(selectedGame?.markets, selectedGame?.odds)}
+                <span className="font-medium text-xs truncate text-white">
+                  {selectedGame.selectedRunner.runnerName}
+                </span>
+                <div className="min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs bg-live-dark text-live-accent border border-live-accent">
+                  {selectedGame.selectedOdd}
+                </div>
               </div>
             </div>
-
-            {extractXOdds(selectedGame?.markets, selectedGame?.odds) !== '-' && (
+          ) : (
+            // Default match odds view
+            <div className="flex flex-col gap-2 my-2">
               <div
-                className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${selectedTeam === 'Draw'
+                className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team1
                     ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]'
                     : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
                   }`}
                 onClick={() => {
-                  const xOdds = extractXOdds(selectedGame?.markets, selectedGame?.odds);
-                  if (xOdds !== '-') {
-                    handleTeamSelect('Draw', xOdds);
+                  const w1Odds = extractW1Odds(selectedGame?.markets, selectedGame?.odds);
+                  if (w1Odds !== '-') {
+                    handleTeamSelect(selectedGame?.team1, w1Odds);
                   }
                 }}
               >
-                <span className={`font-medium text-xs truncate ${selectedTeam === 'Draw' ? 'text-white' : 'text-live-primary'}`}>
-                  Draw
+                <span className={`font-medium text-xs truncate ${selectedTeam === selectedGame?.team1 ? 'text-white' : 'text-live-primary'}`}>
+                  {selectedGame?.team1}
                 </span>
                 <div
-                  className={`min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === 'Draw'
+                  className={`min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === selectedGame?.team1
                       ? 'bg-live-dark text-live-accent border border-live-accent'
                       : 'bg-live-odds text-live-accent border border-live'
-                    } ${highlightedOdds.x ? 'odds-highlight' : ''
+                    } ${highlightedOdds.w1 ? 'odds-highlight' : ''
                     }`}
                 >
-                  {extractXOdds(selectedGame?.markets, selectedGame?.odds)}
+                  {extractW1Odds(selectedGame?.markets, selectedGame?.odds)}
                 </div>
               </div>
-            )}
 
-            <div
-              className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team2
-                  ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]'
-                  : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
-                }`}
-              onClick={() => {
-                const w2Odds = extractW2Odds(selectedGame?.markets, selectedGame?.odds);
-                if (w2Odds !== '-') {
-                  handleTeamSelect(selectedGame?.team2, w2Odds);
-                }
-              }}
-            >
-              <span className={`font-medium text-xs truncate ${selectedTeam === selectedGame?.team2 ? 'text-white' : 'text-live-primary'}`}>
-                {selectedGame?.team2}
-              </span>
+              {extractXOdds(selectedGame?.markets, selectedGame?.odds) !== '-' && (
+                <div
+                  className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${selectedTeam === 'Draw'
+                      ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]'
+                      : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
+                    }`}
+                  onClick={() => {
+                    const xOdds = extractXOdds(selectedGame?.markets, selectedGame?.odds);
+                    if (xOdds !== '-') {
+                      handleTeamSelect('Draw', xOdds);
+                    }
+                  }}
+                >
+                  <span className={`font-medium text-xs truncate ${selectedTeam === 'Draw' ? 'text-white' : 'text-live-primary'}`}>
+                    Draw
+                  </span>
+                  <div
+                    className={`min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === 'Draw'
+                        ? 'bg-live-dark text-live-accent border border-live-accent'
+                        : 'bg-live-odds text-live-accent border border-live'
+                      } ${highlightedOdds.x ? 'odds-highlight' : ''
+                      }`}
+                  >
+                    {extractXOdds(selectedGame?.markets, selectedGame?.odds)}
+                  </div>
+                </div>
+              )}
+
               <div
-                className={`min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === selectedGame?.team2
-                    ? 'bg-live-dark text-live-accent border border-live-accent'
-                    : 'bg-live-odds text-live-accent border border-live'
-                  } ${highlightedOdds.w2 ? 'odds-highlight' : ''
+                className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team2
+                    ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]'
+                    : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
                   }`}
+                onClick={() => {
+                  const w2Odds = extractW2Odds(selectedGame?.markets, selectedGame?.odds);
+                  if (w2Odds !== '-') {
+                    handleTeamSelect(selectedGame?.team2, w2Odds);
+                  }
+                }}
               >
-                {extractW2Odds(selectedGame?.markets, selectedGame?.odds)}
+                <span className={`font-medium text-xs truncate ${selectedTeam === selectedGame?.team2 ? 'text-white' : 'text-live-primary'}`}>
+                  {selectedGame?.team2}
+                </span>
+                <div
+                  className={`min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === selectedGame?.team2
+                      ? 'bg-live-dark text-live-accent border border-live-accent'
+                      : 'bg-live-odds text-live-accent border border-live'
+                    } ${highlightedOdds.w2 ? 'odds-highlight' : ''
+                    }`}
+                >
+                  {extractW2Odds(selectedGame?.markets, selectedGame?.odds)}
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
-          <div className="text-xs text-live-secondary mb-1">{selectedGame?.team1} - {selectedGame?.team2}</div>
+          <div className="text-xs text-live-secondary mb-1">
+            {isMarketRunnerSelection 
+              ? `${selectedGame?.team1} - ${selectedGame?.team2}` 
+              : `${selectedGame?.team1} - ${selectedGame?.team2}`}
+          </div>
           <div className="text-xs text-live-secondary">{formatDateTime(selectedGame?.openDate)}</div>
         </div>
 
-        {selectedTeam && (
+        {(selectedTeam || isMarketRunnerSelection) && (
           <>
             <div className="bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
               <input
@@ -751,7 +885,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           </>
         )}
 
-        {selectedTeam && (
+        {(selectedTeam || isMarketRunnerSelection) && (
           <div className="flex gap-1.5" ref={containerRef}>
             {betAmounts.map((amount, index) => (
               <div key={index} className="flex-1">
@@ -797,11 +931,11 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
         )}
 
         <button
-          className={`w-full px-2.5 py-1.5 rounded text-sm font-bold transition-colors cursor-pointer color-yellowborder-solid transition-all duration-200 ${isAuthenticated && selectedTeam
+          className={`w-full px-2.5 py-1.5 rounded text-sm font-bold transition-colors cursor-pointer color-yellowborder-solid transition-all duration-200 ${isAuthenticated && (selectedTeam || isMarketRunnerSelection)
               ? 'bg-live-accent hover:bg-live-warning border border-live-accent text-live-accent hover:text-live-dark hover:scale-[1.02] hover:shadow-[0_0_8px_var(--live-accent-primary)]'
               : 'bg-live-tertiary border border-live text-live-accent cursor-not-allowed opacity-50'
             }`}
-          disabled={!isAuthenticated || !selectedTeam}
+          disabled={!isAuthenticated || (!selectedTeam && !isMarketRunnerSelection)}
           onClick={handlePlaceBet}
         >
           BET

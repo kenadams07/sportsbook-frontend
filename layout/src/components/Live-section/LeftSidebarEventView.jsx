@@ -53,6 +53,65 @@ function extractOddsW1W2(markets) {
   };
 }
 
+// Function to filter matches based on search term
+function filterMatches(matches, searchTerm) {
+  if (!searchTerm) return matches;
+  
+  const normalizedSearch = normalize(searchTerm);
+  return matches.filter(match => {
+    // Check event name (teams)
+    if (match.eventName && normalize(match.eventName).includes(normalizedSearch)) {
+      return true;
+    }
+    
+    // Check competition name
+    if (match.competitionName && normalize(match.competitionName).includes(normalizedSearch)) {
+      return true;
+    }
+    
+    // Check sport name
+    if (match.sportName && normalize(match.sportName).includes(normalizedSearch)) {
+      return true;
+    }
+    
+    // Check if search term matches a date pattern (simplified)
+    if (match.openDate) {
+      const date = new Date(match.openDate);
+      const dateStr = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear().toString().slice(-2)}`;
+      if (dateStr.includes(searchTerm)) {
+        return true;
+      }
+      
+      // Also check for full date format
+      const fullDateStr = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+      if (fullDateStr.includes(searchTerm)) {
+        return true;
+      }
+    }
+    
+    return false;
+  });
+}
+
+// Function to filter sports based on search term
+function filterSports(sports, matchesBySport, searchTerm) {
+  if (!searchTerm) return sports;
+  
+  const normalizedSearch = normalize(searchTerm);
+  
+  // Filter sports that match the search term
+  return sports.filter(sport => {
+    // Check if sport name matches (e.g., "Basketball" when searching for "Basket")
+    if (sport.sportNames.some(name => normalize(name).includes(normalizedSearch))) {
+      return true;
+    }
+    
+    // Check if any matches in this sport match the search term
+    const matches = matchesBySport[sport.key] || [];
+    return filterMatches(matches, searchTerm).length > 0;
+  });
+}
+
 export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setSelectedSport = () => {}, selectedMatch, onSelectedMatchOddsUpdate = () => {} }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -65,7 +124,25 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
   const [scoresByEventId, setScoresByEventId] = useState({}); // New state for scores
   const [highlightedOdds, setHighlightedOdds] = useState({});
   const [pendingSelection, setPendingSelection] = useState(null); // Track pending game selection
+  const [placeholderIndex, setPlaceholderIndex] = useState(0); // For animated placeholder
   const oddsPrevRef = useRef({});
+  const placeholderIntervalRef = useRef(null);
+
+  // Animated placeholder texts
+  const placeholderTexts = ["competition", "team", "date"];
+  
+  // Set up animated placeholder
+  useEffect(() => {
+    placeholderIntervalRef.current = setInterval(() => {
+      setPlaceholderIndex(prev => (prev + 1) % placeholderTexts.length);
+    }, 1000);
+    
+    return () => {
+      if (placeholderIntervalRef.current) {
+        clearInterval(placeholderIntervalRef.current);
+      }
+    };
+  }, []);
 
   // Set selectedType based on location state
   useEffect(() => {
@@ -138,7 +215,13 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
         if (!sportId) return;
         fetchSportsEvents(sportId, selectedType === "live")
           .then((json) => {
-            const list = json?.sports ?? [];
+            // Check if we received valid data before processing
+            if (!json || !Array.isArray(json.sports)) {
+              console.warn(`Invalid data received for sport ${sportKey}, skipping update`);
+              return;
+            }
+            
+            const list = json.sports;
             const oddsMap = { ...oddsByEventId };
             const scoresMap = { ...scoresByEventId }; // New scores map
             const highlights = { ...highlightedOdds };
@@ -148,7 +231,9 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
               oddsMap[e.eventId] = newOdds;
               scoresMap[e.eventId] = { // Update scores
                 homeScore: e.homeScore || 0,
-                awayScore: e.awayScore || 0
+                awayScore: e.awayScore || 0,
+                halfTimeScore: e.halfTimeScore || null,
+                currentTime: e.currentTime || null
               };
               highlights[e.eventId] = {
                 w1: prevOdds.w1 !== newOdds.w1,
@@ -156,11 +241,18 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
               };
               
               // If this is the currently selected match, update its odds
+              // But only update the basic match data, not overwrite market runner selections
               if (selectedMatch && selectedMatch.eventId === e.eventId) {
                 onSelectedMatchOddsUpdate({
                   ...selectedMatch,
                   odds: newOdds,
-                  markets: e.markets
+                  markets: e.markets,
+                  homeScore: e.homeScore || 0,
+                  awayScore: e.awayScore || 0,
+                  halfTimeScore: e.halfTimeScore || null,
+                  currentTime: e.currentTime || null,
+                  status: e.status || selectedMatch.status
+                  // Preserve selectedMarket and selectedRunner if they exist
                 });
               }
             }
@@ -174,11 +266,29 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
           })
           .catch(error => {
             console.error(`Error polling odds for sport ${sportKey}:`, error);
+            // Don't stop polling on error, just log it
           });
       });
     }
-    intervalId = setInterval(pollOdds, 1000);
-    return () => clearInterval(intervalId);
+    
+    // Add error handling for the interval setup
+    try {
+      intervalId = setInterval(() => {
+        try {
+          pollOdds();
+        } catch (error) {
+          console.error("Error in pollOdds interval:", error);
+        }
+      }, 1000);
+    } catch (error) {
+      console.error("Error setting up polling interval:", error);
+    }
+    
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
   }, [selectedType, oddsByEventId, scoresByEventId, expanded, selectedMatch, onSelectedMatchOddsUpdate]);
 
   const toggleExpand = (sportKey) => {
@@ -258,10 +368,15 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
           
           // Select the first game of the first sport with matches (only if no match is already selected)
           if (!selectedMatch) {
+            const firstMatch = matches[0];
+            const team1 = firstMatch.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
+            const team2 = firstMatch.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
             setSelectedMatch({
-              ...matches[0],
-              team1: matches[0].eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '',
-              team2: matches[0].eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '',
+              ...firstMatch,
+              team1,
+              team2,
+              // Ensure sportKey is included for markets API call
+              sportKey: sport.key
             });
             setSelectedSport(sport);
           }
@@ -299,6 +414,9 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
     }
   }, [matchesBySport, pendingSelection, setSelectedMatch, location.pathname]);
 
+  // Filter sports and matches based on search term
+  const filteredSports = filterSports(SPORTS, matchesBySport, search);
+
   return (
     <aside className="flex-1 bg-live-secondary h-full flex flex-col p-2 min-w-0">
       {/* Toggle Buttons */}
@@ -328,16 +446,28 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
           Prematch
         </Button>
       </div>
-      {/* Search Bar */}
-      <div className="mb-3 flex items-center gap-2 bg-live-tertiary rounded px-2 py-1">
-        <Search className="w-5 h-5 text-live-muted" />
-        <input
-          type="text"
-          placeholder="Search for a competition or team"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="bg-transparent outline-none text-sm text-live-primary flex-1 py-1 px-2"
-        />
+      {/* Search Bar with Animated Placeholder */}
+      <div className="mb-3 flex items-center bg-live-tertiary rounded px-2 py-1 relative">
+        <Search className="w-5 h-5 text-live-muted flex-shrink-0 mr-2" />
+        <div className="relative flex-1">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder=""
+            className="bg-transparent outline-none text-sm text-live-primary w-full py-1 relative z-10"
+          />
+          {!search && (
+            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 pointer-events-none flex items-center">
+              <span className="text-live-muted text-sm">Search for a </span>
+              <span className="text-live-muted text-sm inline-block w-20 h-5 overflow-hidden ml-1">
+                <span className="inline-block animate-slide-up">
+                  {placeholderTexts[placeholderIndex]}
+                </span>
+              </span>
+            </div>
+          )}
+        </div>
       </div>
       {/* Icon Buttons */}
       <div className="flex gap-2 mb-3 px-1">
@@ -350,10 +480,13 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
       </div>
       {/* Sports Accordions */}
       <div className="flex-1 overflow-y-auto custom-scrollbar pr-1">
-        {SPORTS.map((sport) => {
+        {filteredSports.map((sport) => {
           const Icon = sport.icon;
-          const matches = matchesBySport[sport.key] || [];
-          const matchCount = matches.length;
+          // Filter matches based on search term
+          const allMatches = matchesBySport[sport.key] || [];
+          const filteredMatches = filterMatches(allMatches, search);
+          const matchCount = filteredMatches.length;
+          
           return (
             <div key={sport.key} className="mb-2 bg-live-tertiary rounded">
               <div
@@ -380,7 +513,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
                     ) : matchCount === 0 ? (
                       <div className="text-xs text-live-muted px-2 py-2">No matches</div>
                     ) : (
-                      matches.map((match, idx) => {
+                      filteredMatches.map((match, idx) => {
                         // Robustly extract team names
                         let team1 = '';
                         let team2 = '';
@@ -406,6 +539,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
                             odds={odds}
                             league={match.competitionName}
                             sport={sport.key}
+                            sportKey={sport.key} // Pass sportKey for markets API call
                             highlight={isSelected}
                             oddsHighlight={highlight}
                             onClick={() => {
@@ -416,6 +550,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
                                 team1,
                                 team2,
                                 odds: latestOdds, // Include the latest odds in the selected match data
+                                sportKey: sport.key // Include sportKey for markets API call
                               });
                               setSelectedSport(sport);
                             }}

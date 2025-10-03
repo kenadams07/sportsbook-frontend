@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { IoSearchOutline, IoCloseOutline, IoChevronDown, IoChevronUp } from "react-icons/io5";
+import { SPORT_ID_BY_KEY } from "../../utils/CommonExports";
+import { fetchMarketsData } from "../../utils/sportsEventsApi";
 
 const sportImageMap = {
   soccer: "/assets/img1.jpg",
@@ -13,7 +15,17 @@ const sportImageMap = {
   volleyball: "/assets/img4.jpg",
 };
 
-export default function MiddleGameDisplay({ match, sport, marketItems }) {
+export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
+  };
+
+  const handleSearchClear = () => {
+    setSearchTerm('');
+  };
+
   if (!match || !sport) {
     return (
       <div className="flex items-center justify-center h-full text-live-muted text-sm">
@@ -48,8 +60,8 @@ export default function MiddleGameDisplay({ match, sport, marketItems }) {
 
   return (
     <div className="p-2 flex flex-col gap-4 h-full min-w-0">
-      {/* Top Section with Background Image */}
-      <div className="relative w-full h-64 rounded-md overflow-hidden">
+      {/* Top Section with Background Image - Fixed height, always visible */}
+      <div className="relative w-full h-64 rounded-md overflow-hidden flex-shrink-0">
         {/* Background Image */}
          <img
           src={imageSrc}
@@ -72,12 +84,10 @@ export default function MiddleGameDisplay({ match, sport, marketItems }) {
               <span className="text-live-primary text-sm font-medium">{match.competitionName || 'League'}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-live-dark text-xs px-2 py-1 bg-live-accent rounded">
-                {match.status === 'IN_PLAY' ? '2nd Half' : match.status}
+              <span className={`text-live-dark text-xs px-2 py-1 bg-live-accent rounded ${match.status === 'IN_PLAY' ? 'animate-pulse-highlight in-play-golden' : ''}`}>
+                {match.status === 'IN_PLAY' ? 'IN PLAY' : (match.status || 'N/A')}
               </span>
-              <span className="text-live-accent text-lg font-bold">
-                {match.status === 'IN_PLAY' ? '81' : '0'}
-              </span>
+           
             </div>
           </div>
 
@@ -99,7 +109,7 @@ export default function MiddleGameDisplay({ match, sport, marketItems }) {
               {/* Center - Score display */}
               <div className="text-center">
                 <div className="text-live-primary text-lg font-bold">
-                  {homeScore}-{awayScore} (2-1) (1-1) 81'
+                  {homeScore}-{awayScore} {match.status === 'IN_PLAY' ? (match.halfTimeScore ? `(${match.halfTimeScore})` : '') : ''} {match.status === 'IN_PLAY' ? (match.currentTime ? `${match.currentTime}'` : '') : ''}
                 </div>
               </div>
 
@@ -129,10 +139,168 @@ export default function MiddleGameDisplay({ match, sport, marketItems }) {
       </div>
 
       {/* Sleek Navbar Below Image */}
-      <SleekNavbar />
+      <SleekNavbar 
+        onSearchChange={handleSearchChange}
+        searchValue={searchTerm}
+        onSearchClear={handleSearchClear}
+      />
 
-      {/* Market Section */}
-      <MarketSection marketItems={marketItems} />
+      {/* Market Section - Scrollable area */}
+      <div className="flex-grow overflow-hidden flex flex-col">
+        <MarketSection 
+          selectedMatch={match} 
+          onRunnerSelect={onRunnerSelect}
+          searchTerm={searchTerm}
+        />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * MarketItem Component - Displays a single market with its runners and odds
+ */
+function MarketItem({ market, isOpen, onToggle, highlightedOdds = {}, onRunnerSelect, selectedMatch }) {
+  const contentRef = useRef(null);
+  const [measuredHeight, setMeasuredHeight] = useState(0);
+
+  // Measure content height for smooth animation
+  useEffect(() => {
+    if (contentRef.current) {
+      setMeasuredHeight(contentRef.current.scrollHeight);
+    }
+  }, [isOpen, market.runners]);
+
+  // Extract odds from back prices
+  const getOdds = (runner) => {
+    if (!runner || runner.status === "SUSPENDED") return "SUSPENDED";
+    const backPrice = runner.backPrices?.[0]?.price;
+    return typeof backPrice === "number" ? backPrice.toFixed(2) : "-";
+  };
+
+  // Check if odds have changed for highlighting
+  const isOddsHighlighted = (runner, oddsValue) => {
+    if (!runner || !highlightedOdds[runner.runnerName]) return false;
+    return highlightedOdds[runner.runnerName] === oddsValue;
+  };
+
+  // Check if this runner is currently selected
+  const isSelectedRunner = (runner) => {
+    if (!selectedMatch || !selectedMatch.selectedRunner || !runner) return false;
+    return selectedMatch.selectedRunner.runnerId === runner.runnerId;
+  };
+
+  // Effect to update selected runner odds when they change
+  useEffect(() => {
+    // If this runner is selected and odds have changed, notify parent
+    if (selectedMatch && selectedMatch.selectedRunner && selectedMatch.selectedMarket && market) {
+      const runner = market.runners?.find(r => r && r.runnerId === selectedMatch.selectedRunner.runnerId);
+      const isSelected = isSelectedRunner(runner);
+      if (isSelected && market.marketId === selectedMatch.selectedMarket.marketId) {
+        if (runner) {
+          const newOdds = getOdds(runner);
+          // Only update if odds have actually changed
+          if (newOdds !== selectedMatch.selectedOdd && newOdds !== "SUSPENDED" && newOdds !== "-") {
+            // Update the selected runner with new odds
+            onRunnerSelect({
+              ...selectedMatch,
+              selectedMarket: market,
+              selectedRunner: runner,
+              selectedOdd: newOdds
+            });
+          }
+        }
+      }
+    }
+  }, [market.runners, selectedMatch, market, onRunnerSelect]);
+
+  // Handle runner selection
+  const handleRunnerSelect = (runner) => {
+    if (onRunnerSelect && selectedMatch) {
+      const oddsValue = getOdds(runner);
+      if (oddsValue !== "SUSPENDED" && oddsValue !== "-") {
+        onRunnerSelect({
+          ...selectedMatch,
+          selectedMarket: market,
+          selectedRunner: runner,
+          selectedOdd: oddsValue
+        });
+      }
+    }
+  };
+
+  return (
+    <div className="transition-colors overflow-hidden bg-gradient-to-r from-live-primary to-live-tertiary shadow rounded">
+      {/* Market header */}
+      <button
+        type="button"
+        onClick={onToggle}
+        className="w-full flex items-center justify-between px-3 py-2.5 text-xs hover:bg-live-hover transition-colors"
+        aria-expanded={isOpen}
+      >
+        <div className="flex items-center gap-3">
+          <span className="text-live-accent text-xs">⭐</span>
+          <span className="text-live-primary font-medium truncate text-xs">{market.marketName}</span>
+        </div>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <span className="text-live-dark text-[10px] px-2 py-1 bg-live-accent rounded">🔗</span>
+          <span className="text-live-accent text-xs">{market.runners?.length || 0}</span>
+          <span className="text-live-accent text-sm">📊</span>
+          {isOpen ? <IoChevronUp className="w-4 h-4 text-live-primary" /> : <IoChevronDown className="w-4 h-4 text-live-primary" />}
+        </div>
+      </button>
+
+      {/* Market content */}
+      <div
+        style={{
+          maxHeight: isOpen ? `${measuredHeight}px` : "0px",
+          transition: "max-height 280ms ease, opacity 200ms ease",
+          overflow: "hidden",
+          backgroundColor: "var(--live-bg-tertiary)",
+          opacity: isOpen ? 1 : 0,
+        }}
+      >
+        <div ref={contentRef}>
+          <div className="px-3 pb-2.5 pt-1.5">
+            <ul className="text-xs text-live-primary space-y-1.5">
+              {market.runners && market.runners.length > 0 ? (
+                market.runners.map((runner, idx) => {
+                  const oddsValue = getOdds(runner);
+                  const isHighlighted = isOddsHighlighted(runner, oddsValue);
+                  const isSelected = isSelectedRunner(runner);
+                  
+                  return (
+                    <li
+                      key={`${market.marketId}-${runner.runnerId}`} // Use unique key
+                      className={`flex items-center justify-between py-1.5 px-2 bg-live-hover rounded cursor-pointer hover:bg-live-accent hover:bg-opacity-20 transition-colors ${
+                        runner.status === "SUSPENDED" ? "opacity-50 cursor-not-allowed" : ""
+                      } ${isSelected ? "ring-2 ring-live-accent" : ""}`}
+                      onClick={() => {
+                        if (runner.status !== "SUSPENDED") {
+                          handleRunnerSelect(runner);
+                        }
+                      }}
+                    >
+                      <span className="text-live-primary truncate text-xs">{runner.runnerName}</span>
+                      <span className={`text-xs px-2 py-1 rounded font-medium flex-shrink-0 ${
+                        runner.status === "SUSPENDED" 
+                          ? "bg-live-danger text-white" 
+                          : isHighlighted
+                            ? "odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110"
+                            : "bg-live-tertiary text-live-primary"
+                      }`}>
+                        {oddsValue}
+                      </span>
+                    </li>
+                  );
+                })
+              ) : (
+                <li className="px-2 py-1.5 text-live-secondary text-xs">No runners available</li>
+              )}
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -143,292 +311,270 @@ export default function MiddleGameDisplay({ match, sport, marketItems }) {
  * - Smooth expand/collapse by animating max-height using measured scrollHeight.
  * - Panel shell color: #3c3c3c, content background: #626262
  */
-function MarketSection({ marketItems }) {
-  // Dummy fallback data if not passed via props
-  const defaults = useMemo(
-    () => [
-      {
-        id: "match_winner",
-        title: "Match Winner",
-        rows: [
-          { label: "Team 1", value: "1.85" },
-          { label: "Draw", value: "3.20" },
-          { label: "Team 2", value: "2.05" },
-        ],
-      },
-      {
-        id: "total_goals",
-        title: "Total Goals",
-        rows: [
-          { label: "Over 2.5", value: "1.95" },
-          { label: "Under 2.5", value: "1.90" },
-        ],
-      },
-      {
-        id: "handicap",
-        title: "Handicap",
-        rows: [
-          { label: "Team 1 -1", value: "2.75" },
-          { label: "Team 2 +1", value: "1.45" },
-        ],
-      },
-      {
-        id: "btts",
-        title: "Both Teams to Score",
-        rows: [
-          { label: "Yes", value: "1.80" },
-          { label: "No", value: "1.95" },
-        ],
-      },
-      {
-        id: "correct_score",
-        title: "Correct Score",
-        rows: [
-          { label: "1-0", value: "7.50" },
-          { label: "1-1", value: "6.00" },
-          { label: "2-1", value: "9.00" },
-        ],
-      },
-      {
-        id: "first_half",
-        title: "First Half",
-        rows: [
-          { label: "Team 1", value: "2.40" },
-          { label: "Draw", value: "2.00" },
-          { label: "Team 2", value: "3.10" },
-        ],
-      },
-    ],
-    []
-  );
+function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
+  const [markets, setMarkets] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [expandedById, setExpandedById] = useState({});
+  const [allMarketsExpanded, setAllMarketsExpanded] = useState(false);
+  const prevMarketsRef = useRef([]);
+  const intervalRef = useRef(null);
+  const highlightedOddsRef = useRef({});
+  const selectedRunnerRef = useRef(null);
+  const prevSelectedMatchRef = useRef(null);
 
-  const items = Array.isArray(marketItems) && marketItems.length ? marketItems : defaults;
-
-  // Parent only toggles child states; the two-column layout preserves column positions
-  const [isMarketOpen, setIsMarketOpen] = useState(false);
-
-  // Track expanded state per child panel
-  const [expandedById, setExpandedById] = useState(() => {
-    const init = {};
-    items.forEach((it) => (init[it.id] = false));
-    return init;
-  });
-
-  // Reset child states when items change to keep them aligned with parent
+  // Store selected runner info
   useEffect(() => {
-    const next = {};
-    items.forEach((it) => (next[it.id] = isMarketOpen));
-    setExpandedById(next);
-  }, [items]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (selectedMatch && selectedMatch.selectedRunner) {
+      selectedRunnerRef.current = {
+        marketId: selectedMatch.selectedMarket?.marketId,
+        runnerId: selectedMatch.selectedRunner?.runnerId,
+        eventId: selectedMatch.eventId
+      };
+    }
+  }, [selectedMatch]);
 
-  // refs for measuring each panel's content height
-  const contentRefs = useRef({});
-  const [heights, setHeights] = useState({});
-
-  // Measure heights whenever items, expansion changes or window resizes
+  // Clear interval on unmount
   useEffect(() => {
-    const measure = () => {
-      const next = {};
-      items.forEach((it) => {
-        const node = contentRefs.current[it.id];
-        if (node) {
-          // If inner wrapper exists, read scrollHeight (full content height)
-          next[it.id] = node.scrollHeight;
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+
+  // Filter markets based on search term
+  const filteredMarkets = useMemo(() => {
+    if (!searchTerm) return markets;
+    
+    const term = searchTerm.toLowerCase().trim();
+    return markets.filter(market => 
+      market.marketName?.toLowerCase().includes(term) ||
+      market.runners?.some(runner => 
+        runner.runnerName?.toLowerCase().includes(term)
+      )
+    );
+  }, [markets, searchTerm]);
+
+  // Fetch markets data with polling optimization
+  useEffect(() => {
+    // Check if we're switching to a new match
+    const isNewMatch = !prevSelectedMatchRef.current || 
+                      (selectedMatch && prevSelectedMatchRef.current.eventId !== selectedMatch.eventId);
+    
+    // If switching to a new match, show loading state
+    if (isNewMatch && selectedMatch) {
+      setLoading(true);
+      // Clear previous markets immediately when switching matches
+      setMarkets([]);
+      prevMarketsRef.current = [];
+      // Reset expanded state for new match
+      setExpandedById({});
+      setAllMarketsExpanded(false);
+    }
+    
+    prevSelectedMatchRef.current = selectedMatch;
+
+    if (!selectedMatch || !selectedMatch.eventId || !selectedMatch.sportKey) {
+      setMarkets([]);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      setLoading(false);
+      return;
+    }
+
+    const fetchMarkets = async () => {
+      try {
+        const sportId = SPORT_ID_BY_KEY[selectedMatch.sportKey];
+        if (!sportId) {
+          setMarkets([]);
+          setLoading(false);
+          return;
         }
-      });
-      setHeights(next);
+
+        const marketsData = await fetchMarketsData(selectedMatch.eventId, sportId);
+        const newMarkets = Array.isArray(marketsData) ? marketsData : [];
+        
+        // Only update state if data has actually changed to prevent unnecessary re-renders
+        const prevMarkets = prevMarketsRef.current;
+        if (JSON.stringify(prevMarkets) !== JSON.stringify(newMarkets)) {
+          // Check for odds changes to highlight
+          const newHighlightedOdds = {};
+          newMarkets.forEach((market, marketIndex) => {
+            const prevMarket = prevMarkets[marketIndex];
+            if (prevMarket && market.runners) {
+              market.runners.forEach((runner, runnerIndex) => {
+                const prevRunner = prevMarket.runners?.[runnerIndex];
+                if (prevRunner && runner.backPrices?.[0]?.price !== prevRunner.backPrices?.[0]?.price) {
+                  newHighlightedOdds[runner.runnerName] = runner.backPrices?.[0]?.price?.toFixed(2) || '-';
+                }
+              });
+            }
+          });
+          
+          if (Object.keys(newHighlightedOdds).length > 0) {
+            highlightedOddsRef.current = newHighlightedOdds;
+            // Clear highlights after 1 second
+            setTimeout(() => {
+              highlightedOddsRef.current = {};
+            }, 1000);
+          }
+          
+          setMarkets(newMarkets);
+          prevMarketsRef.current = newMarkets;
+          
+          // Initialize all markets as collapsed by default (only for new matches)
+          if (isNewMatch && newMarkets.length > 0) {
+            const initialExpanded = {};
+            newMarkets.forEach((market, index) => {
+              initialExpanded[market.marketId || index] = false;
+            });
+            setExpandedById(initialExpanded);
+            setAllMarketsExpanded(false);
+          }
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching markets data:", error);
+        // Only reset markets if there was an actual error and we have previous data
+        // This prevents clearing the UI when there are temporary network issues
+        if (prevMarketsRef.current.length > 0) {
+          // Keep existing markets data instead of clearing it
+          console.warn("Keeping existing markets data due to network error");
+        }
+        setLoading(false);
+      }
     };
 
-    // measure on next paint to ensure DOM is ready
-    requestAnimationFrame(measure);
+    // Clear any existing interval
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
 
-    const onResize = () => {
-      // debounce not necessary here; single handler is fine
-      requestAnimationFrame(measure);
+    // Fetch immediately
+    fetchMarkets();
+
+    // Set up polling interval with error handling
+    try {
+      intervalRef.current = setInterval(() => {
+        // Add a try-catch around the fetch to prevent interval crashes
+        try {
+          fetchMarkets();
+        } catch (error) {
+          console.error("Error in markets polling interval:", error);
+        }
+      }, 1000);
+    } catch (error) {
+      console.error("Error setting up markets polling interval:", error);
+    }
+
+    // Clean up on selectedMatch change or component unmount
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
     };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [items, expandedById]);
+  }, [selectedMatch, expandedById]);
 
-  const toggleMarket = () => {
-    setIsMarketOpen((prev) => {
-      const nextOpen = !prev;
-      setExpandedById((old) => {
-        const updated = {};
-        items.forEach((it) => (updated[it.id] = nextOpen));
-        return updated;
-      });
-      return nextOpen;
+  const toggleMarket = (marketId) => {
+    setExpandedById(prev => ({
+      ...prev,
+      [marketId]: !prev[marketId]
+    }));
+  };
+
+  const toggleAllMarkets = () => {
+    const newExpandedState = {};
+    filteredMarkets.forEach((market, index) => {
+      const marketId = market.marketId || index;
+      newExpandedState[marketId] = !allMarketsExpanded;
     });
+    setExpandedById(newExpandedState);
+    setAllMarketsExpanded(!allMarketsExpanded);
   };
 
-  const toggleItem = (id) => {
-    setExpandedById((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  // Split into two columns for responsive layout
+  // Split filtered markets into two columns
   const leftColumn = [];
   const rightColumn = [];
-  items.forEach((it, idx) => {
-    if (idx % 2 === 0) leftColumn.push(it);
-    else rightColumn.push(it);
+  
+  filteredMarkets.forEach((market, idx) => {
+    const marketId = market.marketId || idx;
+    if (idx % 2 === 0) {
+      leftColumn.push({ ...market, id: marketId });
+    } else {
+      rightColumn.push({ ...market, id: marketId });
+    }
   });
 
+  if (loading) {
+    return (
+      <div className="text-live-primary p-4">
+        <div className="text-center py-4">Loading markets...</div>
+      </div>
+    );
+  }
+
+  if (markets.length === 0) {
+    return (
+      <div className="text-live-primary p-4">
+        <div className="text-center py-4">No markets available for this event</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="text-live-primary">
+    <div className="text-live-primary flex flex-col h-full">
       {/* Parent Market Header - Enhanced styling with theme colors */}
       <button
         type="button"
-        onClick={toggleMarket}
-        className="w-full flex items-center justify-between px-3 py-2 hover:opacity-90 transition-opacity bg-gradient-to-r from-live-primary to-live-secondary shadow-md"
-        aria-expanded={isMarketOpen}
+        onClick={toggleAllMarkets}
+        className="w-full flex items-center justify-between px-3 py-2 hover:opacity-90 transition-opacity bg-gradient-to-r from-live-primary to-live-secondary shadow-md flex-shrink-0"
       >
         <span className="text-sm font-bold tracking-wide text-live-accent">Market</span>
         <div className="flex items-center gap-3">
-          <span className="text-xs opacity-80 text-live-accent">{items.length} panels</span>
-          {isMarketOpen ? <IoChevronUp className="w-5 h-5 text-live-accent" /> : <IoChevronDown className="w-5 h-5 text-live-accent" />}
+          <span className="text-xs opacity-80 text-live-accent">{filteredMarkets.length} panels</span>
+          {allMarketsExpanded ? (
+            <IoChevronUp className="w-5 h-5 text-live-accent" />
+          ) : (
+            <IoChevronDown className="w-5 h-5 text-live-accent" />
+          )}
         </div>
       </button>
 
-      {/* Responsive 2-column layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-2 bg-gradient-to-br from-live-tertiary to-live-secondary rounded-b-md">
-        {/* Left column */}
-        <div className="space-y-2">
-          {leftColumn.map((it) => {
-            const open = !!expandedById[it.id];
-            const measured = heights[it.id] ?? 0;
-            return (
-              <div
-                key={it.id}
-                className="transition-colors overflow-hidden bg-gradient-to-r from-live-primary to-live-tertiary shadow rounded"
-              >
-                {/* Market item header - Uniform extra small text size */}
-                <button
-                  type="button"
-                  onClick={() => toggleItem(it.id)}
-                  className="w-full flex items-center justify-between px-3 py-2.5 text-xs hover:bg-live-hover transition-colors"
-                  aria-expanded={open}
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-live-accent text-xs">⭐</span>
-                    <span className="text-live-primary font-medium truncate text-xs">{it.title}</span>
-                  </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <span className="text-live-dark text-[10px] px-2 py-1 bg-live-accent rounded">🔗</span>
-                    <span className="text-live-accent text-xs">1</span>
-                    <span className="text-live-accent text-sm">📊</span>
-                    {open ? <IoChevronUp className="w-4 h-4 text-live-primary" /> : <IoChevronDown className="w-4 h-4 text-live-primary" />}
-                  </div>
-                </button>
+      {/* Responsive 2-column layout - Scrollable area */}
+      <div className="flex-grow overflow-y-auto custom-scrollbar">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-2 bg-gradient-to-br from-live-tertiary to-live-secondary rounded-b-md">
+          {/* Left column */}
+          <div className="space-y-2">
+            {leftColumn.map((market) => (
+              <MarketItem
+                key={market.id}
+                market={market}
+                isOpen={!!expandedById[market.id]}
+                onToggle={() => toggleMarket(market.id)}
+                highlightedOdds={highlightedOddsRef.current}
+                onRunnerSelect={onRunnerSelect}
+                selectedMatch={selectedMatch}
+              />
+            ))}
+          </div>
 
-                {/* Collapsible content - Uniform extra small text size */}
-                <div
-                  style={{
-                    maxHeight: open ? `${measured}px` : "0px",
-                    transition: "max-height 280ms ease, opacity 200ms ease",
-                    overflow: "hidden",
-                    backgroundColor: "var(--live-bg-tertiary)",
-                    opacity: open ? 1 : 0,
-                  }}
-                >
-                  <div
-                    ref={(el) => {
-                      contentRefs.current[it.id] = el;
-                    }}
-                  >
-                    <div className="px-3 pb-2.5 pt-1.5">
-                      <ul className="text-xs text-live-primary space-y-1.5">
-                        {(it.rows || []).map((r, idx) => (
-                          <li
-                            key={idx}
-                            className="flex items-center justify-between py-1.5 px-2 bg-live-hover rounded"
-                          >
-                            <span className="text-live-primary truncate text-xs">{r.label}</span>
-                            <span className="text-xs px-2 py-1 rounded font-medium flex-shrink-0 bg-live-tertiary text-live-primary">
-                              {r.value}
-                            </span>
-                          </li>
-                        ))}
-                        {!it.rows?.length && (
-                          <li className="px-2 py-1.5 text-live-secondary text-xs">No data available</li>
-                        )}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Right column */}
-        <div className="space-y-2">
-          {rightColumn.map((it) => {
-            const open = !!expandedById[it.id];
-            const measured = heights[it.id] ?? 0;
-            return (
-              <div
-                key={it.id}
-                className="transition-colors overflow-hidden bg-gradient-to-r from-live-primary to-live-tertiary shadow rounded"
-              >
-                {/* Market item header - Uniform extra small text size */}
-                <button
-                  type="button"
-                  onClick={() => toggleItem(it.id)}
-                  className="w-full flex items-center justify-between px-3 py-2.5 text-xs hover:bg-live-hover transition-colors"
-                  aria-expanded={open}
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-live-accent text-xs">⭐</span>
-                    <span className="text-live-primary font-medium truncate text-xs">{it.title}</span>
-                  </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <span className="text-live-dark text-[10px] px-2 py-1 bg-live-accent rounded">🔗</span>
-                    <span className="text-live-accent text-xs">1</span>
-                    <span className="text-live-accent text-sm">📊</span>
-                    {open ? <IoChevronUp className="w-4 h-4 text-live-primary" /> : <IoChevronDown className="w-4 h-4 text-live-primary" />}
-                  </div>
-                </button>
-
-                {/* Collapsible content - Uniform extra small text size */}
-                <div
-                  style={{
-                    maxHeight: open ? `${measured}px` : "0px",
-                    transition: "max-height 280ms ease, opacity 200ms ease",
-                    overflow: "hidden",
-                    backgroundColor: "var(--live-bg-tertiary)",
-                    opacity: open ? 1 : 0,
-                  }}
-                >
-                  <div
-                    ref={(el) => {
-                      contentRefs.current[it.id] = el;
-                    }}
-                  >
-                    <div className="px-3 pb-2.5 pt-1.5">
-                      <ul className="text-xs text-live-primary space-y-1.5">
-                        {(it.rows || []).map((r, idx) => (
-                          <li
-                            key={idx}
-                            className="flex items-center justify-between py-1.5 px-2 bg-live-hover rounded"
-                          >
-                            <span className="text-live-primary truncate text-xs">{r.label}</span>
-                            <span className="text-xs px-2 py-1 rounded font-medium flex-shrink-0 bg-live-tertiary text-live-primary">
-                              {r.value}
-                            </span>
-                          </li>
-                        ))}
-                        {!it.rows?.length && (
-                          <li className="px-2 py-1.5 text-live-secondary text-xs">No data available</li>
-                        )}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            );
-          })}
+          {/* Right column */}
+          <div className="space-y-2">
+            {rightColumn.map((market) => (
+              <MarketItem
+                key={market.id}
+                market={market}
+                isOpen={!!expandedById[market.id]}
+                onToggle={() => toggleMarket(market.id)}
+                highlightedOdds={highlightedOddsRef.current}
+                onRunnerSelect={onRunnerSelect}
+                selectedMatch={selectedMatch}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -436,9 +582,8 @@ function MarketSection({ marketItems }) {
 }
 
 // SleekNavbar component (unchanged core behavior)
-function SleekNavbar() {
+function SleekNavbar({ onSearchChange, searchValue, onSearchClear }) {
   const [searchActive, setSearchActive] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
   const [activeTab, setActiveTab] = useState("All");
 
   return (
@@ -501,7 +646,7 @@ function SleekNavbar() {
             className="search-icon-btn flex items-center justify-center w-9 h-9 hover:bg-live-primary transition-colors"
             onClick={() => {
               setSearchActive(false);
-              setSearchValue("");
+              onSearchClear();
             }}
             aria-label="Close search"
           >
@@ -513,8 +658,8 @@ function SleekNavbar() {
               type="text"
               autoFocus
               value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              placeholder="Search..."
+              onChange={(e) => onSearchChange(e.target.value)}
+              placeholder="Search markets..."
               className="w-full p-2 pl-10 pr-4 border border-live-accent focus:outline-none focus:ring-1 focus:ring-live-accent focus:border-live-accent bg-live-tertiary text-live-primary transition-all duration-300"
             />
             <span className="absolute left-3 top-2.5 text-live-muted">

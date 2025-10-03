@@ -21,6 +21,46 @@ export default defineConfig({
         target: 'http://89.116.20.218:2700',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/events/, '/events'),
+        configure: (proxy, options) => {
+          proxy.on('error', (err, req, res) => {
+            console.error('Proxy error for /api/events:', err);
+            res.writeHead(503, {
+              'Content-Type': 'application/json',
+            });
+            res.end(JSON.stringify({
+              error: 'Service Unavailable',
+              message: 'Unable to connect to events server'
+            }));
+          });
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            // Add timeout to proxy requests
+            proxyReq.setTimeout(10000);
+          });
+          // Removed proxyRes logging to stop console spam
+        }
+      },
+      // Proxy for the markets API to avoid CORS issues
+      '/api/markets': {
+        target: 'http://89.116.20.218:2700',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/markets/, '/markets'),
+        configure: (proxy, options) => {
+          proxy.on('error', (err, req, res) => {
+            console.error('Proxy error for /api/markets:', err);
+            res.writeHead(503, {
+              'Content-Type': 'application/json',
+            });
+            res.end(JSON.stringify({
+              error: 'Service Unavailable',
+              message: 'Unable to connect to markets server'
+            }));
+          });
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            // Add timeout to proxy requests
+            proxyReq.setTimeout(10000);
+          });
+          // Removed proxyRes logging to stop console spam
+        }
       },
       '/users': {
         target: 'http://localhost:4001',

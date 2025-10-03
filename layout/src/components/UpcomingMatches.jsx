@@ -23,6 +23,45 @@ function formatDateOrInPlay(status, openDateMs) {
   return `${dd}.${mm}.${yy}, ${hh}:${min}`
 }
 
+// New function to format time for the game rows (HH:MM format)
+function formatGameTime(openDateMs) {
+  if (!openDateMs) return "-"
+  const d = new Date(openDateMs)
+  const hh = String(d.getHours()).padStart(2, "0")
+  const min = String(d.getMinutes()).padStart(2, "0")
+  return `${hh}:${min}`
+}
+
+// New function to format date for the game rows (DD.MM.YY format)
+function formatGameDate(openDateMs) {
+  if (!openDateMs) return "-"
+  const d = new Date(openDateMs)
+  const dd = String(d.getDate()).padStart(2, "0")
+  const mm = String(d.getMonth() + 1).padStart(2, "0")
+  const yy = String(d.getFullYear()).slice(-2)
+  return `${dd}.${mm}.${yy}`
+}
+
+// New function to check if a game falls within a specific time range
+function isGameInTimeRange(openDateMs, timeRange) {
+  if (!openDateMs) return false
+  
+  const now = new Date()
+  const gameTime = new Date(openDateMs)
+  const diffMinutes = (gameTime - now) / (1000 * 60) // Difference in minutes
+  
+  switch (timeRange) {
+    case "0-15M":
+      return diffMinutes >= 0 && diffMinutes <= 15
+    case "15-30M":
+      return diffMinutes > 15 && diffMinutes <= 30
+    case "30-60M":
+      return diffMinutes > 30 && diffMinutes <= 60
+    default:
+      return true
+  }
+}
+
 function splitEventName(eventName = "") {
   const parts = eventName.split(/\s+vs\.?\s+/i)
   if (parts.length === 2) return { team1: parts[0], team2: parts[1] }
@@ -67,7 +106,7 @@ function findSportKeyByName(sportName) {
 
 export default function UpcomingMatches() {
   const navigate = useNavigate()
-  const [selectedTimeFilter, setSelectedTimeFilter] = useState("0-15M")
+  const [selectedTimeFilter, setSelectedTimeFilter] = useState(null)
   const [selectedSportKey, setSelectedSportKey] = useState("soccer")
   const [selectedGameId, setSelectedGameId] = useState(null)
   const [selectedGameSportKey, setSelectedGameSportKey] = useState(null)
@@ -131,7 +170,13 @@ export default function UpcomingMatches() {
         // Use the fetchSportsEvents function which now directly uses the backup endpoint
         const data = sportId ? await fetchSportsEvents(sportId, true) : { sports: [] };
   
-        const list = data?.sports ?? []
+        // Check if we received valid data before processing
+        if (!data || !Array.isArray(data.sports)) {
+          console.warn(`Invalid data received for sport ${selectedSportKey}, skipping update`);
+          return;
+        }
+        
+        const list = data.sports;
         const oddsMap = { ...oddsByEventId }
         const highlights = {}
         for (const e of list) {
@@ -152,10 +197,28 @@ export default function UpcomingMatches() {
         }, 1000)
       } catch (error) {
         console.error("Error polling odds:", error);
+        // Don't stop polling on error, just log it
       }
     }
-    intervalId = setInterval(pollOdds, 1000)
-    return () => clearInterval(intervalId)
+    
+    // Add error handling for the interval setup
+    try {
+      intervalId = setInterval(() => {
+        try {
+          pollOdds();
+        } catch (error) {
+          console.error("Error in pollOdds interval:", error);
+        }
+      }, 1000)
+    } catch (error) {
+      console.error("Error setting up polling interval:", error);
+    }
+    
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId)
+      }
+    }
   }, [selectedSportKey, oddsByEventId])
 
   const filteredEvents = useMemo(() => {
@@ -167,7 +230,8 @@ export default function UpcomingMatches() {
   }, [events, selectedSportKey])
 
   const matches = useMemo(() => {
-    return filteredEvents.map((e, idx) => {
+    // First filter by sport
+    const sportFilteredMatches = filteredEvents.map((e, idx) => {
       const { team1, team2 } = splitEventName(e.eventName)
       const odds = oddsByEventId[e.eventId] || extractOddsW1W2(e.markets)
       const inferredSportKey = e.sportKey || findSportKeyByName(e.sportName) || null
@@ -176,6 +240,8 @@ export default function UpcomingMatches() {
         openDate: e.openDate,
         status: e.status,
         timeLabel: formatDateOrInPlay(e.status, e.openDate),
+        gameTime: formatGameTime(e.openDate), // New formatted time for game rows
+        gameDate: formatGameDate(e.openDate), // New formatted date for game rows
         team1,
         team2,
         isFavorite: !!e.isFavourite,
@@ -183,9 +249,21 @@ export default function UpcomingMatches() {
         additionalMarkets: "",
         sportKey: inferredSportKey,
         highlight: highlightedOdds[e.eventId] || { w1: false, w2: false },
+        competitionName: e.competitionName || "", // Add competition name from API
+        catName: e.catName || "" // Add category name from API
       }
     })
-  }, [filteredEvents, oddsByEventId, highlightedOdds])
+    
+    // Only apply time filtering if a time filter is selected
+    if (selectedTimeFilter) {
+      return sportFilteredMatches.filter(match => 
+        isGameInTimeRange(match.openDate, selectedTimeFilter)
+      )
+    }
+    
+    // If no time filter is selected, show all matches
+    return sportFilteredMatches
+  }, [filteredEvents, oddsByEventId, highlightedOdds, selectedTimeFilter])
 
   const handleGameClick = (id, sportKey) => {
     setSelectedGameId(id)
@@ -263,6 +341,19 @@ export default function UpcomingMatches() {
                 {filter}
               </Button>
             ))}
+            {/* Add a "Show All" button to reset the time filter */}
+            <Button
+              variant={!selectedTimeFilter ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedTimeFilter(null)}
+              className={`text-xs sm:text-sm px-2 py-1 sm:px-3 sm:py-2 ${
+                !selectedTimeFilter
+                  ? "bg-white text-black hover:bg-white"
+                  : "bg-transparent border-gray-600 text-white hover:bg-white hover:text-black"
+              }`}
+            >
+              All
+            </Button>
           </div>
           <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800 hover:text-white text-xs sm:text-sm">
             More
@@ -329,30 +420,11 @@ export default function UpcomingMatches() {
         )}
       </div>
 
-      {/* Winner dropdown and W1/W2 header */}
-      <div className="flex flex-col sm:flex-row items-center justify-between px-3 lg:px-5 py-2 bg-[#3f3e3e] gap-3">
-        <div>
-          <Select defaultValue="winner">
-            <SelectTrigger className="w-28 sm:w-32 bg-gray-800 border-gray-600 text-white text-xs sm:text-sm flex items-center justify-between">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="bg-gray-800 border-gray-600">
-              <SelectItem value="winner" className="text-white text-xs sm:text-sm">
-                Winner
-              </SelectItem>
-              <SelectItem value="handicap" className="text-white text-xs sm:text-sm">
-                Handicap
-              </SelectItem>
-              <SelectItem value="over-under" className="text-white text-xs sm:text-sm">
-                Total
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex gap-2 sm:gap-4 text-xs sm:text-sm font-medium cursor-pointer">
-          <div className="w-10 sm:w-16 bg-[#505050] flex items-center justify-center h-8 sm:h-12 text-center rounded">W1</div>
-          <div className="w-10 sm:w-16 bg-[#505050] flex items-center justify-center h-8 sm:h-12 text-center rounded">W2</div>
+      {/* W1/W2 header above the matches list */}
+      <div className="flex justify-end px-3 lg:px-5 py-2">
+        <div className="flex gap-2 sm:gap-4 text-xs sm:text-sm font-medium">
+          <div className="w-10 sm:w-16 bg-[#505050] flex items-center justify-center h-6 sm:h-8 text-center rounded">W1</div>
+          <div className="w-10 sm:w-16 bg-[#505050] flex items-center justify-center h-6 sm:h-8 text-center rounded">W2</div>
         </div>
       </div>
 
@@ -365,11 +437,14 @@ export default function UpcomingMatches() {
       )}
       {error && <div className="px-4 py-3 text-sm text-red-400">Error: {error}</div>}
       {!loading && !error && matches.length === 0 && (
-        <div className="px-4 py-10 text-center text-sm text-muted-foreground">Currently no matches to display</div>
+        <div className="px-4 py-10 text-center text-sm text-muted-foreground">
+          Currently no matches to display
+          {selectedTimeFilter && ` for ${selectedTimeFilter} time range`}
+        </div>
       )}
 
       {/* Matches list with scroll for more than 5 items */}
-      <div className="flex flex-col px-2 max-h-[320px] overflow-y-auto">
+      <div className="flex flex-col px-2 max-h-[320px] overflow-y-auto custom-scrollbar">
         {!loading &&
           matches.map((match) => {
             const isSelected = selectedGameId === match.id
@@ -401,27 +476,50 @@ export default function UpcomingMatches() {
                   backgroundClass
                 } ${textColor} ${isSelected ? 'shadow-md transform scale-[1.01] border border-white/20' : ''}`}
               >
-                {/* Left: time + teams */}
-                <div className="flex items-center gap-3 min-w-0 flex-1">
-                  <div className="flex items-center gap-1 text-[11px] text-muted-foreground flex-shrink-0">
-                    <Clock className="w-4 h-4" />
-                    <span className="whitespace-nowrap text-[11px]">{match.timeLabel}</span>
+                {/* Left: date + time */}
+                <div className="flex flex-col items-start gap-1 text-[11px] text-muted-foreground flex-shrink-0 w-16">
+                  <div className="whitespace-nowrap">{match.gameDate}</div>
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    <span className="whitespace-nowrap">{match.gameTime}</span>
                   </div>
+                </div>
 
-                  <div className="h-5 w-px bg-gradient-to-b from-transparent via-muted-foreground to-transparent opacity-30 hidden sm:block" />
+                <div className="h-8 w-px bg-gradient-to-b from-transparent via-muted-foreground to-transparent opacity-30" />
 
-                  <div className="flex-1 min-w-0">
+                {/* Center: teams + IN PLAY + competition name + LIVE */}
+                <div className="flex-1 min-w-0 flex items-center justify-between">
+                  <div className="flex flex-col min-w-0">
                     <div className="font-medium truncate text-[13px] sm:text-sm">
                       {match.team1}
                     </div>
                     <div className="text-[12px] sm:text-sm truncate opacity-90">
                       {match.team2}
                     </div>
+                    {match.status === "IN_PLAY" && (
+                      <div className="text-[9px] font-bold bg-red-600 text-white px-1 py-0.5 rounded w-fit mt-1">
+                        IN PLAY
+                      </div>
+                    )}
                   </div>
+                  
+                  {/* Competition name and LIVE in a single line */}
+                  <div className="flex items-center gap-2 mx-2">
+                    {match.competitionName && (
+                      <div className="text-[11px] text-white truncate"> {/* Changed to text-white for better visibility */}
+                        {match.competitionName}
+                      </div>
+                    )}
+                    {match.catName && (
+                      <div className="text-[10px] bg-blue-700 px-1.5 py-0.5 rounded">
+                        {match.catName}
+                      </div>
+                    )}
+                  </div>
+                </div>
 
-                  <div className="text-muted-foreground text-[11px] self-start sm:self-center truncate ml-2 hidden md:block">
-                    {match.additionalMarkets}
-                  </div>
+                <div className="text-muted-foreground text-[11px] self-start sm:self-center truncate ml-2 hidden md:block">
+                  {match.additionalMarkets}
                 </div>
 
                 {/* Right: odds buttons */}

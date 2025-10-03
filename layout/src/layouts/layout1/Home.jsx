@@ -10,6 +10,7 @@ import img4 from "/assets/img4.jpg"
 import WelcomeComponent from '../../components/WelcomeComponent'
 import { getLocalStorageItem, setLocalStorageItem } from '../../utils/Helper'
 import RegisterModal from '../../modals/RegisterModal'
+import { useNavigate } from 'react-router-dom'
 
 const images = [
   { id: 1, src: img1, name: "Game One" },
@@ -33,6 +34,7 @@ const Home = () => {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const intervalRef = useRef(null);
   const apiRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Check if we should show the welcome modal
@@ -95,6 +97,14 @@ const Home = () => {
     if (item.src.includes('banner1')) {
       setIsRegisterModalOpen(true);
     }
+    // Check if the banner is banner-2.png and navigate to games section
+    else if (item.src.includes('banner-2')) {
+      navigate('/games');
+    }
+    // Check if the banner is banner-5.png and navigate to sports market section with pre-match selected
+    else if (item.src.includes('banner-5')) {
+      navigate('/live_events/event-view', { state: { viewType: 'prematch' } });
+    }
   };
 
   return (
@@ -124,7 +134,7 @@ const Home = () => {
           }}
           onMouseLeave={handleUserInteraction}
         >
-          <CarouselContent className='h-full'>
+          <CarouselContent className='h-full custom-scrollbar'>
             {sliderImages.map((item) => (
               <CarouselItem key={item.id} className='h-full'>
                 <div className='relative w-full h-full'>

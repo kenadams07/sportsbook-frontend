@@ -10,6 +10,7 @@ export default function GameCard({
   odds,
   league,
   sport, // <-- Add sport prop
+  sportKey, // <-- Add sportKey prop
   highlight = false,
   oddsHighlight = { w1: false, w2: false },
   onClick,
@@ -42,6 +43,8 @@ export default function GameCard({
           : 'border-live shadow-md hover:shadow-lg'
       } cursor-pointer hover:bg-live-hover hover:scale-[1.01]`}
       onClick={onClick}
+      data-sport-key={sportKey} // Add data attribute for debugging
+      data-event-id={time} // Add data attribute for debugging
     >
       {/* League and status vertically */}
       <div className="flex flex-col items-start mb-1 gap-1">

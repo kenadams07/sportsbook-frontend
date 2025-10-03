@@ -50,7 +50,6 @@ const navItems = [
 
     { label: 'Casino', items: [{ label: 'Home', href: '/casino/slots' }, { label: 'Tournaments', href: '/casino/tournaments' }] }, 
      { label: 'Games', href: '/games'},
-    { label: 'Promotions', items: [{ label: 'Sports Bonus', href: '/promotions/sports' }, { label: 'Casino Bonus', href: '/promotions/casino' }, { label: 'VIP Program', href: '/promotions/vip' }] },
     { label: 'Virtual Sports', items: [{ label: 'Virtual Football', href: '/virtual/football' }, { label: 'Virtual Horse Racing', href: '/virtual/horse-racing' }, { label: 'Virtual Tennis', href: '/virtual/tennis' }] },
     { label: 'Esports', items: [{ label: 'Event View', href: '/esports/event-view' }, { label: 'Live Calendar', href: '/esports/live-calendar' }, { label: 'Results', href: '/esports/results' }, { label: 'Statistics', href: '/esports/statistics' }] },
     { label: 'PlayTech', items: [{ label: 'Slots', href: '/playtech/slots' }, { label: 'Live Casino', href: '/playtech/live' }, { label: 'Table Games', href: '/playtech/table' }] }
@@ -140,6 +139,7 @@ export default function MainNavbar() {
 
   // Get exposure value to display
   const getTotalExposure = useMemo(() => {
+    
     // Use WebSocket exposure when available, otherwise fallback to existing logic
     if (exposure !== 0) {
       return exposure;
@@ -276,7 +276,7 @@ export default function MainNavbar() {
                                     <div className="hidden md:flex items-center gap-4 text-white font-bold">
                                         <span>Balance: {typeof getAvailableBalance === 'number' ? getAvailableBalance.toFixed(2) : '0.00'}</span>
                                         <span>|</span>
-                                        <span>Exposure: -{typeof getTotalExposure === 'number' ? getTotalExposure.toFixed(2) : '0.00'}</span>
+                                        <span>Exposure: {typeof getTotalExposure === 'number' ? getTotalExposure.toFixed(2) : '0.00'}</span>
                                     </div>
                                 )}
                                 {/* Show deposit button only when authenticated */}
