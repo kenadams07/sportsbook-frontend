@@ -29,4 +29,7 @@ export class Exposure {
 
   @Column()
   exposure: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  eventId: string;
 }

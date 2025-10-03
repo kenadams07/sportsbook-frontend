@@ -8,6 +8,9 @@ import { BetStatus, SelectionType, BettingType } from './sportBets.entity';
 import { Users } from '../users/users.entity';
 import { AppGateway } from '../app.gateway';
 import { BadRequestException } from '@nestjs/common';
+import { Markets } from '../markets/markets.entity';
+import { MarketType, ExposureStatus } from '../markets/markets.entity';
+
 @Injectable()
 export class SportBetsService {
   constructor(
@@ -35,11 +38,12 @@ export class SportBetsService {
       throw new BadRequestException("User not found");
     }
 
-    // Fetch existing bets of this user for same event
+    // Fetch existing bets of this user for same event AND market
     const existingBets = await this.sportBetsRepository.find({
       where: {
         user: { id: betData.userId },
         eventId: betData.eventId,
+        marketId: betData.marketId, // Add marketId filter
       },
       relations: ['user'],
     });
@@ -69,10 +73,17 @@ export class SportBetsService {
     const extraNeeded = newExposure - oldExposure;
 
     // Available balance = user balance - user.exposure (already blocked)
+    // This is the virtual balance that user can use for placing new bets
     const availableBalance = user.balance - user.exposure;
 
+    // Check if extra exposure needed exceeds available balance
     if (extraNeeded > 0 && extraNeeded > availableBalance) {
       throw new BadRequestException("Insufficient balance to place this bet");
+    }
+
+    // Ensure exposure never exceeds user balance
+    if (newExposure > user.balance) {
+      throw new BadRequestException("Exposure cannot exceed user balance");
     }
 
     // Save new bet
@@ -94,8 +105,8 @@ export class SportBetsService {
 
     const savedBet = await this.sportBetsRepository.save(newBet);
 
-    // Recalculate & save exposure
-    await this.calculateAndSaveExposure(betData.userId, betData.eventId, betData.runners);
+    // Recalculate & save exposure for this specific market
+    await this.calculateAndSaveExposure(betData.userId, betData.eventId, betData.marketId, betData.marketType, betData.runners);
 
     return {
       success: true,
@@ -103,12 +114,13 @@ export class SportBetsService {
     };
   }
 
-  private async calculateAndSaveExposure(userId: string, eventId: string, runners: string[]): Promise<void> {
-    // Fetch all bets for this user and event
+  private async calculateAndSaveExposure(userId: string, eventId: string, marketId: string, marketType: string, runners: string[]): Promise<void> {
+    // Fetch all bets for this user, event and market
     const userBets = await this.sportBetsRepository.find({
       where: {
         user: { id: userId },
         eventId: eventId,
+        marketId: marketId, // Add marketId filter
       },
       relations: ['user'],
     });
@@ -124,27 +136,60 @@ export class SportBetsService {
     const exposureResult = this.calcExposure(formattedBets, runners);
     const exposureValue = exposureResult.exposure;
 
-    // Find or create exposure record for this user + event
+    // Find or create exposure record for this user + market (not event)
     let exposure = await this.exposureRepository.findOne({
       where: {
         user: { id: userId },
-        marketType: eventId,
+        market: { marketId: marketId }, // Use market relationship
+        eventId: eventId, // Add eventId filter
       },
     });
 
+    // Set the market relationship properly
+    // First, try to find the existing Markets record
+    const marketRepo = this.sportBetsRepository.manager.getRepository(Markets);
+    let market = await marketRepo.findOne({
+      where: {
+        marketId: marketId
+      }
+    });
+    
+    // If market doesn't exist, create it
+    if (!market) {
+      market = new Markets();
+      market.marketId = marketId;
+      // Set other required fields with default values
+      market.marketName = 'Unknown Market';
+      market.marketType = MarketType.ODDS; // Assuming ODDS as default
+      market.status = ExposureStatus.ONE; // Assuming ONE as default
+      market.marketTime = new Date();
+      market = await marketRepo.save(market);
+    }
+    
     if (!exposure) {
-      exposure = new Exposure();
-      exposure.user = { id: userId } as Users;
-      exposure.marketType = eventId;
-      exposure.is_clear = 'false';
-      exposure.exposure = '0';
+      // For new records, we'll use query builder to directly set the foreign key
+      await this.exposureRepository.createQueryBuilder()
+        .insert()
+        .into(Exposure)
+        .values({
+          user: { id: userId },
+          market: market,
+          eventId: eventId,
+          marketType: marketType,
+          exposure: exposureValue.toString(),
+          is_clear: 'false'
+        })
+        .execute();
+    } else {
+      // For existing records, update the values
+      exposure.eventId = eventId;
+      exposure.marketType = marketType;
+      exposure.exposure = exposureValue.toString();
+      exposure.market = market;
+      await this.exposureRepository.save(exposure);
     }
 
-    exposure.exposure = exposureValue.toString();
-
-    await this.exposureRepository.save(exposure);
-
-    // Calculate total exposure across events for this user
+    // Calculate total exposure across ALL markets for this user
     const userExposures = await this.exposureRepository.find({
       where: {
         user: { id: userId },
@@ -155,6 +200,12 @@ export class SportBetsService {
     const totalExposure = userExposures.reduce((total, exp) => {
       return total + parseFloat(exp.exposure || '0');
     }, 0);
+
+    // Ensure total exposure never exceeds user balance
+    const user = await this.usersService.findOneById(userId);
+    if (user && totalExposure > user.balance) {
+      throw new BadRequestException("Total exposure cannot exceed user balance");
+    }
 
     // Update in users table
     await this.usersService.updateUserExposure(userId, totalExposure);
