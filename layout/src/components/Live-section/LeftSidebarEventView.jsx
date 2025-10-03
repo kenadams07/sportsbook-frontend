@@ -161,12 +161,20 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
   }, []);
 
   useEffect(() => {
+    // Create AbortController for this fetch cycle
+    const abortController = new AbortController();
+    
     SPORTS.forEach((sport) => {
       const sportId = SPORT_ID_BY_KEY[sport.key];
       if (!sportId) return;
       setLoadingBySport((prev) => ({ ...prev, [sport.key]: true }));
       fetchSportsEvents(sportId, selectedType === "live")
         .then((json) => {
+          // Check if the request was aborted
+          if (abortController.signal.aborted) {
+            return;
+          }
+          
           const list = json?.sports ?? [];
           setMatchesBySport((prev) => ({ ...prev, [sport.key]: Array.isArray(list) ? list : [] }));
           // Set initial odds and scores
@@ -183,8 +191,19 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
           setScoresByEventId(scoresMap);
           oddsPrevRef.current = oddsMap;
         })
-        .catch(() => setMatchesBySport((prev) => ({ ...prev, [sport.key]: [] })))
-        .finally(() => setLoadingBySport((prev) => ({ ...prev, [sport.key]: false })));
+        .catch(error => {
+          // Ignore aborted requests
+          if (error.name === 'AbortError') {
+            return;
+          }
+          setMatchesBySport((prev) => ({ ...prev, [sport.key]: [] }));
+        })
+        .finally(() => {
+          // Check if the request was aborted before updating loading state
+          if (!abortController.signal.aborted) {
+            setLoadingBySport((prev) => ({ ...prev, [sport.key]: false }));
+          }
+        });
     });
     
     // Check if there's navigation state to pre-select a game
@@ -203,18 +222,33 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
         navigate(location.pathname, { replace: true, state: {} });
       }
     }
+    
+    // Cleanup function to abort any ongoing requests
+    return () => {
+      abortController.abort();
+    };
   }, [selectedType, location.key]);
 
   // Only poll odds and scores for the expanded sport
   useEffect(() => {
     let intervalId;
+    let abortController = new AbortController(); // Create AbortController for this polling cycle
+    
     function pollOdds() {
+      // Create a new AbortController for each polling cycle
+      abortController = new AbortController();
+      
       const expandedSportKeys = Object.keys(expanded).filter((key) => expanded[key]);
       expandedSportKeys.forEach((sportKey) => {
         const sportId = SPORT_ID_BY_KEY[sportKey];
         if (!sportId) return;
         fetchSportsEvents(sportId, selectedType === "live")
           .then((json) => {
+            // Check if the request was aborted
+            if (abortController.signal.aborted) {
+              return;
+            }
+            
             // Check if we received valid data before processing
             if (!json || !Array.isArray(json.sports)) {
               console.warn(`Invalid data received for sport ${sportKey}, skipping update`);
@@ -265,6 +299,10 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
             }, 1000);
           })
           .catch(error => {
+            // Ignore aborted requests
+            if (error.name === 'AbortError') {
+              return;
+            }
             console.error(`Error polling odds for sport ${sportKey}:`, error);
             // Don't stop polling on error, just log it
           });
@@ -288,6 +326,8 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
       if (intervalId) {
         clearInterval(intervalId);
       }
+      // Abort any ongoing requests when component unmounts or dependencies change
+      abortController.abort();
     };
   }, [selectedType, oddsByEventId, scoresByEventId, expanded, selectedMatch, onSelectedMatchOddsUpdate]);
 

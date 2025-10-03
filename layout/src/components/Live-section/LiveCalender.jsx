@@ -311,7 +311,15 @@ const LiveCalender = () => {
            </div>
           <div>
             {loading ? (
-              <div className="px-3 py-4 text-sm text-live-secondary">Loading…</div>
+              <div className="px-3 py-4 flex items-center justify-center">
+                <div className="flex flex-col items-center animate-pulse-scale">
+                  <div className="relative w-8 h-8">
+                    <div className="absolute w-full h-full rounded-full border-4 border-live-accent border-t-transparent animate-spin"></div>
+                    <div className="absolute w-5 h-5 top-1.5 left-1.5 rounded-full border-4 border-live-primary border-b-transparent animate-spin-reverse"></div>
+                  </div>
+                  <p className="mt-2 text-live-primary text-sm font-medium">Loading matches...</p>
+                </div>
+              </div>
             ) : matches.length === 0 ? (
               <div className="px-3 py-4 text-sm text-live-secondary">No matches</div>
             ) : (

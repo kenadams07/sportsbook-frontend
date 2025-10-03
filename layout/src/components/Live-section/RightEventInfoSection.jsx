@@ -157,7 +157,7 @@ const getRunnerIdForSelectedTeam = (selectedGame, selectedTeam) => {
   return null;
 };
 
-export default function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = false }) {
+export default function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = false, isSwitchingMatch }) {
   const dispatch = useDispatch();
   const { isAuthenticated, userData } = useSelector(state => state.Login);
   const { loading: exposureLoading, error: exposureError } = useSelector(state => state.UpdateUserBalanceExposure);
@@ -484,6 +484,21 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
     return (
       <div className="flex items-center justify-center h-full text-live-muted text-sm bg-gradient-to-b from-live-tertiary to-live-secondary rounded p-4 shadow-md">
         Select a game to see details
+      </div>
+    );
+  }
+
+  // Show loading state when switching matches
+  if (isSwitchingMatch) {
+    return (
+      <div className="flex items-center justify-center h-full text-live-muted text-sm bg-gradient-to-b from-live-tertiary to-live-secondary rounded p-4 shadow-md">
+        <div className="flex flex-col items-center animate-pulse-scale">
+          <div className="relative w-10 h-10">
+            <div className="absolute w-full h-full rounded-full border-4 border-live-accent border-t-transparent animate-spin"></div>
+            <div className="absolute w-6 h-6 top-2 left-2 rounded-full border-4 border-live-primary border-b-transparent animate-spin-reverse"></div>
+          </div>
+          <p className="mt-3 text-live-primary text-xs font-medium">Loading game details...</p>
+        </div>
       </div>
     );
   }

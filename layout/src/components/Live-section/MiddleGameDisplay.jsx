@@ -321,6 +321,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
   const highlightedOddsRef = useRef({});
   const selectedRunnerRef = useRef(null);
   const prevSelectedMatchRef = useRef(null);
+  const currentFetchControllerRef = useRef(null); // To cancel ongoing fetch requests
 
   // Store selected runner info
   useEffect(() => {
@@ -333,11 +334,15 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
     }
   }, [selectedMatch]);
 
-  // Clear interval on unmount
+  // Clear interval and controller on unmount
   useEffect(() => {
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+      }
+      // Cancel any ongoing fetch requests
+      if (currentFetchControllerRef.current) {
+        currentFetchControllerRef.current.abort();
       }
     };
   }, []);
@@ -370,6 +375,11 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
       // Reset expanded state for new match
       setExpandedById({});
       setAllMarketsExpanded(false);
+      
+      // Cancel any ongoing fetch requests for the previous match
+      if (currentFetchControllerRef.current) {
+        currentFetchControllerRef.current.abort();
+      }
     }
     
     prevSelectedMatchRef.current = selectedMatch;
@@ -386,6 +396,10 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
 
     const fetchMarkets = async () => {
       try {
+        // Create a new AbortController for this fetch request
+        const controller = new AbortController();
+        currentFetchControllerRef.current = controller;
+        
         const sportId = SPORT_ID_BY_KEY[selectedMatch.sportKey];
         if (!sportId) {
           setMarkets([]);
@@ -394,6 +408,12 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
         }
 
         const marketsData = await fetchMarketsData(selectedMatch.eventId, sportId);
+        
+        // Check if the request was aborted
+        if (controller.signal.aborted) {
+          return;
+        }
+        
         const newMarkets = Array.isArray(marketsData) ? marketsData : [];
         
         // Only update state if data has actually changed to prevent unnecessary re-renders
@@ -436,6 +456,11 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
         }
         setLoading(false);
       } catch (error) {
+        // Ignore aborted requests
+        if (error.name === 'AbortError') {
+          return;
+        }
+        
         console.error("Error fetching markets data:", error);
         // Only reset markets if there was an actual error and we have previous data
         // This prevents clearing the UI when there are temporary network issues
@@ -475,8 +500,12 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
+      // Cancel any ongoing fetch requests
+      if (currentFetchControllerRef.current) {
+        currentFetchControllerRef.current.abort();
+      }
     };
-  }, [selectedMatch, expandedById]);
+  }, [selectedMatch]);
 
   const toggleMarket = (marketId) => {
     setExpandedById(prev => ({
@@ -508,10 +537,17 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
     }
   });
 
+  // Show loading state when switching matches or when markets are loading
   if (loading) {
     return (
-      <div className="text-live-primary p-4">
-        <div className="text-center py-4">Loading markets...</div>
+      <div className="text-live-primary p-4 flex items-center justify-center h-full">
+        <div className="flex flex-col items-center animate-pulse-scale">
+          <div className="relative w-12 h-12">
+            <div className="absolute w-full h-full rounded-full border-4 border-live-accent border-t-transparent animate-spin"></div>
+            <div className="absolute w-8 h-8 top-2 left-2 rounded-full border-4 border-live-primary border-b-transparent animate-spin-reverse"></div>
+          </div>
+          <p className="mt-4 text-live-primary text-sm font-medium">Loading markets...</p>
+        </div>
       </div>
     );
   }

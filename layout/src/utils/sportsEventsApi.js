@@ -10,8 +10,14 @@ const EVENTS_API_PROXY = "/api/events";
  */
 async function retryWithBackoff(fn, retries = 3, delay = 1000) {
   try {
+    // Pass AbortSignal to the function if it accepts it
     return await fn();
   } catch (error) {
+    // Don't retry if the request was aborted
+    if (error.name === 'AbortError') {
+      throw error;
+    }
+    
     if (retries === 0) {
       throw error;
     }
@@ -61,14 +67,16 @@ export async function fetchSportsEvents(sportId, liveMatches = true) {
 
     const data = await response.json();
    
-    
     // API returns data directly in { sports: [...], status: ..., errorDescription: ... } format
     return {
       sports: data?.sports || [],
       eventsCount: data?.sports?.length || 0
     };
   } catch (error) {
-    console.error(`API request failed for sport_id=${sportId}:`, error.message);
+    // Don't log aborted requests as errors
+    if (error.name !== 'AbortError') {
+      console.error(`API request failed for sport_id=${sportId}:`, error.message);
+    }
     // Even if the endpoint fails, we should return a valid structure to prevent app crashes
     return {
       sports: [],
@@ -89,9 +97,16 @@ export async function fetchMarketsData(eventId, sportId) {
     const url = `/api/markets?event_id=${eventId}&sport_id=${sportId}`;
     
     // Wrap the fetch call with retry logic and timeout
-    const response = await retryWithBackoff(async () => {
+    const response = await retryWithBackoff(async (signal) => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
+      // If a signal is provided (from outside), combine it with our controller
+      if (signal) {
+        signal.addEventListener('abort', () => {
+          controller.abort();
+        });
+      }
       
       try {
         const res = await fetch(url, {
