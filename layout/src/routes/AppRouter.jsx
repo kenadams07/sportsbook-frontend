@@ -17,6 +17,7 @@ import MainEsportsSection from '../components/Esports-section/MainEsportsSection
 import EsportsCalendar from '../components/Esports-section/EsportsCalendar';
 import EsportsResults from '../components/Esports-section/EsportsResults';
 import EsportsStatistics from '../components/Esports-section/EsportsStatistics';
+import VirtualSports from '../pages/VirtualSports';
 
 const Homepage = lazy(() => import('../pages/Homepage'));
 const NotFound = lazy(() => import('../components/Error/NotFound'));
@@ -50,6 +51,7 @@ const AppRouter = () => {
             <Route path={Paths.esportsLiveCalendar} element={<EsportsCalendar />} />
             <Route path={Paths.esportsResults} element={<EsportsResults />} />
             <Route path={Paths.esportsStatistics} element={<EsportsStatistics />} />
+            <Route path={Paths.virtualSports} element={<VirtualSports />} />
           </Route>
           <Route path={Paths.verifyEmail} element={<VerifyEmail />} />
           <Route path={Paths.resetPassword} element={<ResetPassword />} />

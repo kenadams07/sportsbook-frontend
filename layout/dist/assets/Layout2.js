@@ -1543,7 +1543,7 @@ const DesktopNav = ({ navItems }) => {
           MenubarItem,
           {
             className: `text-navbar-text rounded-sm bg-mobile-menu my-2 hover:bg-navbar-dropdown-hover hover:border-l-2 hover:border-l-navbar-highlight cursor-pointer ${location.pathname === subItem.href ? "bg-navbar-dropdown-hover border-l-2 border-yellow-400 text-white font-bold" : ""}`,
-            onClick: () => navigate(subItem.href),
+            onClick: () => navigate(subItem.href, { state: subItem.state }),
             children: subItem.label
           },
           subItem.href
@@ -1609,7 +1609,7 @@ const MobileNav = ({ isOpen, toggleOpen, navItems }) => {
             "div",
             {
               onClick: () => {
-                navigate(subItem.href);
+                navigate(subItem.href, { state: subItem.state });
                 toggleOpen();
               },
               className: `block px-8 py-2 text-navbar-text text-sm hover:bg-navbar-dropdown-hover cursor-pointer ${location.pathname === subItem.href ? "border-l-2 border-yellow-400 text-white font-bold bg-navbar-dropdown-hover" : ""}`,
@@ -1637,11 +1637,35 @@ const navItems$1 = [
       { label: "Statistics", href: "/live_events/statistics" }
     ]
   },
-  { label: "Sports", items: [{ label: "Event View", href: "/live/in-play" }, { label: "Live Calendar", href: "/live/streaming" }, { label: "Results", href: "/live/scores" }, { label: "Statistics", href: "/live/scores" }] },
+  {
+    label: "Sports",
+    items: [
+      {
+        label: "Event View",
+        href: "/live_events/event-view",
+        state: { viewType: "prematch" }
+      },
+      {
+        label: "Live Calendar",
+        href: "/live_events/live-calendar",
+        state: { viewType: "prematch" }
+      },
+      {
+        label: "Results",
+        href: "/live_events/results",
+        state: { viewType: "prematch" }
+      },
+      {
+        label: "Statistics",
+        href: "/live_events/statistics",
+        state: { viewType: "prematch" }
+      }
+    ]
+  },
   { label: "Casino", items: [{ label: "Home", href: "/casino/slots" }, { label: "Tournaments", href: "/casino/tournaments" }] },
   { label: "Games", href: "/games" },
-  { label: "Promotions", items: [{ label: "Sports Bonus", href: "/promotions/sports" }, { label: "Casino Bonus", href: "/promotions/casino" }, { label: "VIP Program", href: "/promotions/vip" }] },
-  { label: "Virtual Sports", items: [{ label: "Virtual Football", href: "/virtual/football" }, { label: "Virtual Horse Racing", href: "/virtual/horse-racing" }, { label: "Virtual Tennis", href: "/virtual/tennis" }] },
+  { label: "Virtual Sports", href: "/virtual-sports" },
+  // Changed from dropdown to direct link
   { label: "Esports", items: [{ label: "Event View", href: "/esports/event-view" }, { label: "Live Calendar", href: "/esports/live-calendar" }, { label: "Results", href: "/esports/results" }, { label: "Statistics", href: "/esports/statistics" }] },
   { label: "PlayTech", items: [{ label: "Slots", href: "/playtech/slots" }, { label: "Live Casino", href: "/playtech/live" }, { label: "Table Games", href: "/playtech/table" }] }
 ];
@@ -1658,20 +1682,60 @@ function MainNavbar() {
   const [isDepositModalOpen, setIsDepositModalOpen] = useState$1(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState$1(false);
   const [forceUpdate, setForceUpdate] = useState$1(0);
+  const [exposure, setExposure] = useState$1(0);
+  const [socket, setSocket] = useState$1(null);
+  useEffect(() => {
+    if (isAuthenticated && userData?._id) {
+      const newSocket = new WebSocket("ws://localhost:3001");
+      newSocket.onopen = () => {
+        console.log("WebSocket connection established");
+      };
+      newSocket.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        if (data.type === "exposureUpdate" && data.userId === userData._id) {
+          console.log(`User ${data.userId} exposure updated to ${data.exposure}`);
+          setExposure(data.exposure);
+        }
+      };
+      newSocket.onclose = () => {
+        console.log("WebSocket connection closed");
+      };
+      newSocket.onerror = (error) => {
+        console.error("WebSocket error:", error);
+      };
+      setSocket(newSocket);
+      return () => {
+        if (newSocket) {
+          newSocket.close();
+        }
+      };
+    }
+  }, [isAuthenticated, userData?._id]);
+  const calculateTotalExposure = useCallback((exposures) => {
+    if (!exposures || !Array.isArray(exposures)) {
+      return 0;
+    }
+    return exposures.reduce((total, exposureObj) => {
+      const exposureValue = parseFloat(exposureObj?.exposure) || 0;
+      return total + exposureValue;
+    }, 0);
+  }, []);
   const calculateActiveExposure = useCallback((exposures) => {
     if (!exposures || !Array.isArray(exposures)) {
       return 0;
     }
-    const total = exposures.reduce((total2, exposureObj) => {
+    return exposures.reduce((total, exposureObj) => {
       if (exposureObj?.is_clear === "true" || exposureObj?.is_clear === true) {
-        return total2;
+        return total;
       }
       const exposureValue = parseFloat(exposureObj?.exposure) || 0;
-      return total2 + exposureValue;
+      return total + exposureValue;
     }, 0);
-    return total;
   }, []);
   const getTotalExposure = useMemo(() => {
+    if (exposure !== 0) {
+      return exposure;
+    }
     const sourceData = userData || profileData || {};
     if (sourceData?.exposures) {
       return calculateActiveExposure(sourceData.exposures);
@@ -1679,12 +1743,12 @@ function MainNavbar() {
       return parseFloat(sourceData.exposure) || 0;
     }
     return 0;
-  }, [profileData, userData, calculateActiveExposure]);
-  const getBalance = useMemo(() => {
+  }, [profileData, userData, calculateActiveExposure, exposure]);
+  const getAvailableBalance = useMemo(() => {
     const sourceData = userData || profileData || {};
     const balance = parseFloat(sourceData?.balance) || 0;
     const activeExposure = getTotalExposure;
-    return balance - activeExposure;
+    return Math.max(0, balance - activeExposure);
   }, [profileData, userData, getTotalExposure]);
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -1716,33 +1780,15 @@ function MainNavbar() {
     }
   }, [isAuthenticated, dispatch]);
   useEffect(() => {
-   
   }, [profileData]);
   useEffect(() => {
-   
     const sourceData = userData || profileData || {};
-    const totalExposure = calculateActiveExposure(sourceData?.exposures) || parseFloat(sourceData?.exposure) || 0;
-    const activeExposure = getTotalExposure;
-    console.log("getBalance value:", getBalance);
-    console.log("getTotalExposure value (active only):", activeExposure);
-    console.log("Total exposure (including cleared):", totalExposure);
-    console.log("Balance calculation details:", {
-      sourceBalance: userData?.balance,
-      sourceExposure: userData?.exposure,
-      calculatedBalance: parseFloat(userData?.balance) || 0,
-      calculatedExposure: parseFloat(userData?.exposure) || 0,
-      totalExposure,
-      activeExposure,
-      finalBalance: (parseFloat(userData?.balance) || 0) - activeExposure
-      // Use active exposure for balance
-    });
-  }, [userData, getBalance, getTotalExposure, calculateActiveExposure]);
+    calculateTotalExposure(sourceData?.exposures) || parseFloat(sourceData?.exposure) || 0;
+  }, [userData, getAvailableBalance, getTotalExposure, calculateTotalExposure]);
   useEffect(() => {
-   
     setForceUpdate((prev) => prev + 1);
   }, [profileData]);
   useEffect(() => {
-    
   }, [forceUpdate]);
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen((prev) => !prev);
@@ -1775,12 +1821,12 @@ function MainNavbar() {
               isAuthenticated && !loading && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden md:flex items-center gap-4 text-white font-bold", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
                   "Balance: ",
-                  getBalance
+                  typeof getAvailableBalance === "number" ? getAvailableBalance.toFixed(2) : "0.00"
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "|" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
                   "Exposure: ",
-                  getTotalExposure
+                  typeof getTotalExposure === "number" ? getTotalExposure.toFixed(2) : "0.00"
                 ] })
               ] }),
               isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsx(

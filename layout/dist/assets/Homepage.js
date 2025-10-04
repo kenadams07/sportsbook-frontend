@@ -1,5 +1,5 @@
 import { importShared } from './__federation_fn_import.js';
-import { e as createLucideIcon, j as jsxRuntimeExports, T as Link, h as cn, B as Button, ao as ArrowLeft, m as Primitive, q as createPopperScope, o as useControllableState, r as Root2$1, f as createContextScope, l as useId$1, u as useComposedRefs, A as Anchor, n as composeEventHandlers, ap as useLayoutEffect2, t as Portal$1, aq as usePrevious, p as useCallbackRef, v as hideOthers, y as useFocusGuards, x as ReactRemoveScroll, g as createSlot, F as FocusScope, D as DismissableLayer, z as Content, H as Arrow, N as ChevronDown, ar as Check, as as ChevronUp, K as useNavigate, at as SPORTS, au as ChevronRight, av as SkeletonLoader, aw as SPORT_ID_BY_KEY, ax as API_BASE, ay as GenIcon, az as FaInfoCircle, aA as FaStar, X, k as getLocalStorageItem, ad as setLocalStorageItem, V as RegisterModal, aB as buildExports, aC as useNotification } from './__federation_expose_LayoutApp.js';
+import { e as createLucideIcon, j as jsxRuntimeExports, T as Link, h as cn, B as Button, ao as ArrowLeft, m as Primitive, q as createPopperScope, o as useControllableState, r as Root2$1, f as createContextScope, l as useId$1, u as useComposedRefs, ap as useLayoutEffect2, A as Anchor, n as composeEventHandlers, t as Portal$1, aq as usePrevious, p as useCallbackRef, v as hideOthers, y as useFocusGuards, x as ReactRemoveScroll, g as createSlot, F as FocusScope, D as DismissableLayer, z as Content, H as Arrow, N as ChevronDown, ar as Check, as as ChevronUp, K as useNavigate, at as SPORTS, au as ChevronRight, av as SkeletonLoader, aw as SPORT_ID_BY_KEY, ax as fetchSportsEvents, ay as GenIcon, az as FaInfoCircle, aA as FaStar, X, k as getLocalStorageItem, ad as setLocalStorageItem, V as RegisterModal, aB as buildExports, aC as useNotification } from './__federation_expose_LayoutApp.js';
 import { A as ArrowRight, u as useDirection, c as createCollection, D as DepositModal } from './DepositModal.js';
 
 /**
@@ -3372,15 +3372,52 @@ function formatDateOrInPlay(status, openDateMs) {
   const min = String(d.getMinutes()).padStart(2, "0");
   return `${dd}.${mm}.${yy}, ${hh}:${min}`;
 }
+function formatGameTime(openDateMs) {
+  if (!openDateMs) return "-";
+  const d = new Date(openDateMs);
+  const hh = String(d.getHours()).padStart(2, "0");
+  const min = String(d.getMinutes()).padStart(2, "0");
+  return `${hh}:${min}`;
+}
+function formatGameDate(openDateMs) {
+  if (!openDateMs) return "-";
+  const d = new Date(openDateMs);
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const yy = String(d.getFullYear()).slice(-2);
+  return `${dd}.${mm}.${yy}`;
+}
+function isGameInTimeRange(openDateMs, timeRange) {
+  if (!openDateMs) return false;
+  const now = /* @__PURE__ */ new Date();
+  const gameTime = new Date(openDateMs);
+  const diffMinutes = (gameTime - now) / (1e3 * 60);
+  switch (timeRange) {
+    case "0-15M":
+      return diffMinutes >= 0 && diffMinutes <= 15;
+    case "15-30M":
+      return diffMinutes > 15 && diffMinutes <= 30;
+    case "30-60M":
+      return diffMinutes > 30 && diffMinutes <= 60;
+    default:
+      return true;
+  }
+}
 function splitEventName(eventName = "") {
   const parts = eventName.split(/\s+vs\.?\s+/i);
   if (parts.length === 2) return { team1: parts[0], team2: parts[1] };
   return { team1: eventName, team2: "" };
 }
 function extractOddsW1W2(markets) {
-  const mo = markets?.matchOdds?.[0];
-  const r0 = mo?.runners?.[0];
-  const r1 = mo?.runners?.[1];
+  if (!markets || !markets.matchOdds || !Array.isArray(markets.matchOdds) || markets.matchOdds.length === 0) {
+    return { w1: "-", w2: "-" };
+  }
+  const mo = markets.matchOdds[0];
+  if (!mo || !mo.runners || !Array.isArray(mo.runners) || mo.runners.length < 2) {
+    return { w1: "-", w2: "-" };
+  }
+  const r0 = mo.runners[0];
+  const r1 = mo.runners[1];
   const w1 = r0?.backPrices?.[0]?.price;
   const w2 = r1?.backPrices?.[0]?.price;
   return {
@@ -3403,7 +3440,7 @@ function findSportKeyByName(sportName) {
 }
 function UpcomingMatches() {
   const navigate = useNavigate();
-  const [selectedTimeFilter, setSelectedTimeFilter] = useState$4("0-15M");
+  const [selectedTimeFilter, setSelectedTimeFilter] = useState$4(null);
   const [selectedSportKey, setSelectedSportKey] = useState$4("soccer");
   const [selectedGameId, setSelectedGameId] = useState$4(null);
   const [selectedGameSportKey, setSelectedGameSportKey] = useState$4(null);
@@ -3421,15 +3458,13 @@ function UpcomingMatches() {
       setError(null);
       try {
         const sportId = selectedSportKey ? SPORT_ID_BY_KEY[selectedSportKey] : void 0;
-        const url = sportId ? `/events?sport_id=${sportId}&live_matches=true` : API_BASE;
-        const res = await fetch(url, {
-          headers: { accept: "application/json" },
-          signal: controller.signal
-        });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const json = await res.json();
-        const list = json?.sports ?? [];
-        setEvents(Array.isArray(list) ? list : []);
+        const data = sportId ? await fetchSportsEvents(sportId, true) : { sports: [] };
+        console.log("Fetched data:", data);
+        if (!data || !Array.isArray(data.sports)) {
+          throw new Error("Invalid data format received from API");
+        }
+        const list = data.sports;
+        setEvents(list);
         const oddsMap = {};
         for (const e of list) {
           oddsMap[e.eventId] = extractOddsW1W2(e.markets);
@@ -3438,7 +3473,11 @@ function UpcomingMatches() {
         oddsPrevRef.current = oddsMap;
         setHighlightedOdds({});
       } catch (e) {
-        if (e?.name !== "AbortError") setError(e?.message || "Failed to load events");
+        console.error("Error in fetchEvents:", e);
+        if (e?.name !== "AbortError") {
+          const errorMessage = e?.message || "Failed to load events";
+          setError(`Error loading events: ${errorMessage}`);
+        }
       } finally {
         setLoading(false);
       }
@@ -3451,11 +3490,12 @@ function UpcomingMatches() {
     async function pollOdds() {
       try {
         const sportId = selectedSportKey ? SPORT_ID_BY_KEY[selectedSportKey] : void 0;
-        const url = sportId ? `/events?sport_id=${sportId}&live_matches=true` : API_BASE;
-        const res = await fetch(url, { headers: { accept: "application/json" } });
-        if (!res.ok) return;
-        const json = await res.json();
-        const list = json?.sports ?? [];
+        const data = sportId ? await fetchSportsEvents(sportId, true) : { sports: [] };
+        if (!data || !Array.isArray(data.sports)) {
+          console.warn(`Invalid data received for sport ${selectedSportKey}, skipping update`);
+          return;
+        }
+        const list = data.sports;
         const oddsMap = { ...oddsByEventId };
         const highlights = {};
         for (const e of list) {
@@ -3473,11 +3513,26 @@ function UpcomingMatches() {
         setTimeout(() => {
           setHighlightedOdds({});
         }, 1e3);
-      } catch {
+      } catch (error2) {
+        console.error("Error polling odds:", error2);
       }
     }
-    intervalId = setInterval(pollOdds, 1e3);
-    return () => clearInterval(intervalId);
+    try {
+      intervalId = setInterval(() => {
+        try {
+          pollOdds();
+        } catch (error2) {
+          console.error("Error in pollOdds interval:", error2);
+        }
+      }, 1e3);
+    } catch (error2) {
+      console.error("Error setting up polling interval:", error2);
+    }
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
   }, [selectedSportKey, oddsByEventId]);
   const filteredEvents = useMemo$4(() => {
     if (!selectedSportKey) return events;
@@ -3487,7 +3542,7 @@ function UpcomingMatches() {
     return events.filter((e) => allowed.has(normalize(e.sportName)));
   }, [events, selectedSportKey]);
   const matches = useMemo$4(() => {
-    return filteredEvents.map((e, idx) => {
+    const sportFilteredMatches = filteredEvents.map((e, idx) => {
       const { team1, team2 } = splitEventName(e.eventName);
       const odds = oddsByEventId[e.eventId] || extractOddsW1W2(e.markets);
       const inferredSportKey = e.sportKey || findSportKeyByName(e.sportName) || null;
@@ -3496,16 +3551,30 @@ function UpcomingMatches() {
         openDate: e.openDate,
         status: e.status,
         timeLabel: formatDateOrInPlay(e.status, e.openDate),
+        gameTime: formatGameTime(e.openDate),
+        // New formatted time for game rows
+        gameDate: formatGameDate(e.openDate),
+        // New formatted date for game rows
         team1,
         team2,
         isFavorite: !!e.isFavourite,
         odds,
         additionalMarkets: "",
         sportKey: inferredSportKey,
-        highlight: highlightedOdds[e.eventId] || { w1: false, w2: false }
+        highlight: highlightedOdds[e.eventId] || { w1: false, w2: false },
+        competitionName: e.competitionName || "",
+        // Add competition name from API
+        catName: e.catName || ""
+        // Add category name from API
       };
     });
-  }, [filteredEvents, oddsByEventId, highlightedOdds]);
+    if (selectedTimeFilter) {
+      return sportFilteredMatches.filter(
+        (match) => isGameInTimeRange(match.openDate, selectedTimeFilter)
+      );
+    }
+    return sportFilteredMatches;
+  }, [filteredEvents, oddsByEventId, highlightedOdds, selectedTimeFilter]);
   const handleGameClick = (id, sportKey) => {
     setSelectedGameId(id);
     setSelectedGameSportKey(sportKey || null);
@@ -3519,32 +3588,59 @@ function UpcomingMatches() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#3f3e3e] text-white", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-3 sm:p-4", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-sm sm:text-lg font-semibold mb-3", children: "FEATURED GAME" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm text-muted-foreground text-center py-6", children: "No featured game available" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm text-muted-foreground text-center py-6", children: "There is no featured games at the moment" })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 gap-3", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-sm sm:text-lg font-semibold", children: "UPCOMING MATCHES" }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 w-full sm:w-auto", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-2 overflow-x-auto scrollbar-hide py-1", children: timeFilters.map((filter) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Button,
-          {
-            variant: selectedTimeFilter === filter ? "default" : "outline",
-            size: "sm",
-            onClick: () => setSelectedTimeFilter(filter),
-            className: `text-xs sm:text-sm px-2 py-1 sm:px-3 sm:py-2 ${selectedTimeFilter === filter ? "bg-white text-black hover:bg-white" : "bg-transparent border-gray-600 text-white hover:bg-white hover:text-black"}`,
-            children: filter
-          },
-          filter
-        )) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 overflow-x-auto scrollbar-hide py-1", children: [
+          timeFilters.map((filter) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Button,
+            {
+              variant: selectedTimeFilter === filter ? "default" : "outline",
+              size: "sm",
+              onClick: () => setSelectedTimeFilter(filter),
+              className: `text-xs sm:text-sm px-2 py-1 sm:px-3 sm:py-2 ${selectedTimeFilter === filter ? "bg-white text-black hover:bg-white" : "bg-transparent border-gray-600 text-white hover:bg-white hover:text-black"}`,
+              children: filter
+            },
+            filter
+          )),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Button,
+            {
+              variant: !selectedTimeFilter ? "default" : "outline",
+              size: "sm",
+              onClick: () => setSelectedTimeFilter(null),
+              className: `text-xs sm:text-sm px-2 py-1 sm:px-3 sm:py-2 ${!selectedTimeFilter ? "bg-white text-black hover:bg-white" : "bg-transparent border-gray-600 text-white hover:bg-white hover:text-black"}`,
+              children: "All"
+            }
+          )
+        ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs(Button, { variant: "ghost", size: "sm", className: "text-white hover:bg-gray-800 hover:text-white text-xs sm:text-sm", children: [
           "More",
           /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { className: "w-3 h-3 sm:w-4 sm:h-4 ml-1" })
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex w-full gap-2 overflow-x-auto scrollbar-hide px-2 py-2", children: loading ? (
-      // Using SkeletonLoader for sport icons when loading
-      Array.from({ length: 8 }).map((_, index) => /* @__PURE__ */ jsxRuntimeExports.jsx(SkeletonLoader, { type: "sport-icon" }, index))
-    ) : SPORTS.map((sport) => {
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex w-full gap-2 overflow-x-auto scrollbar-hide px-2 py-2", children: loading ? SPORTS.map((sport) => {
+      const Icon = sport.icon;
+      const isSelected = selectedSportKey === sport.key;
+      const colorClass = sport.color.split(" ").find((cls) => cls.startsWith("bg-chart-")) || "bg-gray-600";
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "div",
+        {
+          onClick: () => setSelectedSportKey(sport.key),
+          className: `snap-start flex-shrink-0 sm:flex-1 flex flex-col items-center justify-center gap-1 cursor-pointer border rounded-md sport-icon-box ${isSelected ? `${colorClass} selected border-white` : "border-gray-600 bg-gray-700 text-white hover:bg-gray-600"}`,
+          style: { padding: "0.45rem 0.7rem", minWidth: "64px" },
+          title: sport.sportNames[0],
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { className: "w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 mx-auto" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[11px] sm:text-[13px] truncate max-w-[90%] text-center font-medium", children: sport.sportNames[0] })
+          ]
+        },
+        sport.key
+      );
+    }) : SPORTS.map((sport) => {
       const Icon = sport.icon;
       const isSelected = selectedSportKey === sport.key;
       const colorClass = sport.color.split(" ").find((cls) => cls.startsWith("bg-chart-")) || "bg-gray-600";
@@ -3563,27 +3659,20 @@ function UpcomingMatches() {
         sport.key
       );
     }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row items-center justify-between px-3 lg:px-5 py-2 bg-[#3f3e3e] gap-3", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Select, { defaultValue: "winner", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(SelectTrigger, { className: "w-28 sm:w-32 bg-gray-800 border-gray-600 text-white text-xs sm:text-sm flex items-center justify-between", children: /* @__PURE__ */ jsxRuntimeExports.jsx(SelectValue, {}) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(SelectContent, { className: "bg-gray-800 border-gray-600", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: "winner", className: "text-white text-xs sm:text-sm", children: "Winner" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: "handicap", className: "text-white text-xs sm:text-sm", children: "Handicap" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(SelectItem, { value: "over-under", className: "text-white text-xs sm:text-sm", children: "Total" })
-        ] })
-      ] }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 sm:gap-4 text-xs sm:text-sm font-medium cursor-pointer", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 sm:w-16 bg-[#505050] flex items-center justify-center h-8 sm:h-12 text-center rounded", children: "W1" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 sm:w-16 bg-[#505050] flex items-center justify-center h-8 sm:h-12 text-center rounded", children: "W2" })
-      ] })
-    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-end px-3 lg:px-5 py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 sm:gap-4 text-xs sm:text-sm font-medium", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 sm:w-16 bg-[#505050] flex items-center justify-center h-6 sm:h-8 text-center rounded", children: "W1" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 sm:w-16 bg-[#505050] flex items-center justify-center h-6 sm:h-8 text-center rounded", children: "W2" })
+    ] }) }),
     loading && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col px-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(SkeletonLoader, { type: "row", count: 5 }) }),
     error && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-3 text-sm text-red-400", children: [
       "Error: ",
       error
     ] }),
-    !loading && !error && matches.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-4 py-10 text-center text-sm text-muted-foreground", children: "Currently no matches to display" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col px-2", children: !loading && matches.map((match) => {
+    !loading && !error && matches.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-10 text-center text-sm text-muted-foreground", children: [
+      "Currently no matches to display",
+      selectedTimeFilter && ` for ${selectedTimeFilter} time range`
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col px-2 max-h-[320px] overflow-y-auto custom-scrollbar", children: !loading && matches.map((match) => {
       const isSelected = selectedGameId === match.id;
       let backgroundClass = "bg-[#505050] hover:bg-[#606060]";
       let textColor = "text-white";
@@ -3601,18 +3690,29 @@ function UpcomingMatches() {
           onClick: () => handleGameClick(match.id, match.sportKey),
           className: `cursor-pointer flex items-center justify-between gap-3 px-3 py-2 m-1 rounded-md transition-all duration-300 ${backgroundClass} ${textColor} ${isSelected ? "shadow-md transform scale-[1.01] border border-white/20" : ""}`,
           children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 min-w-0 flex-1", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 text-[11px] text-muted-foreground flex-shrink-0", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, { className: "w-4 h-4" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "whitespace-nowrap text-[11px]", children: match.timeLabel })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-5 w-px bg-gradient-to-b from-transparent via-muted-foreground to-transparent opacity-30 hidden sm:block" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-medium truncate text-[13px] sm:text-sm", children: match.team1 }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[12px] sm:text-sm truncate opacity-90", children: match.team2 })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-muted-foreground text-[11px] self-start sm:self-center truncate ml-2 hidden md:block", children: match.additionalMarkets })
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-start gap-1 text-[11px] text-muted-foreground flex-shrink-0 w-16", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "whitespace-nowrap", children: match.gameDate }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, { className: "w-3 h-3" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "whitespace-nowrap", children: match.gameTime })
+              ] })
             ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-8 w-px bg-gradient-to-b from-transparent via-muted-foreground to-transparent opacity-30" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0 flex items-center justify-between", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col min-w-0", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-medium truncate text-[13px] sm:text-sm", children: match.team1 }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[12px] sm:text-sm truncate opacity-90", children: match.team2 }),
+                match.status === "IN_PLAY" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[9px] font-bold bg-red-600 text-white px-1 py-0.5 rounded w-fit mt-1", children: "IN PLAY" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mx-2", children: [
+                match.competitionName && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-[11px] text-white truncate", children: [
+                  " ",
+                  match.competitionName
+                ] }),
+                match.catName && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[10px] bg-blue-700 px-1.5 py-0.5 rounded", children: match.catName })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-muted-foreground text-[11px] self-start sm:self-center truncate ml-2 hidden md:block", children: match.additionalMarkets }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(
                 Button,
@@ -14170,6 +14270,7 @@ const Home = () => {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState$1(false);
   const intervalRef = useRef(null);
   const apiRef = useRef(null);
+  const navigate = useNavigate();
   useEffect$1(() => {
     const shouldShowWelcome = getLocalStorageItem("showWelcomeModal");
     if (shouldShowWelcome === "true") {
@@ -14211,6 +14312,10 @@ const Home = () => {
   const handleBannerClick = (item) => {
     if (item.src.includes("banner1")) {
       setIsRegisterModalOpen(true);
+    } else if (item.src.includes("banner-2")) {
+      navigate("/games");
+    } else if (item.src.includes("banner-5")) {
+      navigate("/live_events/event-view", { state: { viewType: "prematch" } });
     }
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full mx-auto px-2 py-2", children: [
@@ -14238,7 +14343,7 @@ const Home = () => {
         },
         onMouseLeave: handleUserInteraction,
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(CarouselContent, { className: "h-full", children: sliderImages.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(CarouselItem, { className: "h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative w-full h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CarouselContent, { className: "h-full custom-scrollbar", children: sliderImages.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(CarouselItem, { className: "h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative w-full h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
             buildExports.LazyLoadImage,
             {
               src: item.src,

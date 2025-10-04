@@ -157,6 +157,22 @@ const getRunnerIdForSelectedTeam = (selectedGame, selectedTeam) => {
   return null;
 };
 
+// Add this helper function after the existing helper functions
+const isMatchSuspended = (selectedGame) => {
+  // Check if match status is suspended
+  if (selectedGame?.status === "SUSPENDED") return true;
+  
+  // Check if all odds are suspended (existing logic from GameCard)
+  const odds = selectedGame?.odds || {};
+  if (odds.w1 === "SUSPENDED" && odds.x === "SUSPENDED" && odds.w2 === "SUSPENDED") return true;
+  
+  // Check if markets are suspended
+  const markets = selectedGame?.markets?.matchOdds?.[0];
+  if (markets?.status === "SUSPENDED") return true;
+  
+  return false;
+};
+
 export default function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = false, isSwitchingMatch }) {
   const dispatch = useDispatch();
   const { isAuthenticated, userData } = useSelector(state => state.Login);
@@ -168,7 +184,10 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
 
   // Check if this is a market runner selection
   const isMarketRunnerSelection = selectedGame?.selectedMarket && selectedGame?.selectedRunner;
-
+  
+  // Check if match is suspended
+  const matchIsSuspended = isMatchSuspended(selectedGame);
+  
   // Get the market name to display
   const getMarketName = () => {
     if (isMarketRunnerSelection) {
@@ -483,7 +502,13 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
   if (!selectedGame) {
     return (
       <div className="flex items-center justify-center h-full text-live-muted text-sm bg-gradient-to-b from-live-tertiary to-live-secondary rounded p-4 shadow-md">
-        Select a game to see details
+        <div className="flex flex-col items-center animate-pulse-scale">
+          <div className="relative w-10 h-10">
+            <div className="absolute w-full h-full rounded-full border-4 border-live-accent border-t-transparent animate-spin"></div>
+            <div className="absolute w-6 h-6 top-2 left-2 rounded-full border-4 border-live-primary border-b-transparent animate-spin-reverse"></div>
+          </div>
+          <p className="mt-3 text-live-primary text-xs font-medium">Loading game details...</p>
+        </div>
       </div>
     );
   }
@@ -541,7 +566,13 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
             </div>
 
             {/* Display runners based on selection type */}
-            {isMarketRunnerSelection ? (
+            {matchIsSuspended ? (
+              // Show suspended message instead of runners for suspended matches
+              <div className="flex flex-col gap-1 my-1 p-2 bg-live-odds rounded text-center">
+                <span className="text-sm font-bold text-live-primary">Match Suspended</span>
+                <span className="text-xs text-live-muted">Betting is not available</span>
+              </div>
+            ) : isMarketRunnerSelection ? (
               // Market runner selection view
               <div className="flex flex-col gap-1 my-1">
                 <div
@@ -648,7 +679,8 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
             <div className="text-[10px] text-live-secondary">{formatDateTime(selectedGame?.openDate)}</div>
           </div>
 
-          {(selectedTeam || isMarketRunnerSelection) && (
+          {/* Only show betting controls if match is not suspended */}
+          {!matchIsSuspended && (selectedTeam || isMarketRunnerSelection) && (
             <>
               <div className="bg-live-tertiary px-2 py-1 rounded border border-live">
                 <input
@@ -667,7 +699,8 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
             </>
           )}
 
-          {(selectedTeam || isMarketRunnerSelection) && (
+          {/* Only show betting chips if match is not suspended */}
+          {!matchIsSuspended && (selectedTeam || isMarketRunnerSelection) && (
             <div className="flex gap-1.5" ref={containerRef}>
               {betAmounts.map((amount, index) => (
                 <div key={index} className="flex-1">
@@ -774,7 +807,13 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           </div>
 
           {/* Display runners based on selection type */}
-          {isMarketRunnerSelection ? (
+          {matchIsSuspended ? (
+            // Show suspended message instead of runners for suspended matches
+            <div className="flex flex-col gap-2 my-2 p-4 bg-live-odds rounded text-center">
+              <span className="text-lg font-bold text-live-primary">Match Suspended</span>
+              <span className="text-sm text-live-muted">Betting is not available for this match</span>
+            </div>
+          ) : isMarketRunnerSelection ? (
             // Market runner selection view
             <div className="flex flex-col gap-2 my-2">
               <div
@@ -881,7 +920,8 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           <div className="text-xs text-live-secondary">{formatDateTime(selectedGame?.openDate)}</div>
         </div>
 
-        {(selectedTeam || isMarketRunnerSelection) && (
+        {/* Only show betting controls if match is not suspended */}
+        {!matchIsSuspended && (selectedTeam || isMarketRunnerSelection) && (
           <>
             <div className="bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
               <input
@@ -900,7 +940,8 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           </>
         )}
 
-        {(selectedTeam || isMarketRunnerSelection) && (
+        {/* Only show betting chips if match is not suspended */}
+        {!matchIsSuspended && (selectedTeam || isMarketRunnerSelection) && (
           <div className="flex gap-1.5" ref={containerRef}>
             {betAmounts.map((amount, index) => (
               <div key={index} className="flex-1">
@@ -945,15 +986,17 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           </div>
         )}
 
+        {/* Only show BET button if match is not suspended */}
         <button
-          className={`w-full px-2.5 py-1.5 rounded text-sm font-bold transition-colors cursor-pointer color-yellowborder-solid transition-all duration-200 ${isAuthenticated && (selectedTeam || isMarketRunnerSelection)
+          className={`w-full px-2.5 py-1.5 rounded text-sm font-bold transition-colors cursor-pointer color-yellowborder-solid transition-all duration-200 ${
+            !matchIsSuspended && isAuthenticated && (selectedTeam || isMarketRunnerSelection)
               ? 'bg-live-accent hover:bg-live-warning border border-live-accent text-live-accent hover:text-live-dark hover:scale-[1.02] hover:shadow-[0_0_8px_var(--live-accent-primary)]'
               : 'bg-live-tertiary border border-live text-live-accent cursor-not-allowed opacity-50'
-            }`}
-          disabled={!isAuthenticated || (!selectedTeam && !isMarketRunnerSelection)}
+          }`}
+          disabled={matchIsSuspended || !isAuthenticated || (!selectedTeam && !isMarketRunnerSelection)}
           onClick={handlePlaceBet}
         >
-          BET
+          {matchIsSuspended ? 'MATCH SUSPENDED' : 'BET'}
         </button>
       </div>
 

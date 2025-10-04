@@ -49,8 +49,8 @@ const navItems = [
     },
 
     { label: 'Casino', items: [{ label: 'Home', href: '/casino/slots' }, { label: 'Tournaments', href: '/casino/tournaments' }] }, 
-     { label: 'Games', href: '/games'},
-    { label: 'Virtual Sports', items: [{ label: 'Virtual Football', href: '/virtual/football' }, { label: 'Virtual Horse Racing', href: '/virtual/horse-racing' }, { label: 'Virtual Tennis', href: '/virtual/tennis' }] },
+    { label: 'Games', href: '/games'},
+    { label: 'Virtual Sports', href: '/virtual-sports' }, // Changed from dropdown to direct link
     { label: 'Esports', items: [{ label: 'Event View', href: '/esports/event-view' }, { label: 'Live Calendar', href: '/esports/live-calendar' }, { label: 'Results', href: '/esports/results' }, { label: 'Statistics', href: '/esports/statistics' }] },
     { label: 'PlayTech', items: [{ label: 'Slots', href: '/playtech/slots' }, { label: 'Live Casino', href: '/playtech/live' }, { label: 'Table Games', href: '/playtech/table' }] }
 ];

@@ -15,4 +15,5 @@ export const Paths = {
     esportsLiveCalendar: '/esports/live-calendar',
     esportsResults: '/esports/results',
     esportsStatistics: '/esports/statistics',
+    virtualSports: '/virtual-sports',
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '../lib/utils';
+import CasinoProvidersGamesSection from '../components/CasinoProvidersGamesSection';
 
 // Game category components
 const GameCategoryButton = ({ icon, label, isActive, onClick }) => (
@@ -117,6 +118,18 @@ const Casino = () => {
     setActiveCategory(categoryId);
   };
 
+  // Handle provider search
+  const handleProviderSearch = (query) => {
+    setSearchQuery(query);
+    // Add your provider search logic here
+  };
+
+  // Handle game search
+  const handleGameSearch = (query) => {
+    setSearchQuery(query);
+    // Add your game search logic here
+  };
+
   return (
     <div className="casino-container">
       {/* Featured Game Banner */}
@@ -172,56 +185,11 @@ const Casino = () => {
         </div>
       </div>
 
-      {/* Main Sections Container */}
-      <div className="casino-main-sections-container">
-        {/* Section Headers */}
-        <div className="casino-section-headers">
-          <div className="casino-section-header casino-providers-header">PROVIDERS</div>
-          <div className="casino-section-header">GAMES</div>
-        </div>
-        
-        {/* Search Inputs */}
-        <div className="casino-search-container">
-          {/* Provider Search */}
-          <div className="casino-provider-search-container">
-            <input
-              type="text"
-              placeholder="Provider Search"
-              className="casino-search-input"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button className="casino-search-button">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Game Search with Filter */}
-          <div className="casino-game-search-container">
-            <div className="casino-game-search-input-container">
-              <input
-                type="text"
-                placeholder="Game Search"
-                className="casino-game-search-input"
-              />
-              <button className="casino-game-search-button">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </button>
-            </div>
-            
-            {/* Filter Button */}
-            <button className="casino-filter-button">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* Reusable PROVIDERS/GAMES Section */}
+      <CasinoProvidersGamesSection 
+        onProviderSearch={handleProviderSearch}
+        onGameSearch={handleGameSearch}
+      />
 
       {/* Game Grid */}
       <div className="casino-game-grid-container">

@@ -15,6 +15,21 @@ const sportImageMap = {
   volleyball: "/assets/img4.jpg",
 };
 
+const isMatchSuspended = (match) => {
+  // Check if match status is suspended
+  if (match?.status === "SUSPENDED") return true;
+  
+  // Check if all odds are suspended (existing logic from GameCard)
+  const odds = match?.odds || {};
+  if (odds.w1 === "SUSPENDED" && odds.x === "SUSPENDED" && odds.w2 === "SUSPENDED") return true;
+  
+  // Check if markets are suspended
+  const markets = match?.markets?.matchOdds?.[0];
+  if (markets?.status === "SUSPENDED") return true;
+  
+  return false;
+};
+
 export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -29,13 +44,20 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
   if (!match || !sport) {
     return (
       <div className="flex items-center justify-center h-full text-live-muted text-sm">
-        Select a game to see details
+        <div className="flex flex-col items-center animate-pulse-scale">
+          <div className="relative w-12 h-12">
+            <div className="absolute w-full h-full rounded-full border-4 border-live-accent border-t-transparent animate-spin"></div>
+            <div className="absolute w-8 h-8 top-2 left-2 rounded-full border-4 border-live-primary border-b-transparent animate-spin-reverse"></div>
+          </div>
+          <p className="mt-4 text-live-primary text-sm font-medium">Loading game details...</p>
+        </div>
       </div>
     );
   }
 
   const sportKey =
-    sport?.key?.toLowerCase?.() ||
+    match?.sportKey || // From match object (when passed from LeftSidebarEventView)
+    sport?.key?.toLowerCase?.() || // From sport prop (when passed from MainLiveSection)
     sport?.name?.toLowerCase?.() ||
     sport?.toLowerCase?.() ||
     "";
@@ -57,6 +79,8 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
   // Use real-time scores from match prop
   const homeScore = match.homeScore ?? 0;
   const awayScore = match.awayScore ?? 0;
+
+  const matchIsSuspended = isMatchSuspended(match);
 
   return (
     <div className="p-2 flex flex-col gap-4 h-full min-w-0">
@@ -147,11 +171,21 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
 
       {/* Market Section - Scrollable area */}
       <div className="flex-grow overflow-hidden flex flex-col">
-        <MarketSection 
-          selectedMatch={match} 
-          onRunnerSelect={onRunnerSelect}
-          searchTerm={searchTerm}
-        />
+        {matchIsSuspended ? (
+          // Show suspended message instead of markets for suspended matches
+          <div className="flex-grow flex items-center justify-center bg-live-tertiary rounded p-4">
+            <div className="text-center">
+              <div className="text-live-primary text-lg font-bold mb-2">Match Suspended</div>
+              <div className="text-live-muted text-sm">Markets are not available for suspended matches</div>
+            </div>
+          </div>
+        ) : (
+          <MarketSection 
+            selectedMatch={match} 
+            onRunnerSelect={onRunnerSelect}
+            searchTerm={searchTerm}
+          />
+        )}
       </div>
     </div>
   );
@@ -384,7 +418,21 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
     
     prevSelectedMatchRef.current = selectedMatch;
 
-    if (!selectedMatch || !selectedMatch.eventId || !selectedMatch.sportKey) {
+    // Check if we have all required data to fetch markets
+    if (!selectedMatch || !selectedMatch.eventId) {
+      setMarkets([]);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      setLoading(false);
+      return;
+    }
+
+    // Try to get sportKey from multiple possible sources
+    const sportKey = selectedMatch.sportKey || selectedMatch.sport?.key || selectedMatch.sport?.name;
+    
+    if (!sportKey) {
       setMarkets([]);
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -400,7 +448,8 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
         const controller = new AbortController();
         currentFetchControllerRef.current = controller;
         
-        const sportId = SPORT_ID_BY_KEY[selectedMatch.sportKey];
+        const sportId = SPORT_ID_BY_KEY[sportKey];
+        
         if (!sportId) {
           setMarkets([]);
           setLoading(false);
@@ -505,7 +554,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
         currentFetchControllerRef.current.abort();
       }
     };
-  }, [selectedMatch]);
+  }, [selectedMatch?.eventId, selectedMatch?.sportKey, selectedMatch]); // Include full selectedMatch for comprehensive updates
 
   const toggleMarket = (marketId) => {
     setExpandedById(prev => ({

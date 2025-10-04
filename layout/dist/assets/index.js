@@ -1618,27 +1618,30 @@ const INIT_STATE$2 = {
 const loginReducer = (state = INIT_STATE$2, action) => {
   switch (action.type) {
     case LOGIN:
-      return { ...state, loading: true, isAuthenticated: false };
+      return { ...state, loading: true, isAuthenticated: false, error: null };
     case LOGIN_SUCCESS:
-    
       return {
         ...state,
-        userData: action?.payload,
+        userData: action.payload,
         loading: false,
         isAuthenticated: true,
+        error: null
       };
     case LOGIN_FAILURE:
-      return { ...state, loading: false, isAuthenticated: false };
+      return { 
+        ...state, 
+        loading: false, 
+        isAuthenticated: false,
+        error: action.error
+      };
     case LOGOUT_SUCCESS:
-      return { ...state, userData: {}, loading: false, isAuthenticated: false };
+      return { ...state, userData: {}, loading: false, isAuthenticated: false, error: null };
     case UPDATE_USER_BALANCE_EXPOSURE:
-     
       return {
         ...state,
         loading: true,
       };
     case UPDATE_USER_BALANCE_EXPOSURE_SUCCESS:
-      
       return {
         ...state,
         loading: false,
@@ -1649,7 +1652,6 @@ const loginReducer = (state = INIT_STATE$2, action) => {
         },
       };
     case GET_USER_DATA_SUCCESS:
-     
       // Update the userData in the login reducer when getUserData is successful
       // Replace the entire userData object to ensure consistency
       return {
@@ -1687,11 +1689,13 @@ const verifyEmailReducer = (state = initialState$1, action) => {
         success: true,
       };
     case VERIFY_EMAIL_FAILURE:
+      // Use the error message from the action payload if available
+      const errorMessage = action.payload?.message || action.payload || "Verification failed";
       return {
         ...state,
         loading: false,
-        data: null,
-        error: "Verification failed",
+        data: action.payload?.data || null,
+        error: errorMessage,
         success: false,
       };
     default:
@@ -1844,22 +1848,34 @@ function takeEvery$1(patternOrChannel, worker) {
 
 function* signupRequest(action) {
   try {
+    // Extract the actual payload from the action
+    const  payload  = action.payload || action;
+    console.log("action.payload in signup saga", payload);
+    
     const data = yield call(() =>
-      notifyPromise(() => api.post("/users/signup", action.payload), {
+      notifyPromise(() => api.post("/users/signup", payload), {
         loadingText: "On Boarding...",
         getSuccessMessage: (res) => {
-     
           if (res?.data?.success) return res.data.message || "On Boarding...";
           return null; // null prevents success notification if success !== true
         },
         getErrorMessage: (err) => {
-
-          return err?.response?.data?.message || err?.message || "Signup failed";
+          // Handle timeout errors specifically
+          if (err?.code === 'ECONNABORTED') {
+            return 'Request timeout. Please check your connection and try again.';
+          }
+          // More detailed error handling
+          if (err?.response?.data?.message) {
+            return err.response.data.message;
+          }
+          if (err?.response?.data?.error) {
+            return err.response.data.error;
+          }
+          return err?.message || "Signup failed";
         },
         successDuration: 4000,
         onSuccess: (res) => {
-         
-      
+          // Handle success callback
         },
         onError: (err) => {
           console.log("Signup failed:", err);
@@ -1868,9 +1884,8 @@ function* signupRequest(action) {
     );
 
     if (data?.data?.success) {
-    
       yield call(setLocalStorageItem, "token", data.data.token);
-        yield call(setLocalStorageItem, "userData", data.data.data);
+      yield call(setLocalStorageItem, "userData", data.data.data);
       yield put(signupSuccess(data.data.data));
       yield put(loginSuccess(data.data.data));
       
@@ -1883,6 +1898,7 @@ function* signupRequest(action) {
     }
 
   } catch (error) {
+    console.error("Signup error caught in saga:", error);
     yield put(signupFailure());
   }
 }
@@ -1897,8 +1913,10 @@ function* rootSaga$6() {
 
 function* loginRequest(action) {
   try {
+    // Extract the actual payload from the action
+    const { payload } = action;
     const data = yield call(() =>
-      notifyPromise(() => api.post("/users/login", action?.payload?.payload), {
+      notifyPromise(() => api.post("/users/login", payload), {
         loadingText: "Logging in...",
         getSuccessMessage: (res) => {
           // Handle the login response structure (success: true)
@@ -1951,9 +1969,10 @@ function* rootSaga$5() {
 
 function* verifyEmailRequest(action) {
     try {
+        // Extract the actual payload and route from the action
+        const { payload, route } = action.payload || action;
+     
         let endpoint = "";
-        const { route, payload } = action.payload;
-        console.log("route, payload in saga", route, payload);
         let notificationOptions = {};
 
         // Check route first to handle special cases like forgot password
@@ -2023,15 +2042,17 @@ function* verifyEmailRequest(action) {
                 }
 
             } else {
-                yield put(verifyEmailFailure());
+                // Pass the error data to the failure action
+                yield put(verifyEmailFailure(data));
             }
         } catch (apiError) {
             console.error("API Error:", apiError);
-            yield put(verifyEmailFailure());
+            // Pass the error to the failure action
+            yield put(verifyEmailFailure(apiError?.response?.data || apiError?.message || "Verification failed"));
         }
     } catch (error) {
         console.error("Saga Error:", error);
-        yield put(verifyEmailFailure());
+        yield put(verifyEmailFailure(error?.message || "Verification failed"));
     }
 }
 
@@ -2078,39 +2099,37 @@ function* rootSaga$3() {
 
 function* getUserDataRequest(action) {
   try {
-    console.log("getUserDataRequest called with action:", action);
+   
     const response = yield call(api.get, "/users/profile");
     const data = response.data;
-    console.log("data getuserdata", data);
-    console.log("Full response:", response);
+ 
 
     // Handle the response structure with success field
     if (data?.success === true) {
- 
+  
       yield put(getUserDataSuccess(data?.data));
       
-      // Update localStorage with the new user data
-      console.log("Updating localStorage with user data:", data?.data);
+  
       yield call(setLocalStorageItem, "userData", JSON.stringify(data?.data));
       
       // Execute callback if provided
       if (action.callback && typeof action.callback === 'function') {
-        console.log("Executing callback function");
+    
         yield call(action.callback, data);
       }
     } 
     // Handle the previous response structure with code field
     else if (data?.meta?.code === 200 || data?.code === 200) {
-      console.log("getUserData success with legacy data structure:", data?.data);
+    
       yield put(getUserDataSuccess(data?.data));
       
       // Update localStorage with the new user data
-      console.log("Updating localStorage with user data:", data?.data);
+     
       yield call(setLocalStorageItem, "userData", JSON.stringify(data?.data));
       
       // Execute callback if provided
       if (action.callback && typeof action.callback === 'function') {
-        console.log("Executing callback function");
+      
         yield call(action.callback, data);
       }
     } else {
@@ -2133,40 +2152,27 @@ function* rootSaga$2() {
 
 function* updateUserBalanceExposureRequest(action) {
   try {
-    console.log("updateUserBalanceExposureRequest called with action:", action);
-    // Get user data from localStorage
     const userData = getLocalStorageItem("userData");
-    console.log("Current userData from localStorage:", userData);
     const userId = userData?._id;
     
     if (!userId) {
-      console.error("User ID not found in localStorage");
       yield put(updateUserBalanceExposureFailure());
       return;
     }
 
-    // Prepare payload with required fields
+    // Create payload by combining all fields from action.payload with userId
+    // We preserve all fields as sent from the component, including stake
     const payload = {
-      eventId: action.payload.eventId || null,
-      marketId: action.payload.marketId || null,
+      ...action.payload,
       userId: userId,
-      is_clear: action.payload.is_clear || "false",
-      marketType: action.payload.marketType,
-      stake: action.payload.stake || 0,
-      team: action.payload.team || null,
-      odds: action.payload.odds || 0,
-      possibleWin: action.payload.possibleWin || 0
     };
-    console.log("Sending payload to /exposures/update-exposure:", payload);
     
-    // Make POST request to update exposure
     const response = yield call(() =>
       notifyPromise(
         () => api.post("/sportBets/place-bet", payload),
         {
           loadingText: "Updating exposure...",
           getSuccessMessage: (res) => {
-            // Check for different success response formats
             if (res?.data?.success === true) {
               return res.data.message || "Bet Placed successfully";
             } else if (
@@ -2179,7 +2185,6 @@ function* updateUserBalanceExposureRequest(action) {
                 "Bet Placed successfully"
               );
             }
-            // If we have a response with data but no explicit success field, assume success
             else if (res?.data && (res?.status === 200 || res?.status === 201)) {
               return "Bet Placed successfully";
             }
@@ -2198,29 +2203,18 @@ function* updateUserBalanceExposureRequest(action) {
       )
     );
 
-    // More flexible response checking
     const isSuccess = response?.data?.success === true || 
                      response?.data?.meta?.code === 200 || 
                      response?.data?.code === 200 ||
                      (response?.status >= 200 && response?.status < 300) ||
                      (response?.data && response?.status === 200);
 
-    console.log("Is success:", isSuccess);
-
     if (isSuccess) {
-      // Extract data based on response structure
       const responseData = response.data?.data || response.data;
-      console.log("Response data:", responseData);
       
-      // Add a small delay to ensure the server has processed the exposure update
-      console.log("Waiting 500ms before fetching updated user data");
       yield new Promise(resolve => setTimeout(resolve, 500));
       
-      // Instead of just dispatching success action, let's fetch the updated user data
-      // Make a GET request to fetch updated user data
-      console.log("Fetching updated user data");
       const userResponse = yield call(api.get, "/users/profile");
-      console.log("User data response:", userResponse);
       
       if (userResponse?.data?.success === true || 
           userResponse?.data?.meta?.code === 200 || 
@@ -2228,52 +2222,32 @@ function* updateUserBalanceExposureRequest(action) {
           (userResponse?.status >= 200 && userResponse?.status < 300)) {
         
         const updatedUserData = userResponse.data?.data || userResponse.data;
-        console.log("Updated user data:", updatedUserData);
         
-        // Use the exposure value calculated by the backend
-        const backendCalculatedExposure = updatedUserData?.exposure || 0;
-        console.log("Using backend calculated exposure:", backendCalculatedExposure);
-        
-        // Dispatch both actions to update both reducers
         yield put(updateUserBalanceExposureSuccess({
           balance: updatedUserData?.balance,
-          exposure: backendCalculatedExposure,
+          exposure: updatedUserData?.exposure,
         }));
         
         yield put(getUserDataSuccess(updatedUserData));
         
-        // Update localStorage with new user data
-        console.log("Updating localStorage with updatedUserData:", updatedUserData);
         yield call(setLocalStorageItem, "userData", JSON.stringify(updatedUserData));
       } else {
-        // Fallback to original approach if user data fetch fails
-        console.log("Failed to fetch updated user data, using original values");
         yield put(updateUserBalanceExposureSuccess({
           balance: action.payload.balance,
           exposure: action.payload.exposure,
         }));
         
-        // Update localStorage with the calculated values
         const updatedUserData = {
           ...userData,
           balance: action.payload.balance,
           exposure: action.payload.exposure,
         };
-        console.log("Updating localStorage with calculated values:", updatedUserData);
         yield call(setLocalStorageItem, "userData", JSON.stringify(updatedUserData));
       }
     } else {
-      console.log("Exposure update failed - unexpected response format");
-      console.log("Response received:", response);
-      // Dispatch failure action
       yield put(updateUserBalanceExposureFailure());
     }
   } catch (error) {
-    console.error("Error updating exposure:", error);
-    console.error("Error name:", error?.name);
-    console.error("Error message:", error?.message);
-    console.error("Error stack:", error?.stack);
-    // Dispatch failure action
     yield put(updateUserBalanceExposureFailure());
   }
 }

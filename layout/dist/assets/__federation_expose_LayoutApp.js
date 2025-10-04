@@ -103,7 +103,7 @@ const __variableDynamicImportRuntimeHelper = (glob, path, segs) => {
   });
 };
 
-const {createContext: createContext$2,Component,createElement: createElement$2,useContext: useContext$2,useState: useState$i,useMemo: useMemo$4,forwardRef: forwardRef$2} = await importShared('react');
+const {createContext: createContext$2,Component,createElement: createElement$2,useContext: useContext$2,useState: useState$m,useMemo: useMemo$4,forwardRef: forwardRef$2} = await importShared('react');
 
 
 const ErrorBoundaryContext = createContext$2(null);
@@ -781,41 +781,41 @@ var validRequestMethodsArr = [
   ...validMutationMethodsArr
 ];
 new Set(validRequestMethodsArr);
-const React$1j = await importShared('react');
+const React$1n = await importShared('react');
 
-var DataRouterContext = React$1j.createContext(null);
+var DataRouterContext = React$1n.createContext(null);
 DataRouterContext.displayName = "DataRouter";
-var DataRouterStateContext = React$1j.createContext(null);
+var DataRouterStateContext = React$1n.createContext(null);
 DataRouterStateContext.displayName = "DataRouterState";
-var RSCRouterContext = React$1j.createContext(false);
+var RSCRouterContext = React$1n.createContext(false);
 function useIsRSCRouterContext() {
-  return React$1j.useContext(RSCRouterContext);
+  return React$1n.useContext(RSCRouterContext);
 }
-var ViewTransitionContext = React$1j.createContext({
+var ViewTransitionContext = React$1n.createContext({
   isTransitioning: false
 });
 ViewTransitionContext.displayName = "ViewTransition";
-var FetchersContext = React$1j.createContext(
+var FetchersContext = React$1n.createContext(
   /* @__PURE__ */ new Map()
 );
 FetchersContext.displayName = "Fetchers";
-var AwaitContext = React$1j.createContext(null);
+var AwaitContext = React$1n.createContext(null);
 AwaitContext.displayName = "Await";
-var NavigationContext = React$1j.createContext(
+var NavigationContext = React$1n.createContext(
   null
 );
 NavigationContext.displayName = "Navigation";
-var LocationContext = React$1j.createContext(
+var LocationContext = React$1n.createContext(
   null
 );
 LocationContext.displayName = "Location";
-var RouteContext = React$1j.createContext({
+var RouteContext = React$1n.createContext({
   outlet: null,
   matches: [],
   isDataRoute: false
 });
 RouteContext.displayName = "Route";
-var RouteErrorContext = React$1j.createContext(null);
+var RouteErrorContext = React$1n.createContext(null);
 RouteErrorContext.displayName = "RouteError";
 const React2$2 = await importShared('react');
 
@@ -2784,6 +2784,7 @@ const Paths = {
     esportsLiveCalendar: '/esports/live-calendar',
     esportsResults: '/esports/results',
     esportsStatistics: '/esports/statistics',
+    virtualSports: '/virtual-sports',
 };
 
 const domainConfig = {
@@ -5947,8 +5948,79 @@ function cn$1(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-const React$1i = await importShared('react');
-const {useState: useState$h} = React$1i;
+const React$1m = await importShared('react');
+const {useState: useState$l} = React$1m;
+
+const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
+  const [providerSearchQuery, setProviderSearchQuery] = useState$l("");
+  const [gameSearchQuery, setGameSearchQuery] = useState$l("");
+  const handleProviderSearch = (e) => {
+    const value = e.target.value;
+    setProviderSearchQuery(value);
+    if (onProviderSearch) {
+      onProviderSearch(value);
+    }
+  };
+  const handleGameSearch = (e) => {
+    const value = e.target.value;
+    setGameSearchQuery(value);
+    if (onGameSearch) {
+      onGameSearch(value);
+    }
+  };
+  const handleProviderSearchSubmit = () => {
+    if (onProviderSearch) {
+      onProviderSearch(providerSearchQuery);
+    }
+  };
+  const handleGameSearchSubmit = () => {
+    if (onGameSearch) {
+      onGameSearch(gameSearchQuery);
+    }
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-main-sections-container", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-section-headers", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-section-header casino-providers-header", children: "PROVIDERS" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-section-header", children: "GAMES" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-search-container", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-provider-search-container", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "text",
+            placeholder: "Provider Search",
+            className: "casino-search-input",
+            value: providerSearchQuery,
+            onChange: handleProviderSearch,
+            onKeyPress: (e) => e.key === "Enter" && handleProviderSearchSubmit()
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "casino-search-button", onClick: handleProviderSearchSubmit, children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { xmlns: "http://www.w3.org/2000/svg", className: "h-4 w-4", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" }) }) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-game-search-container", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-game-search-input-container", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              type: "text",
+              placeholder: "Game Search",
+              className: "casino-game-search-input",
+              value: gameSearchQuery,
+              onChange: handleGameSearch,
+              onKeyPress: (e) => e.key === "Enter" && handleGameSearchSubmit()
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "casino-game-search-button", onClick: handleGameSearchSubmit, children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { xmlns: "http://www.w3.org/2000/svg", className: "h-4 w-4", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" }) }) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "casino-filter-button", children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { xmlns: "http://www.w3.org/2000/svg", className: "h-5 w-5", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M4 6h16M4 12h16m-7 6h7" }) }) })
+      ] })
+    ] })
+  ] });
+};
+
+const React$1l = await importShared('react');
+const {useState: useState$k} = React$1l;
 const GameCategoryButton = ({ icon, label, isActive, onClick }) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
   "div",
   {
@@ -6018,8 +6090,8 @@ const casinoGames = [
 const Casino = () => {
   const navigate = useNavigate();
   useLocation();
-  const [activeTab, setActiveTab] = useState$h("home");
-  const [searchQuery, setSearchQuery] = useState$h("");
+  const [activeTab, setActiveTab] = useState$k("home");
+  const [searchQuery, setSearchQuery] = useState$k("");
   const tabs = [
     { id: "home", label: "Home" },
     { id: "tournaments", label: "Tournaments" }
@@ -6036,7 +6108,7 @@ const Casino = () => {
     { id: "lottery", label: "Lottery Games", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "L" }) },
     { id: "slots", label: "Top Slots", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "S" }) }
   ];
-  const [activeCategory, setActiveCategory] = useState$h("all");
+  const [activeCategory, setActiveCategory] = useState$k("all");
   const handleTabChange = (tabId) => {
     if (tabId === "tournaments") {
       navigate("/casino/tournaments");
@@ -6046,6 +6118,12 @@ const Casino = () => {
   };
   const handleCategoryChange = (categoryId) => {
     setActiveCategory(categoryId);
+  };
+  const handleProviderSearch = (query) => {
+    setSearchQuery(query);
+  };
+  const handleGameSearch = (query) => {
+    setSearchQuery(query);
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-container", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-featured-banner", children: [
@@ -6085,41 +6163,13 @@ const Casino = () => {
       },
       category.id
     )) }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-main-sections-container", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-section-headers", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-section-header casino-providers-header", children: "PROVIDERS" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-section-header", children: "GAMES" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-search-container", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-provider-search-container", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
-            {
-              type: "text",
-              placeholder: "Provider Search",
-              className: "casino-search-input",
-              value: searchQuery,
-              onChange: (e) => setSearchQuery(e.target.value)
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "casino-search-button", children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { xmlns: "http://www.w3.org/2000/svg", className: "h-4 w-4", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" }) }) })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-game-search-container", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-game-search-input-container", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "text",
-                placeholder: "Game Search",
-                className: "casino-game-search-input"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "casino-game-search-button", children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { xmlns: "http://www.w3.org/2000/svg", className: "h-4 w-4", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" }) }) })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "casino-filter-button", children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { xmlns: "http://www.w3.org/2000/svg", className: "h-5 w-5", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M4 6h16M4 12h16m-7 6h7" }) }) })
-        ] })
-      ] })
-    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      CasinoProvidersGamesSection,
+      {
+        onProviderSearch: handleProviderSearch,
+        onGameSearch: handleGameSearch
+      }
+    ),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-game-grid-container", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-game-grid-flex", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-providers-placeholder" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-games-container", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-games-grid", children: casinoGames.map((game) => /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -6135,11 +6185,11 @@ const Casino = () => {
   ] });
 };
 
-const React$1h = await importShared('react');
-const {useState: useState$g} = React$1h;
+const React$1k = await importShared('react');
+const {useState: useState$j} = React$1k;
 const CasinoTournaments = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState$g("tournaments");
+  const [activeTab, setActiveTab] = useState$j("tournaments");
   const tabs = [
     { id: "home", label: "Home" },
     { id: "tournaments", label: "Tournaments" }
@@ -6604,7 +6654,7 @@ const __iconNode = [
 ];
 const X = createLucideIcon("x", __iconNode);
 
-const React$1g = await importShared('react');
+const React$1j = await importShared('react');
 
 var DefaultContext = {
   color: undefined,
@@ -6613,7 +6663,7 @@ var DefaultContext = {
   style: undefined,
   attr: undefined
 };
-var IconContext = React$1g.createContext && /*#__PURE__*/React$1g.createContext(DefaultContext);
+var IconContext = React$1j.createContext && /*#__PURE__*/React$1j.createContext(DefaultContext);
 
 var _excluded = ["attr", "size", "title"];
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
@@ -6624,14 +6674,14 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == typeof i ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != typeof t || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r); if ("object" != typeof i) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-const React$1f = await importShared('react');
+const React$1i = await importShared('react');
 function Tree2Element(tree) {
-  return tree && tree.map((node, i) => /*#__PURE__*/React$1f.createElement(node.tag, _objectSpread({
+  return tree && tree.map((node, i) => /*#__PURE__*/React$1i.createElement(node.tag, _objectSpread({
     key: i
   }, node.attr), Tree2Element(node.child)));
 }
 function GenIcon(data) {
-  return props => /*#__PURE__*/React$1f.createElement(IconBase, _extends({
+  return props => /*#__PURE__*/React$1i.createElement(IconBase, _extends({
     attr: _objectSpread({}, data.attr)
   }, props), Tree2Element(data.child));
 }
@@ -6647,7 +6697,7 @@ function IconBase(props) {
     var className;
     if (conf.className) className = conf.className;
     if (props.className) className = (className ? className + " " : "") + props.className;
-    return /*#__PURE__*/React$1f.createElement("svg", _extends({
+    return /*#__PURE__*/React$1i.createElement("svg", _extends({
       stroke: "currentColor",
       fill: "currentColor",
       strokeWidth: "0"
@@ -6659,9 +6709,9 @@ function IconBase(props) {
       height: computedSize,
       width: computedSize,
       xmlns: "http://www.w3.org/2000/svg"
-    }), title && /*#__PURE__*/React$1f.createElement("title", null, title), props.children);
+    }), title && /*#__PURE__*/React$1i.createElement("title", null, title), props.children);
   };
-  return IconContext !== undefined ? /*#__PURE__*/React$1f.createElement(IconContext.Consumer, null, conf => elem(conf)) : elem(DefaultContext);
+  return IconContext !== undefined ? /*#__PURE__*/React$1i.createElement(IconContext.Consumer, null, conf => elem(conf)) : elem(DefaultContext);
 }
 
 // THIS FILE IS AUTO GENERATED
@@ -6765,7 +6815,7 @@ const SPORT_ID_BY_KEY = {
 };
 
 // packages/react/compose-refs/src/compose-refs.tsx
-const React$1e = await importShared('react');
+const React$1h = await importShared('react');
 
 function setRef(ref, value) {
   if (typeof ref === "function") {
@@ -6799,29 +6849,29 @@ function composeRefs(...refs) {
   };
 }
 function useComposedRefs(...refs) {
-  return React$1e.useCallback(composeRefs(...refs), refs);
+  return React$1h.useCallback(composeRefs(...refs), refs);
 }
 
 // src/slot.tsx
-const React$1d = await importShared('react');
+const React$1g = await importShared('react');
 // @__NO_SIDE_EFFECTS__
 function createSlot(ownerName) {
   const SlotClone = /* @__PURE__ */ createSlotClone(ownerName);
-  const Slot2 = React$1d.forwardRef((props, forwardedRef) => {
+  const Slot2 = React$1g.forwardRef((props, forwardedRef) => {
     const { children, ...slotProps } = props;
-    const childrenArray = React$1d.Children.toArray(children);
+    const childrenArray = React$1g.Children.toArray(children);
     const slottable = childrenArray.find(isSlottable);
     if (slottable) {
       const newElement = slottable.props.children;
       const newChildren = childrenArray.map((child) => {
         if (child === slottable) {
-          if (React$1d.Children.count(newElement) > 1) return React$1d.Children.only(null);
-          return React$1d.isValidElement(newElement) ? newElement.props.children : null;
+          if (React$1g.Children.count(newElement) > 1) return React$1g.Children.only(null);
+          return React$1g.isValidElement(newElement) ? newElement.props.children : null;
         } else {
           return child;
         }
       });
-      return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children: React$1d.isValidElement(newElement) ? React$1d.cloneElement(newElement, void 0, newChildren) : null });
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children: React$1g.isValidElement(newElement) ? React$1g.cloneElement(newElement, void 0, newChildren) : null });
     }
     return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children });
   });
@@ -6831,24 +6881,24 @@ function createSlot(ownerName) {
 var Slot$2 = /* @__PURE__ */ createSlot("Slot");
 // @__NO_SIDE_EFFECTS__
 function createSlotClone(ownerName) {
-  const SlotClone = React$1d.forwardRef((props, forwardedRef) => {
+  const SlotClone = React$1g.forwardRef((props, forwardedRef) => {
     const { children, ...slotProps } = props;
-    if (React$1d.isValidElement(children)) {
+    if (React$1g.isValidElement(children)) {
       const childrenRef = getElementRef$2(children);
       const props2 = mergeProps(slotProps, children.props);
-      if (children.type !== React$1d.Fragment) {
+      if (children.type !== React$1g.Fragment) {
         props2.ref = forwardedRef ? composeRefs(forwardedRef, childrenRef) : childrenRef;
       }
-      return React$1d.cloneElement(children, props2);
+      return React$1g.cloneElement(children, props2);
     }
-    return React$1d.Children.count(children) > 1 ? React$1d.Children.only(null) : null;
+    return React$1g.Children.count(children) > 1 ? React$1g.Children.only(null) : null;
   });
   SlotClone.displayName = `${ownerName}.SlotClone`;
   return SlotClone;
 }
 var SLOTTABLE_IDENTIFIER = Symbol("radix.slottable");
 function isSlottable(child) {
-  return React$1d.isValidElement(child) && typeof child.type === "function" && "__radixId" in child.type && child.type.__radixId === SLOTTABLE_IDENTIFIER;
+  return React$1g.isValidElement(child) && typeof child.type === "function" && "__radixId" in child.type && child.type.__radixId === SLOTTABLE_IDENTIFIER;
 }
 function mergeProps(slotProps, childProps) {
   const overrideProps = { ...childProps };
@@ -6929,7 +6979,7 @@ const cva = (base, config)=>(props)=>{
         return cx(base, getVariantClassNames, getCompoundVariantClassNames, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
     };
 
-const React$1c = await importShared('react');
+const React$1f = await importShared('react');
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
@@ -6955,7 +7005,7 @@ const buttonVariants = cva(
     }
   }
 );
-const Button$1 = React$1c.forwardRef(
+const Button$1 = React$1f.forwardRef(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot$2 : "button";
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -6984,6 +7034,8 @@ function GameCard({
   league,
   sport,
   // <-- Add sport prop
+  sportKey,
+  // <-- Add sportKey prop
   highlight = false,
   oddsHighlight = { w1: false, w2: false },
   onClick
@@ -7002,11 +7054,14 @@ function GameCard({
     const dateObj = new Date(time);
     displayTime = dateObj.toLocaleString();
   }
+  const isSuspended = odds.w1 === "SUSPENDED" && odds.x === "SUSPENDED" && odds.w2 === "SUSPENDED";
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "div",
     {
       className: `bg-live-primary rounded-md p-2 mb-2 border transition-all duration-300 ease-in-out transform ${highlight ? "border-live-accent shadow-[0_0_12px_var(--live-accent-primary)] scale-[1.02]" : "border-live shadow-md hover:shadow-lg"} cursor-pointer hover:bg-live-hover hover:scale-[1.01]`,
       onClick,
+      "data-sport-key": sportKey,
+      "data-event-id": time,
       children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-start mb-1 gap-1", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-live-secondary font-semibold truncate", children: league }),
@@ -7024,26 +7079,32 @@ function GameCard({
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-lg text-live-accent font-bold", children: score2 })
           ] })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 mt-2", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-live-muted", children: "W1" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${oddsHighlight?.w1 ? "odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110" : "hover:shadow-md"}`, children: odds.w1 })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-live-muted", children: "X" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-base text-live-accent font-bold transition-all duration-300 hover:shadow-md", children: odds.x })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-live-muted", children: "W2" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${oddsHighlight?.w2 ? "odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110" : "hover:shadow-md"}`, children: odds.w2 })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-2 mt-2", children: isSuspended ? (
+          // Display full suspended box
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full flex items-center justify-center bg-live-odds rounded p-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-bold text-live-primary", children: "SUSPENDED" }) })
+        ) : (
+          // Display regular odds
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-live-muted", children: "W1" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${oddsHighlight?.w1 ? "odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110" : "hover:shadow-md"}`, children: odds.w1 })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-live-muted", children: "X" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-base text-live-accent font-bold transition-all duration-300 hover:shadow-md", children: odds.x })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-live-muted", children: "W2" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${oddsHighlight?.w2 ? "odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110" : "hover:shadow-md"}`, children: odds.w2 })
+            ] })
           ] })
-        ] })
+        ) })
       ]
     }
   );
 }
 
-const React$1b = await importShared('react');
+const React$1e = await importShared('react');
 
 const SkeletonLoader = ({ type = "row", count = 1, className = "" }) => {
   const renderSkeleton = () => {
@@ -7113,13 +7174,164 @@ const SkeletonLoader = ({ type = "row", count = 1, className = "" }) => {
         return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `bg-gray-700 rounded animate-pulse ${className}` });
     }
   };
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: Array.from({ length: count }).map((_, index) => /* @__PURE__ */ jsxRuntimeExports.jsx(React$1b.Fragment, { children: renderSkeleton() }, index)) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: Array.from({ length: count }).map((_, index) => /* @__PURE__ */ jsxRuntimeExports.jsx(React$1e.Fragment, { children: renderSkeleton() }, index)) });
 };
 
-const React$1a = await importShared('react');
-const {useEffect: useEffect$a,useState: useState$f,useRef: useRef$8} = React$1a;
+// Use the proxy endpoint to avoid CORS issues
+const EVENTS_API_PROXY = "/api/events";
+
+/**
+ * Utility function to implement retry logic with exponential backoff
+ * @param {Function} fn - The function to retry
+ * @param {number} retries - Number of retry attempts
+ * @param {number} delay - Initial delay in milliseconds
+ * @returns {Promise<any>} - Result of the function call
+ */
+async function retryWithBackoff(fn, retries = 3, delay = 1000) {
+  try {
+    // Pass AbortSignal to the function if it accepts it
+    return await fn();
+  } catch (error) {
+    // Don't retry if the request was aborted
+    if (error.name === 'AbortError') {
+      throw error;
+    }
+    
+    if (retries === 0) {
+      throw error;
+    }
+    // Wait for the specified delay before retrying
+    await new Promise(resolve => setTimeout(resolve, delay));
+    // Retry with exponential backoff (double the delay each time)
+    return retryWithBackoff(fn, retries - 1, delay * 2);
+  }
+}
+
+/**
+ * Fetch sports events from the API through proxy to avoid CORS issues
+ * @param {string} sportId - The sport ID (e.g., "sr:sport:1")
+ * @param {boolean} liveMatches - Whether to fetch live matches or scheduled matches
+ * @returns {Promise<Object>} - The response data containing sports events
+ */
+async function fetchSportsEvents(sportId, liveMatches = true) {
+  try {
+    // Use the proxy endpoint to avoid CORS issues
+    const url = `${EVENTS_API_PROXY}?sport_id=${sportId}&live_matches=${liveMatches}`;
+    
+    // Wrap the fetch call with retry logic and timeout
+    const response = await retryWithBackoff(async () => {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
+      try {
+        const res = await fetch(url, {
+          method: "GET",
+          headers: {
+            "accept": "application/json",
+          },
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        return res;
+      } catch (error) {
+        clearTimeout(timeoutId);
+        throw error;
+      }
+    }, 2, 1000); // Retry up to 2 times with 1 second initial delay
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+   
+    // API returns data directly in { sports: [...], status: ..., errorDescription: ... } format
+    return {
+      sports: data?.sports || [],
+      eventsCount: data?.sports?.length || 0
+    };
+  } catch (error) {
+    // Don't log aborted requests as errors
+    if (error.name !== 'AbortError') {
+      console.error(`API request failed for sport_id=${sportId}:`, error.message);
+    }
+    // Even if the endpoint fails, we should return a valid structure to prevent app crashes
+    return {
+      sports: [],
+      eventsCount: 0
+    };
+  }
+}
+
+/**
+ * Fetch markets data for a specific event
+ * @param {string} eventId - The event ID
+ * @param {string} sportId - The sport ID (e.g., "sr:sport:1")
+ * @returns {Promise<Object>} - The response data containing markets
+ */
+async function fetchMarketsData(eventId, sportId) {
+  try {
+    // Use the markets proxy endpoint to avoid CORS issues
+    const url = `/api/markets?event_id=${eventId}&sport_id=${sportId}`;
+    
+    // Wrap the fetch call with retry logic and timeout
+    const response = await retryWithBackoff(async (signal) => {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
+      // If a signal is provided (from outside), combine it with our controller
+      if (signal) {
+        signal.addEventListener('abort', () => {
+          controller.abort();
+        });
+      }
+      
+      try {
+        const res = await fetch(url, {
+          method: "GET",
+          headers: {
+            "accept": "application/json",
+          },
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        return res;
+      } catch (error) {
+        clearTimeout(timeoutId);
+        throw error;
+      }
+    }, 2, 1000); // Retry up to 2 times with 1 second initial delay
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    // Return markets data from the nested structure
+    return data?.event?.markets?.matchOdds || [];
+  } catch (error) {
+    console.error(`API request failed for event_id=${eventId}, sport_id=${sportId}:`, error.message);
+    return [];
+  }
+}
+
+const React$1d = await importShared('react');
+const {useEffect: useEffect$d,useState: useState$i,useRef: useRef$9} = React$1d;
+function normalize(str = "") {
+  return str.trim().toLowerCase();
+}
 function extractOddsW1W2$1(markets) {
   const mo = markets?.matchOdds?.[0];
+  if (mo?.status === "SUSPENDED") {
+    return {
+      w1: "SUSPENDED",
+      x: "SUSPENDED",
+      w2: "SUSPENDED"
+    };
+  }
   const runners = mo?.runners || [];
   let w1Runner, drawRunner, w2Runner;
   drawRunner = runners.find(
@@ -7139,32 +7351,92 @@ function extractOddsW1W2$1(markets) {
     w2: typeof w2 === "number" ? w2.toFixed(2) : "-"
   };
 }
+function filterMatches(matches, searchTerm) {
+  if (!searchTerm) return matches;
+  const normalizedSearch = normalize(searchTerm);
+  return matches.filter((match) => {
+    if (match.eventName && normalize(match.eventName).includes(normalizedSearch)) {
+      return true;
+    }
+    if (match.competitionName && normalize(match.competitionName).includes(normalizedSearch)) {
+      return true;
+    }
+    if (match.sportName && normalize(match.sportName).includes(normalizedSearch)) {
+      return true;
+    }
+    if (match.openDate) {
+      const date = new Date(match.openDate);
+      const dateStr = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear().toString().slice(-2)}`;
+      if (dateStr.includes(searchTerm)) {
+        return true;
+      }
+      const fullDateStr = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+      if (fullDateStr.includes(searchTerm)) {
+        return true;
+      }
+    }
+    return false;
+  });
+}
+function filterSports(sports, matchesBySport, searchTerm) {
+  if (!searchTerm) return sports;
+  const normalizedSearch = normalize(searchTerm);
+  return sports.filter((sport) => {
+    if (sport.sportNames.some((name) => normalize(name).includes(normalizedSearch))) {
+      return true;
+    }
+    const matches = matchesBySport[sport.key] || [];
+    return filterMatches(matches, searchTerm).length > 0;
+  });
+}
 function LeftSidebarEventView({ setSelectedMatch = () => {
 }, setSelectedSport = () => {
 }, selectedMatch, onSelectedMatchOddsUpdate = () => {
 } }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const [search, setSearch] = useState$f("");
-  const [expanded, setExpanded] = useState$f({});
-  const [selectedType, setSelectedType] = useState$f("live");
-  const [matchesBySport, setMatchesBySport] = useState$f({});
-  const [loadingBySport, setLoadingBySport] = useState$f({});
-  const [oddsByEventId, setOddsByEventId] = useState$f({});
-  const [scoresByEventId, setScoresByEventId] = useState$f({});
-  const [highlightedOdds, setHighlightedOdds] = useState$f({});
-  const [pendingSelection, setPendingSelection] = useState$f(null);
-  const oddsPrevRef = useRef$8({});
-  useEffect$a(() => {
+  const [search, setSearch] = useState$i("");
+  const [expanded, setExpanded] = useState$i({});
+  const [selectedType, setSelectedType] = useState$i("live");
+  const [matchesBySport, setMatchesBySport] = useState$i({});
+  const [loadingBySport, setLoadingBySport] = useState$i({});
+  const [oddsByEventId, setOddsByEventId] = useState$i({});
+  const [scoresByEventId, setScoresByEventId] = useState$i({});
+  const [highlightedOdds, setHighlightedOdds] = useState$i({});
+  const [pendingSelection, setPendingSelection] = useState$i(null);
+  const [placeholderIndex, setPlaceholderIndex] = useState$i(0);
+  const oddsPrevRef = useRef$9({});
+  const placeholderIntervalRef = useRef$9(null);
+  const placeholderTexts = ["competition", "team", "date"];
+  useEffect$d(() => {
+    placeholderIntervalRef.current = setInterval(() => {
+      setPlaceholderIndex((prev) => (prev + 1) % placeholderTexts.length);
+    }, 1e3);
+    return () => {
+      if (placeholderIntervalRef.current) {
+        clearInterval(placeholderIntervalRef.current);
+      }
+    };
+  }, []);
+  useEffect$d(() => {
+    const { viewType } = location.state || {};
+    if (viewType === "prematch") {
+      setSelectedType("prematch");
+    }
+  }, [location.state]);
+  useEffect$d(() => {
     if (location.state) ;
   }, []);
-  useEffect$a(() => {
+  useEffect$d(() => {
+    const abortController = new AbortController();
     SPORTS.forEach((sport) => {
       const sportId = SPORT_ID_BY_KEY[sport.key];
       if (!sportId) return;
       setLoadingBySport((prev) => ({ ...prev, [sport.key]: true }));
-      const url = `/events?sport_id=${sportId}&live_matches=${selectedType === "live"}`;
-      fetch(url, { headers: { accept: "application/json" } }).then((res) => res.json()).then((json) => {
+      fetchSportsEvents(sportId, selectedType === "live").then((json) => {
+        if (abortController.signal.aborted) {
+          return;
+        }
         const list = json?.sports ?? [];
         setMatchesBySport((prev) => ({ ...prev, [sport.key]: Array.isArray(list) ? list : [] }));
         const oddsMap = { ...oddsByEventId };
@@ -7179,7 +7451,16 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
         setOddsByEventId(oddsMap);
         setScoresByEventId(scoresMap);
         oddsPrevRef.current = oddsMap;
-      }).catch(() => setMatchesBySport((prev) => ({ ...prev, [sport.key]: [] }))).finally(() => setLoadingBySport((prev) => ({ ...prev, [sport.key]: false })));
+      }).catch((error) => {
+        if (error.name === "AbortError") {
+          return;
+        }
+        setMatchesBySport((prev) => ({ ...prev, [sport.key]: [] }));
+      }).finally(() => {
+        if (!abortController.signal.aborted) {
+          setLoadingBySport((prev) => ({ ...prev, [sport.key]: false }));
+        }
+      });
     });
     const { selectedGameId, selectedSportKey } = location.state || {};
     if (selectedGameId && selectedSportKey) {
@@ -7192,17 +7473,28 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
         navigate(location.pathname, { replace: true, state: {} });
       }
     }
+    return () => {
+      abortController.abort();
+    };
   }, [selectedType, location.key]);
-  useEffect$a(() => {
+  useEffect$d(() => {
     let intervalId;
+    let abortController = new AbortController();
     function pollOdds() {
+      abortController = new AbortController();
       const expandedSportKeys = Object.keys(expanded).filter((key) => expanded[key]);
       expandedSportKeys.forEach((sportKey) => {
         const sportId = SPORT_ID_BY_KEY[sportKey];
         if (!sportId) return;
-        const url = `/events?sport_id=${sportId}&live_matches=${selectedType === "live"}`;
-        fetch(url, { headers: { accept: "application/json" } }).then((res) => res.json()).then((json) => {
-          const list = json?.sports ?? [];
+        fetchSportsEvents(sportId, selectedType === "live").then((json) => {
+          if (abortController.signal.aborted) {
+            return;
+          }
+          if (!json || !Array.isArray(json.sports)) {
+            console.warn(`Invalid data received for sport ${sportKey}, skipping update`);
+            return;
+          }
+          const list = json.sports;
           const oddsMap = { ...oddsByEventId };
           const scoresMap = { ...scoresByEventId };
           const highlights = { ...highlightedOdds };
@@ -7213,7 +7505,9 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
             scoresMap[e.eventId] = {
               // Update scores
               homeScore: e.homeScore || 0,
-              awayScore: e.awayScore || 0
+              awayScore: e.awayScore || 0,
+              halfTimeScore: e.halfTimeScore || null,
+              currentTime: e.currentTime || null
             };
             highlights[e.eventId] = {
               w1: prevOdds.w1 !== newOdds.w1,
@@ -7223,7 +7517,13 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
               onSelectedMatchOddsUpdate({
                 ...selectedMatch,
                 odds: newOdds,
-                markets: e.markets
+                markets: e.markets,
+                homeScore: e.homeScore || 0,
+                awayScore: e.awayScore || 0,
+                halfTimeScore: e.halfTimeScore || null,
+                currentTime: e.currentTime || null,
+                status: e.status || selectedMatch.status
+                // Preserve selectedMarket and selectedRunner if they exist
               });
             }
           }
@@ -7234,11 +7534,31 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
           setTimeout(() => {
             setHighlightedOdds({});
           }, 1e3);
+        }).catch((error) => {
+          if (error.name === "AbortError") {
+            return;
+          }
+          console.error(`Error polling odds for sport ${sportKey}:`, error);
         });
       });
     }
-    intervalId = setInterval(pollOdds, 1e3);
-    return () => clearInterval(intervalId);
+    try {
+      intervalId = setInterval(() => {
+        try {
+          pollOdds();
+        } catch (error) {
+          console.error("Error in pollOdds interval:", error);
+        }
+      }, 1e3);
+    } catch (error) {
+      console.error("Error setting up polling interval:", error);
+    }
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+      abortController.abort();
+    };
   }, [selectedType, oddsByEventId, scoresByEventId, expanded, selectedMatch, onSelectedMatchOddsUpdate]);
   const toggleExpand = (sportKey) => {
     setExpanded((prevExpanded) => {
@@ -7256,7 +7576,7 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
       }
     });
   };
-  useEffect$a(() => {
+  useEffect$d(() => {
     const { selectedGameId, selectedSportKey } = location.state || {};
     if (selectedGameId && selectedSportKey) {
       setExpanded((prev) => ({ ...prev, [selectedSportKey]: true }));
@@ -7270,11 +7590,14 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
         if (selectedGame) {
           const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || "";
           const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || "";
-          setSelectedMatch({
+          const selectedMatchData = {
             ...selectedGame,
             team1,
-            team2
-          });
+            team2,
+            // Ensure sportKey is included for markets API call
+            sportKey: selectedSportKey
+          };
+          setSelectedMatch(selectedMatchData);
         }
         navigate(location.pathname, { replace: true, state: {} });
       } else {
@@ -7292,11 +7615,17 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
             return prev;
           });
           if (!selectedMatch) {
-            setSelectedMatch({
-              ...matches[0],
-              team1: matches[0].eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || "",
-              team2: matches[0].eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || ""
-            });
+            const firstMatch = matches[0];
+            const team1 = firstMatch.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || "";
+            const team2 = firstMatch.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || "";
+            const selectedMatchData = {
+              ...firstMatch,
+              team1,
+              team2,
+              // Ensure sportKey is included for markets API call
+              sportKey: sport.key
+            };
+            setSelectedMatch(selectedMatchData);
             setSelectedSport(sport);
           }
           break;
@@ -7304,7 +7633,7 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
       }
     }
   }, [matchesBySport, location.state, location.key, selectedMatch, setSelectedMatch, setSelectedSport]);
-  useEffect$a(() => {
+  useEffect$d(() => {
     if (pendingSelection) {
       const { selectedGameId, selectedSportKey } = pendingSelection;
       const matches = matchesBySport[selectedSportKey] || [];
@@ -7313,17 +7642,21 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
         if (selectedGame) {
           const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || "";
           const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || "";
-          setSelectedMatch({
+          const selectedMatchData = {
             ...selectedGame,
             team1,
-            team2
-          });
+            team2,
+            // Ensure sportKey is included for markets API call
+            sportKey: selectedSportKey
+          };
+          setSelectedMatch(selectedMatchData);
         }
         setPendingSelection(null);
         navigate(location.pathname, { replace: true, state: {} });
       }
     }
   }, [matchesBySport, pendingSelection, setSelectedMatch, location.pathname]);
+  const filteredSports = filterSports(SPORTS, matchesBySport, search);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { className: "flex-1 bg-live-secondary h-full flex flex-col p-2 min-w-0", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 mb-3", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -7347,27 +7680,34 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
         }
       )
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-3 flex items-center gap-2 bg-live-tertiary rounded px-2 py-1", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { className: "w-5 h-5 text-live-muted" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "input",
-        {
-          type: "text",
-          placeholder: "Search for a competition or team",
-          value: search,
-          onChange: (e) => setSearch(e.target.value),
-          className: "bg-transparent outline-none text-sm text-live-primary flex-1 py-1 px-2"
-        }
-      )
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-3 flex items-center bg-live-tertiary rounded px-2 py-1 relative", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { className: "w-5 h-5 text-live-muted flex-shrink-0 mr-2" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative flex-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "text",
+            value: search,
+            onChange: (e) => setSearch(e.target.value),
+            placeholder: "",
+            className: "bg-transparent outline-none text-sm text-live-primary w-full py-1 relative z-10"
+          }
+        ),
+        !search && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute left-0 top-1/2 transform -translate-y-1/2 pointer-events-none flex items-center", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-muted text-sm", children: "Search for a " }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-muted text-sm inline-block w-20 h-5 overflow-hidden ml-1", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "inline-block animate-slide-up", children: placeholderTexts[placeholderIndex] }) })
+        ] })
+      ] })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 mb-3 px-1", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-live-primary p-2 rounded flex items-center justify-center hover:bg-live-hover", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { className: "w-5 h-5 text-live-primary" }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-live-primary p-2 rounded flex items-center justify-center hover:bg-live-hover", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Globe, { className: "w-5 h-5 text-live-primary" }) })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 overflow-y-auto custom-scrollbar pr-1", children: SPORTS.map((sport) => {
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 overflow-y-auto custom-scrollbar pr-1", children: filteredSports.map((sport) => {
       const Icon = sport.icon;
-      const matches = matchesBySport[sport.key] || [];
-      const matchCount = matches.length;
+      const allMatches = matchesBySport[sport.key] || [];
+      const filteredMatches = filterMatches(allMatches, search);
+      const matchCount = filteredMatches.length;
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-2 bg-live-tertiary rounded", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "div",
@@ -7384,7 +7724,7 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
             ]
           }
         ),
-        expanded[sport.key] && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "pl-2 pb-2", children: loadingBySport[sport.key] ? /* @__PURE__ */ jsxRuntimeExports.jsx(SkeletonLoader, { type: "game-card", count: 3 }) : matchCount === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-live-muted px-2 py-2", children: "No matches" }) : matches.map((match, idx) => {
+        expanded[sport.key] && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "pl-2 pb-2", children: loadingBySport[sport.key] ? /* @__PURE__ */ jsxRuntimeExports.jsx(SkeletonLoader, { type: "game-card", count: 3 }) : matchCount === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-live-muted px-2 py-2", children: "No matches" }) : filteredMatches.map((match, idx) => {
           let team1 = "";
           let team2 = "";
           if (match.eventName) {
@@ -7408,17 +7748,21 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
               odds,
               league: match.competitionName,
               sport: sport.key,
+              sportKey: sport.key,
               highlight: isSelected,
               oddsHighlight: highlight,
               onClick: () => {
                 const latestOdds = oddsByEventId[match.eventId] || extractOddsW1W2$1(match.markets);
-                setSelectedMatch({
+                const selectedMatchData = {
                   ...match,
                   team1,
                   team2,
-                  odds: latestOdds
+                  odds: latestOdds,
                   // Include the latest odds in the selected match data
-                });
+                  sportKey: sport.key
+                  // Include sportKey for markets API call
+                };
+                setSelectedMatch(selectedMatchData);
                 setSelectedSport(sport);
               }
             },
@@ -7441,8 +7785,8 @@ function IoChevronDown (props) {
   return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"fill":"none","strokeMiterlimit":"10","strokeWidth":"32","d":"M221.09 64a157.09 157.09 0 1 0 157.09 157.09A157.1 157.1 0 0 0 221.09 64z"},"child":[]},{"tag":"path","attr":{"fill":"none","strokeLinecap":"round","strokeMiterlimit":"10","strokeWidth":"32","d":"M338.29 338.29 448 448"},"child":[]}]})(props);
 }
 
-const React$19 = await importShared('react');
-const {useEffect: useEffect$9,useMemo: useMemo$3,useRef: useRef$7,useState: useState$e} = React$19;
+const React$1c = await importShared('react');
+const {useEffect: useEffect$c,useMemo: useMemo$3,useRef: useRef$8,useState: useState$h} = React$1c;
 const sportImageMap = {
   soccer: "/assets/img1.jpg",
   football: "/assets/img2.jpg",
@@ -7453,11 +7797,34 @@ const sportImageMap = {
   hockey: "/assets/img3.jpg",
   volleyball: "/assets/img4.jpg"
 };
-function MiddleGameDisplay({ match, sport, marketItems }) {
+const isMatchSuspended$1 = (match) => {
+  if (match?.status === "SUSPENDED") return true;
+  const odds = match?.odds || {};
+  if (odds.w1 === "SUSPENDED" && odds.x === "SUSPENDED" && odds.w2 === "SUSPENDED") return true;
+  const markets = match?.markets?.matchOdds?.[0];
+  if (markets?.status === "SUSPENDED") return true;
+  return false;
+};
+function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
+  const [searchTerm, setSearchTerm] = useState$h("");
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
+  };
+  const handleSearchClear = () => {
+    setSearchTerm("");
+  };
   if (!match || !sport) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center h-full text-live-muted text-sm", children: "Select a game to see details" });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center h-full text-live-muted text-sm", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center animate-pulse-scale", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-12 h-12", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute w-full h-full rounded-full border-4 border-live-accent border-t-transparent animate-spin" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute w-8 h-8 top-2 left-2 rounded-full border-4 border-live-primary border-b-transparent animate-spin-reverse" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-4 text-live-primary text-sm font-medium", children: "Loading game details..." })
+    ] }) });
   }
-  const sportKey = sport?.key?.toLowerCase?.() || sport?.name?.toLowerCase?.() || sport?.toLowerCase?.() || "";
+  const sportKey = match?.sportKey || // From match object (when passed from LeftSidebarEventView)
+  sport?.key?.toLowerCase?.() || // From sport prop (when passed from MainLiveSection)
+  sport?.name?.toLowerCase?.() || sport?.toLowerCase?.() || "";
   const imageSrc = sportImageMap[sportKey] || "/assets/img1.jpg";
   let displayTime = match.time || match.openDate;
   if (typeof displayTime === "number" && displayTime > 1e12) {
@@ -7469,8 +7836,9 @@ function MiddleGameDisplay({ match, sport, marketItems }) {
   const team2 = teamNames[1] || "Team 2";
   const homeScore = match.homeScore ?? 0;
   const awayScore = match.awayScore ?? 0;
+  const matchIsSuspended = isMatchSuspended$1(match);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-2 flex flex-col gap-4 h-full min-w-0", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-full h-64 rounded-md overflow-hidden", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-full h-64 rounded-md overflow-hidden flex-shrink-0", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "img",
         {
@@ -7490,10 +7858,7 @@ function MiddleGameDisplay({ match, sport, marketItems }) {
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-6 h-4 bg-live-info border border-live-primary rounded-sm flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary text-xs font-bold", children: "🇬🇧" }) }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary text-sm font-medium", children: match.competitionName || "League" })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-dark text-xs px-2 py-1 bg-live-accent rounded", children: match.status === "IN_PLAY" ? "2nd Half" : match.status }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent text-lg font-bold", children: match.status === "IN_PLAY" ? "81" : "0" })
-          ] })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-live-dark text-xs px-2 py-1 bg-live-accent rounded ${match.status === "IN_PLAY" ? "animate-pulse-highlight in-play-golden" : ""}`, children: match.status === "IN_PLAY" ? "IN PLAY" : match.status || "N/A" }) })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 flex items-center justify-between px-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full flex items-center justify-between", style: { background: "rgba(0,0,0,0.4)", padding: "16px", borderRadius: "8px" }, children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
@@ -7510,7 +7875,10 @@ function MiddleGameDisplay({ match, sport, marketItems }) {
             homeScore,
             "-",
             awayScore,
-            " (2-1) (1-1) 81'"
+            " ",
+            match.status === "IN_PLAY" ? match.halfTimeScore ? `(${match.halfTimeScore})` : "" : "",
+            " ",
+            match.status === "IN_PLAY" ? match.currentTime ? `${match.currentTime}'` : "" : ""
           ] }) }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-right space-y-3", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-primary text-2xl font-bold", children: homeScore }),
@@ -7524,283 +7892,381 @@ function MiddleGameDisplay({ match, sport, marketItems }) {
         ] }) })
       ] })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(SleekNavbar, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(MarketSection, { marketItems })
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      SleekNavbar,
+      {
+        onSearchChange: handleSearchChange,
+        searchValue: searchTerm,
+        onSearchClear: handleSearchClear
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-grow overflow-hidden flex flex-col", children: matchIsSuspended ? (
+      // Show suspended message instead of markets for suspended matches
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-grow flex items-center justify-center bg-live-tertiary rounded p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-primary text-lg font-bold mb-2", children: "Match Suspended" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-muted text-sm", children: "Markets are not available for suspended matches" })
+      ] }) })
+    ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+      MarketSection,
+      {
+        selectedMatch: match,
+        onRunnerSelect,
+        searchTerm
+      }
+    ) })
   ] });
 }
-function MarketSection({ marketItems }) {
-  const defaults = useMemo$3(
-    () => [
-      {
-        id: "match_winner",
-        title: "Match Winner",
-        rows: [
-          { label: "Team 1", value: "1.85" },
-          { label: "Draw", value: "3.20" },
-          { label: "Team 2", value: "2.05" }
-        ]
-      },
-      {
-        id: "total_goals",
-        title: "Total Goals",
-        rows: [
-          { label: "Over 2.5", value: "1.95" },
-          { label: "Under 2.5", value: "1.90" }
-        ]
-      },
-      {
-        id: "handicap",
-        title: "Handicap",
-        rows: [
-          { label: "Team 1 -1", value: "2.75" },
-          { label: "Team 2 +1", value: "1.45" }
-        ]
-      },
-      {
-        id: "btts",
-        title: "Both Teams to Score",
-        rows: [
-          { label: "Yes", value: "1.80" },
-          { label: "No", value: "1.95" }
-        ]
-      },
-      {
-        id: "correct_score",
-        title: "Correct Score",
-        rows: [
-          { label: "1-0", value: "7.50" },
-          { label: "1-1", value: "6.00" },
-          { label: "2-1", value: "9.00" }
-        ]
-      },
-      {
-        id: "first_half",
-        title: "First Half",
-        rows: [
-          { label: "Team 1", value: "2.40" },
-          { label: "Draw", value: "2.00" },
-          { label: "Team 2", value: "3.10" }
-        ]
-      }
-    ],
-    []
-  );
-  const items = Array.isArray(marketItems) && marketItems.length ? marketItems : defaults;
-  const [isMarketOpen, setIsMarketOpen] = useState$e(false);
-  const [expandedById, setExpandedById] = useState$e(() => {
-    const init = {};
-    items.forEach((it) => init[it.id] = false);
-    return init;
-  });
-  useEffect$9(() => {
-    const next = {};
-    items.forEach((it) => next[it.id] = isMarketOpen);
-    setExpandedById(next);
-  }, [items]);
-  const contentRefs = useRef$7({});
-  const [heights, setHeights] = useState$e({});
-  useEffect$9(() => {
-    const measure = () => {
-      const next = {};
-      items.forEach((it) => {
-        const node = contentRefs.current[it.id];
-        if (node) {
-          next[it.id] = node.scrollHeight;
+function MarketItem({ market, isOpen, onToggle, highlightedOdds = {}, onRunnerSelect, selectedMatch }) {
+  const contentRef = useRef$8(null);
+  const [measuredHeight, setMeasuredHeight] = useState$h(0);
+  useEffect$c(() => {
+    if (contentRef.current) {
+      setMeasuredHeight(contentRef.current.scrollHeight);
+    }
+  }, [isOpen, market.runners]);
+  const getOdds = (runner) => {
+    if (!runner || runner.status === "SUSPENDED") return "SUSPENDED";
+    const backPrice = runner.backPrices?.[0]?.price;
+    return typeof backPrice === "number" ? backPrice.toFixed(2) : "-";
+  };
+  const isOddsHighlighted = (runner, oddsValue) => {
+    if (!runner || !highlightedOdds[runner.runnerName]) return false;
+    return highlightedOdds[runner.runnerName] === oddsValue;
+  };
+  const isSelectedRunner = (runner) => {
+    if (!selectedMatch || !selectedMatch.selectedRunner || !runner) return false;
+    return selectedMatch.selectedRunner.runnerId === runner.runnerId;
+  };
+  useEffect$c(() => {
+    if (selectedMatch && selectedMatch.selectedRunner && selectedMatch.selectedMarket && market) {
+      const runner = market.runners?.find((r) => r && r.runnerId === selectedMatch.selectedRunner.runnerId);
+      const isSelected = isSelectedRunner(runner);
+      if (isSelected && market.marketId === selectedMatch.selectedMarket.marketId) {
+        if (runner) {
+          const newOdds = getOdds(runner);
+          if (newOdds !== selectedMatch.selectedOdd && newOdds !== "SUSPENDED" && newOdds !== "-") {
+            onRunnerSelect({
+              ...selectedMatch,
+              selectedMarket: market,
+              selectedRunner: runner,
+              selectedOdd: newOdds
+            });
+          }
         }
-      });
-      setHeights(next);
-    };
-    requestAnimationFrame(measure);
-    const onResize = () => {
-      requestAnimationFrame(measure);
-    };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [items, expandedById]);
-  const toggleMarket = () => {
-    setIsMarketOpen((prev) => {
-      const nextOpen = !prev;
-      setExpandedById((old) => {
-        const updated = {};
-        items.forEach((it) => updated[it.id] = nextOpen);
-        return updated;
-      });
-      return nextOpen;
-    });
+      }
+    }
+  }, [market.runners, selectedMatch, market, onRunnerSelect]);
+  const handleRunnerSelect = (runner) => {
+    if (onRunnerSelect && selectedMatch) {
+      const oddsValue = getOdds(runner);
+      if (oddsValue !== "SUSPENDED" && oddsValue !== "-") {
+        onRunnerSelect({
+          ...selectedMatch,
+          selectedMarket: market,
+          selectedRunner: runner,
+          selectedOdd: oddsValue
+        });
+      }
+    }
   };
-  const toggleItem = (id) => {
-    setExpandedById((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-  const leftColumn = [];
-  const rightColumn = [];
-  items.forEach((it, idx) => {
-    if (idx % 2 === 0) leftColumn.push(it);
-    else rightColumn.push(it);
-  });
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-live-primary", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "transition-colors overflow-hidden bg-gradient-to-r from-live-primary to-live-tertiary shadow rounded", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "button",
       {
         type: "button",
-        onClick: toggleMarket,
-        className: "w-full flex items-center justify-between px-3 py-2 hover:opacity-90 transition-opacity bg-gradient-to-r from-live-primary to-live-secondary shadow-md",
-        "aria-expanded": isMarketOpen,
+        onClick: onToggle,
+        className: "w-full flex items-center justify-between px-3 py-2.5 text-xs hover:bg-live-hover transition-colors",
+        "aria-expanded": isOpen,
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-bold tracking-wide text-live-accent", children: "Market" }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs opacity-80 text-live-accent", children: [
-              items.length,
-              " panels"
-            ] }),
-            isMarketOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronUp, { className: "w-5 h-5 text-live-accent" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronDown, { className: "w-5 h-5 text-live-accent" })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent text-xs", children: "⭐" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary font-medium truncate text-xs", children: market.marketName })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 flex-shrink-0", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-dark text-[10px] px-2 py-1 bg-live-accent rounded", children: "🔗" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent text-xs", children: market.runners?.length || 0 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent text-sm", children: "📊" }),
+            isOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronUp, { className: "w-4 h-4 text-live-primary" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronDown, { className: "w-4 h-4 text-live-primary" })
           ] })
         ]
       }
     ),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-2 p-2 bg-gradient-to-br from-live-tertiary to-live-secondary rounded-b-md", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: leftColumn.map((it) => {
-        const open = !!expandedById[it.id];
-        const measured = heights[it.id] ?? 0;
-        return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "div",
-          {
-            className: "transition-colors overflow-hidden bg-gradient-to-r from-live-primary to-live-tertiary shadow rounded",
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                "button",
-                {
-                  type: "button",
-                  onClick: () => toggleItem(it.id),
-                  className: "w-full flex items-center justify-between px-3 py-2.5 text-xs hover:bg-live-hover transition-colors",
-                  "aria-expanded": open,
-                  children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent text-xs", children: "⭐" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary font-medium truncate text-xs", children: it.title })
-                    ] }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 flex-shrink-0", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-dark text-[10px] px-2 py-1 bg-live-accent rounded", children: "🔗" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent text-xs", children: "1" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent text-sm", children: "📊" }),
-                      open ? /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronUp, { className: "w-4 h-4 text-live-primary" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronDown, { className: "w-4 h-4 text-live-primary" })
-                    ] })
-                  ]
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        style: {
+          maxHeight: isOpen ? `${measuredHeight}px` : "0px",
+          transition: "max-height 280ms ease, opacity 200ms ease",
+          overflow: "hidden",
+          backgroundColor: "var(--live-bg-tertiary)",
+          opacity: isOpen ? 1 : 0
+        },
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: contentRef, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-3 pb-2.5 pt-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "text-xs text-live-primary space-y-1.5", children: market.runners && market.runners.length > 0 ? market.runners.map((runner, idx) => {
+          const oddsValue = getOdds(runner);
+          const isHighlighted = isOddsHighlighted(runner, oddsValue);
+          const isSelected = isSelectedRunner(runner);
+          return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "li",
+            {
+              className: `flex items-center justify-between py-1.5 px-2 bg-live-hover rounded cursor-pointer hover:bg-live-accent hover:bg-opacity-20 transition-colors ${runner.status === "SUSPENDED" ? "opacity-50 cursor-not-allowed" : ""} ${isSelected ? "ring-2 ring-live-accent" : ""}`,
+              onClick: () => {
+                if (runner.status !== "SUSPENDED") {
+                  handleRunnerSelect(runner);
                 }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "div",
-                {
-                  style: {
-                    maxHeight: open ? `${measured}px` : "0px",
-                    transition: "max-height 280ms ease, opacity 200ms ease",
-                    overflow: "hidden",
-                    backgroundColor: "var(--live-bg-tertiary)",
-                    opacity: open ? 1 : 0
-                  },
-                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "div",
-                    {
-                      ref: (el) => {
-                        contentRefs.current[it.id] = el;
-                      },
-                      children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-3 pb-2.5 pt-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("ul", { className: "text-xs text-live-primary space-y-1.5", children: [
-                        (it.rows || []).map((r, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                          "li",
-                          {
-                            className: "flex items-center justify-between py-1.5 px-2 bg-live-hover rounded",
-                            children: [
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary truncate text-xs", children: r.label }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs px-2 py-1 rounded font-medium flex-shrink-0 bg-live-tertiary text-live-primary", children: r.value })
-                            ]
-                          },
-                          idx
-                        )),
-                        !it.rows?.length && /* @__PURE__ */ jsxRuntimeExports.jsx("li", { className: "px-2 py-1.5 text-live-secondary text-xs", children: "No data available" })
-                      ] }) })
-                    }
-                  )
-                }
-              )
-            ]
-          },
-          it.id
-        );
-      }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: rightColumn.map((it) => {
-        const open = !!expandedById[it.id];
-        const measured = heights[it.id] ?? 0;
-        return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "div",
-          {
-            className: "transition-colors overflow-hidden bg-gradient-to-r from-live-primary to-live-tertiary shadow rounded",
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                "button",
-                {
-                  type: "button",
-                  onClick: () => toggleItem(it.id),
-                  className: "w-full flex items-center justify-between px-3 py-2.5 text-xs hover:bg-live-hover transition-colors",
-                  "aria-expanded": open,
-                  children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent text-xs", children: "⭐" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary font-medium truncate text-xs", children: it.title })
-                    ] }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 flex-shrink-0", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-dark text-[10px] px-2 py-1 bg-live-accent rounded", children: "🔗" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent text-xs", children: "1" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent text-sm", children: "📊" }),
-                      open ? /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronUp, { className: "w-4 h-4 text-live-primary" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronDown, { className: "w-4 h-4 text-live-primary" })
-                    ] })
-                  ]
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "div",
-                {
-                  style: {
-                    maxHeight: open ? `${measured}px` : "0px",
-                    transition: "max-height 280ms ease, opacity 200ms ease",
-                    overflow: "hidden",
-                    backgroundColor: "var(--live-bg-tertiary)",
-                    opacity: open ? 1 : 0
-                  },
-                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "div",
-                    {
-                      ref: (el) => {
-                        contentRefs.current[it.id] = el;
-                      },
-                      children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-3 pb-2.5 pt-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("ul", { className: "text-xs text-live-primary space-y-1.5", children: [
-                        (it.rows || []).map((r, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                          "li",
-                          {
-                            className: "flex items-center justify-between py-1.5 px-2 bg-live-hover rounded",
-                            children: [
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary truncate text-xs", children: r.label }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs px-2 py-1 rounded font-medium flex-shrink-0 bg-live-tertiary text-live-primary", children: r.value })
-                            ]
-                          },
-                          idx
-                        )),
-                        !it.rows?.length && /* @__PURE__ */ jsxRuntimeExports.jsx("li", { className: "px-2 py-1.5 text-live-secondary text-xs", children: "No data available" })
-                      ] }) })
-                    }
-                  )
-                }
-              )
-            ]
-          },
-          it.id
-        );
-      }) })
-    ] })
+              },
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary truncate text-xs", children: runner.runnerName }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-xs px-2 py-1 rounded font-medium flex-shrink-0 ${runner.status === "SUSPENDED" ? "bg-live-danger text-white" : isHighlighted ? "odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110" : "bg-live-tertiary text-live-primary"}`, children: oddsValue })
+              ]
+            },
+            `${market.marketId}-${runner.runnerId}`
+          );
+        }) : /* @__PURE__ */ jsxRuntimeExports.jsx("li", { className: "px-2 py-1.5 text-live-secondary text-xs", children: "No runners available" }) }) }) })
+      }
+    )
   ] });
 }
-function SleekNavbar() {
-  const [searchActive, setSearchActive] = useState$e(false);
-  const [searchValue, setSearchValue] = useState$e("");
-  const [activeTab, setActiveTab] = useState$e("All");
+function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "" }) {
+  const [markets, setMarkets] = useState$h([]);
+  const [loading, setLoading] = useState$h(false);
+  const [expandedById, setExpandedById] = useState$h({});
+  const [allMarketsExpanded, setAllMarketsExpanded] = useState$h(false);
+  const prevMarketsRef = useRef$8([]);
+  const intervalRef = useRef$8(null);
+  const highlightedOddsRef = useRef$8({});
+  const selectedRunnerRef = useRef$8(null);
+  const prevSelectedMatchRef = useRef$8(null);
+  const currentFetchControllerRef = useRef$8(null);
+  useEffect$c(() => {
+    if (selectedMatch && selectedMatch.selectedRunner) {
+      selectedRunnerRef.current = {
+        marketId: selectedMatch.selectedMarket?.marketId,
+        runnerId: selectedMatch.selectedRunner?.runnerId,
+        eventId: selectedMatch.eventId
+      };
+    }
+  }, [selectedMatch]);
+  useEffect$c(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      if (currentFetchControllerRef.current) {
+        currentFetchControllerRef.current.abort();
+      }
+    };
+  }, []);
+  const filteredMarkets = useMemo$3(() => {
+    if (!searchTerm) return markets;
+    const term = searchTerm.toLowerCase().trim();
+    return markets.filter(
+      (market) => market.marketName?.toLowerCase().includes(term) || market.runners?.some(
+        (runner) => runner.runnerName?.toLowerCase().includes(term)
+      )
+    );
+  }, [markets, searchTerm]);
+  useEffect$c(() => {
+    const isNewMatch = !prevSelectedMatchRef.current || selectedMatch && prevSelectedMatchRef.current.eventId !== selectedMatch.eventId;
+    if (isNewMatch && selectedMatch) {
+      setLoading(true);
+      setMarkets([]);
+      prevMarketsRef.current = [];
+      setExpandedById({});
+      setAllMarketsExpanded(false);
+      if (currentFetchControllerRef.current) {
+        currentFetchControllerRef.current.abort();
+      }
+    }
+    prevSelectedMatchRef.current = selectedMatch;
+    if (!selectedMatch || !selectedMatch.eventId) {
+      setMarkets([]);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      setLoading(false);
+      return;
+    }
+    const sportKey = selectedMatch.sportKey || selectedMatch.sport?.key || selectedMatch.sport?.name;
+    if (!sportKey) {
+      setMarkets([]);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      setLoading(false);
+      return;
+    }
+    const fetchMarkets = async () => {
+      try {
+        const controller = new AbortController();
+        currentFetchControllerRef.current = controller;
+        const sportId = SPORT_ID_BY_KEY[sportKey];
+        if (!sportId) {
+          setMarkets([]);
+          setLoading(false);
+          return;
+        }
+        const marketsData = await fetchMarketsData(selectedMatch.eventId, sportId);
+        if (controller.signal.aborted) {
+          return;
+        }
+        const newMarkets = Array.isArray(marketsData) ? marketsData : [];
+        const prevMarkets = prevMarketsRef.current;
+        if (JSON.stringify(prevMarkets) !== JSON.stringify(newMarkets)) {
+          const newHighlightedOdds = {};
+          newMarkets.forEach((market, marketIndex) => {
+            const prevMarket = prevMarkets[marketIndex];
+            if (prevMarket && market.runners) {
+              market.runners.forEach((runner, runnerIndex) => {
+                const prevRunner = prevMarket.runners?.[runnerIndex];
+                if (prevRunner && runner.backPrices?.[0]?.price !== prevRunner.backPrices?.[0]?.price) {
+                  newHighlightedOdds[runner.runnerName] = runner.backPrices?.[0]?.price?.toFixed(2) || "-";
+                }
+              });
+            }
+          });
+          if (Object.keys(newHighlightedOdds).length > 0) {
+            highlightedOddsRef.current = newHighlightedOdds;
+            setTimeout(() => {
+              highlightedOddsRef.current = {};
+            }, 1e3);
+          }
+          setMarkets(newMarkets);
+          prevMarketsRef.current = newMarkets;
+          if (isNewMatch && newMarkets.length > 0) {
+            const initialExpanded = {};
+            newMarkets.forEach((market, index) => {
+              initialExpanded[market.marketId || index] = false;
+            });
+            setExpandedById(initialExpanded);
+            setAllMarketsExpanded(false);
+          }
+        }
+        setLoading(false);
+      } catch (error) {
+        if (error.name === "AbortError") {
+          return;
+        }
+        console.error("Error fetching markets data:", error);
+        if (prevMarketsRef.current.length > 0) {
+          console.warn("Keeping existing markets data due to network error");
+        }
+        setLoading(false);
+      }
+    };
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    fetchMarkets();
+    try {
+      intervalRef.current = setInterval(() => {
+        try {
+          fetchMarkets();
+        } catch (error) {
+          console.error("Error in markets polling interval:", error);
+        }
+      }, 1e3);
+    } catch (error) {
+      console.error("Error setting up markets polling interval:", error);
+    }
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      if (currentFetchControllerRef.current) {
+        currentFetchControllerRef.current.abort();
+      }
+    };
+  }, [selectedMatch?.eventId, selectedMatch?.sportKey, selectedMatch]);
+  const toggleMarket = (marketId) => {
+    setExpandedById((prev) => ({
+      ...prev,
+      [marketId]: !prev[marketId]
+    }));
+  };
+  const toggleAllMarkets = () => {
+    const newExpandedState = {};
+    filteredMarkets.forEach((market, index) => {
+      const marketId = market.marketId || index;
+      newExpandedState[marketId] = !allMarketsExpanded;
+    });
+    setExpandedById(newExpandedState);
+    setAllMarketsExpanded(!allMarketsExpanded);
+  };
+  const leftColumn = [];
+  const rightColumn = [];
+  filteredMarkets.forEach((market, idx) => {
+    const marketId = market.marketId || idx;
+    if (idx % 2 === 0) {
+      leftColumn.push({ ...market, id: marketId });
+    } else {
+      rightColumn.push({ ...market, id: marketId });
+    }
+  });
+  if (loading) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-primary p-4 flex items-center justify-center h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center animate-pulse-scale", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-12 h-12", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute w-full h-full rounded-full border-4 border-live-accent border-t-transparent animate-spin" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute w-8 h-8 top-2 left-2 rounded-full border-4 border-live-primary border-b-transparent animate-spin-reverse" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-4 text-live-primary text-sm font-medium", children: "Loading markets..." })
+    ] }) });
+  }
+  if (markets.length === 0) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-primary p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center py-4", children: "No markets available for this event" }) });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-live-primary flex flex-col h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        type: "button",
+        onClick: toggleAllMarkets,
+        className: "w-full flex items-center justify-between px-3 py-2 hover:opacity-90 transition-opacity bg-gradient-to-r from-live-primary to-live-secondary shadow-md flex-shrink-0",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-bold tracking-wide text-live-accent", children: "Market" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs opacity-80 text-live-accent", children: [
+              filteredMarkets.length,
+              " panels"
+            ] }),
+            allMarketsExpanded ? /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronUp, { className: "w-5 h-5 text-live-accent" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronDown, { className: "w-5 h-5 text-live-accent" })
+          ] })
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-grow overflow-y-auto custom-scrollbar", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-2 p-2 bg-gradient-to-br from-live-tertiary to-live-secondary rounded-b-md", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: leftColumn.map((market) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        MarketItem,
+        {
+          market,
+          isOpen: !!expandedById[market.id],
+          onToggle: () => toggleMarket(market.id),
+          highlightedOdds: highlightedOddsRef.current,
+          onRunnerSelect,
+          selectedMatch
+        },
+        market.id
+      )) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: rightColumn.map((market) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        MarketItem,
+        {
+          market,
+          isOpen: !!expandedById[market.id],
+          onToggle: () => toggleMarket(market.id),
+          highlightedOdds: highlightedOddsRef.current,
+          onRunnerSelect,
+          selectedMatch
+        },
+        market.id
+      )) })
+    ] }) })
+  ] });
+}
+function SleekNavbar({ onSearchChange, searchValue, onSearchClear }) {
+  const [searchActive, setSearchActive] = useState$h(false);
+  const [activeTab, setActiveTab] = useState$h("All");
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "div",
     {
@@ -7857,7 +8323,7 @@ function SleekNavbar() {
             className: "search-icon-btn flex items-center justify-center w-9 h-9 hover:bg-live-primary transition-colors",
             onClick: () => {
               setSearchActive(false);
-              setSearchValue("");
+              onSearchClear();
             },
             "aria-label": "Close search",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(IoCloseOutline, { className: "h-5 w-5 text-live-primary" })
@@ -7870,8 +8336,8 @@ function SleekNavbar() {
               type: "text",
               autoFocus: true,
               value: searchValue,
-              onChange: (e) => setSearchValue(e.target.value),
-              placeholder: "Search...",
+              onChange: (e) => onSearchChange(e.target.value),
+              placeholder: "Search markets...",
               className: "w-full p-2 pl-10 pr-4 border border-live-accent focus:outline-none focus:ring-1 focus:ring-live-accent focus:border-live-accent bg-live-tertiary text-live-primary transition-all duration-300"
             }
           ),
@@ -7895,16 +8361,16 @@ var useSyncExternalStoreWithSelector_production = {};
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var React$18 = reactExports;
+var React$1b = reactExports;
 function is(x, y) {
   return (x === y && (0 !== x || 1 / x === 1 / y)) || (x !== x && y !== y);
 }
 var objectIs = "function" === typeof Object.is ? Object.is : is,
-  useSyncExternalStore = React$18.useSyncExternalStore,
-  useRef$6 = React$18.useRef,
-  useEffect$8 = React$18.useEffect,
-  useMemo$2 = React$18.useMemo,
-  useDebugValue = React$18.useDebugValue;
+  useSyncExternalStore = React$1b.useSyncExternalStore,
+  useRef$7 = React$1b.useRef,
+  useEffect$b = React$1b.useEffect,
+  useMemo$2 = React$1b.useMemo,
+  useDebugValue = React$1b.useDebugValue;
 useSyncExternalStoreWithSelector_production.useSyncExternalStoreWithSelector = function (
   subscribe,
   getSnapshot,
@@ -7912,7 +8378,7 @@ useSyncExternalStoreWithSelector_production.useSyncExternalStoreWithSelector = f
   selector,
   isEqual
 ) {
-  var instRef = useRef$6(null);
+  var instRef = useRef$7(null);
   if (null === instRef.current) {
     var inst = { hasValue: false, value: null };
     instRef.current = inst;
@@ -7958,7 +8424,7 @@ useSyncExternalStoreWithSelector_production.useSyncExternalStoreWithSelector = f
     [getSnapshot, getServerSnapshot, selector, isEqual]
   );
   var value = useSyncExternalStore(subscribe, instRef[0], instRef[1]);
-  useEffect$8(
+  useEffect$b(
     function () {
       inst.hasValue = true;
       inst.value = value;
@@ -7975,7 +8441,7 @@ useSyncExternalStoreWithSelector_production.useSyncExternalStoreWithSelector = f
 
 var withSelectorExports = withSelector.exports;
 
-const React$17 = await importShared('react');
+const React$1a = await importShared('react');
 function defaultNoopBatch(callback) {
   callback();
 }
@@ -8110,7 +8576,7 @@ var canUseDOM = () => !!(typeof window !== "undefined" && typeof window.document
 var isDOM = /* @__PURE__ */ canUseDOM();
 var isRunningInReactNative = () => typeof navigator !== "undefined" && navigator.product === "ReactNative";
 var isReactNative = /* @__PURE__ */ isRunningInReactNative();
-var getUseIsomorphicLayoutEffect = () => isDOM || isReactNative ? React$17.useLayoutEffect : React$17.useEffect;
+var getUseIsomorphicLayoutEffect = () => isDOM || isReactNative ? React$1a.useLayoutEffect : React$1a.useEffect;
 var useIsomorphicLayoutEffect$2 = /* @__PURE__ */ getUseIsomorphicLayoutEffect();
 var ContextKey = /* @__PURE__ */ Symbol.for(`react-redux-context`);
 var gT = typeof globalThis !== "undefined" ? globalThis : (
@@ -8118,21 +8584,21 @@ var gT = typeof globalThis !== "undefined" ? globalThis : (
   {}
 );
 function getContext() {
-  if (!React$17.createContext) return {};
+  if (!React$1a.createContext) return {};
   const contextMap = gT[ContextKey] ??= /* @__PURE__ */ new Map();
-  let realContext = contextMap.get(React$17.createContext);
+  let realContext = contextMap.get(React$1a.createContext);
   if (!realContext) {
-    realContext = React$17.createContext(
+    realContext = React$1a.createContext(
       null
     );
-    contextMap.set(React$17.createContext, realContext);
+    contextMap.set(React$1a.createContext, realContext);
   }
   return realContext;
 }
 var ReactReduxContext = /* @__PURE__ */ getContext();
 function Provider(providerProps) {
   const { children, context, serverState, store } = providerProps;
-  const contextValue = React$17.useMemo(() => {
+  const contextValue = React$1a.useMemo(() => {
     const subscription = createSubscription(store);
     const baseContextValue = {
       store,
@@ -8143,7 +8609,7 @@ function Provider(providerProps) {
       return baseContextValue;
     }
   }, [store, serverState]);
-  const previousState = React$17.useMemo(() => store.getState(), [store]);
+  const previousState = React$1a.useMemo(() => store.getState(), [store]);
   useIsomorphicLayoutEffect$2(() => {
     const { subscription } = contextValue;
     subscription.onStateChange = subscription.notifyNestedSubs;
@@ -8157,12 +8623,12 @@ function Provider(providerProps) {
     };
   }, [contextValue, previousState]);
   const Context = context || ReactReduxContext;
-  return /* @__PURE__ */ React$17.createElement(Context.Provider, { value: contextValue }, children);
+  return /* @__PURE__ */ React$1a.createElement(Context.Provider, { value: contextValue }, children);
 }
 var Provider_default = Provider;
 function createReduxContextHook(context = ReactReduxContext) {
   return function useReduxContext2() {
-    const contextValue = React$17.useContext(context);
+    const contextValue = React$1a.useContext(context);
     return contextValue;
   };
 }
@@ -8201,8 +8667,8 @@ function createSelectorHook(context = ReactReduxContext) {
     const { equalityFn = refEquality } = typeof equalityFnOrOptions === "function" ? { equalityFn: equalityFnOrOptions } : equalityFnOrOptions;
     const reduxContext = useReduxContext2();
     const { store, subscription, getServerState } = reduxContext;
-    React$17.useRef(true);
-    const wrappedSelector = React$17.useCallback(
+    React$1a.useRef(true);
+    const wrappedSelector = React$1a.useCallback(
       {
         [selector.name](state) {
           const selected = selector(state);
@@ -8218,7 +8684,7 @@ function createSelectorHook(context = ReactReduxContext) {
       wrappedSelector,
       equalityFn
     );
-    React$17.useDebugValue(selectedState);
+    React$1a.useDebugValue(selectedState);
     return selectedState;
   };
   Object.assign(useSelector2, {
@@ -12273,26 +12739,33 @@ const notifyError = (message) => {
   });
 };
 
-const BACKEND_API = "http://localhost:3000";
-const API_BASE = "http://localhost:3000";
+const BACKEND_API = "http://localhost:3001";
 
 const api = axios.create({
   baseURL: BACKEND_API,
+  timeout: 10000, // Add a 10 second timeout
 });
 
 api.interceptors.request.use(
   (config) => {
+    // Log request for debugging
+    console.log("API Request:", config.method?.toUpperCase(), config.url, config.data);
     const token = getLocalStorageItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    console.error("API Request Error:", error);
+    return Promise.reject(error);
+  }
 );
 
 api.interceptors.response.use(
   (response) => {
+    // Log successful response for debugging
+    console.log("API Response:", response.status, response.data);
     if (response?.data?.meta?.status === 401) {
       handleUnauthorized(response.data.meta.message);
       return Promise.reject(
@@ -12302,10 +12775,15 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (
-      error?.response?.status === 401 ||
-      error?.response?.data?.meta?.status === 401
-    ) {
+    // Log error response for debugging
+    console.error("API Error Response:", error.response?.status, error.response?.data, error.message);
+    
+    if (error.code === 'ECONNABORTED') {
+      console.error('Request timeout');
+      return Promise.reject(new Error('Request timeout. Please try again.'));
+    }
+    
+    if (error?.response?.status === 401 || error?.response?.data?.meta?.status === 401) {
       handleUnauthorized("Please login again.");
     }
     return Promise.reject(error);
@@ -12319,7 +12797,7 @@ function handleUnauthorized(message) {
   window.location.href = "/";
 }
 
-const {useState: useState$d,useEffect: useEffect$7,useRef: useRef$5} = await importShared('react');
+const {useState: useState$g,useEffect: useEffect$a,useRef: useRef$6} = await importShared('react');
 const formatDateTime$1 = (timestamp) => {
   if (!timestamp) return "N/A";
   const date = new Date(parseInt(timestamp));
@@ -12348,60 +12826,163 @@ const calculateActiveExposure = (exposures) => {
 };
 const extractW1Odds = (markets, passedOdds = null) => {
   if (passedOdds && passedOdds.w1) {
-    return passedOdds.w1 !== "-" ? parseFloat(passedOdds.w1).toFixed(2) : "-";
+    const parsedOdds = parseFloat(passedOdds.w1);
+    if (!isNaN(parsedOdds) && passedOdds.w1 !== "-") {
+      return parsedOdds.toFixed(2);
+    }
+    return "-";
   }
   if (!markets) return "-";
   const mo = markets?.matchOdds?.[0];
+  if (mo?.status === "SUSPENDED") {
+    return "-";
+  }
   const r0 = mo?.runners?.[0];
   const w1 = r0?.backPrices?.[0]?.price;
-  return typeof w1 === "number" ? w1.toFixed(2) : "-";
+  if (typeof w1 === "number" && !isNaN(w1)) {
+    return w1.toFixed(2);
+  }
+  return "-";
 };
 const extractXOdds = (markets, passedOdds = null) => {
   if (passedOdds && passedOdds.x) {
-    return passedOdds.x !== "-" ? parseFloat(passedOdds.x).toFixed(2) : "-";
+    const parsedOdds = parseFloat(passedOdds.x);
+    if (!isNaN(parsedOdds) && passedOdds.x !== "-") {
+      return parsedOdds.toFixed(2);
+    }
+    return "-";
   }
   if (!markets) return "-";
   const mo = markets?.matchOdds?.[0];
+  if (mo?.status === "SUSPENDED") {
+    return "-";
+  }
   const runners = mo?.runners || [];
   const drawRunner = runners.find(
     (runner) => runner.runnerName && runner.runnerName.toLowerCase() === "draw"
   );
   const x = drawRunner?.backPrices?.[0]?.price;
-  return typeof x === "number" ? x.toFixed(2) : "-";
+  if (typeof x === "number" && !isNaN(x)) {
+    return x.toFixed(2);
+  }
+  return "-";
 };
 const extractW2Odds = (markets, passedOdds = null) => {
   if (passedOdds && passedOdds.w2) {
-    return passedOdds.w2 !== "-" ? parseFloat(passedOdds.w2).toFixed(2) : "-";
+    const parsedOdds = parseFloat(passedOdds.w2);
+    if (!isNaN(parsedOdds) && passedOdds.w2 !== "-") {
+      return parsedOdds.toFixed(2);
+    }
+    return "-";
   }
   if (!markets) return "-";
   const mo = markets?.matchOdds?.[0];
+  if (mo?.status === "SUSPENDED") {
+    return "-";
+  }
   const r1 = mo?.runners?.[1];
   const w2 = r1?.backPrices?.[0]?.price;
-  return typeof w2 === "number" ? w2.toFixed(2) : "-";
+  if (typeof w2 === "number" && !isNaN(w2)) {
+    return w2.toFixed(2);
+  }
+  return "-";
 };
-function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = false }) {
+const getRunnerIdForSelectedTeam = (selectedGame, selectedTeam) => {
+  if (!selectedGame?.markets?.matchOdds?.[0]?.runners) return null;
+  const runners = selectedGame.markets.matchOdds[0].runners;
+  if (selectedTeam === "Draw") {
+    const drawRunner = runners.find(
+      (runner) => runner.runnerName && runner.runnerName.toLowerCase() === "draw"
+    );
+    return drawRunner ? drawRunner.runnerId : null;
+  } else if (selectedTeam === selectedGame.team1) {
+    const nonDrawRunners = runners.filter(
+      (runner) => !runner.runnerName || runner.runnerName.toLowerCase() !== "draw"
+    );
+    return nonDrawRunners[0] ? nonDrawRunners[0].runnerId : null;
+  } else if (selectedTeam === selectedGame.team2) {
+    const nonDrawRunners = runners.filter(
+      (runner) => !runner.runnerName || runner.runnerName.toLowerCase() !== "draw"
+    );
+    return nonDrawRunners.length > 1 ? nonDrawRunners[nonDrawRunners.length - 1].runnerId : nonDrawRunners[0] ? nonDrawRunners[0].runnerId : null;
+  }
+  return null;
+};
+const isMatchSuspended = (selectedGame) => {
+  if (selectedGame?.status === "SUSPENDED") return true;
+  const odds = selectedGame?.odds || {};
+  if (odds.w1 === "SUSPENDED" && odds.x === "SUSPENDED" && odds.w2 === "SUSPENDED") return true;
+  const markets = selectedGame?.markets?.matchOdds?.[0];
+  if (markets?.status === "SUSPENDED") return true;
+  return false;
+};
+function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = false, isSwitchingMatch }) {
   const dispatch = useDispatch();
   const { isAuthenticated, userData } = useSelector((state) => state.Login);
   const { loading: exposureLoading, error: exposureError } = useSelector((state) => state.UpdateUserBalanceExposure);
-  const [oddsOption, setOddsOption] = useState$d("always ask");
-  const [isOpen, setIsOpen] = useState$d(false);
-  const [betAmounts, setBetAmounts] = useState$d([500, 1e3, 5e3]);
-  const [editableIndex, setEditableIndex] = useState$d(null);
-  const [editValue, setEditValue] = useState$d("");
-  const [isEditingMode, setIsEditingMode] = useState$d(false);
-  const [stakeValue, setStakeValue] = useState$d("");
-  const [selectedTeam, setSelectedTeam] = useState$d(null);
-  const [selectedOdd, setSelectedOdd] = useState$d(null);
-  const [previousOdds, setPreviousOdds] = useState$d({ w1: null, x: null, w2: null });
-  const [highlightedOdds, setHighlightedOdds] = useState$d({ w1: false, x: false, w2: false });
-  const editInputRef = useRef$5(null);
-  const containerRef = useRef$5(null);
-  useEffect$7(() => {
+  const { userData: profileData, loading } = useSelector((state) => state.GetUserData);
+  const [socketExposure, setSocketExposure] = useState$g(0);
+  const [isSocketConnected, setIsSocketConnected] = useState$g(false);
+  const [selectedRunnerInfo, setSelectedRunnerInfo] = useState$g(null);
+  const isMarketRunnerSelection = selectedGame?.selectedMarket && selectedGame?.selectedRunner;
+  const matchIsSuspended = isMatchSuspended(selectedGame);
+  const getMarketName = () => {
+    if (isMarketRunnerSelection) {
+      return selectedGame.selectedMarket.marketName;
+    }
+    if (selectedGame?.markets?.matchOdds?.[0]?.marketName) {
+      return selectedGame.markets.matchOdds[0].marketName;
+    }
+    return "Match Odds";
+  };
+  const marketName = getMarketName();
+  useEffect$a(() => {
+    if (isAuthenticated && userData?._id) {
+      const newSocket = new WebSocket("ws://localhost:3001");
+      newSocket.onopen = () => {
+        console.log("WebSocket connection established in RightEventInfoSection");
+        setIsSocketConnected(true);
+      };
+      newSocket.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        if (data.type === "exposureUpdate" && data.userId === userData._id) {
+          console.log(`User ${data.userId} exposure updated to ${data.exposure} in RightEventInfoSection`);
+          setSocketExposure(parseFloat(data.exposure) || 0);
+        }
+      };
+      newSocket.onclose = () => {
+        console.log("WebSocket connection closed in RightEventInfoSection");
+        setIsSocketConnected(false);
+      };
+      newSocket.onerror = (error) => {
+        console.error("WebSocket error in RightEventInfoSection:", error);
+        setIsSocketConnected(false);
+      };
+      return () => {
+        if (newSocket) {
+          newSocket.close();
+        }
+      };
+    }
+  }, [isAuthenticated, userData?._id]);
+  const [isOpen, setIsOpen] = useState$g(false);
+  const [betAmounts, setBetAmounts] = useState$g([500, 1e3, 5e3]);
+  const [editableIndex, setEditableIndex] = useState$g(null);
+  const [editValue, setEditValue] = useState$g("");
+  const [isEditingMode, setIsEditingMode] = useState$g(false);
+  const [stakeValue, setStakeValue] = useState$g("");
+  const [selectedTeam, setSelectedTeam] = useState$g(null);
+  const [selectedOdd, setSelectedOdd] = useState$g(null);
+  const [previousOdds, setPreviousOdds] = useState$g({ w1: null, x: null, w2: null });
+  const [highlightedOdds, setHighlightedOdds] = useState$g({ w1: false, x: false, w2: false });
+  const editInputRef = useRef$6(null);
+  const containerRef = useRef$6(null);
+  useEffect$a(() => {
     if (userData) {
       calculateActiveExposure(userData.exposures);
     }
   }, [userData]);
-  useEffect$7(() => {
+  useEffect$a(() => {
     const handleClickOutside = (event) => {
       if (containerRef.current && !containerRef.current.contains(event.target)) {
         setIsEditingMode(false);
@@ -12416,7 +12997,7 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isEditingMode]);
-  useEffect$7(() => {
+  useEffect$a(() => {
     if (editableIndex !== null && editInputRef.current) {
       editInputRef.current.focus();
     }
@@ -12455,6 +13036,9 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
     }
   };
   const handleTeamSelect = (teamName, oddValue) => {
+    if (selectedRunnerInfo) {
+      setSelectedRunnerInfo(null);
+    }
     let latestOddValue = oddValue;
     if (teamName === selectedGame?.team1) {
       latestOddValue = extractW1Odds(selectedGame?.markets, selectedGame?.odds);
@@ -12468,92 +13052,60 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
     setStakeValue("");
   };
   const handlePlaceBet = async () => {
-    if (!isAuthenticated || !selectedTeam || !stakeValue) {
+    if (!isAuthenticated || !selectedTeam && !isMarketRunnerSelection) {
       return;
     }
     const stake = parseFloat(stakeValue);
     if (isNaN(stake) || stake <= 0) {
+      notifyError$1("Please enter a valid stake amount");
       return;
     }
-    let oddsValue = 0;
-    if (selectedTeam === selectedGame?.team1) {
-      oddsValue = extractW1Odds(selectedGame?.markets, selectedGame?.odds);
-    } else if (selectedTeam === "Draw") {
-      oddsValue = extractXOdds(selectedGame?.markets, selectedGame?.odds);
-    } else if (selectedTeam === selectedGame?.team2) {
-      oddsValue = extractW2Odds(selectedGame?.markets, selectedGame?.odds);
-    }
-    oddsValue = parseFloat(oddsValue) || 0;
     try {
-      const response = await api.get("/users/profile");
-      if (response?.data?.success === true || response?.data?.meta?.code === 200 || response?.data?.code === 200) {
-        const freshUserData = response.data?.data || response.data;
-        const currentBalance = parseFloat(freshUserData?.balance) || 0;
-        const activeExposure = calculateActiveExposure(freshUserData?.exposures) || parseFloat(freshUserData?.exposure) || 0;
-        const availableBalance = currentBalance - activeExposure;
-        if (stake > availableBalance) {
-          notifyError$1("Insufficient balance to place this bet");
-          return;
-        }
-        const newBalance = currentBalance - stake;
+      if (isMarketRunnerSelection) {
+        const market = selectedGame.selectedMarket;
+        const runner = selectedGame.selectedRunner;
         dispatch(updateUserBalanceExposure({
-          balance: newBalance,
-          // We'll send the stake amount and let the backend handle complex exposure calculation
-          stake,
+          balance: parseFloat(userData?.balance) || 0,
           eventId: selectedGame?.eventId || null,
-          marketId: selectedGame?.markets?.matchOdds?.[0]?.marketId || null,
+          marketId: market?.marketId || null,
           is_clear: false,
-          marketType: "matchOdds",
-          team: selectedTeam,
-          odds: oddsValue,
-          possibleWin: calculatePossibleWin()
+          marketType: market?.marketType || "matchOdds",
+          stake,
+          sportsid: selectedGame?.sportId || null,
+          runnerid: runner?.runnerId || null,
+          runnername: runner?.runnerName || null,
+          odds: selectedGame?.selectedOdd || null,
+          competitionId: selectedGame?.competitionId || null,
+          competitionName: selectedGame?.competitionName || null,
+          marketName: market?.marketName || null,
+          runners: market?.runners?.map((r) => r.runnerName) || []
         }));
       } else {
-        const currentBalance = parseFloat(userData?.balance) || 0;
-        const activeExposure = calculateActiveExposure(userData?.exposures) || parseFloat(userData?.exposure) || 0;
-        const availableBalance = currentBalance - activeExposure;
-        if (stake > availableBalance) {
-          notifyError$1("Insufficient balance to place this bet");
-          return;
-        }
-        const newBalance = currentBalance - stake;
+        const market = selectedGame?.markets?.matchOdds?.[0];
+        const marketType = market?.marketType || "matchOdds";
+        const marketName2 = market?.marketName || "Match Odds";
         dispatch(updateUserBalanceExposure({
-          balance: newBalance,
-          // We'll send the stake amount and let the backend handle complex exposure calculation
-          stake,
+          balance: parseFloat(userData?.balance) || 0,
           eventId: selectedGame?.eventId || null,
-          marketId: selectedGame?.markets?.matchOdds?.[0]?.marketId || null,
+          marketId: market?.marketId || null,
           is_clear: false,
-          marketType: "matchOdds",
-          team: selectedTeam,
-          odds: oddsValue,
-          possibleWin: calculatePossibleWin()
+          marketType,
+          stake,
+          sportsid: selectedGame?.sportId || null,
+          runnerid: getRunnerIdForSelectedTeam(selectedGame, selectedTeam),
+          runnername: selectedTeam,
+          odds: selectedOdd,
+          competitionId: selectedGame?.competitionId || null,
+          competitionName: selectedGame?.competitionName || null,
+          marketName: marketName2,
+          runners: market?.runners?.map((runner) => runner.runnerName) || []
         }));
       }
-    } catch (error) {
-      const currentBalance = parseFloat(userData?.balance) || 0;
-      const activeExposure = calculateActiveExposure(userData?.exposures) || parseFloat(userData?.exposure) || 0;
-      const availableBalance = currentBalance - activeExposure;
-      if (stake > availableBalance) {
-        notifyError$1("Insufficient balance to place this bet");
-        return;
-      }
-      const newBalance = currentBalance - stake;
-      dispatch(updateUserBalanceExposure({
-        balance: newBalance,
-        // We'll send the stake amount and let the backend handle complex exposure calculation
-        stake,
-        eventId: selectedGame?.eventId || null,
-        marketId: selectedGame?.markets?.matchOdds?.[0]?.marketId || null,
-        is_clear: false,
-        marketType: "matchOdds",
-        team: selectedTeam,
-        odds: oddsValue,
-        possibleWin: calculatePossibleWin()
-      }));
+    } catch (err) {
+      notifyError$1(err.message || "Failed to place bet");
     }
   };
-  useEffect$7(() => {
+  useEffect$a(() => {
     if (!exposureLoading && !exposureError) {
       setSelectedTeam(null);
       setSelectedOdd(null);
@@ -12561,14 +13113,37 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
     }
   }, [exposureLoading, exposureError]);
   const calculatePossibleWin = () => {
-    if (!stakeValue || !selectedOdd || isNaN(stakeValue) || isNaN(selectedOdd)) return 0;
+    const isMarketRunnerSelection2 = selectedGame?.selectedMarket && selectedGame?.selectedRunner;
+    const oddsValue = isMarketRunnerSelection2 ? selectedGame?.selectedOdd : selectedOdd;
+    if (!stakeValue || !oddsValue || isNaN(stakeValue) || oddsValue === "-" || isNaN(parseFloat(oddsValue))) return "0.00";
     const stake = parseFloat(stakeValue);
-    const odd = parseFloat(selectedOdd);
+    const odd = parseFloat(oddsValue);
+    if (isNaN(stake) || isNaN(odd)) return "0.00";
     const possibleWin = (odd - 1) * stake;
-    return possibleWin;
+    return possibleWin.toFixed(2);
   };
-  useEffect$7(() => {
+  useEffect$a(() => {
     if (selectedGame) {
+      if (selectedGame.selectedMarket && selectedGame.selectedRunner) {
+        const market = selectedGame.selectedMarket;
+        const runner = selectedGame.selectedRunner;
+        if (market.runners) {
+          const updatedRunner = market.runners.find((r) => r && r.runnerId === runner.runnerId);
+          if (updatedRunner && updatedRunner.backPrices && updatedRunner.backPrices.length > 0) {
+            const newOdds = updatedRunner.backPrices[0].price;
+            if (newOdds !== void 0 && newOdds !== null) {
+              const formattedOdds = typeof newOdds === "number" ? newOdds.toFixed(2) : newOdds.toString();
+              if (formattedOdds !== selectedOdd) {
+                setSelectedOdd(formattedOdds);
+                setHighlightedOdds((prev) => ({ ...prev, selected: true }));
+                setTimeout(() => {
+                  setHighlightedOdds((prev) => ({ ...prev, selected: false }));
+                }, 1e3);
+              }
+            }
+          }
+        }
+      }
       const w1Odds = extractW1Odds(selectedGame.markets, selectedGame.odds);
       const xOdds = extractXOdds(selectedGame.markets, selectedGame.odds);
       const w2Odds = extractW2Odds(selectedGame.markets, selectedGame.odds);
@@ -12600,7 +13175,22 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
     }
   }, [selectedGame]);
   if (!selectedGame) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center h-full text-live-muted text-sm bg-gradient-to-b from-live-tertiary to-live-secondary rounded p-4 shadow-md", children: "Select a game to see details" });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center h-full text-live-muted text-sm bg-gradient-to-b from-live-tertiary to-live-secondary rounded p-4 shadow-md", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center animate-pulse-scale", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-10 h-10", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute w-full h-full rounded-full border-4 border-live-accent border-t-transparent animate-spin" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute w-6 h-6 top-2 left-2 rounded-full border-4 border-live-primary border-b-transparent animate-spin-reverse" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-3 text-live-primary text-xs font-medium", children: "Loading game details..." })
+    ] }) });
+  }
+  if (isSwitchingMatch) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center h-full text-live-muted text-sm bg-gradient-to-b from-live-tertiary to-live-secondary rounded p-4 shadow-md", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center animate-pulse-scale", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-10 h-10", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute w-full h-full rounded-full border-4 border-live-accent border-t-transparent animate-spin" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute w-6 h-6 top-2 left-2 rounded-full border-4 border-live-primary border-b-transparent animate-spin-reverse" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-3 text-live-primary text-xs font-medium", children: "Loading game details..." })
+    ] }) });
   }
   if (isCompact) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-2.5 m-1.5 bg-live-primary rounded-lg border border-live-accent shadow-live flex flex-col gap-2 text-live-primary", children: [
@@ -12622,82 +13212,100 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
         ] }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-live-tertiary px-2 py-1 rounded border border-live", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[10px] mb-1 font-bold text-live-primary", children: selectedGame?.competitionName }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-1 my-1", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[9px] mb-1 font-medium text-live-accent opacity-80", children: marketName }),
+          matchIsSuspended ? (
+            // Show suspended message instead of runners for suspended matches
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-1 my-1 p-2 bg-live-odds rounded text-center", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-bold text-live-primary", children: "Match Suspended" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-live-muted", children: "Betting is not available" })
+            ] })
+          ) : isMarketRunnerSelection ? (
+            // Market runner selection view
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-1 my-1", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
               "div",
               {
-                className: `flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team1 ? "bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]" : "bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]"}`,
-                onClick: () => {
-                  const w1Odds = extractW1Odds(selectedGame?.markets, selectedGame?.odds);
-                  if (w1Odds !== "-") {
-                    handleTeamSelect(selectedGame?.team1, w1Odds);
-                  }
-                },
+                className: `flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]`,
                 children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `font-medium text-[9px] truncate ${selectedTeam === selectedGame?.team1 ? "text-live-dark" : "text-live-primary"}`, children: selectedGame?.team1 }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "div",
-                    {
-                      className: `min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] ${selectedTeam === selectedGame?.team1 ? "bg-live-dark text-live-accent border border-live-accent" : "bg-live-odds text-live-accent border border-live"} ${highlightedOdds.w1 ? "odds-highlight" : ""}`,
-                      children: extractW1Odds(selectedGame?.markets, selectedGame?.odds)
-                    }
-                  )
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-medium text-[9px] truncate text-white", children: selectedGame.selectedRunner.runnerName }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] bg-live-dark text-live-accent border border-live-accent", children: selectedGame.selectedOdd })
                 ]
               }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "div",
-              {
-                className: `flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${selectedTeam === "Draw" ? "bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]" : "bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]"}`,
-                onClick: () => {
-                  const xOdds = extractXOdds(selectedGame?.markets, selectedGame?.odds);
-                  if (xOdds !== "-") {
-                    handleTeamSelect("Draw", xOdds);
-                  }
-                },
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `font-medium text-[9px] truncate ${selectedTeam === "Draw" ? "text-live-dark" : "text-live-primary"}`, children: "Draw" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "div",
-                    {
-                      className: `min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] ${selectedTeam === "Draw" ? "bg-live-dark text-live-accent border border-live-accent" : "bg-live-odds text-live-accent border border-live"} ${highlightedOdds.x ? "odds-highlight" : ""}`,
-                      children: extractXOdds(selectedGame?.markets, selectedGame?.odds)
+            ) })
+          ) : (
+            // Default match odds view
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-1 my-1", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "div",
+                {
+                  className: `flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team1 ? "bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]" : "bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]"}`,
+                  onClick: () => {
+                    const w1Odds = extractW1Odds(selectedGame?.markets, selectedGame?.odds);
+                    if (w1Odds !== "-") {
+                      handleTeamSelect(selectedGame?.team1, w1Odds);
                     }
-                  )
-                ]
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "div",
-              {
-                className: `flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team2 ? "bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]" : "bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]"}`,
-                onClick: () => {
-                  const w2Odds = extractW2Odds(selectedGame?.markets, selectedGame?.odds);
-                  if (w2Odds !== "-") {
-                    handleTeamSelect(selectedGame?.team2, w2Odds);
-                  }
-                },
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `font-medium text-[9px] truncate ${selectedTeam === selectedGame?.team2 ? "text-live-dark" : "text-live-primary"}`, children: selectedGame?.team2 }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "div",
-                    {
-                      className: `min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] ${selectedTeam === selectedGame?.team2 ? "bg-live-dark text-live-accent border border-live-accent" : "bg-live-odds text-live-accent border border-live"} ${highlightedOdds.w2 ? "odds-highlight" : ""}`,
-                      children: extractW2Odds(selectedGame?.markets, selectedGame?.odds)
+                  },
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `font-medium text-[9px] truncate ${selectedTeam === selectedGame?.team1 ? "text-white" : "text-live-primary"}`, children: selectedGame?.team1 }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "div",
+                      {
+                        className: `min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] ${selectedTeam === selectedGame?.team1 ? "bg-live-dark text-live-accent border border-live-accent" : "bg-live-odds text-live-accent border border-live"} ${highlightedOdds.w1 ? "odds-highlight" : ""}`,
+                        children: extractW1Odds(selectedGame?.markets, selectedGame?.odds)
+                      }
+                    )
+                  ]
+                }
+              ),
+              extractXOdds(selectedGame?.markets, selectedGame?.odds) !== "-" && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "div",
+                {
+                  className: `flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${selectedTeam === "Draw" ? "bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]" : "bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]"}`,
+                  onClick: () => {
+                    const xOdds = extractXOdds(selectedGame?.markets, selectedGame?.odds);
+                    if (xOdds !== "-") {
+                      handleTeamSelect("Draw", xOdds);
                     }
-                  )
-                ]
-              }
-            )
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-[10px] text-live-secondary mb-1", children: [
-            selectedGame?.team1,
-            " - ",
-            selectedGame?.team2
-          ] }),
+                  },
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `font-medium text-[9px] truncate ${selectedTeam === "Draw" ? "text-white" : "text-live-primary"}`, children: "Draw" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "div",
+                      {
+                        className: `min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] ${selectedTeam === "Draw" ? "bg-live-dark text-live-accent border border-live-accent" : "bg-live-odds text-live-accent border border-live"} ${highlightedOdds.x ? "odds-highlight" : ""}`,
+                        children: extractXOdds(selectedGame?.markets, selectedGame?.odds)
+                      }
+                    )
+                  ]
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "div",
+                {
+                  className: `flex items-center justify-between p-1.5 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team2 ? "bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]" : "bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]"}`,
+                  onClick: () => {
+                    const w2Odds = extractW2Odds(selectedGame?.markets, selectedGame?.odds);
+                    if (w2Odds !== "-") {
+                      handleTeamSelect(selectedGame?.team2, w2Odds);
+                    }
+                  },
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `font-medium text-[9px] truncate ${selectedTeam === selectedGame?.team2 ? "text-white" : "text-live-primary"}`, children: selectedGame?.team2 }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "div",
+                      {
+                        className: `min-w-[36px] h-[24px] flex items-center justify-center rounded font-bold text-[10px] ${selectedTeam === selectedGame?.team2 ? "bg-live-dark text-live-accent border border-live-accent" : "bg-live-odds text-live-accent border border-live"} ${highlightedOdds.w2 ? "odds-highlight" : ""}`,
+                        children: extractW2Odds(selectedGame?.markets, selectedGame?.odds)
+                      }
+                    )
+                  ]
+                }
+              )
+            ] })
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[10px] text-live-secondary mb-1", children: isMarketRunnerSelection ? `${selectedGame?.team1} - ${selectedGame?.team2}` : `${selectedGame?.team1} - ${selectedGame?.team2}` }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[10px] text-live-secondary", children: formatDateTime$1(selectedGame?.openDate) })
         ] }),
-        selectedTeam && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        !matchIsSuspended && (selectedTeam || isMarketRunnerSelection) && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-live-tertiary px-2 py-1 rounded border border-live", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
             "input",
             {
@@ -12716,7 +13324,7 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
             ] })
           ] })
         ] }),
-        selectedTeam && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-1.5", ref: containerRef, children: [
+        !matchIsSuspended && (selectedTeam || isMarketRunnerSelection) && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-1.5", ref: containerRef, children: [
           betAmounts.map((amount, index) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1", children: editableIndex === index ? /* @__PURE__ */ jsxRuntimeExports.jsx(
             "input",
             {
@@ -12751,16 +13359,7 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
               children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { xmlns: "http://www.w3.org/2000/svg", className: `h-2.5 w-2.5 mx-auto ${isEditingMode ? "text-live-dark" : "text-live-primary"}`, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" }) })
             }
           )
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            className: `w-full px-2 py-1 rounded text-[10px] font-bold transition-colors cursor-pointer ${isAuthenticated && selectedTeam ? "bg-live-accent hover:bg-live-warning border border-live-accent text-live-accent hover:text-live-dark" : "bg-live-tertiary border border-live text-live-accent cursor-not-allowed opacity-50"}`,
-            disabled: !isAuthenticated || !selectedTeam,
-            onClick: handlePlaceBet,
-            children: "BET"
-          }
-        )
+        ] })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-live-secondary rounded p-3 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-muted text-[10px]", children: "Empty content area" }) })
     ] });
@@ -12796,82 +13395,100 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-live-tertiary px-2.5 py-1.5 rounded border border-live", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs mb-1 font-bold text-live-primary", children: selectedGame?.competitionName }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-2 my-2", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[9px] mb-1 font-medium text-live-accent opacity-80", children: marketName }),
+        matchIsSuspended ? (
+          // Show suspended message instead of runners for suspended matches
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-2 my-2 p-4 bg-live-odds rounded text-center", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-lg font-bold text-live-primary", children: "Match Suspended" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-live-muted", children: "Betting is not available for this match" })
+          ] })
+        ) : isMarketRunnerSelection ? (
+          // Market runner selection view
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-2 my-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
             "div",
             {
-              className: `flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team1 ? "bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]" : "bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]"}`,
-              onClick: () => {
-                const w1Odds = extractW1Odds(selectedGame?.markets, selectedGame?.odds);
-                if (w1Odds !== "-") {
-                  handleTeamSelect(selectedGame?.team1, w1Odds);
-                }
-              },
+              className: `flex items-center justify-between p-2 rounded border cursor-pointer transition-all bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]`,
               children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `font-medium text-xs truncate ${selectedTeam === selectedGame?.team1 ? "text-live-dark" : "text-live-primary"}`, children: selectedGame?.team1 }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "div",
-                  {
-                    className: `min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === selectedGame?.team1 ? "bg-live-dark text-live-accent border border-live-accent" : "bg-live-odds text-live-accent border border-live"} ${highlightedOdds.w1 ? "odds-highlight" : ""}`,
-                    children: extractW1Odds(selectedGame?.markets, selectedGame?.odds)
-                  }
-                )
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-medium text-xs truncate text-white", children: selectedGame.selectedRunner.runnerName }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs bg-live-dark text-live-accent border border-live-accent", children: selectedGame.selectedOdd })
               ]
             }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "div",
-            {
-              className: `flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${selectedTeam === "Draw" ? "bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]" : "bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]"}`,
-              onClick: () => {
-                const xOdds = extractXOdds(selectedGame?.markets, selectedGame?.odds);
-                if (xOdds !== "-") {
-                  handleTeamSelect("Draw", xOdds);
-                }
-              },
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `font-medium text-xs truncate ${selectedTeam === "Draw" ? "text-live-dark" : "text-live-primary"}`, children: "Draw" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "div",
-                  {
-                    className: `min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === "Draw" ? "bg-live-dark text-live-accent border border-live-accent" : "bg-live-odds text-live-accent border border-live"} ${highlightedOdds.x ? "odds-highlight" : ""}`,
-                    children: extractXOdds(selectedGame?.markets, selectedGame?.odds)
+          ) })
+        ) : (
+          // Default match odds view
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-2 my-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "div",
+              {
+                className: `flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team1 ? "bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]" : "bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]"}`,
+                onClick: () => {
+                  const w1Odds = extractW1Odds(selectedGame?.markets, selectedGame?.odds);
+                  if (w1Odds !== "-") {
+                    handleTeamSelect(selectedGame?.team1, w1Odds);
                   }
-                )
-              ]
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "div",
-            {
-              className: `flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team2 ? "bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]" : "bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]"}`,
-              onClick: () => {
-                const w2Odds = extractW2Odds(selectedGame?.markets, selectedGame?.odds);
-                if (w2Odds !== "-") {
-                  handleTeamSelect(selectedGame?.team2, w2Odds);
-                }
-              },
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `font-medium text-xs truncate ${selectedTeam === selectedGame?.team2 ? "text-live-dark" : "text-live-primary"}`, children: selectedGame?.team2 }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "div",
-                  {
-                    className: `min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === selectedGame?.team2 ? "bg-live-dark text-live-accent border border-live-accent" : "bg-live-odds text-live-accent border border-live"} ${highlightedOdds.w2 ? "odds-highlight" : ""}`,
-                    children: extractW2Odds(selectedGame?.markets, selectedGame?.odds)
+                },
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `font-medium text-xs truncate ${selectedTeam === selectedGame?.team1 ? "text-white" : "text-live-primary"}`, children: selectedGame?.team1 }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "div",
+                    {
+                      className: `min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === selectedGame?.team1 ? "bg-live-dark text-live-accent border border-live-accent" : "bg-live-odds text-live-accent border border-live"} ${highlightedOdds.w1 ? "odds-highlight" : ""}`,
+                      children: extractW1Odds(selectedGame?.markets, selectedGame?.odds)
+                    }
+                  )
+                ]
+              }
+            ),
+            extractXOdds(selectedGame?.markets, selectedGame?.odds) !== "-" && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "div",
+              {
+                className: `flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${selectedTeam === "Draw" ? "bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]" : "bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]"}`,
+                onClick: () => {
+                  const xOdds = extractXOdds(selectedGame?.markets, selectedGame?.odds);
+                  if (xOdds !== "-") {
+                    handleTeamSelect("Draw", xOdds);
                   }
-                )
-              ]
-            }
-          )
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-xs text-live-secondary mb-1", children: [
-          selectedGame?.team1,
-          " - ",
-          selectedGame?.team2
-        ] }),
+                },
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `font-medium text-xs truncate ${selectedTeam === "Draw" ? "text-white" : "text-live-primary"}`, children: "Draw" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "div",
+                    {
+                      className: `min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === "Draw" ? "bg-live-dark text-live-accent border border-live-accent" : "bg-live-odds text-live-accent border border-live"} ${highlightedOdds.x ? "odds-highlight" : ""}`,
+                      children: extractXOdds(selectedGame?.markets, selectedGame?.odds)
+                    }
+                  )
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "div",
+              {
+                className: `flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team2 ? "bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]" : "bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]"}`,
+                onClick: () => {
+                  const w2Odds = extractW2Odds(selectedGame?.markets, selectedGame?.odds);
+                  if (w2Odds !== "-") {
+                    handleTeamSelect(selectedGame?.team2, w2Odds);
+                  }
+                },
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `font-medium text-xs truncate ${selectedTeam === selectedGame?.team2 ? "text-white" : "text-live-primary"}`, children: selectedGame?.team2 }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "div",
+                    {
+                      className: `min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === selectedGame?.team2 ? "bg-live-dark text-live-accent border border-live-accent" : "bg-live-odds text-live-accent border border-live"} ${highlightedOdds.w2 ? "odds-highlight" : ""}`,
+                      children: extractW2Odds(selectedGame?.markets, selectedGame?.odds)
+                    }
+                  )
+                ]
+              }
+            )
+          ] })
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-live-secondary mb-1", children: isMarketRunnerSelection ? `${selectedGame?.team1} - ${selectedGame?.team2}` : `${selectedGame?.team1} - ${selectedGame?.team2}` }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-live-secondary", children: formatDateTime$1(selectedGame?.openDate) })
       ] }),
-      selectedTeam && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+      !matchIsSuspended && (selectedTeam || isMarketRunnerSelection) && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-live-tertiary px-2.5 py-1.5 rounded border border-live", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
           "input",
           {
@@ -12887,7 +13504,7 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-live-accent font-bold", children: calculatePossibleWin() })
         ] })
       ] }),
-      selectedTeam && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-1.5", ref: containerRef, children: [
+      !matchIsSuspended && (selectedTeam || isMarketRunnerSelection) && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-1.5", ref: containerRef, children: [
         betAmounts.map((amount, index) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1", children: editableIndex === index ? /* @__PURE__ */ jsxRuntimeExports.jsx(
           "input",
           {
@@ -12926,10 +13543,10 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "button",
         {
-          className: `w-full px-2.5 py-1.5 rounded text-sm font-bold transition-colors cursor-pointer color-yellowborder-solid transition-all duration-200 ${isAuthenticated && selectedTeam ? "bg-live-accent hover:bg-live-warning border border-live-accent text-live-accent hover:text-live-dark hover:scale-[1.02] hover:shadow-[0_0_8px_var(--live-accent-primary)]" : "bg-live-tertiary border border-live text-live-accent cursor-not-allowed opacity-50"}`,
-          disabled: !isAuthenticated || !selectedTeam,
+          className: `w-full px-2.5 py-1.5 rounded text-sm font-bold transition-colors cursor-pointer color-yellowborder-solid transition-all duration-200 ${!matchIsSuspended && isAuthenticated && (selectedTeam || isMarketRunnerSelection) ? "bg-live-accent hover:bg-live-warning border border-live-accent text-live-accent hover:text-live-dark hover:scale-[1.02] hover:shadow-[0_0_8px_var(--live-accent-primary)]" : "bg-live-tertiary border border-live text-live-accent cursor-not-allowed opacity-50"}`,
+          disabled: matchIsSuspended || !isAuthenticated || !selectedTeam && !isMarketRunnerSelection,
           onClick: handlePlaceBet,
-          children: "BET"
+          children: matchIsSuspended ? "MATCH SUSPENDED" : "BET"
         }
       )
     ] }),
@@ -12951,7 +13568,7 @@ const LinkTo = ({ onClick, text }) => /* @__PURE__ */ jsxRuntimeExports.jsx(
   }
 );
 
-const React$16 = await importShared('react');
+const React$19 = await importShared('react');
 
 const React__default = await importShared('react');
 
@@ -13102,7 +13719,7 @@ var getProxyFormState = (formState, control, localProxyFormState, isRoot = true)
     return result;
 };
 
-const useIsomorphicLayoutEffect$1 = typeof window !== 'undefined' ? React$16.useLayoutEffect : React$16.useEffect;
+const useIsomorphicLayoutEffect$1 = typeof window !== 'undefined' ? React$19.useLayoutEffect : React$19.useEffect;
 
 var isString = (value) => typeof value === 'string';
 
@@ -14931,9 +15548,9 @@ function useForm(props = {}) {
     return _formControl.current;
 }
 
-const React$15 = await importShared('react');
-const Input = React$15.forwardRef(({ className, type, placeholder, error, ...props }, ref) => {
-  const [showPassword, setShowPassword] = React$15.useState(false);
+const React$18 = await importShared('react');
+const Input = React$18.forwardRef(({ className, type, placeholder, error, ...props }, ref) => {
+  const [showPassword, setShowPassword] = React$18.useState(false);
   const inputType = type === "password" && showPassword ? "text" : type;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "input-container w-full relative", children: [
     placeholder && /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm font-medium text-gray-300 mb-2", children: placeholder }),
@@ -14973,17 +15590,17 @@ const Input = React$15.forwardRef(({ className, type, placeholder, error, ...pro
 Input.displayName = "Input";
 
 // packages/react/context/src/create-context.tsx
-const React$14 = await importShared('react');
+const React$17 = await importShared('react');
 function createContext2(rootComponentName, defaultContext) {
-  const Context = React$14.createContext(defaultContext);
+  const Context = React$17.createContext(defaultContext);
   const Provider = (props) => {
     const { children, ...context } = props;
-    const value = React$14.useMemo(() => context, Object.values(context));
+    const value = React$17.useMemo(() => context, Object.values(context));
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Context.Provider, { value, children });
   };
   Provider.displayName = rootComponentName + "Provider";
   function useContext2(consumerName) {
-    const context = React$14.useContext(Context);
+    const context = React$17.useContext(Context);
     if (context) return context;
     if (defaultContext !== void 0) return defaultContext;
     throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
@@ -14993,19 +15610,19 @@ function createContext2(rootComponentName, defaultContext) {
 function createContextScope(scopeName, createContextScopeDeps = []) {
   let defaultContexts = [];
   function createContext3(rootComponentName, defaultContext) {
-    const BaseContext = React$14.createContext(defaultContext);
+    const BaseContext = React$17.createContext(defaultContext);
     const index = defaultContexts.length;
     defaultContexts = [...defaultContexts, defaultContext];
     const Provider = (props) => {
       const { scope, children, ...context } = props;
       const Context = scope?.[scopeName]?.[index] || BaseContext;
-      const value = React$14.useMemo(() => context, Object.values(context));
+      const value = React$17.useMemo(() => context, Object.values(context));
       return /* @__PURE__ */ jsxRuntimeExports.jsx(Context.Provider, { value, children });
     };
     Provider.displayName = rootComponentName + "Provider";
     function useContext2(consumerName, scope) {
       const Context = scope?.[scopeName]?.[index] || BaseContext;
-      const context = React$14.useContext(Context);
+      const context = React$17.useContext(Context);
       if (context) return context;
       if (defaultContext !== void 0) return defaultContext;
       throw new Error(`\`${consumerName}\` must be used within \`${rootComponentName}\``);
@@ -15014,11 +15631,11 @@ function createContextScope(scopeName, createContextScopeDeps = []) {
   }
   const createScope = () => {
     const scopeContexts = defaultContexts.map((defaultContext) => {
-      return React$14.createContext(defaultContext);
+      return React$17.createContext(defaultContext);
     });
     return function useScope(scope) {
       const contexts = scope?.[scopeName] || scopeContexts;
-      return React$14.useMemo(
+      return React$17.useMemo(
         () => ({ [`__scope${scopeName}`]: { ...scope, [scopeName]: contexts } }),
         [scope, contexts]
       );
@@ -15041,7 +15658,7 @@ function composeContextScopes(...scopes) {
         const currentScope = scopeProps[`__scope${scopeName}`];
         return { ...nextScopes2, ...currentScope };
       }, {});
-      return React$14.useMemo(() => ({ [`__scope${baseScope.scopeName}`]: nextScopes }), [nextScopes]);
+      return React$17.useMemo(() => ({ [`__scope${baseScope.scopeName}`]: nextScopes }), [nextScopes]);
     };
   };
   createScope.scopeName = baseScope.scopeName;
@@ -15059,14 +15676,14 @@ function composeEventHandlers$1(originalEventHandler, ourEventHandler, { checkFo
 }
 
 // packages/react/use-layout-effect/src/use-layout-effect.tsx
-const React$13 = await importShared('react');
+const React$16 = await importShared('react');
 
-var useLayoutEffect2 = globalThis?.document ? React$13.useLayoutEffect : () => {
+var useLayoutEffect2 = globalThis?.document ? React$16.useLayoutEffect : () => {
 };
 
 // src/use-controllable-state.tsx
-const React$12 = await importShared('react');
-var useInsertionEffect = React$12[" useInsertionEffect ".trim().toString()] || useLayoutEffect2;
+const React$15 = await importShared('react');
+var useInsertionEffect = React$15[" useInsertionEffect ".trim().toString()] || useLayoutEffect2;
 function useControllableState({
   prop,
   defaultProp,
@@ -15081,8 +15698,8 @@ function useControllableState({
   const isControlled = prop !== void 0;
   const value = isControlled ? prop : uncontrolledProp;
   {
-    const isControlledRef = React$12.useRef(prop !== void 0);
-    React$12.useEffect(() => {
+    const isControlledRef = React$15.useRef(prop !== void 0);
+    React$15.useEffect(() => {
       const wasControlled = isControlledRef.current;
       if (wasControlled !== isControlled) {
         const from = wasControlled ? "controlled" : "uncontrolled";
@@ -15094,7 +15711,7 @@ function useControllableState({
       isControlledRef.current = isControlled;
     }, [isControlled, caller]);
   }
-  const setValue = React$12.useCallback(
+  const setValue = React$15.useCallback(
     (nextValue) => {
       if (isControlled) {
         const value2 = isFunction$1(nextValue) ? nextValue(prop) : nextValue;
@@ -15113,13 +15730,13 @@ function useUncontrolledState({
   defaultProp,
   onChange
 }) {
-  const [value, setValue] = React$12.useState(defaultProp);
-  const prevValueRef = React$12.useRef(value);
-  const onChangeRef = React$12.useRef(onChange);
+  const [value, setValue] = React$15.useState(defaultProp);
+  const prevValueRef = React$15.useRef(value);
+  const onChangeRef = React$15.useRef(onChange);
   useInsertionEffect(() => {
     onChangeRef.current = onChange;
   }, [onChange]);
-  React$12.useEffect(() => {
+  React$15.useEffect(() => {
     if (prevValueRef.current !== value) {
       onChangeRef.current?.(value);
       prevValueRef.current = value;
@@ -15135,11 +15752,11 @@ function isFunction$1(value) {
 await importShared('react');
 
 // packages/react/use-previous/src/use-previous.tsx
-const React$11 = await importShared('react');
+const React$14 = await importShared('react');
 
 function usePrevious(value) {
-  const ref = React$11.useRef({ value, previous: value });
-  return React$11.useMemo(() => {
+  const ref = React$14.useRef({ value, previous: value });
+  return React$14.useMemo(() => {
     if (ref.current.value !== value) {
       ref.current.previous = ref.current.value;
       ref.current.value = value;
@@ -15149,9 +15766,9 @@ function usePrevious(value) {
 }
 
 // packages/react/use-size/src/use-size.tsx
-const React$10 = await importShared('react');
+const React$13 = await importShared('react');
 function useSize(element) {
-  const [size, setSize] = React$10.useState(void 0);
+  const [size, setSize] = React$13.useState(void 0);
   useLayoutEffect2(() => {
     if (element) {
       setSize({ width: element.offsetWidth, height: element.offsetHeight });
@@ -15189,10 +15806,10 @@ function useSize(element) {
 const React2$1 = await importShared('react');
 
 // src/use-state-machine.tsx
-const React$$ = await importShared('react');
+const React$12 = await importShared('react');
 
 function useStateMachine$1(initialState, machine) {
-  return React$$.useReducer((state, event) => {
+  return React$12.useReducer((state, event) => {
     const nextState = machine[state][event];
     return nextState ?? state;
   }, initialState);
@@ -15317,7 +15934,7 @@ function getElementRef$1(element) {
 }
 
 // src/primitive.tsx
-const React$_ = await importShared('react');
+const React$11 = await importShared('react');
 
 const ReactDOM$3 = await importShared('react-dom');
 var NODES = [
@@ -15341,7 +15958,7 @@ var NODES = [
 ];
 var Primitive = NODES.reduce((primitive, node) => {
   const Slot = createSlot(`Primitive.${node}`);
-  const Node = React$_.forwardRef((props, forwardedRef) => {
+  const Node = React$11.forwardRef((props, forwardedRef) => {
     const { asChild, ...primitiveProps } = props;
     const Comp = asChild ? Slot : node;
     if (typeof window !== "undefined") {
@@ -15357,7 +15974,7 @@ function dispatchDiscreteCustomEvent(target, event) {
 }
 
 // src/checkbox.tsx
-const React$Z = await importShared('react');
+const React$10 = await importShared('react');
 var CHECKBOX_NAME = "Checkbox";
 var [createCheckboxContext, createCheckboxScope] = createContextScope(CHECKBOX_NAME);
 var [CheckboxProviderImpl, useCheckboxContext] = createCheckboxContext(CHECKBOX_NAME);
@@ -15382,9 +15999,9 @@ function CheckboxProvider(props) {
     onChange: onCheckedChange,
     caller: CHECKBOX_NAME
   });
-  const [control, setControl] = React$Z.useState(null);
-  const [bubbleInput, setBubbleInput] = React$Z.useState(null);
-  const hasConsumerStoppedPropagationRef = React$Z.useRef(false);
+  const [control, setControl] = React$10.useState(null);
+  const [bubbleInput, setBubbleInput] = React$10.useState(null);
+  const hasConsumerStoppedPropagationRef = React$10.useRef(false);
   const isFormControl = control ? !!form || !!control.closest("form") : (
     // We set this to true by default so that events bubble to forms without JS (SSR)
     true
@@ -15415,7 +16032,7 @@ function CheckboxProvider(props) {
   );
 }
 var TRIGGER_NAME$2 = "CheckboxTrigger";
-var CheckboxTrigger = React$Z.forwardRef(
+var CheckboxTrigger = React$10.forwardRef(
   ({ __scopeCheckbox, onKeyDown, onClick, ...checkboxProps }, forwardedRef) => {
     const {
       control,
@@ -15430,8 +16047,8 @@ var CheckboxTrigger = React$Z.forwardRef(
       bubbleInput
     } = useCheckboxContext(TRIGGER_NAME$2, __scopeCheckbox);
     const composedRefs = useComposedRefs(forwardedRef, setControl);
-    const initialCheckedStateRef = React$Z.useRef(checked);
-    React$Z.useEffect(() => {
+    const initialCheckedStateRef = React$10.useRef(checked);
+    React$10.useEffect(() => {
       const form = control?.form;
       if (form) {
         const reset = () => setChecked(initialCheckedStateRef.current);
@@ -15467,7 +16084,7 @@ var CheckboxTrigger = React$Z.forwardRef(
   }
 );
 CheckboxTrigger.displayName = TRIGGER_NAME$2;
-var Checkbox$1 = React$Z.forwardRef(
+var Checkbox$1 = React$10.forwardRef(
   (props, forwardedRef) => {
     const {
       __scopeCheckbox,
@@ -15515,7 +16132,7 @@ var Checkbox$1 = React$Z.forwardRef(
 );
 Checkbox$1.displayName = CHECKBOX_NAME;
 var INDICATOR_NAME = "CheckboxIndicator";
-var CheckboxIndicator = React$Z.forwardRef(
+var CheckboxIndicator = React$10.forwardRef(
   (props, forwardedRef) => {
     const { __scopeCheckbox, forceMount, ...indicatorProps } = props;
     const context = useCheckboxContext(INDICATOR_NAME, __scopeCheckbox);
@@ -15539,7 +16156,7 @@ var CheckboxIndicator = React$Z.forwardRef(
 );
 CheckboxIndicator.displayName = INDICATOR_NAME;
 var BUBBLE_INPUT_NAME = "CheckboxBubbleInput";
-var CheckboxBubbleInput = React$Z.forwardRef(
+var CheckboxBubbleInput = React$10.forwardRef(
   ({ __scopeCheckbox, ...props }, forwardedRef) => {
     const {
       control,
@@ -15557,7 +16174,7 @@ var CheckboxBubbleInput = React$Z.forwardRef(
     const composedRefs = useComposedRefs(forwardedRef, setBubbleInput);
     const prevChecked = usePrevious(checked);
     const controlSize = useSize(control);
-    React$Z.useEffect(() => {
+    React$10.useEffect(() => {
       const input = bubbleInput;
       if (!input) return;
       const inputProto = window.HTMLInputElement.prototype;
@@ -15574,7 +16191,7 @@ var CheckboxBubbleInput = React$Z.forwardRef(
         input.dispatchEvent(event);
       }
     }, [bubbleInput, prevChecked, checked, hasConsumerStoppedPropagationRef]);
-    const defaultCheckedRef = React$Z.useRef(isIndeterminate(checked) ? false : checked);
+    const defaultCheckedRef = React$10.useRef(isIndeterminate(checked) ? false : checked);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Primitive.input,
       {
@@ -15616,8 +16233,8 @@ function getState$2(checked) {
   return isIndeterminate(checked) ? "indeterminate" : checked ? "checked" : "unchecked";
 }
 
-const React$Y = await importShared('react');
-const Checkbox = React$Y.forwardRef(({ className, ...props }, ref) => {
+const React$$ = await importShared('react');
+const Checkbox = React$$.forwardRef(({ className, ...props }, ref) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     Checkbox$1,
     {
@@ -15652,11 +16269,11 @@ function composeEventHandlers(originalEventHandler, ourEventHandler, { checkForD
 }
 
 // packages/react/id/src/id.tsx
-const React$X = await importShared('react');
-var useReactId = React$X[" useId ".trim().toString()] || (() => void 0);
+const React$_ = await importShared('react');
+var useReactId = React$_[" useId ".trim().toString()] || (() => void 0);
 var count$2 = 0;
 function useId(deterministicId) {
-  const [id, setId] = React$X.useState(useReactId());
+  const [id, setId] = React$_.useState(useReactId());
   useLayoutEffect2(() => {
     setId((reactId) => reactId ?? String(count$2++));
   }, [deterministicId]);
@@ -15664,21 +16281,21 @@ function useId(deterministicId) {
 }
 
 // packages/react/use-callback-ref/src/use-callback-ref.tsx
-const React$W = await importShared('react');
+const React$Z = await importShared('react');
 
 function useCallbackRef$1(callback) {
-  const callbackRef = React$W.useRef(callback);
-  React$W.useEffect(() => {
+  const callbackRef = React$Z.useRef(callback);
+  React$Z.useEffect(() => {
     callbackRef.current = callback;
   });
-  return React$W.useMemo(() => (...args) => callbackRef.current?.(...args), []);
+  return React$Z.useMemo(() => (...args) => callbackRef.current?.(...args), []);
 }
 
 // packages/react/use-escape-keydown/src/use-escape-keydown.tsx
-const React$V = await importShared('react');
+const React$Y = await importShared('react');
 function useEscapeKeydown(onEscapeKeyDownProp, ownerDocument = globalThis?.document) {
   const onEscapeKeyDown = useCallbackRef$1(onEscapeKeyDownProp);
-  React$V.useEffect(() => {
+  React$Y.useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
         onEscapeKeyDown(event);
@@ -15690,18 +16307,18 @@ function useEscapeKeydown(onEscapeKeyDownProp, ownerDocument = globalThis?.docum
 }
 
 // src/dismissable-layer.tsx
-const React$U = await importShared('react');
+const React$X = await importShared('react');
 var DISMISSABLE_LAYER_NAME$1 = "DismissableLayer";
 var CONTEXT_UPDATE$1 = "dismissableLayer.update";
 var POINTER_DOWN_OUTSIDE$1 = "dismissableLayer.pointerDownOutside";
 var FOCUS_OUTSIDE$1 = "dismissableLayer.focusOutside";
 var originalBodyPointerEvents$1;
-var DismissableLayerContext$1 = React$U.createContext({
+var DismissableLayerContext$1 = React$X.createContext({
   layers: /* @__PURE__ */ new Set(),
   layersWithOutsidePointerEventsDisabled: /* @__PURE__ */ new Set(),
   branches: /* @__PURE__ */ new Set()
 });
-var DismissableLayer$1 = React$U.forwardRef(
+var DismissableLayer$1 = React$X.forwardRef(
   (props, forwardedRef) => {
     const {
       disableOutsidePointerEvents = false,
@@ -15712,10 +16329,10 @@ var DismissableLayer$1 = React$U.forwardRef(
       onDismiss,
       ...layerProps
     } = props;
-    const context = React$U.useContext(DismissableLayerContext$1);
-    const [node, setNode] = React$U.useState(null);
+    const context = React$X.useContext(DismissableLayerContext$1);
+    const [node, setNode] = React$X.useState(null);
     const ownerDocument = node?.ownerDocument ?? globalThis?.document;
-    const [, force] = React$U.useState({});
+    const [, force] = React$X.useState({});
     const composedRefs = useComposedRefs(forwardedRef, (node2) => setNode(node2));
     const layers = Array.from(context.layers);
     const [highestLayerWithOutsidePointerEventsDisabled] = [...context.layersWithOutsidePointerEventsDisabled].slice(-1);
@@ -15748,7 +16365,7 @@ var DismissableLayer$1 = React$U.forwardRef(
         onDismiss();
       }
     }, ownerDocument);
-    React$U.useEffect(() => {
+    React$X.useEffect(() => {
       if (!node) return;
       if (disableOutsidePointerEvents) {
         if (context.layersWithOutsidePointerEventsDisabled.size === 0) {
@@ -15765,7 +16382,7 @@ var DismissableLayer$1 = React$U.forwardRef(
         }
       };
     }, [node, ownerDocument, disableOutsidePointerEvents, context]);
-    React$U.useEffect(() => {
+    React$X.useEffect(() => {
       return () => {
         if (!node) return;
         context.layers.delete(node);
@@ -15773,7 +16390,7 @@ var DismissableLayer$1 = React$U.forwardRef(
         dispatchUpdate$1();
       };
     }, [node, context]);
-    React$U.useEffect(() => {
+    React$X.useEffect(() => {
       const handleUpdate = () => force({});
       document.addEventListener(CONTEXT_UPDATE$1, handleUpdate);
       return () => document.removeEventListener(CONTEXT_UPDATE$1, handleUpdate);
@@ -15799,11 +16416,11 @@ var DismissableLayer$1 = React$U.forwardRef(
 );
 DismissableLayer$1.displayName = DISMISSABLE_LAYER_NAME$1;
 var BRANCH_NAME$1 = "DismissableLayerBranch";
-var DismissableLayerBranch$1 = React$U.forwardRef((props, forwardedRef) => {
-  const context = React$U.useContext(DismissableLayerContext$1);
-  const ref = React$U.useRef(null);
+var DismissableLayerBranch$1 = React$X.forwardRef((props, forwardedRef) => {
+  const context = React$X.useContext(DismissableLayerContext$1);
+  const ref = React$X.useRef(null);
   const composedRefs = useComposedRefs(forwardedRef, ref);
-  React$U.useEffect(() => {
+  React$X.useEffect(() => {
     const node = ref.current;
     if (node) {
       context.branches.add(node);
@@ -15817,10 +16434,10 @@ var DismissableLayerBranch$1 = React$U.forwardRef((props, forwardedRef) => {
 DismissableLayerBranch$1.displayName = BRANCH_NAME$1;
 function usePointerDownOutside$1(onPointerDownOutside, ownerDocument = globalThis?.document) {
   const handlePointerDownOutside = useCallbackRef$1(onPointerDownOutside);
-  const isPointerInsideReactTreeRef = React$U.useRef(false);
-  const handleClickRef = React$U.useRef(() => {
+  const isPointerInsideReactTreeRef = React$X.useRef(false);
+  const handleClickRef = React$X.useRef(() => {
   });
-  React$U.useEffect(() => {
+  React$X.useEffect(() => {
     const handlePointerDown = (event) => {
       if (event.target && !isPointerInsideReactTreeRef.current) {
         let handleAndDispatchPointerDownOutsideEvent2 = function() {
@@ -15860,8 +16477,8 @@ function usePointerDownOutside$1(onPointerDownOutside, ownerDocument = globalThi
 }
 function useFocusOutside$1(onFocusOutside, ownerDocument = globalThis?.document) {
   const handleFocusOutside = useCallbackRef$1(onFocusOutside);
-  const isFocusInsideReactTreeRef = React$U.useRef(false);
-  React$U.useEffect(() => {
+  const isFocusInsideReactTreeRef = React$X.useRef(false);
+  React$X.useEffect(() => {
     const handleFocus = (event) => {
       if (event.target && !isFocusInsideReactTreeRef.current) {
         const eventDetail = { originalEvent: event };
@@ -15894,12 +16511,12 @@ function handleAndDispatchCustomEvent$1(name, handler, detail, { discrete }) {
 }
 
 // src/focus-scope.tsx
-const React$T = await importShared('react');
+const React$W = await importShared('react');
 var AUTOFOCUS_ON_MOUNT = "focusScope.autoFocusOnMount";
 var AUTOFOCUS_ON_UNMOUNT = "focusScope.autoFocusOnUnmount";
 var EVENT_OPTIONS = { bubbles: false, cancelable: true };
 var FOCUS_SCOPE_NAME = "FocusScope";
-var FocusScope = React$T.forwardRef((props, forwardedRef) => {
+var FocusScope = React$W.forwardRef((props, forwardedRef) => {
   const {
     loop = false,
     trapped = false,
@@ -15907,12 +16524,12 @@ var FocusScope = React$T.forwardRef((props, forwardedRef) => {
     onUnmountAutoFocus: onUnmountAutoFocusProp,
     ...scopeProps
   } = props;
-  const [container, setContainer] = React$T.useState(null);
+  const [container, setContainer] = React$W.useState(null);
   const onMountAutoFocus = useCallbackRef$1(onMountAutoFocusProp);
   const onUnmountAutoFocus = useCallbackRef$1(onUnmountAutoFocusProp);
-  const lastFocusedElementRef = React$T.useRef(null);
+  const lastFocusedElementRef = React$W.useRef(null);
   const composedRefs = useComposedRefs(forwardedRef, (node) => setContainer(node));
-  const focusScope = React$T.useRef({
+  const focusScope = React$W.useRef({
     paused: false,
     pause() {
       this.paused = true;
@@ -15921,7 +16538,7 @@ var FocusScope = React$T.forwardRef((props, forwardedRef) => {
       this.paused = false;
     }
   }).current;
-  React$T.useEffect(() => {
+  React$W.useEffect(() => {
     if (trapped) {
       let handleFocusIn2 = function(event) {
         if (focusScope.paused || !container) return;
@@ -15956,7 +16573,7 @@ var FocusScope = React$T.forwardRef((props, forwardedRef) => {
       };
     }
   }, [trapped, container, focusScope.paused]);
-  React$T.useEffect(() => {
+  React$W.useEffect(() => {
     if (container) {
       focusScopesStack.add(focusScope);
       const previouslyFocusedElement = document.activeElement;
@@ -15987,7 +16604,7 @@ var FocusScope = React$T.forwardRef((props, forwardedRef) => {
       };
     }
   }, [container, onMountAutoFocus, onUnmountAutoFocus, focusScope]);
-  const handleKeyDown = React$T.useCallback(
+  const handleKeyDown = React$W.useCallback(
     (event) => {
       if (!loop && !trapped) return;
       if (focusScope.paused) return;
@@ -16096,13 +16713,13 @@ function removeLinks(items) {
 }
 
 // src/portal.tsx
-const React$S = await importShared('react');
+const React$V = await importShared('react');
 
 const ReactDOM$2 = await importShared('react-dom');
 var PORTAL_NAME$2 = "Portal";
-var Portal$2 = React$S.forwardRef((props, forwardedRef) => {
+var Portal$2 = React$V.forwardRef((props, forwardedRef) => {
   const { container: containerProp, ...portalProps } = props;
-  const [mounted, setMounted] = React$S.useState(false);
+  const [mounted, setMounted] = React$V.useState(false);
   useLayoutEffect2(() => setMounted(true), []);
   const container = containerProp || mounted && globalThis?.document?.body;
   return container ? ReactDOM$2.createPortal(/* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { ...portalProps, ref: forwardedRef }), container) : null;
@@ -16113,10 +16730,10 @@ Portal$2.displayName = PORTAL_NAME$2;
 const React2 = await importShared('react');
 
 // src/use-state-machine.tsx
-const React$R = await importShared('react');
+const React$U = await importShared('react');
 
 function useStateMachine(initialState, machine) {
-  return React$R.useReducer((state, event) => {
+  return React$U.useReducer((state, event) => {
     const nextState = machine[state][event];
     return nextState ?? state;
   }, initialState);
@@ -16241,11 +16858,11 @@ function getElementRef(element) {
 }
 
 // src/focus-guards.tsx
-const React$Q = await importShared('react');
+const React$T = await importShared('react');
 
 var count$1 = 0;
 function useFocusGuards$1() {
-  React$Q.useEffect(() => {
+  React$T.useEffect(() => {
     const edgeGuards = document.querySelectorAll("[data-radix-focus-guard]");
     document.body.insertAdjacentElement("afterbegin", edgeGuards[0] ?? createFocusGuard$1());
     document.body.insertAdjacentElement("beforeend", edgeGuards[1] ?? createFocusGuard$1());
@@ -16356,7 +16973,7 @@ function assignRef(ref, value) {
     return ref;
 }
 
-const {useState: useState$c} = await importShared('react');
+const {useState: useState$f} = await importShared('react');
 
 /**
  * creates a MutableRef with ref change callback
@@ -16373,7 +16990,7 @@ const {useState: useState$c} = await importShared('react');
  * @returns {MutableRefObject}
  */
 function useCallbackRef(initialValue, callback) {
-    var ref = useState$c(function () { return ({
+    var ref = useState$f(function () { return ({
         // value
         value: initialValue,
         // last callback
@@ -16397,8 +17014,8 @@ function useCallbackRef(initialValue, callback) {
     return ref.facade;
 }
 
-const React$P = await importShared('react');
-var useIsomorphicLayoutEffect = typeof window !== 'undefined' ? React$P.useLayoutEffect : React$P.useEffect;
+const React$S = await importShared('react');
+var useIsomorphicLayoutEffect = typeof window !== 'undefined' ? React$S.useLayoutEffect : React$S.useEffect;
 var currentValues = new WeakMap();
 /**
  * Merges two or more refs together providing a single interface to set their value
@@ -16515,7 +17132,7 @@ function createSidecarMedium(options) {
     return medium;
 }
 
-const React$O = await importShared('react');
+const React$R = await importShared('react');
 
 var SideCar$1 = function (_a) {
     var sideCar = _a.sideCar, rest = __rest(_a, ["sideCar"]);
@@ -16526,7 +17143,7 @@ var SideCar$1 = function (_a) {
     if (!Target) {
         throw new Error('Sidecar medium not found');
     }
-    return React$O.createElement(Target, __assign({}, rest));
+    return React$R.createElement(Target, __assign({}, rest));
 };
 SideCar$1.isSideCarExport = true;
 function exportSidecar(medium, exported) {
@@ -16536,16 +17153,16 @@ function exportSidecar(medium, exported) {
 
 var effectCar = createSidecarMedium();
 
-const React$N = await importShared('react');
+const React$Q = await importShared('react');
 var nothing = function () {
     return;
 };
 /**
  * Removes scrollbar from the page and contain the scroll within the Lock
  */
-var RemoveScroll = React$N.forwardRef(function (props, parentRef) {
-    var ref = React$N.useRef(null);
-    var _a = React$N.useState({
+var RemoveScroll = React$Q.forwardRef(function (props, parentRef) {
+    var ref = React$Q.useRef(null);
+    var _a = React$Q.useState({
         onScrollCapture: nothing,
         onWheelCapture: nothing,
         onTouchMoveCapture: nothing,
@@ -16554,9 +17171,9 @@ var RemoveScroll = React$N.forwardRef(function (props, parentRef) {
     var SideCar = sideCar;
     var containerRef = useMergeRefs([ref, parentRef]);
     var containerProps = __assign(__assign({}, rest), callbacks);
-    return (React$N.createElement(React$N.Fragment, null,
-        enabled && (React$N.createElement(SideCar, { sideCar: effectCar, removeScrollBar: removeScrollBar, shards: shards, noRelative: noRelative, noIsolation: noIsolation, inert: inert, setCallbacks: setCallbacks, allowPinchZoom: !!allowPinchZoom, lockRef: ref, gapMode: gapMode })),
-        forwardProps ? (React$N.cloneElement(React$N.Children.only(children), __assign(__assign({}, containerProps), { ref: containerRef }))) : (React$N.createElement(Container, __assign({}, containerProps, { className: className, ref: containerRef }), children))));
+    return (React$Q.createElement(React$Q.Fragment, null,
+        enabled && (React$Q.createElement(SideCar, { sideCar: effectCar, removeScrollBar: removeScrollBar, shards: shards, noRelative: noRelative, noIsolation: noIsolation, inert: inert, setCallbacks: setCallbacks, allowPinchZoom: !!allowPinchZoom, lockRef: ref, gapMode: gapMode })),
+        forwardProps ? (React$Q.cloneElement(React$Q.Children.only(children), __assign(__assign({}, containerProps), { ref: containerRef }))) : (React$Q.createElement(Container, __assign({}, containerProps, { className: className, ref: containerRef }), children))));
 });
 RemoveScroll.defaultProps = {
     enabled: true,
@@ -16623,7 +17240,7 @@ var stylesheetSingleton = function () {
     };
 };
 
-const React$M = await importShared('react');
+const React$P = await importShared('react');
 /**
  * creates a hook to control style singleton
  * @see {@link styleSingleton} for a safer component version
@@ -16636,7 +17253,7 @@ const React$M = await importShared('react');
 var styleHookSingleton = function () {
     var sheet = stylesheetSingleton();
     return function (styles, isDynamic) {
-        React$M.useEffect(function () {
+        React$P.useEffect(function () {
             sheet.add(styles);
             return function () {
                 sheet.remove();
@@ -16691,7 +17308,7 @@ var getGapWidth = function (gapMode) {
     };
 };
 
-const React$L = await importShared('react');
+const React$O = await importShared('react');
 var Style = styleSingleton();
 var lockAttribute = 'data-scroll-locked';
 // important tip - once we measure scrollBar width and remove them
@@ -16714,7 +17331,7 @@ var getCurrentUseCounter = function () {
     return isFinite(counter) ? counter : 0;
 };
 var useLockAttribute = function () {
-    React$L.useEffect(function () {
+    React$O.useEffect(function () {
         document.body.setAttribute(lockAttribute, (getCurrentUseCounter() + 1).toString());
         return function () {
             var newCounter = getCurrentUseCounter() - 1;
@@ -16738,8 +17355,8 @@ var RemoveScrollBar = function (_a) {
      however it will be used only by the "first" invocation
      due to singleton nature of <Style
      */
-    var gap = React$L.useMemo(function () { return getGapWidth(gapMode); }, [gapMode]);
-    return React$L.createElement(Style, { styles: getStyles(gap, !noRelative, gapMode, !noImportant ? '!important' : '') });
+    var gap = React$O.useMemo(function () { return getGapWidth(gapMode); }, [gapMode]);
+    return React$O.createElement(Style, { styles: getStyles(gap, !noRelative, gapMode, !noImportant ? '!important' : '') });
 };
 
 var passiveSupported = false;
@@ -16871,7 +17488,7 @@ var handleScroll = function (axis, endTarget, event, sourceDelta, noOverscroll) 
     return shouldCancelScroll;
 };
 
-const React$K = await importShared('react');
+const React$N = await importShared('react');
 var getTouchXY = function (event) {
     return 'changedTouches' in event ? [event.changedTouches[0].clientX, event.changedTouches[0].clientY] : [0, 0];
 };
@@ -16884,16 +17501,16 @@ var generateStyle = function (id) { return "\n  .block-interactivity-".concat(id
 var idCounter$1 = 0;
 var lockStack = [];
 function RemoveScrollSideCar(props) {
-    var shouldPreventQueue = React$K.useRef([]);
-    var touchStartRef = React$K.useRef([0, 0]);
-    var activeAxis = React$K.useRef();
-    var id = React$K.useState(idCounter$1++)[0];
-    var Style = React$K.useState(styleSingleton)[0];
-    var lastProps = React$K.useRef(props);
-    React$K.useEffect(function () {
+    var shouldPreventQueue = React$N.useRef([]);
+    var touchStartRef = React$N.useRef([0, 0]);
+    var activeAxis = React$N.useRef();
+    var id = React$N.useState(idCounter$1++)[0];
+    var Style = React$N.useState(styleSingleton)[0];
+    var lastProps = React$N.useRef(props);
+    React$N.useEffect(function () {
         lastProps.current = props;
     }, [props]);
-    React$K.useEffect(function () {
+    React$N.useEffect(function () {
         if (props.inert) {
             document.body.classList.add("block-interactivity-".concat(id));
             var allow_1 = __spreadArray([props.lockRef.current], (props.shards || []).map(extractRef), true).filter(Boolean);
@@ -16905,7 +17522,7 @@ function RemoveScrollSideCar(props) {
         }
         return;
     }, [props.inert, props.lockRef.current, props.shards]);
-    var shouldCancelEvent = React$K.useCallback(function (event, parent) {
+    var shouldCancelEvent = React$N.useCallback(function (event, parent) {
         if (('touches' in event && event.touches.length === 2) || (event.type === 'wheel' && event.ctrlKey)) {
             return !lastProps.current.allowPinchZoom;
         }
@@ -16944,7 +17561,7 @@ function RemoveScrollSideCar(props) {
         var cancelingAxis = activeAxis.current || currentAxis;
         return handleScroll(cancelingAxis, parent, event, cancelingAxis === 'h' ? deltaX : deltaY);
     }, []);
-    var shouldPrevent = React$K.useCallback(function (_event) {
+    var shouldPrevent = React$N.useCallback(function (_event) {
         var event = _event;
         if (!lockStack.length || lockStack[lockStack.length - 1] !== Style) {
             // not the last active
@@ -16973,24 +17590,24 @@ function RemoveScrollSideCar(props) {
             }
         }
     }, []);
-    var shouldCancel = React$K.useCallback(function (name, delta, target, should) {
+    var shouldCancel = React$N.useCallback(function (name, delta, target, should) {
         var event = { name: name, delta: delta, target: target, should: should, shadowParent: getOutermostShadowParent(target) };
         shouldPreventQueue.current.push(event);
         setTimeout(function () {
             shouldPreventQueue.current = shouldPreventQueue.current.filter(function (e) { return e !== event; });
         }, 1);
     }, []);
-    var scrollTouchStart = React$K.useCallback(function (event) {
+    var scrollTouchStart = React$N.useCallback(function (event) {
         touchStartRef.current = getTouchXY(event);
         activeAxis.current = undefined;
     }, []);
-    var scrollWheel = React$K.useCallback(function (event) {
+    var scrollWheel = React$N.useCallback(function (event) {
         shouldCancel(event.type, getDeltaXY(event), event.target, shouldCancelEvent(event, props.lockRef.current));
     }, []);
-    var scrollTouchMove = React$K.useCallback(function (event) {
+    var scrollTouchMove = React$N.useCallback(function (event) {
         shouldCancel(event.type, getTouchXY(event), event.target, shouldCancelEvent(event, props.lockRef.current));
     }, []);
-    React$K.useEffect(function () {
+    React$N.useEffect(function () {
         lockStack.push(Style);
         props.setCallbacks({
             onScrollCapture: scrollWheel,
@@ -17008,9 +17625,9 @@ function RemoveScrollSideCar(props) {
         };
     }, []);
     var removeScrollBar = props.removeScrollBar, inert = props.inert;
-    return (React$K.createElement(React$K.Fragment, null,
-        inert ? React$K.createElement(Style, { styles: generateStyle(id) }) : null,
-        removeScrollBar ? React$K.createElement(RemoveScrollBar, { noRelative: props.noRelative, gapMode: props.gapMode }) : null));
+    return (React$N.createElement(React$N.Fragment, null,
+        inert ? React$N.createElement(Style, { styles: generateStyle(id) }) : null,
+        removeScrollBar ? React$N.createElement(RemoveScrollBar, { noRelative: props.noRelative, gapMode: props.gapMode }) : null));
 }
 function getOutermostShadowParent(node) {
     var shadowParent = null;
@@ -17026,8 +17643,8 @@ function getOutermostShadowParent(node) {
 
 const SideCar = exportSidecar(effectCar, RemoveScrollSideCar);
 
-const React$J = await importShared('react');
-var ReactRemoveScroll = React$J.forwardRef(function (props, ref) { return (React$J.createElement(RemoveScroll, __assign({}, props, { ref: ref, sideCar: SideCar }))); });
+const React$M = await importShared('react');
+var ReactRemoveScroll = React$M.forwardRef(function (props, ref) { return (React$M.createElement(RemoveScroll, __assign({}, props, { ref: ref, sideCar: SideCar }))); });
 ReactRemoveScroll.classNames = RemoveScroll.classNames;
 
 var getDefaultParent = function (originalTarget) {
@@ -17167,7 +17784,7 @@ var hideOthers = function (originalTarget, parentNode, markerName) {
 };
 
 // src/dialog.tsx
-const React$I = await importShared('react');
+const React$L = await importShared('react');
 var DIALOG_NAME = "Dialog";
 var [createDialogContext, createDialogScope] = createContextScope(DIALOG_NAME);
 var [DialogProvider, useDialogContext] = createDialogContext(DIALOG_NAME);
@@ -17180,8 +17797,8 @@ var Dialog$1 = (props) => {
     onOpenChange,
     modal = true
   } = props;
-  const triggerRef = React$I.useRef(null);
-  const contentRef = React$I.useRef(null);
+  const triggerRef = React$L.useRef(null);
+  const contentRef = React$L.useRef(null);
   const [open, setOpen] = useControllableState({
     prop: openProp,
     defaultProp: defaultOpen ?? false,
@@ -17199,7 +17816,7 @@ var Dialog$1 = (props) => {
       descriptionId: useId(),
       open,
       onOpenChange: setOpen,
-      onOpenToggle: React$I.useCallback(() => setOpen((prevOpen) => !prevOpen), [setOpen]),
+      onOpenToggle: React$L.useCallback(() => setOpen((prevOpen) => !prevOpen), [setOpen]),
       modal,
       children
     }
@@ -17207,7 +17824,7 @@ var Dialog$1 = (props) => {
 };
 Dialog$1.displayName = DIALOG_NAME;
 var TRIGGER_NAME$1 = "DialogTrigger";
-var DialogTrigger$1 = React$I.forwardRef(
+var DialogTrigger$1 = React$L.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDialog, ...triggerProps } = props;
     const context = useDialogContext(TRIGGER_NAME$1, __scopeDialog);
@@ -17235,11 +17852,11 @@ var [PortalProvider$1, usePortalContext$1] = createDialogContext(PORTAL_NAME$1, 
 var DialogPortal$1 = (props) => {
   const { __scopeDialog, forceMount, children, container } = props;
   const context = useDialogContext(PORTAL_NAME$1, __scopeDialog);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(PortalProvider$1, { scope: __scopeDialog, forceMount, children: React$I.Children.map(children, (child) => /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$2, { asChild: true, container, children: child }) })) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(PortalProvider$1, { scope: __scopeDialog, forceMount, children: React$L.Children.map(children, (child) => /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$2, { asChild: true, container, children: child }) })) });
 };
 DialogPortal$1.displayName = PORTAL_NAME$1;
 var OVERLAY_NAME = "DialogOverlay";
-var DialogOverlay$1 = React$I.forwardRef(
+var DialogOverlay$1 = React$L.forwardRef(
   (props, forwardedRef) => {
     const portalContext = usePortalContext$1(OVERLAY_NAME, props.__scopeDialog);
     const { forceMount = portalContext.forceMount, ...overlayProps } = props;
@@ -17249,7 +17866,7 @@ var DialogOverlay$1 = React$I.forwardRef(
 );
 DialogOverlay$1.displayName = OVERLAY_NAME;
 var Slot$1 = createSlot("DialogOverlay.RemoveScroll");
-var DialogOverlayImpl = React$I.forwardRef(
+var DialogOverlayImpl = React$L.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDialog, ...overlayProps } = props;
     const context = useDialogContext(OVERLAY_NAME, __scopeDialog);
@@ -17269,7 +17886,7 @@ var DialogOverlayImpl = React$I.forwardRef(
   }
 );
 var CONTENT_NAME$2 = "DialogContent";
-var DialogContent$1 = React$I.forwardRef(
+var DialogContent$1 = React$L.forwardRef(
   (props, forwardedRef) => {
     const portalContext = usePortalContext$1(CONTENT_NAME$2, props.__scopeDialog);
     const { forceMount = portalContext.forceMount, ...contentProps } = props;
@@ -17278,12 +17895,12 @@ var DialogContent$1 = React$I.forwardRef(
   }
 );
 DialogContent$1.displayName = CONTENT_NAME$2;
-var DialogContentModal = React$I.forwardRef(
+var DialogContentModal = React$L.forwardRef(
   (props, forwardedRef) => {
     const context = useDialogContext(CONTENT_NAME$2, props.__scopeDialog);
-    const contentRef = React$I.useRef(null);
+    const contentRef = React$L.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, context.contentRef, contentRef);
-    React$I.useEffect(() => {
+    React$L.useEffect(() => {
       const content = contentRef.current;
       if (content) return hideOthers(content);
     }, []);
@@ -17312,11 +17929,11 @@ var DialogContentModal = React$I.forwardRef(
     );
   }
 );
-var DialogContentNonModal = React$I.forwardRef(
+var DialogContentNonModal = React$L.forwardRef(
   (props, forwardedRef) => {
     const context = useDialogContext(CONTENT_NAME$2, props.__scopeDialog);
-    const hasInteractedOutsideRef = React$I.useRef(false);
-    const hasPointerDownOutsideRef = React$I.useRef(false);
+    const hasInteractedOutsideRef = React$L.useRef(false);
+    const hasPointerDownOutsideRef = React$L.useRef(false);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       DialogContentImpl,
       {
@@ -17352,11 +17969,11 @@ var DialogContentNonModal = React$I.forwardRef(
     );
   }
 );
-var DialogContentImpl = React$I.forwardRef(
+var DialogContentImpl = React$L.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDialog, trapFocus, onOpenAutoFocus, onCloseAutoFocus, ...contentProps } = props;
     const context = useDialogContext(CONTENT_NAME$2, __scopeDialog);
-    const contentRef = React$I.useRef(null);
+    const contentRef = React$L.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, contentRef);
     useFocusGuards$1();
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
@@ -17391,7 +18008,7 @@ var DialogContentImpl = React$I.forwardRef(
   }
 );
 var TITLE_NAME = "DialogTitle";
-var DialogTitle$1 = React$I.forwardRef(
+var DialogTitle$1 = React$L.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDialog, ...titleProps } = props;
     const context = useDialogContext(TITLE_NAME, __scopeDialog);
@@ -17400,7 +18017,7 @@ var DialogTitle$1 = React$I.forwardRef(
 );
 DialogTitle$1.displayName = TITLE_NAME;
 var DESCRIPTION_NAME = "DialogDescription";
-var DialogDescription$1 = React$I.forwardRef(
+var DialogDescription$1 = React$L.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDialog, ...descriptionProps } = props;
     const context = useDialogContext(DESCRIPTION_NAME, __scopeDialog);
@@ -17409,7 +18026,7 @@ var DialogDescription$1 = React$I.forwardRef(
 );
 DialogDescription$1.displayName = DESCRIPTION_NAME;
 var CLOSE_NAME$1 = "DialogClose";
-var DialogClose$1 = React$I.forwardRef(
+var DialogClose$1 = React$L.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDialog, ...closeProps } = props;
     const context = useDialogContext(CLOSE_NAME$1, __scopeDialog);
@@ -17441,7 +18058,7 @@ var TitleWarning = ({ titleId }) => {
 If you want to hide the \`${titleWarningContext.titleName}\`, you can wrap it with our VisuallyHidden component.
 
 For more information, see https://radix-ui.com/primitives/docs/components/${titleWarningContext.docsSlug}`;
-  React$I.useEffect(() => {
+  React$L.useEffect(() => {
     if (titleId) {
       const hasTitle = document.getElementById(titleId);
       if (!hasTitle) console.error(MESSAGE);
@@ -17453,7 +18070,7 @@ var DESCRIPTION_WARNING_NAME = "DialogDescriptionWarning";
 var DescriptionWarning = ({ contentRef, descriptionId }) => {
   const descriptionWarningContext = useWarningContext(DESCRIPTION_WARNING_NAME);
   const MESSAGE = `Warning: Missing \`Description\` or \`aria-describedby={undefined}\` for {${descriptionWarningContext.contentName}}.`;
-  React$I.useEffect(() => {
+  React$L.useEffect(() => {
     const describedById = contentRef.current?.getAttribute("aria-describedby");
     if (descriptionId && describedById) {
       const hasDescription = document.getElementById(descriptionId);
@@ -17471,24 +18088,24 @@ var Title = DialogTitle$1;
 var Description = DialogDescription$1;
 var Close = DialogClose$1;
 
-const React$H = await importShared('react');
-const Dialog = React$H.forwardRef(({ ...props }, ref) => {
+const React$K = await importShared('react');
+const Dialog = React$K.forwardRef(({ ...props }, ref) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(Root$2, { ref, "data-slot": "dialog", ...props });
 });
 Dialog.displayName = "Dialog";
-const DialogTrigger = React$H.forwardRef(({ ...props }, ref) => {
+const DialogTrigger = React$K.forwardRef(({ ...props }, ref) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(Trigger$1, { ref, "data-slot": "dialog-trigger", ...props });
 });
 DialogTrigger.displayName = "DialogTrigger";
-const DialogPortal = React$H.forwardRef(({ ...props }, ref) => {
+const DialogPortal = React$K.forwardRef(({ ...props }, ref) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$1, { ref, "data-slot": "dialog-portal", ...props });
 });
 DialogPortal.displayName = "DialogPortal";
-const DialogClose = React$H.forwardRef(({ ...props }, ref) => {
+const DialogClose = React$K.forwardRef(({ ...props }, ref) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(Close, { ref, "data-slot": "dialog-close", ...props });
 });
 DialogClose.displayName = "DialogClose";
-const DialogOverlay = React$H.forwardRef(({ className, ...props }, ref) => {
+const DialogOverlay = React$K.forwardRef(({ className, ...props }, ref) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     Overlay,
     {
@@ -17503,7 +18120,7 @@ const DialogOverlay = React$H.forwardRef(({ className, ...props }, ref) => {
   );
 });
 DialogOverlay.displayName = "DialogOverlay";
-const DialogContent = React$H.forwardRef(({ className, children, showCloseButton = true, ...props }, ref) => {
+const DialogContent = React$K.forwardRef(({ className, children, showCloseButton = true, ...props }, ref) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogPortal, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(DialogOverlay, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -17535,7 +18152,7 @@ const DialogContent = React$H.forwardRef(({ className, children, showCloseButton
   ] });
 });
 DialogContent.displayName = "DialogContent";
-const DialogHeader = React$H.forwardRef(({ className, ...props }, ref) => {
+const DialogHeader = React$K.forwardRef(({ className, ...props }, ref) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "div",
     {
@@ -17547,7 +18164,7 @@ const DialogHeader = React$H.forwardRef(({ className, ...props }, ref) => {
   );
 });
 DialogHeader.displayName = "DialogHeader";
-const DialogFooter = React$H.forwardRef(({ className, ...props }, ref) => {
+const DialogFooter = React$K.forwardRef(({ className, ...props }, ref) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "div",
     {
@@ -17559,7 +18176,7 @@ const DialogFooter = React$H.forwardRef(({ className, ...props }, ref) => {
   );
 });
 DialogFooter.displayName = "DialogFooter";
-const DialogTitle = React$H.forwardRef(({ className, ...props }, ref) => {
+const DialogTitle = React$K.forwardRef(({ className, ...props }, ref) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     Title,
     {
@@ -17571,7 +18188,7 @@ const DialogTitle = React$H.forwardRef(({ className, ...props }, ref) => {
   );
 });
 DialogTitle.displayName = "DialogTitle";
-const DialogDescription = React$H.forwardRef(({ className, ...props }, ref) => {
+const DialogDescription = React$K.forwardRef(({ className, ...props }, ref) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     Description,
     {
@@ -17595,8 +18212,9 @@ const loginSuccess = (payload) => ({
   payload,
 });
 
-const loginFailure = () => ({
+const loginFailure = (error) => ({
   type: LOGIN_FAILURE,
+  error,
 });
 
 const verifyEmail = (payload, callback) => ({
@@ -17615,7 +18233,7 @@ const verifyEmailFailure = (error) => ({
   payload: error,
 });
 
-const {useEffect: useEffect$6,useState: useState$b} = await importShared('react');
+const {useEffect: useEffect$9,useState: useState$e} = await importShared('react');
 function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
   const {
     register,
@@ -17634,7 +18252,7 @@ function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
   const dispatch = useDispatch();
   const emailOrUsername = watch("emailOrUsername");
   watch("password");
-  useEffect$6(() => {
+  useEffect$9(() => {
     if (isOpen) {
       reset({
         emailOrUsername: "",
@@ -17653,10 +18271,7 @@ function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
   };
   const onSubmit = (data) => {
     dispatch(
-      login({
-        payload: data
-      }, (response) => {
-        console.log("Login successful, response:", response);
+      login(data, (response) => {
         onClose();
       })
     );
@@ -22782,7 +23397,7 @@ function getClassNamesForModifiers(modifiers, classNames, modifiersClassNames = 
     return modifierClassNames;
 }
 
-const React$G = await importShared('react');
+const React$J = await importShared('react');
 
 /**
  * Render the button elements in the calendar.
@@ -22791,10 +23406,10 @@ const React$G = await importShared('react');
  * @deprecated Use `PreviousMonthButton` or `@link NextMonthButton` instead.
  */
 function Button(props) {
-    return React$G.createElement("button", { ...props });
+    return React$J.createElement("button", { ...props });
 }
 
-const React$F = await importShared('react');
+const React$I = await importShared('react');
 
 /**
  * Render the label in the month caption.
@@ -22803,10 +23418,10 @@ const React$F = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function CaptionLabel(props) {
-    return React$F.createElement("span", { ...props });
+    return React$I.createElement("span", { ...props });
 }
 
-const React$E = await importShared('react');
+const React$H = await importShared('react');
 
 /**
  * Render the chevron icon used in the navigation buttons and dropdowns.
@@ -22816,14 +23431,14 @@ const React$E = await importShared('react');
  */
 function Chevron(props) {
     const { size = 24, orientation = "left", className } = props;
-    return (React$E.createElement("svg", { className: className, width: size, height: size, viewBox: "0 0 24 24" },
-        orientation === "up" && (React$E.createElement("polygon", { points: "6.77 17 12.5 11.43 18.24 17 20 15.28 12.5 8 5 15.28" })),
-        orientation === "down" && (React$E.createElement("polygon", { points: "6.77 8 12.5 13.57 18.24 8 20 9.72 12.5 17 5 9.72" })),
-        orientation === "left" && (React$E.createElement("polygon", { points: "16 18.112 9.81111111 12 16 5.87733333 14.0888889 4 6 12 14.0888889 20" })),
-        orientation === "right" && (React$E.createElement("polygon", { points: "8 18.112 14.18888889 12 8 5.87733333 9.91111111 4 18 12 9.91111111 20" }))));
+    return (React$H.createElement("svg", { className: className, width: size, height: size, viewBox: "0 0 24 24" },
+        orientation === "up" && (React$H.createElement("polygon", { points: "6.77 17 12.5 11.43 18.24 17 20 15.28 12.5 8 5 15.28" })),
+        orientation === "down" && (React$H.createElement("polygon", { points: "6.77 8 12.5 13.57 18.24 8 20 9.72 12.5 17 5 9.72" })),
+        orientation === "left" && (React$H.createElement("polygon", { points: "16 18.112 9.81111111 12 16 5.87733333 14.0888889 4 6 12 14.0888889 20" })),
+        orientation === "right" && (React$H.createElement("polygon", { points: "8 18.112 14.18888889 12 8 5.87733333 9.91111111 4 18 12 9.91111111 20" }))));
 }
 
-const React$D = await importShared('react');
+const React$G = await importShared('react');
 
 /**
  * Render a grid cell for a specific day in the calendar.
@@ -22837,10 +23452,10 @@ const React$D = await importShared('react');
  */
 function Day(props) {
     const { day, modifiers, ...tdProps } = props;
-    return React$D.createElement("td", { ...tdProps });
+    return React$G.createElement("td", { ...tdProps });
 }
 
-const React$C = await importShared('react');
+const React$F = await importShared('react');
 
 /**
  * Render a button for a specific day in the calendar.
@@ -22850,15 +23465,15 @@ const React$C = await importShared('react');
  */
 function DayButton(props) {
     const { day, modifiers, ...buttonProps } = props;
-    const ref = React$C.useRef(null);
-    React$C.useEffect(() => {
+    const ref = React$F.useRef(null);
+    React$F.useEffect(() => {
         if (modifiers.focused)
             ref.current?.focus();
     }, [modifiers.focused]);
-    return React$C.createElement("button", { ref: ref, ...buttonProps });
+    return React$F.createElement("button", { ref: ref, ...buttonProps });
 }
 
-const React$B = await importShared('react');
+const React$E = await importShared('react');
 /**
  * Render a dropdown component for navigation in the calendar.
  *
@@ -22869,14 +23484,14 @@ function Dropdown(props) {
     const { options, className, components, classNames, ...selectProps } = props;
     const cssClassSelect = [classNames[UI.Dropdown], className].join(" ");
     const selectedOption = options?.find(({ value }) => value === selectProps.value);
-    return (React$B.createElement("span", { "data-disabled": selectProps.disabled, className: classNames[UI.DropdownRoot] },
-        React$B.createElement(components.Select, { className: cssClassSelect, ...selectProps }, options?.map(({ value, label, disabled }) => (React$B.createElement(components.Option, { key: value, value: value, disabled: disabled }, label)))),
-        React$B.createElement("span", { className: classNames[UI.CaptionLabel], "aria-hidden": true },
+    return (React$E.createElement("span", { "data-disabled": selectProps.disabled, className: classNames[UI.DropdownRoot] },
+        React$E.createElement(components.Select, { className: cssClassSelect, ...selectProps }, options?.map(({ value, label, disabled }) => (React$E.createElement(components.Option, { key: value, value: value, disabled: disabled }, label)))),
+        React$E.createElement("span", { className: classNames[UI.CaptionLabel], "aria-hidden": true },
             selectedOption?.label,
-            React$B.createElement(components.Chevron, { orientation: "down", size: 18, className: classNames[UI.Chevron] }))));
+            React$E.createElement(components.Chevron, { orientation: "down", size: 18, className: classNames[UI.Chevron] }))));
 }
 
-const React$A = await importShared('react');
+const React$D = await importShared('react');
 
 /**
  * Render the navigation dropdowns for the calendar.
@@ -22885,10 +23500,10 @@ const React$A = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function DropdownNav(props) {
-    return React$A.createElement("div", { ...props });
+    return React$D.createElement("div", { ...props });
 }
 
-const React$z = await importShared('react');
+const React$C = await importShared('react');
 
 /**
  * Render the footer of the calendar.
@@ -22897,10 +23512,10 @@ const React$z = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function Footer(props) {
-    return React$z.createElement("div", { ...props });
+    return React$C.createElement("div", { ...props });
 }
 
-const React$y = await importShared('react');
+const React$B = await importShared('react');
 
 /**
  * Render the grid with the weekday header row and the weeks for a specific
@@ -22911,10 +23526,10 @@ const React$y = await importShared('react');
  */
 function Month(props) {
     const { calendarMonth, displayIndex, ...divProps } = props;
-    return React$y.createElement("div", { ...divProps }, props.children);
+    return React$B.createElement("div", { ...divProps }, props.children);
 }
 
-const React$x = await importShared('react');
+const React$A = await importShared('react');
 
 /**
  * Render the caption for a month in the calendar.
@@ -22924,10 +23539,10 @@ const React$x = await importShared('react');
  */
 function MonthCaption(props) {
     const { calendarMonth, displayIndex, ...divProps } = props;
-    return React$x.createElement("div", { ...divProps });
+    return React$A.createElement("div", { ...divProps });
 }
 
-const React$w = await importShared('react');
+const React$z = await importShared('react');
 
 /**
  * Render the grid of days for a specific month.
@@ -22936,10 +23551,10 @@ const React$w = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function MonthGrid(props) {
-    return React$w.createElement("table", { ...props });
+    return React$z.createElement("table", { ...props });
 }
 
-const React$v = await importShared('react');
+const React$y = await importShared('react');
 
 /**
  * Render a container wrapping the month grids.
@@ -22948,7 +23563,7 @@ const React$v = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function Months(props) {
-    return React$v.createElement("div", { ...props });
+    return React$y.createElement("div", { ...props });
 }
 
 const {createContext: createContext$1,useContext: useContext$1} = await importShared('react');
@@ -22975,7 +23590,7 @@ function useDayPicker() {
     return context;
 }
 
-const React$u = await importShared('react');
+const React$x = await importShared('react');
 /**
  * Render a dropdown to navigate between months in the calendar.
  *
@@ -22984,11 +23599,11 @@ const React$u = await importShared('react');
  */
 function MonthsDropdown(props) {
     const { components } = useDayPicker();
-    return React$u.createElement(components.Dropdown, { ...props });
+    return React$x.createElement(components.Dropdown, { ...props });
 }
 
-const React$t = await importShared('react');
-const {useCallback: useCallback$1} = React$t;
+const React$w = await importShared('react');
+const {useCallback: useCallback$1} = React$w;
 /**
  * Render the navigation toolbar with buttons to navigate between months.
  *
@@ -23008,14 +23623,14 @@ function Nav(props) {
             onPreviousClick?.(e);
         }
     }, [previousMonth, onPreviousClick]);
-    return (React$t.createElement("nav", { ...navProps },
-        React$t.createElement(components.PreviousMonthButton, { type: "button", className: classNames[UI.PreviousMonthButton], tabIndex: previousMonth ? undefined : -1, "aria-disabled": previousMonth ? undefined : true, "aria-label": labelPrevious(previousMonth), onClick: handlePreviousClick },
-            React$t.createElement(components.Chevron, { disabled: previousMonth ? undefined : true, className: classNames[UI.Chevron], orientation: "left" })),
-        React$t.createElement(components.NextMonthButton, { type: "button", className: classNames[UI.NextMonthButton], tabIndex: nextMonth ? undefined : -1, "aria-disabled": nextMonth ? undefined : true, "aria-label": labelNext(nextMonth), onClick: handleNextClick },
-            React$t.createElement(components.Chevron, { disabled: nextMonth ? undefined : true, orientation: "right", className: classNames[UI.Chevron] }))));
+    return (React$w.createElement("nav", { ...navProps },
+        React$w.createElement(components.PreviousMonthButton, { type: "button", className: classNames[UI.PreviousMonthButton], tabIndex: previousMonth ? undefined : -1, "aria-disabled": previousMonth ? undefined : true, "aria-label": labelPrevious(previousMonth), onClick: handlePreviousClick },
+            React$w.createElement(components.Chevron, { disabled: previousMonth ? undefined : true, className: classNames[UI.Chevron], orientation: "left" })),
+        React$w.createElement(components.NextMonthButton, { type: "button", className: classNames[UI.NextMonthButton], tabIndex: nextMonth ? undefined : -1, "aria-disabled": nextMonth ? undefined : true, "aria-label": labelNext(nextMonth), onClick: handleNextClick },
+            React$w.createElement(components.Chevron, { disabled: nextMonth ? undefined : true, orientation: "right", className: classNames[UI.Chevron] }))));
 }
 
-const React$s = await importShared('react');
+const React$v = await importShared('react');
 /**
  * Render the button to navigate to the next month in the calendar.
  *
@@ -23024,10 +23639,10 @@ const React$s = await importShared('react');
  */
 function NextMonthButton(props) {
     const { components } = useDayPicker();
-    return React$s.createElement(components.Button, { ...props });
+    return React$v.createElement(components.Button, { ...props });
 }
 
-const React$r = await importShared('react');
+const React$u = await importShared('react');
 
 /**
  * Render an `option` element.
@@ -23036,10 +23651,10 @@ const React$r = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function Option(props) {
-    return React$r.createElement("option", { ...props });
+    return React$u.createElement("option", { ...props });
 }
 
-const React$q = await importShared('react');
+const React$t = await importShared('react');
 /**
  * Render the button to navigate to the previous month in the calendar.
  *
@@ -23048,10 +23663,10 @@ const React$q = await importShared('react');
  */
 function PreviousMonthButton(props) {
     const { components } = useDayPicker();
-    return React$q.createElement(components.Button, { ...props });
+    return React$t.createElement(components.Button, { ...props });
 }
 
-const React$p = await importShared('react');
+const React$s = await importShared('react');
 
 /**
  * Render the root element of the calendar.
@@ -23061,10 +23676,10 @@ const React$p = await importShared('react');
  */
 function Root$1(props) {
     const { rootRef, ...rest } = props;
-    return React$p.createElement("div", { ...rest, ref: rootRef });
+    return React$s.createElement("div", { ...rest, ref: rootRef });
 }
 
-const React$o = await importShared('react');
+const React$r = await importShared('react');
 
 /**
  * Render a `select` element.
@@ -23073,10 +23688,10 @@ const React$o = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function Select(props) {
-    return React$o.createElement("select", { ...props });
+    return React$r.createElement("select", { ...props });
 }
 
-const React$n = await importShared('react');
+const React$q = await importShared('react');
 
 /**
  * Render a table row representing a week in the calendar.
@@ -23086,10 +23701,10 @@ const React$n = await importShared('react');
  */
 function Week(props) {
     const { week, ...trProps } = props;
-    return React$n.createElement("tr", { ...trProps });
+    return React$q.createElement("tr", { ...trProps });
 }
 
-const React$m = await importShared('react');
+const React$p = await importShared('react');
 
 /**
  * Render a table header cell with the name of a weekday (e.g., "Mo", "Tu").
@@ -23098,10 +23713,10 @@ const React$m = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function Weekday(props) {
-    return React$m.createElement("th", { ...props });
+    return React$p.createElement("th", { ...props });
 }
 
-const React$l = await importShared('react');
+const React$o = await importShared('react');
 
 /**
  * Render the table row containing the weekday names.
@@ -23110,11 +23725,11 @@ const React$l = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function Weekdays(props) {
-    return (React$l.createElement("thead", { "aria-hidden": true },
-        React$l.createElement("tr", { ...props })));
+    return (React$o.createElement("thead", { "aria-hidden": true },
+        React$o.createElement("tr", { ...props })));
 }
 
-const React$k = await importShared('react');
+const React$n = await importShared('react');
 
 /**
  * Render a table cell displaying the number of the week.
@@ -23124,10 +23739,10 @@ const React$k = await importShared('react');
  */
 function WeekNumber(props) {
     const { week, ...thProps } = props;
-    return React$k.createElement("th", { ...thProps });
+    return React$n.createElement("th", { ...thProps });
 }
 
-const React$j = await importShared('react');
+const React$m = await importShared('react');
 
 /**
  * Render the header cell for the week numbers column.
@@ -23136,10 +23751,10 @@ const React$j = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function WeekNumberHeader(props) {
-    return React$j.createElement("th", { ...props });
+    return React$m.createElement("th", { ...props });
 }
 
-const React$i = await importShared('react');
+const React$l = await importShared('react');
 
 /**
  * Render the container for the weeks in the month grid.
@@ -23148,10 +23763,10 @@ const React$i = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function Weeks(props) {
-    return React$i.createElement("tbody", { ...props });
+    return React$l.createElement("tbody", { ...props });
 }
 
-const React$h = await importShared('react');
+const React$k = await importShared('react');
 /**
  * Render a dropdown to navigate between years in the calendar.
  *
@@ -23160,7 +23775,7 @@ const React$h = await importShared('react');
  */
 function YearsDropdown(props) {
     const { components } = useDayPicker();
-    return React$h.createElement(components.Dropdown, { ...props });
+    return React$k.createElement(components.Dropdown, { ...props });
 }
 
 const components = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
@@ -23729,7 +24344,7 @@ const defaultLabels = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.definePrope
   labelYearDropdown
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const {useLayoutEffect: useLayoutEffect$1,useRef: useRef$4} = await importShared('react');
+const {useLayoutEffect: useLayoutEffect$1,useRef: useRef$5} = await importShared('react');
 const asHtmlElement = (element) => {
     if (element instanceof HTMLElement)
         return element;
@@ -23755,9 +24370,9 @@ const queryWeekdaysEl = (element) => asHtmlElement(element.querySelector("[data-
  *   names, months, focused day, and the date utility library.
  */
 function useAnimation(rootElRef, enabled, { classNames, months, focused, dateLib }) {
-    const previousRootElSnapshotRef = useRef$4(null);
-    const previousMonthsRef = useRef$4(months);
-    const animatingRef = useRef$4(false);
+    const previousRootElSnapshotRef = useRef$5(null);
+    const previousMonthsRef = useRef$5(months);
+    const animatingRef = useRef$5(false);
     useLayoutEffect$1(() => {
         // get previous months before updating the previous months ref
         const previousMonths = previousMonthsRef.current;
@@ -24216,7 +24831,7 @@ function getWeeks(months) {
     }, initialWeeks);
 }
 
-const {useState: useState$a} = await importShared('react');
+const {useState: useState$d} = await importShared('react');
 
 /**
  * A custom hook for managing both controlled and uncontrolled component states.
@@ -24241,12 +24856,12 @@ const {useState: useState$a} = await importShared('react');
  *   update the value.
  */
 function useControlledValue(defaultValue, controlledValue) {
-    const [uncontrolledValue, setValue] = useState$a(defaultValue);
+    const [uncontrolledValue, setValue] = useState$d(defaultValue);
     const value = controlledValue === undefined ? uncontrolledValue : controlledValue;
     return [value, setValue];
 }
 
-const {useEffect: useEffect$5} = await importShared('react');
+const {useEffect: useEffect$8} = await importShared('react');
 /**
  * Provides the calendar object to work with the calendar in custom components.
  *
@@ -24263,7 +24878,7 @@ function useCalendar(props, dateLib) {
     const [firstMonth, setFirstMonth] = useControlledValue(initialMonth, 
     // initialMonth is always computed from props.month if provided
     props.month ? initialMonth : undefined);
-    useEffect$5(() => {
+    useEffect$8(() => {
         const newInitialMonth = getInitialMonth(props, navStart, navEnd, dateLib);
         setFirstMonth(newInitialMonth);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -24468,7 +25083,7 @@ function getNextFocus(moveBy, moveDir, refDay, calendarStartMonth, calendarEndMo
     return getNextFocus(moveBy, moveDir, focusDay, calendarStartMonth, calendarEndMonth, props, dateLib, attempt + 1);
 }
 
-const {useState: useState$9} = await importShared('react');
+const {useState: useState$c} = await importShared('react');
 /**
  * Manages focus behavior for the DayPicker component, including setting,
  * moving, and blurring focus on calendar days.
@@ -24485,9 +25100,9 @@ const {useState: useState$9} = await importShared('react');
  */
 function useFocus(props, calendar, getModifiers, isSelected, dateLib) {
     const { autoFocus } = props;
-    const [lastFocused, setLastFocused] = useState$9();
+    const [lastFocused, setLastFocused] = useState$c();
     const focusTarget = calculateFocusTarget(calendar.days, getModifiers, isSelected || (() => false), lastFocused);
-    const [focusedDay, setFocused] = useState$9(autoFocus ? focusTarget : undefined);
+    const [focusedDay, setFocused] = useState$c(autoFocus ? focusTarget : undefined);
     const blur = () => {
         setLastFocused(focusedDay);
         setFocused(undefined);
@@ -24873,8 +25488,8 @@ function useSelection(props, dateLib) {
     }
 }
 
-const React$g = await importShared('react');
-const {useCallback,useMemo: useMemo$1,useRef: useRef$3} = React$g;
+const React$j = await importShared('react');
+const {useCallback,useMemo: useMemo$1,useRef: useRef$4} = React$j;
 /**
  * Renders the DayPicker calendar component.
  *
@@ -25040,7 +25655,7 @@ function DayPicker(initialProps) {
         style: { ...styles?.[UI.Root], ...props.style }
     }), [classNames, props.className, props.style, styles]);
     const dataAttributes = getDataAttributes(props);
-    const rootElRef = useRef$3(null);
+    const rootElRef = useRef$4(null);
     useAnimation(rootElRef, Boolean(props.animate), {
         classNames,
         months,
@@ -25063,24 +25678,24 @@ function DayPicker(initialProps) {
         labels,
         formatters
     };
-    return (React$g.createElement(dayPickerContext.Provider, { value: contextValue },
-        React$g.createElement(components.Root, { rootRef: props.animate ? rootElRef : undefined, className: className, style: style, dir: props.dir, id: props.id, lang: props.lang, nonce: props.nonce, title: props.title, role: props.role, "aria-label": props["aria-label"], ...dataAttributes },
-            React$g.createElement(components.Months, { className: classNames[UI.Months], style: styles?.[UI.Months] },
-                !props.hideNavigation && !navLayout && (React$g.createElement(components.Nav, { "data-animated-nav": props.animate ? "true" : undefined, className: classNames[UI.Nav], style: styles?.[UI.Nav], "aria-label": labelNav(), onPreviousClick: handlePreviousClick, onNextClick: handleNextClick, previousMonth: previousMonth, nextMonth: nextMonth })),
+    return (React$j.createElement(dayPickerContext.Provider, { value: contextValue },
+        React$j.createElement(components.Root, { rootRef: props.animate ? rootElRef : undefined, className: className, style: style, dir: props.dir, id: props.id, lang: props.lang, nonce: props.nonce, title: props.title, role: props.role, "aria-label": props["aria-label"], ...dataAttributes },
+            React$j.createElement(components.Months, { className: classNames[UI.Months], style: styles?.[UI.Months] },
+                !props.hideNavigation && !navLayout && (React$j.createElement(components.Nav, { "data-animated-nav": props.animate ? "true" : undefined, className: classNames[UI.Nav], style: styles?.[UI.Nav], "aria-label": labelNav(), onPreviousClick: handlePreviousClick, onNextClick: handleNextClick, previousMonth: previousMonth, nextMonth: nextMonth })),
                 months.map((calendarMonth, displayIndex) => {
                     const dropdownMonths = getMonthOptions(calendarMonth.date, navStart, navEnd, formatters, dateLib);
                     const dropdownYears = getYearOptions(navStart, navEnd, formatters, dateLib);
-                    return (React$g.createElement(components.Month, { "data-animated-month": props.animate ? "true" : undefined, className: classNames[UI.Month], style: styles?.[UI.Month], key: displayIndex, displayIndex: displayIndex, calendarMonth: calendarMonth },
+                    return (React$j.createElement(components.Month, { "data-animated-month": props.animate ? "true" : undefined, className: classNames[UI.Month], style: styles?.[UI.Month], key: displayIndex, displayIndex: displayIndex, calendarMonth: calendarMonth },
                         navLayout === "around" &&
                             !props.hideNavigation &&
-                            displayIndex === 0 && (React$g.createElement(components.PreviousMonthButton, { type: "button", className: classNames[UI.PreviousMonthButton], tabIndex: previousMonth ? undefined : -1, "aria-disabled": previousMonth ? undefined : true, "aria-label": labelPrevious(previousMonth), onClick: handlePreviousClick, "data-animated-button": props.animate ? "true" : undefined },
-                            React$g.createElement(components.Chevron, { disabled: previousMonth ? undefined : true, className: classNames[UI.Chevron], orientation: props.dir === "rtl" ? "right" : "left" }))),
-                        React$g.createElement(components.MonthCaption, { "data-animated-caption": props.animate ? "true" : undefined, className: classNames[UI.MonthCaption], style: styles?.[UI.MonthCaption], calendarMonth: calendarMonth, displayIndex: displayIndex }, captionLayout?.startsWith("dropdown") ? (React$g.createElement(components.DropdownNav, { className: classNames[UI.Dropdowns], style: styles?.[UI.Dropdowns] },
+                            displayIndex === 0 && (React$j.createElement(components.PreviousMonthButton, { type: "button", className: classNames[UI.PreviousMonthButton], tabIndex: previousMonth ? undefined : -1, "aria-disabled": previousMonth ? undefined : true, "aria-label": labelPrevious(previousMonth), onClick: handlePreviousClick, "data-animated-button": props.animate ? "true" : undefined },
+                            React$j.createElement(components.Chevron, { disabled: previousMonth ? undefined : true, className: classNames[UI.Chevron], orientation: props.dir === "rtl" ? "right" : "left" }))),
+                        React$j.createElement(components.MonthCaption, { "data-animated-caption": props.animate ? "true" : undefined, className: classNames[UI.MonthCaption], style: styles?.[UI.MonthCaption], calendarMonth: calendarMonth, displayIndex: displayIndex }, captionLayout?.startsWith("dropdown") ? (React$j.createElement(components.DropdownNav, { className: classNames[UI.Dropdowns], style: styles?.[UI.Dropdowns] },
                             captionLayout === "dropdown" ||
-                                captionLayout === "dropdown-months" ? (React$g.createElement(components.MonthsDropdown, { className: classNames[UI.MonthsDropdown], "aria-label": labelMonthDropdown(), classNames: classNames, components: components, disabled: Boolean(props.disableNavigation), onChange: handleMonthChange(calendarMonth.date), options: dropdownMonths, style: styles?.[UI.Dropdown], value: dateLib.getMonth(calendarMonth.date) })) : (React$g.createElement("span", null, formatMonthDropdown(calendarMonth.date, dateLib))),
+                                captionLayout === "dropdown-months" ? (React$j.createElement(components.MonthsDropdown, { className: classNames[UI.MonthsDropdown], "aria-label": labelMonthDropdown(), classNames: classNames, components: components, disabled: Boolean(props.disableNavigation), onChange: handleMonthChange(calendarMonth.date), options: dropdownMonths, style: styles?.[UI.Dropdown], value: dateLib.getMonth(calendarMonth.date) })) : (React$j.createElement("span", null, formatMonthDropdown(calendarMonth.date, dateLib))),
                             captionLayout === "dropdown" ||
-                                captionLayout === "dropdown-years" ? (React$g.createElement(components.YearsDropdown, { className: classNames[UI.YearsDropdown], "aria-label": labelYearDropdown(dateLib.options), classNames: classNames, components: components, disabled: Boolean(props.disableNavigation), onChange: handleYearChange(calendarMonth.date), options: dropdownYears, style: styles?.[UI.Dropdown], value: dateLib.getYear(calendarMonth.date) })) : (React$g.createElement("span", null, formatYearDropdown(calendarMonth.date, dateLib))),
-                            React$g.createElement("span", { role: "status", "aria-live": "polite", style: {
+                                captionLayout === "dropdown-years" ? (React$j.createElement(components.YearsDropdown, { className: classNames[UI.YearsDropdown], "aria-label": labelYearDropdown(dateLib.options), classNames: classNames, components: components, disabled: Boolean(props.disableNavigation), onChange: handleYearChange(calendarMonth.date), options: dropdownYears, style: styles?.[UI.Dropdown], value: dateLib.getYear(calendarMonth.date) })) : (React$j.createElement("span", null, formatYearDropdown(calendarMonth.date, dateLib))),
+                            React$j.createElement("span", { role: "status", "aria-live": "polite", style: {
                                     border: 0,
                                     clip: "rect(0 0 0 0)",
                                     height: "1px",
@@ -25091,22 +25706,22 @@ function DayPicker(initialProps) {
                                     width: "1px",
                                     whiteSpace: "nowrap",
                                     wordWrap: "normal"
-                                } }, formatCaption(calendarMonth.date, dateLib.options, dateLib)))) : (React$g.createElement(components.CaptionLabel, { className: classNames[UI.CaptionLabel], role: "status", "aria-live": "polite" }, formatCaption(calendarMonth.date, dateLib.options, dateLib)))),
+                                } }, formatCaption(calendarMonth.date, dateLib.options, dateLib)))) : (React$j.createElement(components.CaptionLabel, { className: classNames[UI.CaptionLabel], role: "status", "aria-live": "polite" }, formatCaption(calendarMonth.date, dateLib.options, dateLib)))),
                         navLayout === "around" &&
                             !props.hideNavigation &&
-                            displayIndex === numberOfMonths - 1 && (React$g.createElement(components.NextMonthButton, { type: "button", className: classNames[UI.NextMonthButton], tabIndex: nextMonth ? undefined : -1, "aria-disabled": nextMonth ? undefined : true, "aria-label": labelNext(nextMonth), onClick: handleNextClick, "data-animated-button": props.animate ? "true" : undefined },
-                            React$g.createElement(components.Chevron, { disabled: nextMonth ? undefined : true, className: classNames[UI.Chevron], orientation: props.dir === "rtl" ? "left" : "right" }))),
+                            displayIndex === numberOfMonths - 1 && (React$j.createElement(components.NextMonthButton, { type: "button", className: classNames[UI.NextMonthButton], tabIndex: nextMonth ? undefined : -1, "aria-disabled": nextMonth ? undefined : true, "aria-label": labelNext(nextMonth), onClick: handleNextClick, "data-animated-button": props.animate ? "true" : undefined },
+                            React$j.createElement(components.Chevron, { disabled: nextMonth ? undefined : true, className: classNames[UI.Chevron], orientation: props.dir === "rtl" ? "left" : "right" }))),
                         displayIndex === numberOfMonths - 1 &&
                             navLayout === "after" &&
-                            !props.hideNavigation && (React$g.createElement(components.Nav, { "data-animated-nav": props.animate ? "true" : undefined, className: classNames[UI.Nav], style: styles?.[UI.Nav], "aria-label": labelNav(), onPreviousClick: handlePreviousClick, onNextClick: handleNextClick, previousMonth: previousMonth, nextMonth: nextMonth })),
-                        React$g.createElement(components.MonthGrid, { role: "grid", "aria-multiselectable": mode === "multiple" || mode === "range", "aria-label": labelGrid(calendarMonth.date, dateLib.options, dateLib) ||
+                            !props.hideNavigation && (React$j.createElement(components.Nav, { "data-animated-nav": props.animate ? "true" : undefined, className: classNames[UI.Nav], style: styles?.[UI.Nav], "aria-label": labelNav(), onPreviousClick: handlePreviousClick, onNextClick: handleNextClick, previousMonth: previousMonth, nextMonth: nextMonth })),
+                        React$j.createElement(components.MonthGrid, { role: "grid", "aria-multiselectable": mode === "multiple" || mode === "range", "aria-label": labelGrid(calendarMonth.date, dateLib.options, dateLib) ||
                                 undefined, className: classNames[UI.MonthGrid], style: styles?.[UI.MonthGrid] },
-                            !props.hideWeekdays && (React$g.createElement(components.Weekdays, { "data-animated-weekdays": props.animate ? "true" : undefined, className: classNames[UI.Weekdays], style: styles?.[UI.Weekdays] },
-                                showWeekNumber && (React$g.createElement(components.WeekNumberHeader, { "aria-label": labelWeekNumberHeader(dateLib.options), className: classNames[UI.WeekNumberHeader], style: styles?.[UI.WeekNumberHeader], scope: "col" }, formatWeekNumberHeader())),
-                                weekdays.map((weekday, i) => (React$g.createElement(components.Weekday, { "aria-label": labelWeekday(weekday, dateLib.options, dateLib), className: classNames[UI.Weekday], key: i, style: styles?.[UI.Weekday], scope: "col" }, formatWeekdayName(weekday, dateLib.options, dateLib)))))),
-                            React$g.createElement(components.Weeks, { "data-animated-weeks": props.animate ? "true" : undefined, className: classNames[UI.Weeks], style: styles?.[UI.Weeks] }, calendarMonth.weeks.map((week, weekIndex) => {
-                                return (React$g.createElement(components.Week, { className: classNames[UI.Week], key: week.weekNumber, style: styles?.[UI.Week], week: week },
-                                    showWeekNumber && (React$g.createElement(components.WeekNumber, { week: week, style: styles?.[UI.WeekNumber], "aria-label": labelWeekNumber(week.weekNumber, {
+                            !props.hideWeekdays && (React$j.createElement(components.Weekdays, { "data-animated-weekdays": props.animate ? "true" : undefined, className: classNames[UI.Weekdays], style: styles?.[UI.Weekdays] },
+                                showWeekNumber && (React$j.createElement(components.WeekNumberHeader, { "aria-label": labelWeekNumberHeader(dateLib.options), className: classNames[UI.WeekNumberHeader], style: styles?.[UI.WeekNumberHeader], scope: "col" }, formatWeekNumberHeader())),
+                                weekdays.map((weekday, i) => (React$j.createElement(components.Weekday, { "aria-label": labelWeekday(weekday, dateLib.options, dateLib), className: classNames[UI.Weekday], key: i, style: styles?.[UI.Weekday], scope: "col" }, formatWeekdayName(weekday, dateLib.options, dateLib)))))),
+                            React$j.createElement(components.Weeks, { "data-animated-weeks": props.animate ? "true" : undefined, className: classNames[UI.Weeks], style: styles?.[UI.Weeks] }, calendarMonth.weeks.map((week, weekIndex) => {
+                                return (React$j.createElement(components.Week, { className: classNames[UI.Week], key: week.weekNumber, style: styles?.[UI.Week], week: week },
+                                    showWeekNumber && (React$j.createElement(components.WeekNumber, { week: week, style: styles?.[UI.WeekNumber], "aria-label": labelWeekNumber(week.weekNumber, {
                                             locale
                                         }), className: classNames[UI.WeekNumber], scope: "row", role: "rowheader" }, formatWeekNumber(week.weekNumber, dateLib))),
                                     week.days.map((day) => {
@@ -25130,17 +25745,17 @@ function DayPicker(initialProps) {
                                         const ariaLabel = !isInteractive && !modifiers.hidden
                                             ? labelGridcell(date, modifiers, dateLib.options, dateLib)
                                             : undefined;
-                                        return (React$g.createElement(components.Day, { key: `${dateLib.format(date, "yyyy-MM-dd")}_${dateLib.format(day.displayMonth, "yyyy-MM")}`, day: day, modifiers: modifiers, className: className.join(" "), style: style, role: "gridcell", "aria-selected": modifiers.selected || undefined, "aria-label": ariaLabel, "data-day": dateLib.format(date, "yyyy-MM-dd"), "data-month": day.outside
+                                        return (React$j.createElement(components.Day, { key: `${dateLib.format(date, "yyyy-MM-dd")}_${dateLib.format(day.displayMonth, "yyyy-MM")}`, day: day, modifiers: modifiers, className: className.join(" "), style: style, role: "gridcell", "aria-selected": modifiers.selected || undefined, "aria-label": ariaLabel, "data-day": dateLib.format(date, "yyyy-MM-dd"), "data-month": day.outside
                                                 ? dateLib.format(date, "yyyy-MM")
-                                                : undefined, "data-selected": modifiers.selected || undefined, "data-disabled": modifiers.disabled || undefined, "data-hidden": modifiers.hidden || undefined, "data-outside": day.outside || undefined, "data-focused": modifiers.focused || undefined, "data-today": modifiers.today || undefined }, !modifiers.hidden && isInteractive ? (React$g.createElement(components.DayButton, { className: classNames[UI.DayButton], style: styles?.[UI.DayButton], type: "button", day: day, modifiers: modifiers, disabled: modifiers.disabled || undefined, tabIndex: isFocusTarget(day) ? 0 : -1, "aria-label": labelDayButton(date, modifiers, dateLib.options, dateLib), onClick: handleDayClick(day, modifiers), onBlur: handleDayBlur(day, modifiers), onFocus: handleDayFocus(day, modifiers), onKeyDown: handleDayKeyDown(day, modifiers), onMouseEnter: handleDayMouseEnter(day, modifiers), onMouseLeave: handleDayMouseLeave(day, modifiers) }, formatDay(date, dateLib.options, dateLib))) : (!modifiers.hidden &&
+                                                : undefined, "data-selected": modifiers.selected || undefined, "data-disabled": modifiers.disabled || undefined, "data-hidden": modifiers.hidden || undefined, "data-outside": day.outside || undefined, "data-focused": modifiers.focused || undefined, "data-today": modifiers.today || undefined }, !modifiers.hidden && isInteractive ? (React$j.createElement(components.DayButton, { className: classNames[UI.DayButton], style: styles?.[UI.DayButton], type: "button", day: day, modifiers: modifiers, disabled: modifiers.disabled || undefined, tabIndex: isFocusTarget(day) ? 0 : -1, "aria-label": labelDayButton(date, modifiers, dateLib.options, dateLib), onClick: handleDayClick(day, modifiers), onBlur: handleDayBlur(day, modifiers), onFocus: handleDayFocus(day, modifiers), onKeyDown: handleDayKeyDown(day, modifiers), onMouseEnter: handleDayMouseEnter(day, modifiers), onMouseLeave: handleDayMouseLeave(day, modifiers) }, formatDay(date, dateLib.options, dateLib))) : (!modifiers.hidden &&
                                             formatDay(day.date, dateLib.options, dateLib))));
                                     })));
                             })))));
                 })),
-            props.footer && (React$g.createElement(components.Footer, { className: classNames[UI.Footer], style: styles?.[UI.Footer], role: "status", "aria-live": "polite" }, props.footer)))));
+            props.footer && (React$j.createElement(components.Footer, { className: classNames[UI.Footer], style: styles?.[UI.Footer], role: "status", "aria-live": "polite" }, props.footer)))));
 }
 
-const React$f = await importShared('react');
+const React$i = await importShared('react');
 function Calendar({
   className,
   classNames,
@@ -25266,8 +25881,8 @@ function CalendarDayButton({
   ...props
 }) {
   const defaultClassNames = getDefaultClassNames();
-  const ref = React$f.useRef(null);
-  React$f.useEffect(() => {
+  const ref = React$i.useRef(null);
+  React$i.useEffect(() => {
     if (modifiers.focused) ref.current?.focus();
   }, [modifiers.focused]);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -25292,18 +25907,18 @@ function CalendarDayButton({
 }
 
 // src/dismissable-layer.tsx
-const React$e = await importShared('react');
+const React$h = await importShared('react');
 var DISMISSABLE_LAYER_NAME = "DismissableLayer";
 var CONTEXT_UPDATE = "dismissableLayer.update";
 var POINTER_DOWN_OUTSIDE = "dismissableLayer.pointerDownOutside";
 var FOCUS_OUTSIDE = "dismissableLayer.focusOutside";
 var originalBodyPointerEvents;
-var DismissableLayerContext = React$e.createContext({
+var DismissableLayerContext = React$h.createContext({
   layers: /* @__PURE__ */ new Set(),
   layersWithOutsidePointerEventsDisabled: /* @__PURE__ */ new Set(),
   branches: /* @__PURE__ */ new Set()
 });
-var DismissableLayer = React$e.forwardRef(
+var DismissableLayer = React$h.forwardRef(
   (props, forwardedRef) => {
     const {
       disableOutsidePointerEvents = false,
@@ -25314,10 +25929,10 @@ var DismissableLayer = React$e.forwardRef(
       onDismiss,
       ...layerProps
     } = props;
-    const context = React$e.useContext(DismissableLayerContext);
-    const [node, setNode] = React$e.useState(null);
+    const context = React$h.useContext(DismissableLayerContext);
+    const [node, setNode] = React$h.useState(null);
     const ownerDocument = node?.ownerDocument ?? globalThis?.document;
-    const [, force] = React$e.useState({});
+    const [, force] = React$h.useState({});
     const composedRefs = useComposedRefs(forwardedRef, (node2) => setNode(node2));
     const layers = Array.from(context.layers);
     const [highestLayerWithOutsidePointerEventsDisabled] = [...context.layersWithOutsidePointerEventsDisabled].slice(-1);
@@ -25350,7 +25965,7 @@ var DismissableLayer = React$e.forwardRef(
         onDismiss();
       }
     }, ownerDocument);
-    React$e.useEffect(() => {
+    React$h.useEffect(() => {
       if (!node) return;
       if (disableOutsidePointerEvents) {
         if (context.layersWithOutsidePointerEventsDisabled.size === 0) {
@@ -25367,7 +25982,7 @@ var DismissableLayer = React$e.forwardRef(
         }
       };
     }, [node, ownerDocument, disableOutsidePointerEvents, context]);
-    React$e.useEffect(() => {
+    React$h.useEffect(() => {
       return () => {
         if (!node) return;
         context.layers.delete(node);
@@ -25375,7 +25990,7 @@ var DismissableLayer = React$e.forwardRef(
         dispatchUpdate();
       };
     }, [node, context]);
-    React$e.useEffect(() => {
+    React$h.useEffect(() => {
       const handleUpdate = () => force({});
       document.addEventListener(CONTEXT_UPDATE, handleUpdate);
       return () => document.removeEventListener(CONTEXT_UPDATE, handleUpdate);
@@ -25401,11 +26016,11 @@ var DismissableLayer = React$e.forwardRef(
 );
 DismissableLayer.displayName = DISMISSABLE_LAYER_NAME;
 var BRANCH_NAME = "DismissableLayerBranch";
-var DismissableLayerBranch = React$e.forwardRef((props, forwardedRef) => {
-  const context = React$e.useContext(DismissableLayerContext);
-  const ref = React$e.useRef(null);
+var DismissableLayerBranch = React$h.forwardRef((props, forwardedRef) => {
+  const context = React$h.useContext(DismissableLayerContext);
+  const ref = React$h.useRef(null);
   const composedRefs = useComposedRefs(forwardedRef, ref);
-  React$e.useEffect(() => {
+  React$h.useEffect(() => {
     const node = ref.current;
     if (node) {
       context.branches.add(node);
@@ -25419,10 +26034,10 @@ var DismissableLayerBranch = React$e.forwardRef((props, forwardedRef) => {
 DismissableLayerBranch.displayName = BRANCH_NAME;
 function usePointerDownOutside(onPointerDownOutside, ownerDocument = globalThis?.document) {
   const handlePointerDownOutside = useCallbackRef$1(onPointerDownOutside);
-  const isPointerInsideReactTreeRef = React$e.useRef(false);
-  const handleClickRef = React$e.useRef(() => {
+  const isPointerInsideReactTreeRef = React$h.useRef(false);
+  const handleClickRef = React$h.useRef(() => {
   });
-  React$e.useEffect(() => {
+  React$h.useEffect(() => {
     const handlePointerDown = (event) => {
       if (event.target && !isPointerInsideReactTreeRef.current) {
         let handleAndDispatchPointerDownOutsideEvent2 = function() {
@@ -25462,8 +26077,8 @@ function usePointerDownOutside(onPointerDownOutside, ownerDocument = globalThis?
 }
 function useFocusOutside(onFocusOutside, ownerDocument = globalThis?.document) {
   const handleFocusOutside = useCallbackRef$1(onFocusOutside);
-  const isFocusInsideReactTreeRef = React$e.useRef(false);
-  React$e.useEffect(() => {
+  const isFocusInsideReactTreeRef = React$h.useRef(false);
+  React$h.useEffect(() => {
     const handleFocus = (event) => {
       if (event.target && !isFocusInsideReactTreeRef.current) {
         const eventDetail = { originalEvent: event };
@@ -25496,11 +26111,11 @@ function handleAndDispatchCustomEvent(name, handler, detail, { discrete }) {
 }
 
 // packages/react/focus-guards/src/focus-guards.tsx
-const React$d = await importShared('react');
+const React$g = await importShared('react');
 
 var count = 0;
 function useFocusGuards() {
-  React$d.useEffect(() => {
+  React$g.useEffect(() => {
     const edgeGuards = document.querySelectorAll("[data-radix-focus-guard]");
     document.body.insertAdjacentElement("afterbegin", edgeGuards[0] ?? createFocusGuard());
     document.body.insertAdjacentElement("beforeend", edgeGuards[1] ?? createFocusGuard());
@@ -27360,7 +27975,7 @@ const computePosition = (reference, floating, options) => {
   });
 };
 
-const React$c = await importShared('react');
+const React$f = await importShared('react');
 
 const {useLayoutEffect} = await importShared('react');
 
@@ -27436,7 +28051,7 @@ function roundByDPR(element, value) {
 }
 
 function useLatestRef(value) {
-  const ref = React$c.useRef(value);
+  const ref = React$f.useRef(value);
   index(() => {
     ref.current = value;
   });
@@ -27464,7 +28079,7 @@ function useFloating(options) {
     whileElementsMounted,
     open
   } = options;
-  const [data, setData] = React$c.useState({
+  const [data, setData] = React$f.useState({
     x: 0,
     y: 0,
     strategy,
@@ -27472,19 +28087,19 @@ function useFloating(options) {
     middlewareData: {},
     isPositioned: false
   });
-  const [latestMiddleware, setLatestMiddleware] = React$c.useState(middleware);
+  const [latestMiddleware, setLatestMiddleware] = React$f.useState(middleware);
   if (!deepEqual(latestMiddleware, middleware)) {
     setLatestMiddleware(middleware);
   }
-  const [_reference, _setReference] = React$c.useState(null);
-  const [_floating, _setFloating] = React$c.useState(null);
-  const setReference = React$c.useCallback(node => {
+  const [_reference, _setReference] = React$f.useState(null);
+  const [_floating, _setFloating] = React$f.useState(null);
+  const setReference = React$f.useCallback(node => {
     if (node !== referenceRef.current) {
       referenceRef.current = node;
       _setReference(node);
     }
   }, []);
-  const setFloating = React$c.useCallback(node => {
+  const setFloating = React$f.useCallback(node => {
     if (node !== floatingRef.current) {
       floatingRef.current = node;
       _setFloating(node);
@@ -27492,14 +28107,14 @@ function useFloating(options) {
   }, []);
   const referenceEl = externalReference || _reference;
   const floatingEl = externalFloating || _floating;
-  const referenceRef = React$c.useRef(null);
-  const floatingRef = React$c.useRef(null);
-  const dataRef = React$c.useRef(data);
+  const referenceRef = React$f.useRef(null);
+  const floatingRef = React$f.useRef(null);
+  const dataRef = React$f.useRef(data);
   const hasWhileElementsMounted = whileElementsMounted != null;
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
   const platformRef = useLatestRef(platform);
   const openRef = useLatestRef(open);
-  const update = React$c.useCallback(() => {
+  const update = React$f.useCallback(() => {
     if (!referenceRef.current || !floatingRef.current) {
       return;
     }
@@ -27537,7 +28152,7 @@ function useFloating(options) {
       }));
     }
   }, [open]);
-  const isMountedRef = React$c.useRef(false);
+  const isMountedRef = React$f.useRef(false);
   index(() => {
     isMountedRef.current = true;
     return () => {
@@ -27554,17 +28169,17 @@ function useFloating(options) {
       update();
     }
   }, [referenceEl, floatingEl, update, whileElementsMountedRef, hasWhileElementsMounted]);
-  const refs = React$c.useMemo(() => ({
+  const refs = React$f.useMemo(() => ({
     reference: referenceRef,
     floating: floatingRef,
     setReference,
     setFloating
   }), [setReference, setFloating]);
-  const elements = React$c.useMemo(() => ({
+  const elements = React$f.useMemo(() => ({
     reference: referenceEl,
     floating: floatingEl
   }), [referenceEl, floatingEl]);
-  const floatingStyles = React$c.useMemo(() => {
+  const floatingStyles = React$f.useMemo(() => {
     const initialStyles = {
       position: strategy,
       left: 0,
@@ -27590,7 +28205,7 @@ function useFloating(options) {
       top: y
     };
   }, [strategy, transform, elements.floating, data.x, data.y]);
-  return React$c.useMemo(() => ({
+  return React$f.useMemo(() => ({
     ...data,
     update,
     refs,
@@ -27711,9 +28326,9 @@ const arrow = (options, deps) => ({
 });
 
 // src/arrow.tsx
-const React$b = await importShared('react');
+const React$e = await importShared('react');
 var NAME = "Arrow";
-var Arrow$1 = React$b.forwardRef((props, forwardedRef) => {
+var Arrow$1 = React$e.forwardRef((props, forwardedRef) => {
   const { children, width = 10, height = 5, ...arrowProps } = props;
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     Primitive.svg,
@@ -27732,24 +28347,24 @@ Arrow$1.displayName = NAME;
 var Root = Arrow$1;
 
 // src/popper.tsx
-const React$a = await importShared('react');
+const React$d = await importShared('react');
 var POPPER_NAME = "Popper";
 var [createPopperContext, createPopperScope] = createContextScope(POPPER_NAME);
 var [PopperProvider, usePopperContext] = createPopperContext(POPPER_NAME);
 var Popper = (props) => {
   const { __scopePopper, children } = props;
-  const [anchor, setAnchor] = React$a.useState(null);
+  const [anchor, setAnchor] = React$d.useState(null);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(PopperProvider, { scope: __scopePopper, anchor, onAnchorChange: setAnchor, children });
 };
 Popper.displayName = POPPER_NAME;
 var ANCHOR_NAME$1 = "PopperAnchor";
-var PopperAnchor = React$a.forwardRef(
+var PopperAnchor = React$d.forwardRef(
   (props, forwardedRef) => {
     const { __scopePopper, virtualRef, ...anchorProps } = props;
     const context = usePopperContext(ANCHOR_NAME$1, __scopePopper);
-    const ref = React$a.useRef(null);
+    const ref = React$d.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, ref);
-    React$a.useEffect(() => {
+    React$d.useEffect(() => {
       context.onAnchorChange(virtualRef?.current || ref.current);
     });
     return virtualRef ? null : /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { ...anchorProps, ref: composedRefs });
@@ -27758,7 +28373,7 @@ var PopperAnchor = React$a.forwardRef(
 PopperAnchor.displayName = ANCHOR_NAME$1;
 var CONTENT_NAME$1 = "PopperContent";
 var [PopperContentProvider, useContentContext] = createPopperContext(CONTENT_NAME$1);
-var PopperContent = React$a.forwardRef(
+var PopperContent = React$d.forwardRef(
   (props, forwardedRef) => {
     const {
       __scopePopper,
@@ -27777,9 +28392,9 @@ var PopperContent = React$a.forwardRef(
       ...contentProps
     } = props;
     const context = usePopperContext(CONTENT_NAME$1, __scopePopper);
-    const [content, setContent] = React$a.useState(null);
+    const [content, setContent] = React$d.useState(null);
     const composedRefs = useComposedRefs(forwardedRef, (node) => setContent(node));
-    const [arrow$1, setArrow] = React$a.useState(null);
+    const [arrow$1, setArrow] = React$d.useState(null);
     const arrowSize = useSize(arrow$1);
     const arrowWidth = arrowSize?.width ?? 0;
     const arrowHeight = arrowSize?.height ?? 0;
@@ -27841,7 +28456,7 @@ var PopperContent = React$a.forwardRef(
     const arrowX = middlewareData.arrow?.x;
     const arrowY = middlewareData.arrow?.y;
     const cannotCenterArrow = middlewareData.arrow?.centerOffset !== 0;
-    const [contentZIndex, setContentZIndex] = React$a.useState();
+    const [contentZIndex, setContentZIndex] = React$d.useState();
     useLayoutEffect2(() => {
       if (content) setContentZIndex(window.getComputedStyle(content).zIndex);
     }, [content]);
@@ -27907,7 +28522,7 @@ var OPPOSITE_SIDE = {
   bottom: "top",
   left: "right"
 };
-var PopperArrow = React$a.forwardRef(function PopperArrow2(props, forwardedRef) {
+var PopperArrow = React$d.forwardRef(function PopperArrow2(props, forwardedRef) {
   const { __scopePopper, ...arrowProps } = props;
   const contentContext = useContentContext(ARROW_NAME$1, __scopePopper);
   const baseSide = OPPOSITE_SIDE[contentContext.placedSide];
@@ -27999,7 +28614,7 @@ var Content = PopperContent;
 var Arrow = PopperArrow;
 
 // src/popover.tsx
-const React$9 = await importShared('react');
+const React$c = await importShared('react');
 var POPOVER_NAME = "Popover";
 var [createPopoverContext, createPopoverScope] = createContextScope(POPOVER_NAME, [
   createPopperScope
@@ -28016,8 +28631,8 @@ var Popover$1 = (props) => {
     modal = false
   } = props;
   const popperScope = usePopperScope(__scopePopover);
-  const triggerRef = React$9.useRef(null);
-  const [hasCustomAnchor, setHasCustomAnchor] = React$9.useState(false);
+  const triggerRef = React$c.useRef(null);
+  const [hasCustomAnchor, setHasCustomAnchor] = React$c.useState(false);
   const [open, setOpen] = useControllableState({
     prop: openProp,
     defaultProp: defaultOpen ?? false,
@@ -28032,10 +28647,10 @@ var Popover$1 = (props) => {
       triggerRef,
       open,
       onOpenChange: setOpen,
-      onOpenToggle: React$9.useCallback(() => setOpen((prevOpen) => !prevOpen), [setOpen]),
+      onOpenToggle: React$c.useCallback(() => setOpen((prevOpen) => !prevOpen), [setOpen]),
       hasCustomAnchor,
-      onCustomAnchorAdd: React$9.useCallback(() => setHasCustomAnchor(true), []),
-      onCustomAnchorRemove: React$9.useCallback(() => setHasCustomAnchor(false), []),
+      onCustomAnchorAdd: React$c.useCallback(() => setHasCustomAnchor(true), []),
+      onCustomAnchorRemove: React$c.useCallback(() => setHasCustomAnchor(false), []),
       modal,
       children
     }
@@ -28043,13 +28658,13 @@ var Popover$1 = (props) => {
 };
 Popover$1.displayName = POPOVER_NAME;
 var ANCHOR_NAME = "PopoverAnchor";
-var PopoverAnchor = React$9.forwardRef(
+var PopoverAnchor = React$c.forwardRef(
   (props, forwardedRef) => {
     const { __scopePopover, ...anchorProps } = props;
     const context = usePopoverContext(ANCHOR_NAME, __scopePopover);
     const popperScope = usePopperScope(__scopePopover);
     const { onCustomAnchorAdd, onCustomAnchorRemove } = context;
-    React$9.useEffect(() => {
+    React$c.useEffect(() => {
       onCustomAnchorAdd();
       return () => onCustomAnchorRemove();
     }, [onCustomAnchorAdd, onCustomAnchorRemove]);
@@ -28058,7 +28673,7 @@ var PopoverAnchor = React$9.forwardRef(
 );
 PopoverAnchor.displayName = ANCHOR_NAME;
 var TRIGGER_NAME = "PopoverTrigger";
-var PopoverTrigger$1 = React$9.forwardRef(
+var PopoverTrigger$1 = React$c.forwardRef(
   (props, forwardedRef) => {
     const { __scopePopover, ...triggerProps } = props;
     const context = usePopoverContext(TRIGGER_NAME, __scopePopover);
@@ -28092,7 +28707,7 @@ var PopoverPortal = (props) => {
 };
 PopoverPortal.displayName = PORTAL_NAME;
 var CONTENT_NAME = "PopoverContent";
-var PopoverContent$1 = React$9.forwardRef(
+var PopoverContent$1 = React$c.forwardRef(
   (props, forwardedRef) => {
     const portalContext = usePortalContext(CONTENT_NAME, props.__scopePopover);
     const { forceMount = portalContext.forceMount, ...contentProps } = props;
@@ -28102,13 +28717,13 @@ var PopoverContent$1 = React$9.forwardRef(
 );
 PopoverContent$1.displayName = CONTENT_NAME;
 var Slot = createSlot("PopoverContent.RemoveScroll");
-var PopoverContentModal = React$9.forwardRef(
+var PopoverContentModal = React$c.forwardRef(
   (props, forwardedRef) => {
     const context = usePopoverContext(CONTENT_NAME, props.__scopePopover);
-    const contentRef = React$9.useRef(null);
+    const contentRef = React$c.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, contentRef);
-    const isRightClickOutsideRef = React$9.useRef(false);
-    React$9.useEffect(() => {
+    const isRightClickOutsideRef = React$c.useRef(false);
+    React$c.useEffect(() => {
       const content = contentRef.current;
       if (content) return hideOthers(content);
     }, []);
@@ -28142,11 +28757,11 @@ var PopoverContentModal = React$9.forwardRef(
     ) });
   }
 );
-var PopoverContentNonModal = React$9.forwardRef(
+var PopoverContentNonModal = React$c.forwardRef(
   (props, forwardedRef) => {
     const context = usePopoverContext(CONTENT_NAME, props.__scopePopover);
-    const hasInteractedOutsideRef = React$9.useRef(false);
-    const hasPointerDownOutsideRef = React$9.useRef(false);
+    const hasInteractedOutsideRef = React$c.useRef(false);
+    const hasPointerDownOutsideRef = React$c.useRef(false);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       PopoverContentImpl,
       {
@@ -28182,7 +28797,7 @@ var PopoverContentNonModal = React$9.forwardRef(
     );
   }
 );
-var PopoverContentImpl = React$9.forwardRef(
+var PopoverContentImpl = React$c.forwardRef(
   (props, forwardedRef) => {
     const {
       __scopePopover,
@@ -28246,7 +28861,7 @@ var PopoverContentImpl = React$9.forwardRef(
   }
 );
 var CLOSE_NAME = "PopoverClose";
-var PopoverClose = React$9.forwardRef(
+var PopoverClose = React$c.forwardRef(
   (props, forwardedRef) => {
     const { __scopePopover, ...closeProps } = props;
     const context = usePopoverContext(CLOSE_NAME, __scopePopover);
@@ -28263,7 +28878,7 @@ var PopoverClose = React$9.forwardRef(
 );
 PopoverClose.displayName = CLOSE_NAME;
 var ARROW_NAME = "PopoverArrow";
-var PopoverArrow = React$9.forwardRef(
+var PopoverArrow = React$c.forwardRef(
   (props, forwardedRef) => {
     const { __scopePopover, ...arrowProps } = props;
     const popperScope = usePopperScope(__scopePopover);
@@ -28320,7 +28935,7 @@ function __insertCSS(code) {
   ;style.styleSheet ? (style.styleSheet.cssText = code) : style.appendChild(document.createTextNode(code));
 }
 
-const React$8 = await importShared('react');
+const React$b = await importShared('react');
 
 const ReactDOM = await importShared('react-dom');
 
@@ -28341,64 +28956,64 @@ const getAsset = (type)=>{
 };
 const bars = Array(12).fill(0);
 const Loader = ({ visible, className })=>{
-    return /*#__PURE__*/ React$8.createElement("div", {
+    return /*#__PURE__*/ React$b.createElement("div", {
         className: [
             'sonner-loading-wrapper',
             className
         ].filter(Boolean).join(' '),
         "data-visible": visible
-    }, /*#__PURE__*/ React$8.createElement("div", {
+    }, /*#__PURE__*/ React$b.createElement("div", {
         className: "sonner-spinner"
-    }, bars.map((_, i)=>/*#__PURE__*/ React$8.createElement("div", {
+    }, bars.map((_, i)=>/*#__PURE__*/ React$b.createElement("div", {
             className: "sonner-loading-bar",
             key: `spinner-bar-${i}`
         }))));
 };
-const SuccessIcon = /*#__PURE__*/ React$8.createElement("svg", {
+const SuccessIcon = /*#__PURE__*/ React$b.createElement("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 20 20",
     fill: "currentColor",
     height: "20",
     width: "20"
-}, /*#__PURE__*/ React$8.createElement("path", {
+}, /*#__PURE__*/ React$b.createElement("path", {
     fillRule: "evenodd",
     d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z",
     clipRule: "evenodd"
 }));
-const WarningIcon = /*#__PURE__*/ React$8.createElement("svg", {
+const WarningIcon = /*#__PURE__*/ React$b.createElement("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 24 24",
     fill: "currentColor",
     height: "20",
     width: "20"
-}, /*#__PURE__*/ React$8.createElement("path", {
+}, /*#__PURE__*/ React$b.createElement("path", {
     fillRule: "evenodd",
     d: "M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z",
     clipRule: "evenodd"
 }));
-const InfoIcon = /*#__PURE__*/ React$8.createElement("svg", {
+const InfoIcon = /*#__PURE__*/ React$b.createElement("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 20 20",
     fill: "currentColor",
     height: "20",
     width: "20"
-}, /*#__PURE__*/ React$8.createElement("path", {
+}, /*#__PURE__*/ React$b.createElement("path", {
     fillRule: "evenodd",
     d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z",
     clipRule: "evenodd"
 }));
-const ErrorIcon = /*#__PURE__*/ React$8.createElement("svg", {
+const ErrorIcon = /*#__PURE__*/ React$b.createElement("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 20 20",
     fill: "currentColor",
     height: "20",
     width: "20"
-}, /*#__PURE__*/ React$8.createElement("path", {
+}, /*#__PURE__*/ React$b.createElement("path", {
     fillRule: "evenodd",
     d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z",
     clipRule: "evenodd"
 }));
-const CloseIcon = /*#__PURE__*/ React$8.createElement("svg", {
+const CloseIcon = /*#__PURE__*/ React$b.createElement("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     width: "12",
     height: "12",
@@ -28408,12 +29023,12 @@ const CloseIcon = /*#__PURE__*/ React$8.createElement("svg", {
     strokeWidth: "1.5",
     strokeLinecap: "round",
     strokeLinejoin: "round"
-}, /*#__PURE__*/ React$8.createElement("line", {
+}, /*#__PURE__*/ React$b.createElement("line", {
     x1: "18",
     y1: "6",
     x2: "6",
     y2: "18"
-}), /*#__PURE__*/ React$8.createElement("line", {
+}), /*#__PURE__*/ React$b.createElement("line", {
     x1: "6",
     y1: "6",
     x2: "18",
@@ -28421,8 +29036,8 @@ const CloseIcon = /*#__PURE__*/ React$8.createElement("svg", {
 }));
 
 const useIsDocumentHidden = ()=>{
-    const [isDocumentHidden, setIsDocumentHidden] = React$8.useState(document.hidden);
-    React$8.useEffect(()=>{
+    const [isDocumentHidden, setIsDocumentHidden] = React$b.useState(document.hidden);
+    React$b.useEffect(()=>{
         const callback = ()=>{
             setIsDocumentHidden(document.hidden);
         };
@@ -28574,7 +29189,7 @@ class Observer {
                     'resolve',
                     response
                 ];
-                const isReactElementResponse = React$8.isValidElement(response);
+                const isReactElementResponse = React$b.isValidElement(response);
                 if (isReactElementResponse) {
                     shouldDismiss = false;
                     this.create({
@@ -28586,7 +29201,7 @@ class Observer {
                     shouldDismiss = false;
                     const promiseData = typeof data.error === 'function' ? await data.error(`HTTP error! status: ${response.status}`) : data.error;
                     const description = typeof data.description === 'function' ? await data.description(`HTTP error! status: ${response.status}`) : data.description;
-                    const isExtendedResult = typeof promiseData === 'object' && !React$8.isValidElement(promiseData);
+                    const isExtendedResult = typeof promiseData === 'object' && !React$b.isValidElement(promiseData);
                     const toastSettings = isExtendedResult ? promiseData : {
                         message: promiseData
                     };
@@ -28600,7 +29215,7 @@ class Observer {
                     shouldDismiss = false;
                     const promiseData = typeof data.error === 'function' ? await data.error(response) : data.error;
                     const description = typeof data.description === 'function' ? await data.description(response) : data.description;
-                    const isExtendedResult = typeof promiseData === 'object' && !React$8.isValidElement(promiseData);
+                    const isExtendedResult = typeof promiseData === 'object' && !React$b.isValidElement(promiseData);
                     const toastSettings = isExtendedResult ? promiseData : {
                         message: promiseData
                     };
@@ -28614,7 +29229,7 @@ class Observer {
                     shouldDismiss = false;
                     const promiseData = typeof data.success === 'function' ? await data.success(response) : data.success;
                     const description = typeof data.description === 'function' ? await data.description(response) : data.description;
-                    const isExtendedResult = typeof promiseData === 'object' && !React$8.isValidElement(promiseData);
+                    const isExtendedResult = typeof promiseData === 'object' && !React$b.isValidElement(promiseData);
                     const toastSettings = isExtendedResult ? promiseData : {
                         message: promiseData
                     };
@@ -28634,7 +29249,7 @@ class Observer {
                     shouldDismiss = false;
                     const promiseData = typeof data.error === 'function' ? await data.error(error) : data.error;
                     const description = typeof data.description === 'function' ? await data.description(error) : data.description;
-                    const isExtendedResult = typeof promiseData === 'object' && !React$8.isValidElement(promiseData);
+                    const isExtendedResult = typeof promiseData === 'object' && !React$b.isValidElement(promiseData);
                     const toastSettings = isExtendedResult ? promiseData : {
                         message: promiseData
                     };
@@ -28754,18 +29369,18 @@ function getDefaultSwipeDirections(position) {
 const Toast = (props)=>{
     var _toast_classNames, _toast_classNames1, _toast_classNames2, _toast_classNames3, _toast_classNames4, _toast_classNames5, _toast_classNames6, _toast_classNames7, _toast_classNames8;
     const { invert: ToasterInvert, toast, unstyled, interacting, setHeights, visibleToasts, heights, index, toasts, expanded, removeToast, defaultRichColors, closeButton: closeButtonFromToaster, style, cancelButtonStyle, actionButtonStyle, className = '', descriptionClassName = '', duration: durationFromToaster, position, gap, expandByDefault, classNames, icons, closeButtonAriaLabel = 'Close toast' } = props;
-    const [swipeDirection, setSwipeDirection] = React$8.useState(null);
-    const [swipeOutDirection, setSwipeOutDirection] = React$8.useState(null);
-    const [mounted, setMounted] = React$8.useState(false);
-    const [removed, setRemoved] = React$8.useState(false);
-    const [swiping, setSwiping] = React$8.useState(false);
-    const [swipeOut, setSwipeOut] = React$8.useState(false);
-    const [isSwiped, setIsSwiped] = React$8.useState(false);
-    const [offsetBeforeRemove, setOffsetBeforeRemove] = React$8.useState(0);
-    const [initialHeight, setInitialHeight] = React$8.useState(0);
-    const remainingTime = React$8.useRef(toast.duration || durationFromToaster || TOAST_LIFETIME);
-    const dragStartTime = React$8.useRef(null);
-    const toastRef = React$8.useRef(null);
+    const [swipeDirection, setSwipeDirection] = React$b.useState(null);
+    const [swipeOutDirection, setSwipeOutDirection] = React$b.useState(null);
+    const [mounted, setMounted] = React$b.useState(false);
+    const [removed, setRemoved] = React$b.useState(false);
+    const [swiping, setSwiping] = React$b.useState(false);
+    const [swipeOut, setSwipeOut] = React$b.useState(false);
+    const [isSwiped, setIsSwiped] = React$b.useState(false);
+    const [offsetBeforeRemove, setOffsetBeforeRemove] = React$b.useState(0);
+    const [initialHeight, setInitialHeight] = React$b.useState(0);
+    const remainingTime = React$b.useRef(toast.duration || durationFromToaster || TOAST_LIFETIME);
+    const dragStartTime = React$b.useRef(null);
+    const toastRef = React$b.useRef(null);
     const isFront = index === 0;
     const isVisible = index + 1 <= visibleToasts;
     const toastType = toast.type;
@@ -28773,27 +29388,27 @@ const Toast = (props)=>{
     const toastClassname = toast.className || '';
     const toastDescriptionClassname = toast.descriptionClassName || '';
     // Height index is used to calculate the offset as it gets updated before the toast array, which means we can calculate the new layout faster.
-    const heightIndex = React$8.useMemo(()=>heights.findIndex((height)=>height.toastId === toast.id) || 0, [
+    const heightIndex = React$b.useMemo(()=>heights.findIndex((height)=>height.toastId === toast.id) || 0, [
         heights,
         toast.id
     ]);
-    const closeButton = React$8.useMemo(()=>{
+    const closeButton = React$b.useMemo(()=>{
         var _toast_closeButton;
         return (_toast_closeButton = toast.closeButton) != null ? _toast_closeButton : closeButtonFromToaster;
     }, [
         toast.closeButton,
         closeButtonFromToaster
     ]);
-    const duration = React$8.useMemo(()=>toast.duration || durationFromToaster || TOAST_LIFETIME, [
+    const duration = React$b.useMemo(()=>toast.duration || durationFromToaster || TOAST_LIFETIME, [
         toast.duration,
         durationFromToaster
     ]);
-    const closeTimerStartTimeRef = React$8.useRef(0);
-    const offset = React$8.useRef(0);
-    const lastCloseTimerStartTimeRef = React$8.useRef(0);
-    const pointerStartRef = React$8.useRef(null);
+    const closeTimerStartTimeRef = React$b.useRef(0);
+    const offset = React$b.useRef(0);
+    const lastCloseTimerStartTimeRef = React$b.useRef(0);
+    const pointerStartRef = React$b.useRef(null);
     const [y, x] = position.split('-');
-    const toastsHeightBefore = React$8.useMemo(()=>{
+    const toastsHeightBefore = React$b.useMemo(()=>{
         return heights.reduce((prev, curr, reducerIndex)=>{
             // Calculate offset up until current toast
             if (reducerIndex >= heightIndex) {
@@ -28808,20 +29423,20 @@ const Toast = (props)=>{
     const isDocumentHidden = useIsDocumentHidden();
     const invert = toast.invert || ToasterInvert;
     const disabled = toastType === 'loading';
-    offset.current = React$8.useMemo(()=>heightIndex * gap + toastsHeightBefore, [
+    offset.current = React$b.useMemo(()=>heightIndex * gap + toastsHeightBefore, [
         heightIndex,
         toastsHeightBefore
     ]);
-    React$8.useEffect(()=>{
+    React$b.useEffect(()=>{
         remainingTime.current = duration;
     }, [
         duration
     ]);
-    React$8.useEffect(()=>{
+    React$b.useEffect(()=>{
         // Trigger enter animation without using CSS animation
         setMounted(true);
     }, []);
-    React$8.useEffect(()=>{
+    React$b.useEffect(()=>{
         const toastNode = toastRef.current;
         if (toastNode) {
             const height = toastNode.getBoundingClientRect().height;
@@ -28841,7 +29456,7 @@ const Toast = (props)=>{
         setHeights,
         toast.id
     ]);
-    React$8.useLayoutEffect(()=>{
+    React$b.useLayoutEffect(()=>{
         // Keep height up to date with the content in case it updates
         if (!mounted) return;
         const toastNode = toastRef.current;
@@ -28878,7 +29493,7 @@ const Toast = (props)=>{
         toast.action,
         toast.cancel
     ]);
-    const deleteToast = React$8.useCallback(()=>{
+    const deleteToast = React$b.useCallback(()=>{
         // Save the offset for the exit swipe animation
         setRemoved(true);
         setOffsetBeforeRemove(offset.current);
@@ -28892,7 +29507,7 @@ const Toast = (props)=>{
         setHeights,
         offset
     ]);
-    React$8.useEffect(()=>{
+    React$b.useEffect(()=>{
         if (toast.promise && toastType === 'loading' || toast.duration === Infinity || toast.type === 'loading') return;
         let timeoutId;
         // Pause the timer on each hover
@@ -28930,7 +29545,7 @@ const Toast = (props)=>{
         isDocumentHidden,
         deleteToast
     ]);
-    React$8.useEffect(()=>{
+    React$b.useEffect(()=>{
         if (toast.delete) {
             deleteToast();
             toast.onDismiss == null ? void 0 : toast.onDismiss.call(toast, toast);
@@ -28943,19 +29558,19 @@ const Toast = (props)=>{
         var _toast_classNames;
         if (icons == null ? void 0 : icons.loading) {
             var _toast_classNames1;
-            return /*#__PURE__*/ React$8.createElement("div", {
+            return /*#__PURE__*/ React$b.createElement("div", {
                 className: cn(classNames == null ? void 0 : classNames.loader, toast == null ? void 0 : (_toast_classNames1 = toast.classNames) == null ? void 0 : _toast_classNames1.loader, 'sonner-loader'),
                 "data-visible": toastType === 'loading'
             }, icons.loading);
         }
-        return /*#__PURE__*/ React$8.createElement(Loader, {
+        return /*#__PURE__*/ React$b.createElement(Loader, {
             className: cn(classNames == null ? void 0 : classNames.loader, toast == null ? void 0 : (_toast_classNames = toast.classNames) == null ? void 0 : _toast_classNames.loader),
             visible: toastType === 'loading'
         });
     }
     const icon = toast.icon || (icons == null ? void 0 : icons[toastType]) || getAsset(toastType);
     var _toast_richColors, _icons_close;
-    return /*#__PURE__*/ React$8.createElement("li", {
+    return /*#__PURE__*/ React$b.createElement("li", {
         tabIndex: 0,
         ref: toastRef,
         className: cn(className, toastClassname, classNames == null ? void 0 : classNames.toast, toast == null ? void 0 : (_toast_classNames = toast.classNames) == null ? void 0 : _toast_classNames.toast, classNames == null ? void 0 : classNames.default, classNames == null ? void 0 : classNames[toastType], toast == null ? void 0 : (_toast_classNames1 = toast.classNames) == null ? void 0 : _toast_classNames1[toastType]),
@@ -29089,7 +29704,7 @@ const Toast = (props)=>{
             (_toastRef_current = toastRef.current) == null ? void 0 : _toastRef_current.style.setProperty('--swipe-amount-x', `${swipeAmount.x}px`);
             (_toastRef_current1 = toastRef.current) == null ? void 0 : _toastRef_current1.style.setProperty('--swipe-amount-y', `${swipeAmount.y}px`);
         }
-    }, closeButton && !toast.jsx && toastType !== 'loading' ? /*#__PURE__*/ React$8.createElement("button", {
+    }, closeButton && !toast.jsx && toastType !== 'loading' ? /*#__PURE__*/ React$b.createElement("button", {
         "aria-label": closeButtonAriaLabel,
         "data-disabled": disabled,
         "data-close-button": true,
@@ -29098,19 +29713,19 @@ const Toast = (props)=>{
             toast.onDismiss == null ? void 0 : toast.onDismiss.call(toast, toast);
         },
         className: cn(classNames == null ? void 0 : classNames.closeButton, toast == null ? void 0 : (_toast_classNames2 = toast.classNames) == null ? void 0 : _toast_classNames2.closeButton)
-    }, (_icons_close = icons == null ? void 0 : icons.close) != null ? _icons_close : CloseIcon) : null, (toastType || toast.icon || toast.promise) && toast.icon !== null && ((icons == null ? void 0 : icons[toastType]) !== null || toast.icon) ? /*#__PURE__*/ React$8.createElement("div", {
+    }, (_icons_close = icons == null ? void 0 : icons.close) != null ? _icons_close : CloseIcon) : null, (toastType || toast.icon || toast.promise) && toast.icon !== null && ((icons == null ? void 0 : icons[toastType]) !== null || toast.icon) ? /*#__PURE__*/ React$b.createElement("div", {
         "data-icon": "",
         className: cn(classNames == null ? void 0 : classNames.icon, toast == null ? void 0 : (_toast_classNames3 = toast.classNames) == null ? void 0 : _toast_classNames3.icon)
-    }, toast.promise || toast.type === 'loading' && !toast.icon ? toast.icon || getLoadingIcon() : null, toast.type !== 'loading' ? icon : null) : null, /*#__PURE__*/ React$8.createElement("div", {
+    }, toast.promise || toast.type === 'loading' && !toast.icon ? toast.icon || getLoadingIcon() : null, toast.type !== 'loading' ? icon : null) : null, /*#__PURE__*/ React$b.createElement("div", {
         "data-content": "",
         className: cn(classNames == null ? void 0 : classNames.content, toast == null ? void 0 : (_toast_classNames4 = toast.classNames) == null ? void 0 : _toast_classNames4.content)
-    }, /*#__PURE__*/ React$8.createElement("div", {
+    }, /*#__PURE__*/ React$b.createElement("div", {
         "data-title": "",
         className: cn(classNames == null ? void 0 : classNames.title, toast == null ? void 0 : (_toast_classNames5 = toast.classNames) == null ? void 0 : _toast_classNames5.title)
-    }, toast.jsx ? toast.jsx : typeof toast.title === 'function' ? toast.title() : toast.title), toast.description ? /*#__PURE__*/ React$8.createElement("div", {
+    }, toast.jsx ? toast.jsx : typeof toast.title === 'function' ? toast.title() : toast.title), toast.description ? /*#__PURE__*/ React$b.createElement("div", {
         "data-description": "",
         className: cn(descriptionClassName, toastDescriptionClassname, classNames == null ? void 0 : classNames.description, toast == null ? void 0 : (_toast_classNames6 = toast.classNames) == null ? void 0 : _toast_classNames6.description)
-    }, typeof toast.description === 'function' ? toast.description() : toast.description) : null), /*#__PURE__*/ React$8.isValidElement(toast.cancel) ? toast.cancel : toast.cancel && isAction(toast.cancel) ? /*#__PURE__*/ React$8.createElement("button", {
+    }, typeof toast.description === 'function' ? toast.description() : toast.description) : null), /*#__PURE__*/ React$b.isValidElement(toast.cancel) ? toast.cancel : toast.cancel && isAction(toast.cancel) ? /*#__PURE__*/ React$b.createElement("button", {
         "data-button": true,
         "data-cancel": true,
         style: toast.cancelButtonStyle || cancelButtonStyle,
@@ -29122,7 +29737,7 @@ const Toast = (props)=>{
             deleteToast();
         },
         className: cn(classNames == null ? void 0 : classNames.cancelButton, toast == null ? void 0 : (_toast_classNames7 = toast.classNames) == null ? void 0 : _toast_classNames7.cancelButton)
-    }, toast.cancel.label) : null, /*#__PURE__*/ React$8.isValidElement(toast.action) ? toast.action : toast.action && isAction(toast.action) ? /*#__PURE__*/ React$8.createElement("button", {
+    }, toast.cancel.label) : null, /*#__PURE__*/ React$b.isValidElement(toast.action) ? toast.action : toast.action && isAction(toast.action) ? /*#__PURE__*/ React$b.createElement("button", {
         "data-button": true,
         "data-action": true,
         style: toast.actionButtonStyle || actionButtonStyle,
@@ -29185,13 +29800,13 @@ function assignOffset(defaultOffset, mobileOffset) {
     });
     return styles;
 }
-const Toaster = /*#__PURE__*/ React$8.forwardRef(function Toaster(props, ref) {
+const Toaster = /*#__PURE__*/ React$b.forwardRef(function Toaster(props, ref) {
     const { invert, position = 'bottom-right', hotkey = [
         'altKey',
         'KeyT'
     ], expand, closeButton, className, offset, mobileOffset, theme = 'light', richColors, duration, style, visibleToasts = VISIBLE_TOASTS_AMOUNT, toastOptions, dir = getDocumentDirection(), gap = GAP, icons, containerAriaLabel = 'Notifications' } = props;
-    const [toasts, setToasts] = React$8.useState([]);
-    const possiblePositions = React$8.useMemo(()=>{
+    const [toasts, setToasts] = React$b.useState([]);
+    const possiblePositions = React$b.useMemo(()=>{
         return Array.from(new Set([
             position
         ].concat(toasts.filter((toast)=>toast.position).map((toast)=>toast.position))));
@@ -29199,15 +29814,15 @@ const Toaster = /*#__PURE__*/ React$8.forwardRef(function Toaster(props, ref) {
         toasts,
         position
     ]);
-    const [heights, setHeights] = React$8.useState([]);
-    const [expanded, setExpanded] = React$8.useState(false);
-    const [interacting, setInteracting] = React$8.useState(false);
-    const [actualTheme, setActualTheme] = React$8.useState(theme !== 'system' ? theme : typeof window !== 'undefined' ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light' : 'light');
-    const listRef = React$8.useRef(null);
+    const [heights, setHeights] = React$b.useState([]);
+    const [expanded, setExpanded] = React$b.useState(false);
+    const [interacting, setInteracting] = React$b.useState(false);
+    const [actualTheme, setActualTheme] = React$b.useState(theme !== 'system' ? theme : typeof window !== 'undefined' ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light' : 'light');
+    const listRef = React$b.useRef(null);
     const hotkeyLabel = hotkey.join('+').replace(/Key/g, '').replace(/Digit/g, '');
-    const lastFocusedElementRef = React$8.useRef(null);
-    const isFocusWithinRef = React$8.useRef(false);
-    const removeToast = React$8.useCallback((toastToRemove)=>{
+    const lastFocusedElementRef = React$b.useRef(null);
+    const isFocusWithinRef = React$b.useRef(false);
+    const removeToast = React$b.useCallback((toastToRemove)=>{
         setToasts((toasts)=>{
             var _toasts_find;
             if (!((_toasts_find = toasts.find((toast)=>toast.id === toastToRemove.id)) == null ? void 0 : _toasts_find.delete)) {
@@ -29216,7 +29831,7 @@ const Toaster = /*#__PURE__*/ React$8.forwardRef(function Toaster(props, ref) {
             return toasts.filter(({ id })=>id !== toastToRemove.id);
         });
     }, []);
-    React$8.useEffect(()=>{
+    React$b.useEffect(()=>{
         return ToastState.subscribe((toast)=>{
             if (toast.dismiss) {
                 // Prevent batching of other state updates
@@ -29255,7 +29870,7 @@ const Toaster = /*#__PURE__*/ React$8.forwardRef(function Toaster(props, ref) {
     }, [
         toasts
     ]);
-    React$8.useEffect(()=>{
+    React$b.useEffect(()=>{
         if (theme !== 'system') {
             setActualTheme(theme);
             return;
@@ -29298,7 +29913,7 @@ const Toaster = /*#__PURE__*/ React$8.forwardRef(function Toaster(props, ref) {
     }, [
         theme
     ]);
-    React$8.useEffect(()=>{
+    React$b.useEffect(()=>{
         // Ensure expanded is always false when no toasts are present / only one left
         if (toasts.length <= 1) {
             setExpanded(false);
@@ -29306,7 +29921,7 @@ const Toaster = /*#__PURE__*/ React$8.forwardRef(function Toaster(props, ref) {
     }, [
         toasts
     ]);
-    React$8.useEffect(()=>{
+    React$b.useEffect(()=>{
         const handleKeyDown = (event)=>{
             var _listRef_current;
             const isHotkeyPressed = hotkey.every((key)=>event[key] || event.code === key);
@@ -29324,7 +29939,7 @@ const Toaster = /*#__PURE__*/ React$8.forwardRef(function Toaster(props, ref) {
     }, [
         hotkey
     ]);
-    React$8.useEffect(()=>{
+    React$b.useEffect(()=>{
         if (listRef.current) {
             return ()=>{
                 if (lastFocusedElementRef.current) {
@@ -29340,7 +29955,7 @@ const Toaster = /*#__PURE__*/ React$8.forwardRef(function Toaster(props, ref) {
         listRef.current
     ]);
     return(// Remove item from normal navigation flow, only available via hotkey
-    /*#__PURE__*/ React$8.createElement("section", {
+    /*#__PURE__*/ React$b.createElement("section", {
         ref: ref,
         "aria-label": `${containerAriaLabel} ${hotkeyLabel}`,
         tabIndex: -1,
@@ -29352,7 +29967,7 @@ const Toaster = /*#__PURE__*/ React$8.forwardRef(function Toaster(props, ref) {
         var _heights_;
         const [y, x] = position.split('-');
         if (!toasts.length) return null;
-        return /*#__PURE__*/ React$8.createElement("ol", {
+        return /*#__PURE__*/ React$b.createElement("ol", {
             key: position,
             dir: dir === 'auto' ? getDocumentDirection() : dir,
             tabIndex: -1,
@@ -29405,7 +30020,7 @@ const Toaster = /*#__PURE__*/ React$8.forwardRef(function Toaster(props, ref) {
             onPointerUp: ()=>setInteracting(false)
         }, toasts.filter((toast)=>!toast.position && index === 0 || toast.position === position).map((toast, index)=>{
             var _toastOptions_duration, _toastOptions_closeButton;
-            return /*#__PURE__*/ React$8.createElement(Toast, {
+            return /*#__PURE__*/ React$b.createElement(Toast, {
                 key: toast.id,
                 icons: icons,
                 index: index,
@@ -29453,17 +30068,17 @@ const signupFailure = () => ({
   type: SIGNUP_FAILURE,
 });
 
-const {useState: useState$8} = await importShared('react');
+const {useState: useState$b} = await importShared('react');
 
-const {useEffect: useEffect$4} = await importShared('react');
+const {useEffect: useEffect$7} = await importShared('react');
 function RegisterModal({ isOpen, onClose, onCloseAll }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState$8(false);
-  const [shouldReopenRegister, setShouldReopenRegister] = useState$8(false);
-  const [date, setDate] = useState$8(null);
-  const [isCalendarOpen, setIsCalendarOpen] = useState$8(false);
-  const [formData, setFormData] = useState$8({
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState$b(false);
+  const [shouldReopenRegister, setShouldReopenRegister] = useState$b(false);
+  const [date, setDate] = useState$b(null);
+  const [isCalendarOpen, setIsCalendarOpen] = useState$b(false);
+  const [formData, setFormData] = useState$b({
     username: "",
     name: "",
     email: "",
@@ -29472,13 +30087,13 @@ function RegisterModal({ isOpen, onClose, onCloseAll }) {
     password: "",
     confirmPassword: ""
   });
-  const [errors, setErrors] = useState$8({});
-  useEffect$4(() => {
+  const [errors, setErrors] = useState$b({});
+  useEffect$7(() => {
     if (shouldReopenRegister && !isLoginModalOpen) {
       setShouldReopenRegister(false);
     }
   }, [shouldReopenRegister, isLoginModalOpen]);
-  useEffect$4(() => {
+  useEffect$7(() => {
     if (isOpen) {
       setErrors({});
       setFormData({
@@ -29538,13 +30153,15 @@ function RegisterModal({ isOpen, onClose, onCloseAll }) {
       birthdate: date ? format(date, "yyyy-MM-dd") : ""
     };
     dispatch(
-      signup({
-        payload: formDataWithDate
-      }, (response) => {
-        console.log("Signup successful, response:", response);
-        handleClose();
-        navigate(Paths.verifyEmail);
-      })
+      signup(
+        formDataWithDate,
+        // Pass the form data directly, not nested
+        (response) => {
+          console.log("Signup successful, response:", response);
+          handleClose();
+          navigate(Paths.verifyEmail);
+        }
+      )
     );
   };
   const handleSwitchToLogin = () => {
@@ -29713,21 +30330,58 @@ function RegisterModal({ isOpen, onClose, onCloseAll }) {
   ] });
 }
 
-const {useState: useState$7} = await importShared('react');
+const {useState: useState$a,useEffect: useEffect$6,useRef: useRef$3} = await importShared('react');
 function MainLiveSection() {
-  const [selectedMatch, setSelectedMatch] = useState$7(null);
-  const [selectedSport, setSelectedSport] = useState$7(null);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState$7(false);
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState$7(false);
+  const [selectedMatch, setSelectedMatch] = useState$a(null);
+  const [selectedSport, setSelectedSport] = useState$a(null);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState$a(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState$a(false);
+  const selectedRunnerRef = useRef$3(null);
   const updateSelectedMatchOdds = (updatedMatch) => {
     setSelectedMatch((prevMatch) => {
       if (prevMatch && prevMatch.eventId === updatedMatch.eventId) {
+        if (selectedRunnerRef.current && selectedRunnerRef.current.eventId === updatedMatch.eventId) {
+          return {
+            ...updatedMatch,
+            selectedMarket: selectedRunnerRef.current.selectedMarket,
+            selectedRunner: selectedRunnerRef.current.selectedRunner,
+            selectedOdd: selectedRunnerRef.current.selectedOdd
+          };
+        }
         return updatedMatch;
       }
       return prevMatch;
     });
   };
-  const rightEventInfo = selectedMatch ? {
+  const handleRunnerSelect = (runnerInfo) => {
+    selectedRunnerRef.current = runnerInfo;
+    setSelectedMatch((prevMatch) => {
+      if (prevMatch && prevMatch.eventId === runnerInfo.eventId) {
+        return {
+          ...prevMatch,
+          selectedMarket: runnerInfo.selectedMarket,
+          selectedRunner: runnerInfo.selectedRunner,
+          selectedOdd: runnerInfo.selectedOdd
+        };
+      }
+      return prevMatch;
+    });
+  };
+  useEffect$6(() => {
+    if (selectedMatch) {
+      if (selectedRunnerRef.current && selectedRunnerRef.current.eventId !== selectedMatch.eventId) {
+        selectedRunnerRef.current = null;
+      } else if (selectedRunnerRef.current && !selectedMatch.selectedMarket) {
+        setSelectedMatch((prevMatch) => ({
+          ...prevMatch,
+          selectedMarket: selectedRunnerRef.current.selectedMarket,
+          selectedRunner: selectedRunnerRef.current.selectedRunner,
+          selectedOdd: selectedRunnerRef.current.selectedOdd
+        }));
+      }
+    }
+  }, [selectedMatch]);
+  const rightEventInfo = selectedMatch && selectedMatch.selectedMarket ? selectedMatch : selectedMatch ? {
     ...selectedMatch,
     team1: selectedMatch.team1,
     team2: selectedMatch.team2,
@@ -29743,7 +30397,14 @@ function MainLiveSection() {
         onSelectedMatchOddsUpdate: updateSelectedMatchOdds
       }
     ) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 overflow-y-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx(MiddleGameDisplay, { match: selectedMatch, sport: selectedSport }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 overflow-y-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      MiddleGameDisplay,
+      {
+        match: selectedMatch,
+        sport: selectedSport,
+        onRunnerSelect: handleRunnerSelect
+      }
+    ) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-[25%] min-w-[220px] max-w-[320px] overflow-y-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       RightEventInfoSection,
       {
@@ -29777,8 +30438,8 @@ function MainLiveSection() {
   ] });
 }
 
-const React$7 = await importShared('react');
-const {useEffect: useEffect$3,useState: useState$6,useRef: useRef$2} = React$7;
+const React$a = await importShared('react');
+const {useEffect: useEffect$5,useState: useState$9,useRef: useRef$2} = React$a;
 function extractOddsW1W2(markets) {
   const mo = markets?.matchOdds?.[0];
   const r0 = mo?.runners?.[0];
@@ -29828,17 +30489,16 @@ function formatDateTime(value) {
 const LiveCalender = () => {
   const sportDropdownRef = useRef$2(null);
   const winnerDropdownRef = useRef$2(null);
-  const [isDropdownOpen, setIsDropdownOpen] = useState$6(false);
-  const [isWinnerDropdownOpen, setIsWinnerDropdownOpen] = useState$6(false);
-  const [selectedSportKeys, setSelectedSportKeys] = useState$6(["soccer"]);
-  const [selectedWinnerType, setSelectedWinnerType] = useState$6("winner");
-  const [matches, setMatches] = useState$6([]);
-  const [loading, setLoading] = useState$6(false);
-  const [selectedMatch, setSelectedMatch] = useState$6(null);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState$6(false);
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState$6(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState$9(false);
+  const [isWinnerDropdownOpen, setIsWinnerDropdownOpen] = useState$9(false);
+  const [selectedSportKeys, setSelectedSportKeys] = useState$9(["soccer"]);
+  const [selectedWinnerType, setSelectedWinnerType] = useState$9("winner");
+  const [matches, setMatches] = useState$9([]);
+  const [loading, setLoading] = useState$9(false);
+  const [selectedMatch, setSelectedMatch] = useState$9(null);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState$9(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState$9(false);
   const toggleDropdown = () => {
-    console.log("toggleDropdown called, current state:", isDropdownOpen);
     setIsDropdownOpen(!isDropdownOpen);
   };
   const handleDropdownClick = (e) => {
@@ -29847,7 +30507,7 @@ const LiveCalender = () => {
   const handleWinnerDropdownClick = (e) => {
     e.stopPropagation();
   };
-  useEffect$3(() => {
+  useEffect$5(() => {
     const handleClickOutside = (event) => {
       if (sportDropdownRef.current && !sportDropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
@@ -29861,14 +30521,13 @@ const LiveCalender = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
-  useEffect$3(() => {
+  useEffect$5(() => {
     if (selectedSportKeys.length === 0) return;
     setLoading(true);
     const fetchPromises = selectedSportKeys.map((sportKey) => {
       const sportId = SPORT_ID_BY_KEY[sportKey];
       if (!sportId) return Promise.resolve([]);
-      const url = `/events?sport_id=${sportId}&live_matches=false`;
-      return fetch(url, { headers: { accept: "application/json" } }).then((res) => res.json()).then((json) => {
+      return fetchSportsEvents(sportId, false).then((json) => {
         const list = json?.sports ?? [];
         return Array.isArray(list) ? list : [];
       }).catch(() => []);
@@ -30042,7 +30701,13 @@ const LiveCalender = () => {
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-28 px-3 py-2 text-center border-l border-live", children: "-" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-28 px-3 py-2 text-center border-l border-live", children: "W2" })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-3 py-4 text-sm text-live-secondary", children: "Loading…" }) : matches.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-3 py-4 text-sm text-live-secondary", children: "No matches" }) : matches.map((m, idx) => {
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-3 py-4 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center animate-pulse-scale", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-8 h-8", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute w-full h-full rounded-full border-4 border-live-accent border-t-transparent animate-spin" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute w-5 h-5 top-1.5 left-1.5 rounded-full border-4 border-live-primary border-b-transparent animate-spin-reverse" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-2 text-live-primary text-sm font-medium", children: "Loading matches..." })
+        ] }) }) : matches.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-3 py-4 text-sm text-live-secondary", children: "No matches" }) : matches.map((m, idx) => {
           const odds = extractOddsW1W2(m.markets);
           const isSelected = selectedMatch?.eventId === m.eventId;
           const sport = SPORTS.find((s) => s.key === m.sportKey);
@@ -30114,16 +30779,16 @@ const LiveCalender = () => {
   ] });
 };
 
-const React$6 = await importShared('react');
-const {useState: useState$5} = React$6;
+const React$9 = await importShared('react');
+const {useState: useState$8} = React$9;
 
 const Results = () => {
-  const [activeTab, setActiveTab] = useState$5("Live");
-  const [startDate, setStartDate] = useState$5("22.08.2025");
-  const [endDate, setEndDate] = useState$5("22.08.2025");
-  const [selectedSport, setSelectedSport] = useState$5("Football");
-  const [selectedCompetition, setSelectedCompetition] = useState$5("All");
-  const [expandedLeagues, setExpandedLeagues] = useState$5({});
+  const [activeTab, setActiveTab] = useState$8("Live");
+  const [startDate, setStartDate] = useState$8("22.08.2025");
+  const [endDate, setEndDate] = useState$8("22.08.2025");
+  const [selectedSport, setSelectedSport] = useState$8("Football");
+  const [selectedCompetition, setSelectedCompetition] = useState$8("All");
+  const [expandedLeagues, setExpandedLeagues] = useState$8({});
   const leagues = [
     { id: 1, name: "Calcutta Premier Division (India)", icon: "⚽", country: "IN" },
     { id: 2, name: "Club Friendlies (World)", icon: "⚽", country: "WW" },
@@ -30263,8 +30928,8 @@ const Results = () => {
   ] });
 };
 
-const React$5 = await importShared('react');
-const OTPInput = React$5.forwardRef(({
+const React$8 = await importShared('react');
+const OTPInput = React$8.forwardRef(({
   value,
   onChange,
   length = 6,
@@ -30272,7 +30937,7 @@ const OTPInput = React$5.forwardRef(({
   className,
   ...props
 }, ref) => {
-  const inputRefs = React$5.useRef([]);
+  const inputRefs = React$8.useRef([]);
   const handleChange = (elementValue, index) => {
     if (isNaN(elementValue)) return;
     const newOtp = value ? value.split("") : Array(length).fill("");
@@ -30333,19 +30998,19 @@ const OTPInput = React$5.forwardRef(({
 });
 OTPInput.displayName = "OTPInput";
 
-const React$4 = await importShared('react');
-const {useState: useState$4,useEffect: useEffect$2,useRef: useRef$1} = React$4;
+const React$7 = await importShared('react');
+const {useState: useState$7,useEffect: useEffect$4,useRef: useRef$1} = React$7;
 function VerifyEmail() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [verificationCode, setVerificationCode] = useState$4("");
-  const [isLoading, setIsLoading] = useState$4(false);
-  const [isResending, setIsResending] = useState$4(false);
-  const [isVerified, setIsVerified] = useState$4(false);
-  const [isTimerOn, setIsTimerOn] = useState$4(false);
-  const [isInputDisabled, setIsInputDisabled] = useState$4(true);
-  const [timeLeft, setTimeLeft] = useState$4(0);
-  const [verificationStatus, setVerificationStatus] = useState$4("");
+  const [verificationCode, setVerificationCode] = useState$7("");
+  const [isLoading, setIsLoading] = useState$7(false);
+  const [isResending, setIsResending] = useState$7(false);
+  const [isVerified, setIsVerified] = useState$7(false);
+  const [isTimerOn, setIsTimerOn] = useState$7(false);
+  const [isInputDisabled, setIsInputDisabled] = useState$7(true);
+  const [timeLeft, setTimeLeft] = useState$7(0);
+  const [verificationStatus, setVerificationStatus] = useState$7("");
   const timerRef = useRef$1(null);
   const userData = useSelector((state) => state?.Login?.userData);
   const verifyEmailState = useSelector((state) => state?.VerifyEmail);
@@ -30356,7 +31021,6 @@ function VerifyEmail() {
   };
   const handleSendOTP = () => {
     if (!userData?.email) {
-      toast.error("Email not found. Please try logging in again.");
       return;
     }
     setVerificationCode("");
@@ -30377,15 +31041,12 @@ function VerifyEmail() {
   const handleVerifyCode = async (e) => {
     e.preventDefault();
     if (!userData?.email) {
-      toast.error("Email not found. Please try logging in again.");
       return;
     }
     if (!verificationCode.trim()) {
-      toast.error("Please enter the verification code");
       return;
     }
     if (verificationCode.length !== 6) {
-      toast.error("Please enter a 6-digit verification code");
       return;
     }
     setIsLoading(true);
@@ -30407,7 +31068,7 @@ function VerifyEmail() {
       })
     );
   };
-  useEffect$2(() => {
+  useEffect$4(() => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
@@ -30434,21 +31095,12 @@ function VerifyEmail() {
       }
     };
   }, [isTimerOn]);
-  useEffect$2(() => {
-    if (verifyEmailState?.loading) {
-      if (!verifyEmailState?.data?.hasOwnProperty("otp")) {
-        toast.info("Sending OTP to your email...");
-      } else if (verifyEmailState?.data?.hasOwnProperty("otp")) {
-        toast.info("Verifying your code...");
-      }
-    } else if (verifyEmailState?.success) {
-      if (!verifyEmailState?.data?.hasOwnProperty("otp")) {
-        toast.success("OTP sent to your email");
-      } else if (verifyEmailState?.data?.hasOwnProperty("otp")) {
+  useEffect$4(() => {
+    if (verifyEmailState?.loading) ; else if (verifyEmailState?.success) {
+      if (!verifyEmailState?.data?.hasOwnProperty("otp")) ; else if (verifyEmailState?.data?.hasOwnProperty("otp")) {
         setIsLoading(false);
         setVerificationStatus("Verification Success");
         setIsVerified(true);
-        toast.success("Email verified successfully!");
         setLocalStorageItem("showWelcomeModal", "true");
         setTimeout(() => {
           navigate(Paths.home);
@@ -30456,14 +31108,12 @@ function VerifyEmail() {
       }
     } else if (verifyEmailState?.error) {
       if (!verifyEmailState?.data?.hasOwnProperty("otp")) {
-        toast.error("Failed to send OTP. Please try again.");
         setIsInputDisabled(false);
       } else if (verifyEmailState?.data?.hasOwnProperty("otp")) {
-        toast.error("Invalid verification code. Please try again.");
-        setIsInputDisabled(false);
+        setIsLoading(false);
         setVerificationStatus("");
+        setIsInputDisabled(false);
       }
-      setIsLoading(false);
     }
   }, [verifyEmailState, navigate]);
   if (isVerified) {
@@ -30539,16 +31189,16 @@ function VerifyEmail() {
   ] }) }) });
 }
 
-const React$3 = await importShared('react');
-const {useState: useState$3,useEffect: useEffect$1} = React$3;
+const React$6 = await importShared('react');
+const {useState: useState$6,useEffect: useEffect$3} = React$6;
 function ResetPassword() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [password, setPassword] = useState$3("");
-  const [confirmPassword, setConfirmPassword] = useState$3("");
-  const [isLoading, setIsLoading] = useState$3(false);
-  const [token, setToken] = useState$3("");
-  useEffect$1(() => {
+  const [password, setPassword] = useState$6("");
+  const [confirmPassword, setConfirmPassword] = useState$6("");
+  const [isLoading, setIsLoading] = useState$6(false);
+  const [token, setToken] = useState$6("");
+  useEffect$3(() => {
     const searchParams = new URLSearchParams(location.search);
     const tokenParam = searchParams.get("token");
     if (tokenParam) {
@@ -30671,8 +31321,8 @@ var build = {exports: {}};
 
 var buildExports = build.exports;
 
-const React$2 = await importShared('react');
-const {useState: useState$2} = React$2;
+const React$5 = await importShared('react');
+const {useState: useState$5} = React$5;
 const gameCategories = [
   { id: "all", label: "ALL", icon: FaGripHorizontal },
   { id: "monti", label: "MONTI", icon: GiDiamonds },
@@ -30714,8 +31364,8 @@ const gameData = [
   }
 ];
 const Games = () => {
-  const [activeCategory, setActiveCategory] = useState$2("all");
-  const [searchTerm, setSearchTerm] = useState$2("");
+  const [activeCategory, setActiveCategory] = useState$5("all");
+  const [searchTerm, setSearchTerm] = useState$5("");
   const filteredGames = gameData.filter((game) => {
     const matchesCategory = activeCategory === "all" || game.category === activeCategory;
     const matchesSearch = game.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -30788,7 +31438,7 @@ function SecondaryEsportsNavbar() {
   )) });
 }
 
-const {useState: useState$1} = await importShared('react');
+const {useState: useState$4} = await importShared('react');
 const esportsGames = [
   { id: 1, game: "Counter-Strike 2", count: 2, color: "#f97316" },
   // Orange color for CS2
@@ -30838,10 +31488,10 @@ const upcomingMatches = [
   }
 ];
 function MainEsportsSection() {
-  const [selectedGame, setSelectedGame] = useState$1(null);
-  const [searchQuery, setSearchQuery] = useState$1("");
-  const [selectedCategory, setSelectedCategory] = useState$1("All");
-  const [winnerDropdownOpen, setWinnerDropdownOpen] = useState$1(false);
+  const [selectedGame, setSelectedGame] = useState$4(null);
+  const [searchQuery, setSearchQuery] = useState$4("");
+  const [selectedCategory, setSelectedCategory] = useState$4("All");
+  const [winnerDropdownOpen, setWinnerDropdownOpen] = useState$4(false);
   const filteredGames = esportsGames.filter(
     (game) => game.game.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -31067,8 +31717,52 @@ function EsportsStatistics() {
   ] });
 }
 
-const React$1 = await importShared('react');
-const {Suspense,lazy,useMemo} = React$1;
+const React$4 = await importShared('react');
+const {useState: useState$3} = React$4;
+const VirtualSports = () => {
+  const [searchQuery, setSearchQuery] = useState$3("");
+  const handleProviderSearch = (query) => {
+    setSearchQuery(query);
+    console.log("Provider search query:", query);
+  };
+  const handleGameSearch = (query) => {
+    setSearchQuery(query);
+    console.log("Game search query:", query);
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-container", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "virtual-sports-header", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-white mb-4", children: "Virtual Sports" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-400 mb-6", children: "Experience the thrill of virtual sports betting" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      CasinoProvidersGamesSection,
+      {
+        onProviderSearch: handleProviderSearch,
+        onGameSearch: handleGameSearch
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "virtual-sports-content mt-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-gray-800 rounded-lg p-4 text-center", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-gray-700 h-40 rounded mb-3 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-gray-400", children: "Virtual Football" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-white font-semibold", children: "Virtual Football" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-400 text-sm mt-1", children: "Fast-paced virtual football matches" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-gray-800 rounded-lg p-4 text-center", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-gray-700 h-40 rounded mb-3 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-gray-400", children: "Virtual Horse Racing" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-white font-semibold", children: "Virtual Horse Racing" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-400 text-sm mt-1", children: "Exciting virtual horse races" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-gray-800 rounded-lg p-4 text-center", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-gray-700 h-40 rounded mb-3 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-gray-400", children: "Virtual Tennis" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-white font-semibold", children: "Virtual Tennis" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-400 text-sm mt-1", children: "Quick virtual tennis matches" })
+      ] })
+    ] }) })
+  ] });
+};
+
+const React$3 = await importShared('react');
+const {Suspense,lazy,useMemo} = React$3;
 const Homepage = lazy(() => __vitePreload(() => import('./Homepage.js'),true?[]:void 0));
 const NotFound = lazy(() => __vitePreload(() => Promise.resolve().then(() => NotFound$2),true?void 0:void 0));
 const Statistics = () => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { color: "white", padding: 24 }, children: "Statistics Page" });
@@ -31092,7 +31786,8 @@ const AppRouter = () => {
       /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: Paths.esportsEventView, element: /* @__PURE__ */ jsxRuntimeExports.jsx(MainEsportsSection, {}) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: Paths.esportsLiveCalendar, element: /* @__PURE__ */ jsxRuntimeExports.jsx(EsportsCalendar, {}) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: Paths.esportsResults, element: /* @__PURE__ */ jsxRuntimeExports.jsx(EsportsResults, {}) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: Paths.esportsStatistics, element: /* @__PURE__ */ jsxRuntimeExports.jsx(EsportsStatistics, {}) })
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: Paths.esportsStatistics, element: /* @__PURE__ */ jsxRuntimeExports.jsx(EsportsStatistics, {}) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: Paths.virtualSports, element: /* @__PURE__ */ jsxRuntimeExports.jsx(VirtualSports, {}) })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: Paths.verifyEmail, element: /* @__PURE__ */ jsxRuntimeExports.jsx(VerifyEmail, {}) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: Paths.resetPassword, element: /* @__PURE__ */ jsxRuntimeExports.jsx(ResetPassword, {}) }),
@@ -31100,17 +31795,17 @@ const AppRouter = () => {
   ] }) }) });
 };
 
-const React = await importShared('react');
-const {createContext,useContext,useEffect,useRef,useState} = React;
+const React$2 = await importShared('react');
+const {createContext,useContext,useEffect: useEffect$2,useRef,useState: useState$2} = React$2;
 const NotificationContext = createContext(null);
 const useNotification = () => useContext(NotificationContext);
 const DEFAULT_DURATION = 4e3;
 let idCounter = 0;
 function NotificationProvider({ children }) {
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState$2([]);
   const animMs = 300;
   const notificationsRef = useRef(notifications);
-  useEffect(() => {
+  useEffect$2(() => {
     notificationsRef.current = notifications;
   }, [notifications]);
   const _add = ({ type = "info", title = "", message = "", duration = DEFAULT_DURATION, dismissible = true }) => {
@@ -31134,7 +31829,6 @@ function NotificationProvider({ children }) {
     error: (message, title = "Error", duration = 6e3) => _add({ type: "error", title, message, duration }),
     info: (message, title = "Info", duration = DEFAULT_DURATION) => _add({ type: "info", title, message, duration }),
     loading: (message = "Loading...", title = "") => _add({ type: "loading", title, message, duration: null, dismissible: false }),
-    dismiss: (id) => _remove(id),
     notifyPromise: async (promise, options = {}) => {
       const loadingText = options.loadingText || "Please wait...";
       const getSuccessMessage = options.getSuccessMessage || ((res) => res?.data?.meta?.message || res?.data?.message || "Success");
@@ -31156,7 +31850,7 @@ function NotificationProvider({ children }) {
       }
     }
   };
-  useEffect(() => {
+  useEffect$2(() => {
     setNotifier(api);
     return () => setNotifier(null);
   }, []);
@@ -31178,9 +31872,114 @@ function NotificationProvider({ children }) {
   ] });
 }
 
+const React$1 = await importShared('react');
+const {useState: useState$1,useEffect: useEffect$1} = React$1;
+
+const NetworkStatusIndicator = () => {
+  const [isOnline, setIsOnline] = useState$1(navigator.onLine);
+  const [showIndicator, setShowIndicator] = useState$1(false);
+  useEffect$1(() => {
+    const handleOnline = () => {
+      setIsOnline(true);
+      setShowIndicator(true);
+      setTimeout(() => setShowIndicator(false), 3e3);
+    };
+    const handleOffline = () => {
+      setIsOnline(false);
+      setShowIndicator(true);
+    };
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    if (showIndicator) {
+      setTimeout(() => setShowIndicator(false), 3e3);
+    }
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, [showIndicator]);
+  if (!showIndicator && isOnline) {
+    return null;
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `fixed top-4 right-4 z-50 px-4 py-2 rounded-md shadow-lg transition-all duration-300 ${isOnline ? "bg-green-500 text-white" : "bg-red-500 text-white"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `w-3 h-3 rounded-full mr-2 ${isOnline ? "bg-green-200" : "bg-red-200"}` }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-medium", children: isOnline ? "Back online" : "Connection lost" })
+  ] }) });
+};
+
+const React = await importShared('react');
+const {useState,useEffect} = React;
+
+const ServerStatusChecker = () => {
+  const [serverStatus, setServerStatus] = useState("checking");
+  const [lastChecked, setLastChecked] = useState(null);
+  const [showMessage, setShowMessage] = useState(false);
+  const checkServerStatus = async () => {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5e3);
+      const response = await fetch("/api/events?sport_id=sr:sport:1&live_matches=true", {
+        method: "GET",
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+      if (response.ok) {
+        setServerStatus("online");
+      } else {
+        setServerStatus("offline");
+      }
+    } catch (error) {
+      setServerStatus("offline");
+    } finally {
+      setLastChecked(/* @__PURE__ */ new Date());
+    }
+  };
+  useEffect(() => {
+    checkServerStatus();
+    const intervalId = setInterval(() => {
+      checkServerStatus();
+    }, 3e4);
+    return () => clearInterval(intervalId);
+  }, []);
+  useEffect(() => {
+    if (serverStatus === "offline") {
+      setShowMessage(true);
+    }
+  }, [serverStatus]);
+  const handleCloseMessage = () => {
+    setShowMessage(false);
+  };
+  if (!showMessage || serverStatus === "online") {
+    return null;
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed bottom-4 right-4 z-50 max-w-md", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-red-900 border border-red-700 text-white px-4 py-3 rounded relative", role: "alert", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "h-6 w-6 text-red-300", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "2", d: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" }) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "ml-3 flex-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-medium", children: "Server Connection Issues" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-1 text-sm", children: "We're experiencing connection problems with our servers. Some data may be delayed or unavailable. We're working to resolve this issue." }),
+      lastChecked && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "mt-1 text-xs text-red-200", children: [
+        "Last checked: ",
+        lastChecked.toLocaleTimeString()
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        onClick: handleCloseMessage,
+        className: "ml-4 flex-shrink-0 text-red-300 hover:text-white focus:outline-none",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "h-5 w-5", fill: "currentColor", viewBox: "0 0 20 20", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { fillRule: "evenodd", d: "M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z", clipRule: "evenodd" }) })
+      }
+    )
+  ] }) }) });
+};
+
 await importShared('react');
 function LayoutApp() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx(NotificationProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(BrowserRouter, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(AppRouter, {}) }) }) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx(NotificationProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(BrowserRouter, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(AppRouter, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(NetworkStatusIndicator, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ServerStatusChecker, {})
+  ] }) }) });
 }
 
-export { SIGNUP_FAILURE as $, Anchor as A, Button$1 as B, Content$1 as C, DismissableLayer as D, Eye as E, FocusScope as F, GET_USER_DATA as G, Arrow as H, Input as I, composeRefs as J, useNavigate as K, LOGOUT as L, useLocation as M, ChevronDown as N, Overlay as O, Portal$1 as P, useDispatch as Q, Root$2 as R, useSelector as S, Link as T, User as U, RegisterModal as V, LoginModal as W, X, Toaster as Y, NavLink as Z, Outlet as _, LOGOUT_SUCCESS as a, SIGNUP_SUCCESS as a0, SIGNUP as a1, UPDATE_USER_BALANCE_EXPOSURE_SUCCESS as a2, UPDATE_USER_BALANCE_EXPOSURE as a3, LOGIN_FAILURE as a4, LOGIN_SUCCESS as a5, LOGIN as a6, VERIFY_EMAIL_FAILURE as a7, VERIFY_EMAIL_SUCCESS as a8, VERIFY_EMAIL as a9, FaStar as aA, buildExports as aB, useNotification as aC, UPDATE_USER_BALANCE_EXPOSURE_FAILURE as aa, notifyPromise as ab, api as ac, setLocalStorageItem as ad, signupSuccess as ae, loginSuccess as af, signupFailure as ag, loginFailure as ah, verifyEmailSuccess as ai, verifyEmailFailure as aj, removeLocalStorageItem as ak, updateUserBalanceExposureFailure as al, updateUserBalanceExposureSuccess as am, Provider_default as an, ArrowLeft as ao, useLayoutEffect2 as ap, usePrevious as aq, Check as ar, ChevronUp as as, SPORTS as at, ChevronRight as au, SkeletonLoader as av, SPORT_ID_BY_KEY as aw, API_BASE as ax, GenIcon as ay, FaInfoCircle as az, LOGOUT_FAILURE as b, GET_USER_DATA_SUCCESS as c, GET_USER_DATA_FAILURE as d, LayoutApp as default, createLucideIcon as e, createContextScope as f, createSlot as g, cn$1 as h, Close as i, jsxRuntimeExports as j, getLocalStorageItem as k, useId as l, Primitive as m, composeEventHandlers$1 as n, useControllableState as o, useCallbackRef$1 as p, createPopperScope as q, Root2$1 as r, Presence$1 as s, Portal$2 as t, useComposedRefs as u, hideOthers as v, dispatchDiscreteCustomEvent as w, ReactRemoveScroll as x, useFocusGuards as y, Content as z };
+export { SIGNUP_FAILURE as $, Anchor as A, Button$1 as B, Content$1 as C, DismissableLayer as D, Eye as E, FocusScope as F, GET_USER_DATA as G, Arrow as H, Input as I, composeRefs as J, useNavigate as K, LOGOUT as L, useLocation as M, ChevronDown as N, Overlay as O, Portal$1 as P, useDispatch as Q, Root$2 as R, useSelector as S, Link as T, User as U, RegisterModal as V, LoginModal as W, X, Toaster as Y, NavLink as Z, Outlet as _, LOGOUT_SUCCESS as a, SIGNUP_SUCCESS as a0, SIGNUP as a1, UPDATE_USER_BALANCE_EXPOSURE_SUCCESS as a2, UPDATE_USER_BALANCE_EXPOSURE as a3, LOGIN_FAILURE as a4, LOGIN_SUCCESS as a5, LOGIN as a6, VERIFY_EMAIL_FAILURE as a7, VERIFY_EMAIL_SUCCESS as a8, VERIFY_EMAIL as a9, FaStar as aA, buildExports as aB, useNotification as aC, UPDATE_USER_BALANCE_EXPOSURE_FAILURE as aa, notifyPromise as ab, api as ac, setLocalStorageItem as ad, signupSuccess as ae, loginSuccess as af, signupFailure as ag, loginFailure as ah, verifyEmailSuccess as ai, verifyEmailFailure as aj, removeLocalStorageItem as ak, updateUserBalanceExposureFailure as al, updateUserBalanceExposureSuccess as am, Provider_default as an, ArrowLeft as ao, useLayoutEffect2 as ap, usePrevious as aq, Check as ar, ChevronUp as as, SPORTS as at, ChevronRight as au, SkeletonLoader as av, SPORT_ID_BY_KEY as aw, fetchSportsEvents as ax, GenIcon as ay, FaInfoCircle as az, LOGOUT_FAILURE as b, GET_USER_DATA_SUCCESS as c, GET_USER_DATA_FAILURE as d, LayoutApp as default, createLucideIcon as e, createContextScope as f, createSlot as g, cn$1 as h, Close as i, jsxRuntimeExports as j, getLocalStorageItem as k, useId as l, Primitive as m, composeEventHandlers$1 as n, useControllableState as o, useCallbackRef$1 as p, createPopperScope as q, Root2$1 as r, Presence$1 as s, Portal$2 as t, useComposedRefs as u, hideOthers as v, dispatchDiscreteCustomEvent as w, ReactRemoveScroll as x, useFocusGuards as y, Content as z };

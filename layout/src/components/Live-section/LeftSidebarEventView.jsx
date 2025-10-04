@@ -376,11 +376,14 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
         if (selectedGame) {
           const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
           const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
-          setSelectedMatch({
+          const selectedMatchData = {
             ...selectedGame,
             team1,
             team2,
-          });
+            // Ensure sportKey is included for markets API call
+            sportKey: selectedSportKey
+          };
+          setSelectedMatch(selectedMatchData);
         }
         
         // Clear the location state to prevent issues with subsequent navigation
@@ -411,13 +414,14 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
             const firstMatch = matches[0];
             const team1 = firstMatch.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
             const team2 = firstMatch.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
-            setSelectedMatch({
+            const selectedMatchData = {
               ...firstMatch,
               team1,
               team2,
               // Ensure sportKey is included for markets API call
               sportKey: sport.key
-            });
+            };
+            setSelectedMatch(selectedMatchData);
             setSelectedSport(sport);
           }
           break; // Exit after handling the first sport with matches
@@ -438,11 +442,14 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
         if (selectedGame) {
           const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
           const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
-          setSelectedMatch({
+          const selectedMatchData = {
             ...selectedGame,
             team1,
             team2,
-          });
+            // Ensure sportKey is included for markets API call
+            sportKey: selectedSportKey
+          };
+          setSelectedMatch(selectedMatchData);
         }
         
         // Clear pending selection
@@ -585,13 +592,14 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
                             onClick={() => {
                               // Get the latest odds for this match
                               const latestOdds = oddsByEventId[match.eventId] || extractOddsW1W2(match.markets);
-                              setSelectedMatch({
+                              const selectedMatchData = {
                                 ...match,
                                 team1,
                                 team2,
                                 odds: latestOdds, // Include the latest odds in the selected match data
                                 sportKey: sport.key // Include sportKey for markets API call
-                              });
+                              };
+                              setSelectedMatch(selectedMatchData);
                               setSelectedSport(sport);
                             }}
                           />
