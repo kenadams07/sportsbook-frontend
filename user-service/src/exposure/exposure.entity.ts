@@ -6,7 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Users } from '../users/users.entity';
-import { Markets } from 'src/markets/markets.entity';
+import { Markets } from '../markets/markets.entity';
 
 @Entity()
 export class Exposure {

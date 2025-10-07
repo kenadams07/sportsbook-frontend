@@ -25,7 +25,6 @@ async function seedCurrencies() {
   try {
     // Initialize the data source
     await dataSource.initialize();
-    console.log('Data Source has been initialized!');
 
     // Get the currency repository
     const currencyRepository = dataSource.getRepository(Currency);
@@ -47,15 +46,11 @@ async function seedCurrencies() {
       if (!existingCurrency) {
         const currency = currencyRepository.create(currencyData);
         await currencyRepository.save(currency);
-        console.log(`Created currency: ${currency.name} (${currency.code})`);
       } else {
-        console.log(`Currency ${currencyData.name} (${currencyData.code}) already exists`);
       }
     }
 
-    console.log('Currencies seeded successfully!');
   } catch (error) {
-    console.error('Error seeding currencies:', error);
   } finally {
     // Close the data source
     await dataSource.destroy();
@@ -63,6 +58,5 @@ async function seedCurrencies() {
 }
 
 seedCurrencies().catch((error) => {
-  console.error('Error in seedCurrencies:', error);
   process.exit(1);
 });

@@ -7,8 +7,9 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Currency } from '../currency/currency.entity';
-import { Exposure } from 'src/exposure/exposure.entity';
-import { ResultTransaction } from 'src/resultTransaction/resultTransaction.entity';
+import { Exposure } from '../exposure/exposure.entity';
+import { ResultTransaction } from '../resultTransaction/resultTransaction.entity';
+import { SportBets } from '../sportBets/sportBets.entity';
 
 @Entity()
 export class Users {
@@ -101,12 +102,15 @@ export class Users {
   @Column({ default: true })
   betAllow: boolean;
 
-  @OneToMany('SportBets', 'user')
-  sportsBets: 'SportBets'[];
+  @OneToMany(() => SportBets, (sportBets) => sportBets.user)
+  sportsBets: SportBets[];
 
-  @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+  @Column({ type: 'decimal', precision: 15, scale: 2, default: 0, transformer: {
+    to: (value: number) => value,
+    from: (value: string) => value ? parseFloat(value) : 0
+  }})
   exposure: number;
 
-  @OneToMany('ResultTransaction', 'user')
-  resultTransaction: 'ResultTransaction'[];
+  @OneToMany(() => ResultTransaction, (resultTransaction) => resultTransaction.user)
+  resultTransaction: ResultTransaction[];
 }

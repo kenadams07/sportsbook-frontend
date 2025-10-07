@@ -333,7 +333,7 @@ export class UsersController {
         browser_ip: user.browser_ip,
         status: user.status,
         betAllow: user.betAllow,
-        exposure: user.exposure, // Add exposure to the response
+        exposure: user.exposure || 0,
         currency: user.currency ? {
           id: user.currency.id,
           name: user.currency.name,

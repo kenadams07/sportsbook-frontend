@@ -1,5 +1,5 @@
-import { Markets } from 'src/markets/markets.entity';
-import { Users } from 'src/users/users.entity';
+import { Markets } from '../markets/markets.entity';
+import { Users } from '../users/users.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

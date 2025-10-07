@@ -15,9 +15,7 @@ async function seedCurrencies() {
   for (const currency of currencies) {
     try {
       await currencyService.create(currency);
-      console.log(`Created currency: ${currency.name} (${currency.code})`);
     } catch (error) {
-      console.log(`Currency ${currency.name} might already exist`);
     }
   }
 
@@ -25,6 +23,5 @@ async function seedCurrencies() {
 }
 
 seedCurrencies().catch((error) => {
-  console.error('Error seeding currencies:', error);
   process.exit(1);
 });
