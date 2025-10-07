@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   
   server: {
-    port: 5002,
+    port: 3000,
     strictPort: true,
     cors: true,
     fs: {
@@ -66,11 +66,49 @@ export default defineConfig({
         target: 'http://localhost:4001',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/users/, '/users'),
+        configure: (proxy, options) => {
+          proxy.on('error', (err, req, res) => {
+            console.error('Proxy error for /users:', err);
+            res.writeHead(503, {
+              'Content-Type': 'application/json',
+            });
+            res.end(JSON.stringify({
+              error: 'Service Unavailable',
+              message: 'Unable to connect to user server'
+            }));
+          });
+        }
+      },
+      // Proxy for the casino API to avoid CORS issues
+      '/casino-api': {
+        target: 'http://localhost:3005',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/casino-api/, '/api'),
+        configure: (proxy, options) => {
+          proxy.on('error', (err, req, res) => {
+            console.error('Proxy error for /casino-api:', err);
+            res.writeHead(503, {
+              'Content-Type': 'application/json',
+            });
+            res.end(JSON.stringify({
+              error: 'Service Unavailable',
+              message: 'Unable to connect to casino server'
+            }));
+          });
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            // Add timeout to proxy requests
+            proxyReq.setTimeout(15000);
+          });
+          proxy.on('proxyRes', (proxyRes, req, res) => {
+            // Log successful proxy responses for debugging
+            console.log(`Proxy response for ${req.url}: ${proxyRes.statusCode}`);
+          });
+        }
       },
     },
   },
   preview: {
-    port: 5002,
+    port: 3000,
     strictPort: true,
   },
   plugins: [

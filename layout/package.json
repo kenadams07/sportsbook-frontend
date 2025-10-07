@@ -7,7 +7,12 @@
     "build": "vite build",
     "preview": "vite preview",
     "mock-server": "node mockServer.js",
+    "casino-backend": "node casinoBackend.js",
+    "mock-casino-server": "node mockCasinoServer.js",
     "dev:with-mock": "concurrently \"npm run mock-server\" \"npm run dev\"",
+    "dev:with-casino-backend": "concurrently \"npm run casino-backend\" \"npm run dev\"",
+    "dev:with-casino-mock": "concurrently \"npm run mock-casino-server\" \"npm run dev\"",
+    "dev:with-all-mocks": "concurrently \"npm run mock-server\" \"npm run mock-casino-server\" \"npm run dev\"",
     "dev:with-auth-mock": "concurrently \"npm run mock-auth-server\" \"npm run dev\"",
     "mock-auth-server": "node mockServer.js"
   },

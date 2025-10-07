@@ -151,6 +151,34 @@ app.post('/users/forget-password', (req, res) => {
   }, 1000); // Simulate network delay
 });
 
+// Get user profile endpoint
+app.get('/users/profile', (req, res) => {
+  // Simulate network delay
+  setTimeout(() => {
+    // For now, return a mock user profile
+    // In a real app, you would verify the JWT token and fetch user data from database
+    const mockUser = {
+      id: 1,
+      email: 'test@example.com',
+      username: 'testuser',
+      name: 'Test User',
+      birthdate: '1990-01-01',
+      currency: 'GBP',
+      emailVerification: true,
+      balance: 1000,
+      exposure: 0,
+      createdAt: new Date().toISOString()
+    };
+    
+    console.log('User profile requested');
+    return res.json({
+      success: true,
+      message: 'Profile fetched successfully',
+      data: mockUser
+    });
+  }, 500); // Simulate network delay
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Mock server running on http://localhost:${PORT}`);

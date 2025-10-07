@@ -5,6 +5,7 @@ import VerifyEmail from "./auth/verifyEmailSaga";
 import Logout from "./auth/logoutSaga";
 import GetUserData from "./auth/getUserDataSaga";
 import UpdateUserBalanceExposure from "./auth/updateUserBalanceExposureSaga";
+import CasinoGames from "./casinoSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -14,5 +15,6 @@ export default function* rootSaga() {
     Logout(),
     GetUserData(),
     UpdateUserBalanceExposure(),
+    CasinoGames(),
   ]);
 }

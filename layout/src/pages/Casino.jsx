@@ -14,68 +14,6 @@ const GameCategoryButton = ({ icon, label, isActive, onClick }) => (
   </div>
 );
 
-const GameCard = ({ image, title, description }) => (
-  <div className="casino-game-card group">
-    <img 
-      src={image} 
-      alt={title} 
-      className="casino-game-card-img"
-    />
-    <div className="casino-game-overlay">
-      <h3 className="casino-game-title">{title}</h3>
-      <p className="casino-game-description">{description}</p>
-      <button className="casino-play-button">
-        Play Now
-      </button>
-    </div>
-    <div className="casino-age-badge">
-      +18
-    </div>
-    <div className="casino-game-name-bottom">
-      <p className="casino-game-name-bottom-text">{title}</p>
-    </div>
-  </div>
-);
-
-const casinoGames = [
-  {
-    id: 1,
-    title: 'Olympus Hades Megaways',
-    image: 'https://placehold.co/300x200/2a2a2a/FFA500?text=Olympus+Hades',
-    description: 'Ancient Greek mythology themed game'
-  },
-  {
-    id: 2,
-    title: 'Fortune Tiger',
-    image: 'https://placehold.co/300x200/2a2a2a/FF5500?text=Fortune+Tiger',
-    description: 'Asian-inspired slots game'
-  },
-  {
-    id: 3,
-    title: 'Wolf Gold',
-    image: 'https://placehold.co/300x200/2a2a2a/CCCCCC?text=Wolf+Gold',
-    description: 'Wildlife themed slots with bonus features'
-  },
-  {
-    id: 4,
-    title: 'Book of Dead',
-    image: 'https://placehold.co/300x200/2a2a2a/FFCC00?text=Book+of+Dead',
-    description: 'Ancient Egyptian adventure'
-  },
-  {
-    id: 5,
-    title: "Gonzo's Quest",
-    image: 'https://placehold.co/300x200/2a2a2a/00AAFF?text=Gonzo+Quest',
-    description: 'Search for El Dorado with cascading reels'
-  },
-  {
-    id: 6,
-    title: 'Starburst',
-    image: 'https://placehold.co/300x200/2a2a2a/FF00FF?text=Starburst',
-    description: 'Colorful cosmic slot with expanding wilds'
-  }
-];
-
 const Casino = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -163,11 +101,6 @@ const Casino = () => {
           </div>
         </div>
 
-        {/* Responsible Gaming Message */}
-        <div className="casino-responsible-gaming">
-          <h2>PLEASE GAMBLE RESPONSIBLY</h2>
-          <p>BEGAMBLEAWARE.ORG</p>
-        </div>
       </div>
 
       {/* Game Categories */}
@@ -190,28 +123,6 @@ const Casino = () => {
         onProviderSearch={handleProviderSearch}
         onGameSearch={handleGameSearch}
       />
-
-      {/* Game Grid */}
-      <div className="casino-game-grid-container">
-        <div className="casino-game-grid-flex">
-          {/* Empty space to align with PROVIDERS width - hidden on mobile */}
-          <div className="casino-providers-placeholder"></div>
-          
-          {/* Game Cards aligned with GAMES section */}
-          <div className="casino-games-container">
-            <div className="casino-games-grid">
-              {casinoGames.map(game => (
-                <GameCard 
-                  key={game.id}
-                  title={game.title}
-                  image={game.image}
-                  description={game.description}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
