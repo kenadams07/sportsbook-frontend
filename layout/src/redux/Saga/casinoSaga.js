@@ -12,7 +12,13 @@ import {
   FETCH_CASINO_PROVIDERS_FAILURE,
   FETCH_MORE_CASINO_PROVIDERS,
   FETCH_MORE_CASINO_PROVIDERS_SUCCESS,
-  FETCH_MORE_CASINO_PROVIDERS_FAILURE
+  FETCH_MORE_CASINO_PROVIDERS_FAILURE,
+  FETCH_HOMEPAGE_CASINO_GAMES,
+  FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS,
+  FETCH_HOMEPAGE_CASINO_GAMES_FAILURE,
+  FETCH_HOMEPAGE_LIVE_GAMES,
+  FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS,
+  FETCH_HOMEPAGE_LIVE_GAMES_FAILURE
 } from "../Action/actionTypes";
 import {
   fetchCasinoGamesSuccess,
@@ -22,7 +28,11 @@ import {
   fetchCasinoProvidersSuccess,
   fetchCasinoProvidersFailure,
   fetchMoreCasinoProvidersSuccess,
-  fetchMoreCasinoProvidersFailure
+  fetchMoreCasinoProvidersFailure,
+  fetchHomepageCasinoGamesSuccess,
+  fetchHomepageCasinoGamesFailure,
+  fetchHomepageLiveGamesSuccess,
+  fetchHomepageLiveGamesFailure
 } from "../Action/casinoActions";
 
 // Worker saga to fetch casino providers
@@ -80,7 +90,7 @@ function* fetchCasinoGamesRequest(action) {
   console.log('fetchCasinoGamesRequest saga called with action:', action);
   
   try {
-    const { batchNumber = 0, batchSize = 100, providerName = 'all', search = '' } = action.payload;
+    const { batchNumber = 0, batchSize = 50, providerName = 'all', search = '' } = action.payload;
     
     console.log('Fetching casino games with:', { batchNumber, batchSize, providerName, search });
     
@@ -126,7 +136,7 @@ function* fetchMoreCasinoGamesRequest(action) {
   console.log('fetchMoreCasinoGamesRequest saga called with action:', action);
   
   try {
-    const { batchNumber, batchSize = 100, providerName = 'all', search = '' } = action.payload;
+    const { batchNumber, batchSize = 50, providerName = 'all', search = '' } = action.payload;
     
     console.log('Fetching more casino games with:', { batchNumber, batchSize, providerName, search });
     
@@ -179,6 +189,88 @@ function* fetchMoreCasinoGamesRequest(action) {
   }
 }
 
+// Worker saga to fetch homepage casino games (SUNO provider)
+function* fetchHomepageCasinoGamesRequest(action) {
+  console.log('fetchHomepageCasinoGamesRequest saga called with action:', action);
+  
+  try {
+    const { batchNumber = 0, batchSize = 5, providerName = 'SUNO', search = '' } = action.payload;
+    
+    console.log('Fetching homepage casino games with:', { batchNumber, batchSize, providerName, search });
+    
+    // Make API call to fetch games with pagination
+    const response = yield call(fetchGames, batchNumber, batchSize, providerName, search);
+    
+    console.log('API response for homepage casino games:', response);
+    
+    // Check if response is successful
+    if (response?.status === "success") {
+      // Dispatch success action with the data
+      yield put(fetchHomepageCasinoGamesSuccess({
+        data: response.data,
+        pagination: {
+          hasMore: response.pagination?.hasMore || false,
+          batchNumber: response.pagination?.batchNumber || batchNumber,
+          batchSize: response.pagination?.batchSize || batchSize,
+          providerName: response.pagination?.providerName || providerName,
+          search: response.pagination?.searchQuery || search
+        }
+      }));
+    } else {
+      // Dispatch failure action with error message
+      const errorMessage = response?.message || "Failed to fetch homepage casino games";
+      console.error('Failed to fetch homepage casino games:', errorMessage);
+      yield put(fetchHomepageCasinoGamesFailure(errorMessage));
+    }
+  } catch (error) {
+    // Dispatch failure action with error message
+    const errorMessage = error.response?.data?.message || error.message || "Failed to fetch homepage casino games";
+    console.error('Error fetching homepage casino games:', errorMessage);
+    yield put(fetchHomepageCasinoGamesFailure(errorMessage));
+  }
+}
+
+// Worker saga to fetch homepage live games (SPRIBE provider)
+function* fetchHomepageLiveGamesRequest(action) {
+  console.log('fetchHomepageLiveGamesRequest saga called with action:', action);
+  
+  try {
+    const { batchNumber = 0, batchSize = 5, providerName = 'SPRIBE', search = '' } = action.payload;
+    
+    console.log('Fetching homepage live games with:', { batchNumber, batchSize, providerName, search });
+    
+    // Make API call to fetch games with pagination
+    const response = yield call(fetchGames, batchNumber, batchSize, providerName, search);
+    
+    console.log('API response for homepage live games:', response);
+    
+    // Check if response is successful
+    if (response?.status === "success") {
+      // Dispatch success action with the data
+      yield put(fetchHomepageLiveGamesSuccess({
+        data: response.data,
+        pagination: {
+          hasMore: response.pagination?.hasMore || false,
+          batchNumber: response.pagination?.batchNumber || batchNumber,
+          batchSize: response.pagination?.batchSize || batchSize,
+          providerName: response.pagination?.providerName || providerName,
+          search: response.pagination?.searchQuery || search
+        }
+      }));
+    } else {
+      // Dispatch failure action with error message
+      const errorMessage = response?.message || "Failed to fetch homepage live games";
+      console.error('Failed to fetch homepage live games:', errorMessage);
+      yield put(fetchHomepageLiveGamesFailure(errorMessage));
+    }
+  } catch (error) {
+    // Dispatch failure action with error message
+    const errorMessage = error.response?.data?.message || error.message || "Failed to fetch homepage live games";
+    console.error('Error fetching homepage live games:', errorMessage);
+    yield put(fetchHomepageLiveGamesFailure(errorMessage));
+  }
+}
+
 // Watcher saga to watch for FETCH_CASINO_PROVIDERS action
 export function* watchFetchCasinoProviders() {
   console.log('watchFetchCasinoProviders saga started');
@@ -203,6 +295,18 @@ export function* watchFetchMoreCasinoGames() {
   yield takeEvery(FETCH_MORE_CASINO_GAMES, fetchMoreCasinoGamesRequest);
 }
 
+// Watcher saga to watch for FETCH_HOMEPAGE_CASINO_GAMES action
+export function* watchFetchHomepageCasinoGames() {
+  console.log('watchFetchHomepageCasinoGames saga started');
+  yield takeEvery(FETCH_HOMEPAGE_CASINO_GAMES, fetchHomepageCasinoGamesRequest);
+}
+
+// Watcher saga to watch for FETCH_HOMEPAGE_LIVE_GAMES action
+export function* watchFetchHomepageLiveGames() {
+  console.log('watchFetchHomepageLiveGames saga started');
+  yield takeEvery(FETCH_HOMEPAGE_LIVE_GAMES, fetchHomepageLiveGamesRequest);
+}
+
 // Root saga
 export default function* casinoSaga() {
   console.log('casinoSaga root saga started');
@@ -210,6 +314,8 @@ export default function* casinoSaga() {
     watchFetchCasinoProviders(), 
     watchFetchMoreCasinoProviders(),
     watchFetchCasinoGames(), 
-    watchFetchMoreCasinoGames()
+    watchFetchMoreCasinoGames(),
+    watchFetchHomepageCasinoGames(),
+    watchFetchHomepageLiveGames()
   ]);
 }

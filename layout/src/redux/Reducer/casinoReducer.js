@@ -11,7 +11,13 @@ import {
   FETCH_MORE_CASINO_PROVIDERS,
   FETCH_MORE_CASINO_PROVIDERS_SUCCESS,
   FETCH_MORE_CASINO_PROVIDERS_FAILURE,
-  RESET_CASINO_GAMES
+  RESET_CASINO_GAMES,
+  FETCH_HOMEPAGE_CASINO_GAMES,
+  FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS,
+  FETCH_HOMEPAGE_CASINO_GAMES_FAILURE,
+  FETCH_HOMEPAGE_LIVE_GAMES,
+  FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS,
+  FETCH_HOMEPAGE_LIVE_GAMES_FAILURE
 } from "../Action/actionTypes";
 
 const INIT_STATE = {
@@ -20,6 +26,16 @@ const INIT_STATE = {
   loadingGames: false,
   loadingMoreGames: false,
   gamesError: null,
+  
+  // Homepage Casino Games state (SUNO provider)
+  homepageCasinoGames: [],
+  loadingHomepageCasinoGames: false,
+  homepageCasinoGamesError: null,
+  
+  // Homepage Live Games state (SPRIBE provider)
+  homepageLiveGames: [],
+  loadingHomepageLiveGames: false,
+  homepageLiveGamesError: null,
   
   // Providers state
   providers: [],
@@ -31,7 +47,7 @@ const INIT_STATE = {
   pagination: {
     hasMore: true,
     batchNumber: 0,
-    batchSize: 100,
+    batchSize: 50,
     providerName: 'all',
     search: '',
   },
@@ -173,6 +189,58 @@ const casinoReducer = (state = INIT_STATE, action) => {
           batchNumber: 0,
           search: '',
         }
+      };
+      
+    // Homepage Casino Games Actions (SUNO provider)
+    case FETCH_HOMEPAGE_CASINO_GAMES:
+      console.log('Fetching homepage casino games action dispatched');
+      
+      return { 
+        ...state, 
+        loadingHomepageCasinoGames: true, 
+        homepageCasinoGamesError: null
+      };
+    case FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS:
+      console.log('Homepage casino games fetched successfully:', action.payload);
+      
+      return {
+        ...state,
+        loadingHomepageCasinoGames: false,
+        homepageCasinoGames: action.payload.data || action.payload,
+        homepageCasinoGamesError: null,
+      };
+    case FETCH_HOMEPAGE_CASINO_GAMES_FAILURE:
+      return { 
+        ...state, 
+        loadingHomepageCasinoGames: false, 
+        homepageCasinoGamesError: action.payload,
+        homepageCasinoGames: [],
+      };
+      
+    // Homepage Live Games Actions (SPRIBE provider)
+    case FETCH_HOMEPAGE_LIVE_GAMES:
+      console.log('Fetching homepage live games action dispatched');
+      
+      return { 
+        ...state, 
+        loadingHomepageLiveGames: true, 
+        homepageLiveGamesError: null
+      };
+    case FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS:
+      console.log('Homepage live games fetched successfully:', action.payload);
+      
+      return {
+        ...state,
+        loadingHomepageLiveGames: false,
+        homepageLiveGames: action.payload.data || action.payload,
+        homepageLiveGamesError: null,
+      };
+    case FETCH_HOMEPAGE_LIVE_GAMES_FAILURE:
+      return { 
+        ...state, 
+        loadingHomepageLiveGames: false, 
+        homepageLiveGamesError: action.payload,
+        homepageLiveGames: [],
       };
       
     // Providers Actions

@@ -11,7 +11,13 @@ import {
   FETCH_MORE_CASINO_PROVIDERS,
   FETCH_MORE_CASINO_PROVIDERS_SUCCESS,
   FETCH_MORE_CASINO_PROVIDERS_FAILURE,
-  RESET_CASINO_GAMES
+  RESET_CASINO_GAMES,
+  FETCH_HOMEPAGE_CASINO_GAMES,
+  FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS,
+  FETCH_HOMEPAGE_CASINO_GAMES_FAILURE,
+  FETCH_HOMEPAGE_LIVE_GAMES,
+  FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS,
+  FETCH_HOMEPAGE_LIVE_GAMES_FAILURE
 } from "./actionTypes";
 
 // Games Actions
@@ -67,6 +73,62 @@ export const fetchMoreCasinoGamesFailure = (error) => {
   
   return {
     type: FETCH_MORE_CASINO_GAMES_FAILURE,
+    payload: error,
+  };
+};
+
+// Homepage Casino Games Actions (SUNO provider)
+export const fetchHomepageCasinoGames = (params = {}) => {
+  console.log('fetchHomepageCasinoGames action called with params:', params);
+  
+  return {
+    type: FETCH_HOMEPAGE_CASINO_GAMES,
+    payload: params,
+  };
+};
+
+export const fetchHomepageCasinoGamesSuccess = (payload) => {
+  console.log('fetchHomepageCasinoGamesSuccess action called with payload:', payload);
+  
+  return {
+    type: FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS,
+    payload,
+  };
+};
+
+export const fetchHomepageCasinoGamesFailure = (error) => {
+  console.log('fetchHomepageCasinoGamesFailure action called with error:', error);
+  
+  return {
+    type: FETCH_HOMEPAGE_CASINO_GAMES_FAILURE,
+    payload: error,
+  };
+};
+
+// Homepage Live Games Actions (SPRIBE provider)
+export const fetchHomepageLiveGames = (params = {}) => {
+  console.log('fetchHomepageLiveGames action called with params:', params);
+  
+  return {
+    type: FETCH_HOMEPAGE_LIVE_GAMES,
+    payload: params,
+  };
+};
+
+export const fetchHomepageLiveGamesSuccess = (payload) => {
+  console.log('fetchHomepageLiveGamesSuccess action called with payload:', payload);
+  
+  return {
+    type: FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS,
+    payload,
+  };
+};
+
+export const fetchHomepageLiveGamesFailure = (error) => {
+  console.log('fetchHomepageLiveGamesFailure action called with error:', error);
+  
+  return {
+    type: FETCH_HOMEPAGE_LIVE_GAMES_FAILURE,
     payload: error,
   };
 };
