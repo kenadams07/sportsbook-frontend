@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { SportBetsService } from './sportBets.service';
 import { SportBets } from './sportBets.entity';
 
@@ -9,6 +9,22 @@ export class SportBetsController {
   @Get()
   findAll(): Promise<SportBets[]> {
     return this.sportBetsService.findAll();
+  }
+
+  @Get('my-bets')
+  findUserBets(
+    @Query('userId') userId: string,
+    @Query('eventId') eventId?: string
+  ) {
+    if (!userId) {
+      throw new Error('User ID is required');
+    }
+
+    if (eventId) {
+      return this.sportBetsService.findByUserIdAndEventId(userId, eventId);
+    }
+
+    return this.sportBetsService.findByUserId(userId);
   }
 
   @Post()

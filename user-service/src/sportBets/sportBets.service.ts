@@ -26,6 +26,29 @@ export class SportBetsService {
     return this.sportBetsRepository.find();
   }
 
+  findByUserId(userId: string): Promise<SportBets[]> {
+    return this.sportBetsRepository.find({
+      where: {
+        user: { id: userId }
+      },
+      order: {
+        createdAt: 'DESC'
+      }
+    });
+  }
+
+  findByUserIdAndEventId(userId: string, eventId: string): Promise<SportBets[]> {
+    return this.sportBetsRepository.find({
+      where: {
+        user: { id: userId },
+        eventId: eventId
+      },
+      order: {
+        createdAt: 'DESC'
+      }
+    });
+  }
+
   create(sportBet: Partial<SportBets>): Promise<SportBets> {
     return this.sportBetsRepository.save(sportBet);
   }
