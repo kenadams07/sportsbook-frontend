@@ -10,7 +10,7 @@ function* signupRequest(action) {
   try {
     // Extract the actual payload from the action
     const  payload  = action.payload || action;
-    console.log("action.payload in signup saga", payload);
+    // Removed console.log("action.payload in signup saga", payload);
     
     const data = yield call(() =>
       notifyPromise(() => API.post("/users/signup", payload), {
@@ -38,7 +38,7 @@ function* signupRequest(action) {
           // Handle success callback
         },
         onError: (err) => {
-          console.log("Signup failed:", err);
+          // Removed console.log("Signup failed:", err);
         }
       })
     );
@@ -58,7 +58,7 @@ function* signupRequest(action) {
     }
 
   } catch (error) {
-    console.error("Signup error caught in saga:", error);
+    // Removed console.error("Signup error caught in saga:", error);
     yield put(signupFailure());
   }
 }

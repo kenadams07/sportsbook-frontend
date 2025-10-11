@@ -23,7 +23,7 @@ function* logoutRequest(action) {
     // Redirect to home page immediately
     window.location.href = "/home";
   } catch (error) {
-    console.error("Logout error:", error);
+    // Removed console.error("Logout error:", error);
     yield put(logoutFailure());
   }
 }

@@ -1850,7 +1850,7 @@ function* signupRequest(action) {
   try {
     // Extract the actual payload from the action
     const  payload  = action.payload || action;
-    console.log("action.payload in signup saga", payload);
+
     
     const data = yield call(() =>
       notifyPromise(() => api.post("/users/signup", payload), {
@@ -1878,7 +1878,7 @@ function* signupRequest(action) {
           // Handle success callback
         },
         onError: (err) => {
-          console.log("Signup failed:", err);
+      
         }
       })
     );
@@ -1934,10 +1934,10 @@ function* loginRequest(action) {
         },
         successDuration: 4000,
         onSuccess: (res) => {
-          console.log("Login succeeded:", res.data);
+  
         },
         onError: (err) => {
-          console.log("Login failed:", err);
+       
         }
       })
     );

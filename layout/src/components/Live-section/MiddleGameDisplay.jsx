@@ -510,12 +510,12 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
           return;
         }
         
-        console.error("Error fetching markets data:", error);
+        // Removed console.error("Error fetching markets data:", error);
         // Only reset markets if there was an actual error and we have previous data
         // This prevents clearing the UI when there are temporary network issues
         if (prevMarketsRef.current.length > 0) {
           // Keep existing markets data instead of clearing it
-          console.warn("Keeping existing markets data due to network error");
+          // Removed console.warn("Keeping existing markets data due to network error");
         }
         setLoading(false);
       }
@@ -536,11 +536,11 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
         try {
           fetchMarkets();
         } catch (error) {
-          console.error("Error in markets polling interval:", error);
+          // Removed console.error("Error in markets polling interval:", error);
         }
       }, 1000);
     } catch (error) {
-      console.error("Error setting up markets polling interval:", error);
+      // Removed console.error("Error setting up markets polling interval:", error);
     }
 
     // Clean up on selectedMatch change or component unmount
@@ -601,43 +601,45 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
     );
   }
 
-  if (markets.length === 0) {
+  // Show empty state when no markets
+  if (filteredMarkets.length === 0) {
     return (
-      <div className="text-live-primary p-4">
-        <div className="text-center py-4">No markets available for this event</div>
+      <div className="text-live-primary p-4 flex items-center justify-center h-full">
+        <div className="text-center">
+          <div className="text-lg font-bold mb-2">No Markets Available</div>
+          <div className="text-sm text-live-muted">There are currently no markets for this event</div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="text-live-primary flex flex-col h-full">
-      {/* Parent Market Header - Enhanced styling with theme colors */}
-      <button
-        type="button"
-        onClick={toggleAllMarkets}
-        className="w-full flex items-center justify-between px-3 py-2 hover:opacity-90 transition-opacity bg-gradient-to-r from-live-primary to-live-secondary shadow-md flex-shrink-0"
-      >
-        <span className="text-sm font-bold tracking-wide text-live-accent">Market</span>
-        <div className="flex items-center gap-3">
-          <span className="text-xs opacity-80 text-live-accent">{filteredMarkets.length} panels</span>
-          {allMarketsExpanded ? (
-            <IoChevronUp className="w-5 h-5 text-live-accent" />
-          ) : (
-            <IoChevronDown className="w-5 h-5 text-live-accent" />
-          )}
-        </div>
-      </button>
+    <div className="flex flex-col h-full">
+      {/* Expand/Collapse All button */}
+      <div className="px-2 pb-2">
+        <button
+          onClick={toggleAllMarkets}
+          className="w-full text-left px-3 py-2 text-xs bg-live-primary hover:bg-live-hover rounded transition-colors flex items-center justify-between"
+        >
+          <span className="text-live-primary font-medium">
+            {allMarketsExpanded ? "Collapse All" : "Expand All"} Markets
+          </span>
+          <span className="text-live-accent text-xs">
+            {filteredMarkets.length} markets
+          </span>
+        </button>
+      </div>
 
-      {/* Responsive 2-column layout - Scrollable area */}
-      <div className="flex-grow overflow-y-auto custom-scrollbar">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-2 bg-gradient-to-br from-live-tertiary to-live-secondary rounded-b-md">
+      {/* Two-column layout for markets */}
+      <div className="flex-grow overflow-y-auto px-2">
+        <div className="flex gap-3 h-full">
           {/* Left column */}
-          <div className="space-y-2">
+          <div className="flex-1 space-y-2">
             {leftColumn.map((market) => (
               <MarketItem
                 key={market.id}
                 market={market}
-                isOpen={!!expandedById[market.id]}
+                isOpen={expandedById[market.id] ?? false}
                 onToggle={() => toggleMarket(market.id)}
                 highlightedOdds={highlightedOddsRef.current}
                 onRunnerSelect={onRunnerSelect}
@@ -645,14 +647,14 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
               />
             ))}
           </div>
-
+          
           {/* Right column */}
-          <div className="space-y-2">
+          <div className="flex-1 space-y-2">
             {rightColumn.map((market) => (
               <MarketItem
                 key={market.id}
                 market={market}
-                isOpen={!!expandedById[market.id]}
+                isOpen={expandedById[market.id] ?? false}
                 onToggle={() => toggleMarket(market.id)}
                 highlightedOdds={highlightedOddsRef.current}
                 onRunnerSelect={onRunnerSelect}
@@ -666,92 +668,27 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
   );
 }
 
-// SleekNavbar component (unchanged core behavior)
+/**
+ * SleekNavbar Component - Search bar with clear button
+ */
 function SleekNavbar({ onSearchChange, searchValue, onSearchClear }) {
-  const [searchActive, setSearchActive] = useState(false);
-  const [activeTab, setActiveTab] = useState("All");
-
   return (
-    <div
-      className={`sleek-navbar shadow-md p-2 flex items-center gap-4 transition-all duration-300 bg-live-hover ${
-        searchActive ? "navbar-search-active" : ""
-      }`}
-    >
-      {!searchActive ? (
-        <>
-          {/* Search Icon */}
-          <button
-            className="search-icon-btn flex items-center justify-center w-9 h-9 hover:bg-live-primary transition-colors"
-            onClick={() => setSearchActive(true)}
-            aria-label="Search"
-          >
-            <IoSearchOutline className="h-5 w-5 text-live-primary " />
-          </button>
-          {/* Tabs: All, Match, Totals */}
-          <div className="flex gap-6">
-            <button
-              className={`py-2 px-1 text-sm font-semibold transition-all duration-200 relative cursor-pointer ${
-                activeTab === "All" ? "text-live-accent border-b-2 border-yellow-500 pb-1" : "text-live-secondary hover:text-live-primary"
-              }`}
-              onClick={() => setActiveTab("All")}
-            >
-              All
-              {activeTab === "All" && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-live-accent"></div>
-              )}
-            </button>
-            <button
-              className={`py-2 px-1 text-sm font-semibold transition-all duration-200 relative cursor-pointer ${
-                activeTab === "Match" ? "text-live-accent border-b-2 border-yellow-500 pb-1" : "text-live-secondary hover:text-live-primary"
-              }`}
-              onClick={() => setActiveTab("Match")}
-            >
-              Match
-              {activeTab === "Match" && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-live-accent"></div>
-              )}
-            </button>
-            <button
-              className={`py-2 px-1 text-sm font-semibold transition-all duration-200 relative cursor-pointer ${
-                activeTab === "Totals" ? "text-live-accent border-b-2 border-yellow-500 pb-1" : "text-live-secondary hover:text-live-primary"
-              }`}
-              onClick={() => setActiveTab("Totals")}
-            >
-              Totals
-              {activeTab === "Totals" && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-live-accent"></div>
-              )}
-            </button>
-          </div>
-        </>
-      ) : (
-        <>
-          {/* Close Icon - replaces search icon when search is active */}
-          <button
-            className="search-icon-btn flex items-center justify-center w-9 h-9 hover:bg-live-primary transition-colors"
-            onClick={() => {
-              setSearchActive(false);
-              onSearchClear();
-            }}
-            aria-label="Close search"
-          >
-            <IoCloseOutline className="h-5 w-5 text-live-primary" />
-          </button>
-          {/* Search Input */}
-          <div className="relative flex-1 w-full">
-            <input
-              type="text"
-              autoFocus
-              value={searchValue}
-              onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Search markets..."
-              className="w-full p-2 pl-10 pr-4 border border-live-accent focus:outline-none focus:ring-1 focus:ring-live-accent focus:border-live-accent bg-live-tertiary text-live-primary transition-all duration-300"
-            />
-            <span className="absolute left-3 top-2.5 text-live-muted">
-              <IoSearchOutline className="h-5 w-5" />
-            </span>
-          </div>
-        </>
+    <div className="bg-live-tertiary rounded-md px-3 py-2 flex items-center gap-2">
+      <IoSearchOutline className="text-live-primary flex-shrink-0" />
+      <input
+        type="text"
+        placeholder="Search markets or runners..."
+        className="flex-grow bg-transparent text-sm text-live-primary placeholder:text-live-muted focus:outline-none"
+        value={searchValue}
+        onChange={(e) => onSearchChange(e.target.value)}
+      />
+      {searchValue && (
+        <button
+          onClick={onSearchClear}
+          className="text-live-primary hover:text-live-accent flex-shrink-0"
+        >
+          <IoCloseOutline size={18} />
+        </button>
       )}
     </div>
   );

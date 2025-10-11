@@ -49,7 +49,7 @@ app.post('/users/signup', (req, res) => {
     
     users.push(newUser);
     
-    console.log('New user registered:', newUser);
+    // Removed console.log('New user registered:', newUser);
     
     return res.json({
       success: true,
@@ -86,7 +86,7 @@ app.post('/users/login', (req, res) => {
     // In a real app, you would verify the password here
     // For mock purposes, we'll just assume it's correct
     
-    console.log('User logged in:', user);
+    // Removed console.log('User logged in:', user);
     
     return res.json({
       success: true,
@@ -105,7 +105,7 @@ app.post('/users/verifyemail', (req, res) => {
   setTimeout(() => {
     if (type === 'requestOTP') {
       // Simulate sending OTP
-      console.log('Sending OTP to user email');
+      // Removed console.log('Sending OTP to user email');
       return res.json({
         meta: { code: 200, message: 'OTP sent successfully' },
         data: { type: 'requestOTP', message: 'OTP sent to your email' }
@@ -113,7 +113,7 @@ app.post('/users/verifyemail', (req, res) => {
     } else if (type === 'submitOTP') {
       // Simulate OTP verification
       if (OTP === '123456') { // For testing, use 123456 as valid OTP
-        console.log('OTP verified successfully');
+        // Removed console.log('OTP verified successfully');
         return res.json({
           meta: { code: 200, message: 'Email verified successfully' },
           data: { 
@@ -123,7 +123,7 @@ app.post('/users/verifyemail', (req, res) => {
           }
         });
       } else {
-        console.log('Invalid OTP provided');
+        // Removed console.log('Invalid OTP provided');
         return res.status(400).json({
           meta: { code: 400, message: 'Invalid OTP' },
           data: { type: 'submitOTP', message: 'Invalid verification code' }
@@ -143,7 +143,7 @@ app.post('/users/verifyemail', (req, res) => {
 app.post('/users/forget-password', (req, res) => {
   // Simulate network delay
   setTimeout(() => {
-    console.log('Forget password request received');
+    // Removed console.log('Forget password request received');
     return res.json({
       meta: { code: 200, message: 'Password reset instructions sent' },
       data: { message: 'Password reset instructions sent to your email' }
@@ -170,7 +170,7 @@ app.get('/users/profile', (req, res) => {
       createdAt: new Date().toISOString()
     };
     
-    console.log('User profile requested');
+    // Removed console.log('User profile requested');
     return res.json({
       success: true,
       message: 'Profile fetched successfully',
@@ -181,11 +181,11 @@ app.get('/users/profile', (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Mock server running on http://localhost:${PORT}`);
-  console.log('Available endpoints:');
-  console.log('- POST /users/signup (for user registration)');
-  console.log('- POST /users/login (for user login)');
-  console.log('- POST /users/verifyemail (for email verification)');
-  console.log('- POST /users/forget-password (for password reset)');
-  console.log('Test valid OTP: 123456');
+  // Removed console.log(`Mock server running on http://localhost:${PORT}`);
+  // Removed console.log('Available endpoints:');
+  // Removed console.log('- POST /users/signup (for user registration)');
+  // Removed console.log('- POST /users/login (for user login)');
+  // Removed console.log('- POST /users/verifyemail (for email verification)');
+  // Removed console.log('- POST /users/forget-password (for password reset)');
+  // Removed console.log('Test valid OTP: 123456');
 });

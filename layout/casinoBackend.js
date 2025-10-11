@@ -43,7 +43,7 @@ const generateGames = (providerName, count) => {
 app.get('/api/gap-casino-game/providers/progressive', (req, res) => {
   const { providerOffset = 0, gameOffset = 0, limit = 15 } = req.query;
   
-  console.log(`Progressive loading request - providerOffset: ${providerOffset}, gameOffset: ${gameOffset}, limit: ${limit}`);
+
   
   // Simulate network delay
   setTimeout(() => {
@@ -107,7 +107,7 @@ app.get('/api/gap-casino-game/providers/progressive', (req, res) => {
         }
       });
     } catch (error) {
-      console.error('Error in progressive loading endpoint:', error);
+      // Removed console.error('Error in progressive loading endpoint:', error);
       return res.status(500).json({
         status: "error",
         message: "Internal server error"
@@ -118,8 +118,8 @@ app.get('/api/gap-casino-game/providers/progressive', (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Casino backend server running on http://localhost:${PORT}`);
-  console.log('Available endpoints:');
-  console.log('- GET /api/gap-casino-game/providers/progressive (progressive loading of casino games)');
-  console.log('Query parameters: providerOffset, gameOffset, limit');
+  // Removed console.log(`Casino backend server running on http://localhost:${PORT}`);
+  // Removed console.log('Available endpoints:');
+  // Removed console.log('- GET /api/gap-casino-game/providers/progressive (progressive loading of casino games)');
+  // Removed console.log('Query parameters: providerOffset, gameOffset, limit');
 });

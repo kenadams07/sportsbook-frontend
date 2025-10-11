@@ -1,22 +1,10 @@
-// This component handles the bet placement logic and sends the following payload to the backend:
-// - balance: updated user balance after deducting stake
-// - eventId: ID of the selected event
-// - marketId: ID of the market
-// - is_clear: flag indicating if the bet is settled
-// - marketType: type of market (e.g., "matchOdds")
-// - stake: amount being bet
-// - sportsid: ID of the sport
-// - runnerid: ID of the selected runner
-// - runnername: name of the selected team/runner
-// - odds: odds value for the selected bet
-
-"use client";
-
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateUserBalanceExposure } from '../../redux/Action/auth/updateUserBalanceExposureAction';
 import { notifyError } from '../../utils/notificationService';
 import API from '../../utils/api';
+import UserBetsSection from './UserBetsSection';
+import { fetchUserBets, skipNextUserBetsFetch } from '../../redux/Action/userBetsActions';
 
 const formatDateTime = (timestamp) => {
   if (!timestamp) return 'N/A';
@@ -210,7 +198,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
       const newSocket = new WebSocket('ws://localhost:3001'); // Adjust URL as needed
 
       newSocket.onopen = () => {
-        console.log('WebSocket connection established in RightEventInfoSection');
         setIsSocketConnected(true);
       };
 
@@ -218,18 +205,15 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
         const data = JSON.parse(event.data);
 
         if (data.type === 'exposureUpdate' && data.userId === userData._id) {
-          console.log(`User ${data.userId} exposure updated to ${data.exposure} in RightEventInfoSection`);
           setSocketExposure(parseFloat(data.exposure) || 0);
         }
       };
 
       newSocket.onclose = () => {
-        console.log('WebSocket connection closed in RightEventInfoSection');
         setIsSocketConnected(false);
       };
 
       newSocket.onerror = (error) => {
-        console.error('WebSocket error in RightEventInfoSection:', error);
         setIsSocketConnected(false);
       };
 
@@ -403,6 +387,16 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           runners: market?.runners?.map(runner => runner.runnerName) || []
         }));
       }
+      
+      // Dispatch fetchUserBets action after placing a bet
+      if (userData?._id && selectedGame?.eventId) {
+        // Skip the next automatic fetch in UserBetsSection to prevent duplicate API calls
+        dispatch(skipNextUserBetsFetch());
+        
+        setTimeout(() => {
+          dispatch(fetchUserBets(userData._id, selectedGame.eventId));
+        }, 1000); // Delay to allow backend to process the bet
+      }
     } catch (err) {
       notifyError(err.message || "Failed to place bet");
     }
@@ -534,13 +528,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
 
     return (
       <div className="p-2.5 m-1.5 bg-live-primary rounded-lg border border-live-accent shadow-live flex flex-col gap-2 text-live-primary">
-        <div className="space-y-1.5">
-          <h3 className="text-xs font-bold text-live-primary">MY TEAMS</h3>
-          <button className="w-full flex items-center gap-1.5 bg-live-primary hover:bg-live-hover px-2 py-1.5 rounded text-xs">
-            <span className="text-live-accent">★</span>
-            <span>Add Your Favorites</span>
-          </button>
-        </div>
+        <UserBetsSection userId={userData?._id} eventId={selectedGame?.eventId} />
 
         <div className="bg-live-secondary rounded p-3 flex items-center justify-center">
           <div className="text-live-muted text-[10px]">Empty content area</div>
@@ -756,10 +744,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
 
   return (
     <div className="p-4 m-2 bg-live-primary rounded-lg shadow-lg shadow-black/50 flex flex-col gap-4 text-live-primary">
-      <div className="flex items-center gap-2 border-b border-live-accent pb-3 mb-1">
-        <h2 className="text-lg font-bold text-live-accent">MY TEAMS</h2>
-        <div className="h-0.5 w-8 bg-live-accent rounded-full"></div>
-      </div>
+      <UserBetsSection userId={userData?._id} eventId={selectedGame?.eventId} />
 
       <div className="grid grid-cols-2 gap-3 pb-4 border-b border-live-accent">
         <div className="flex flex-col items-center gap-2 p-3 bg-live-tertiary rounded-lg border border-live shadow-live">

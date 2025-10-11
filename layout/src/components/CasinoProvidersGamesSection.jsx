@@ -136,56 +136,42 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
 
   // Log when providers change
   useEffect(() => {
-    console.log('Providers changed:', providers);
   }, [providers]);
 
   // Log when pagination changes
   useEffect(() => {
-    console.log('Pagination updated:', pagination);
     const gamesContainer = gamesContainerRef.current;
     if (gamesContainer) {
-      console.log('Games container dimensions after pagination update:', {
-        scrollHeight: gamesContainer.scrollHeight,
-        clientHeight: gamesContainer.clientHeight,
-        scrollTop: gamesContainer.scrollTop,
-        offsetHeight: gamesContainer.offsetHeight
-      });
       
       // Check if scrollable
       const isScrollable = gamesContainer.scrollHeight > gamesContainer.clientHeight;
-      console.log('Container scrollable check after pagination update:', {
-        isScrollable,
-        scrollHeight: gamesContainer.scrollHeight,
-        clientHeight: gamesContainer.clientHeight,
-        difference: gamesContainer.scrollHeight - gamesContainer.clientHeight
-      });
-      
+
       if (isScrollable) {
-        console.log('Container is scrollable after pagination update');
+
       } else {
-        console.log('Container is NOT scrollable after pagination update');
+
       }
     }
   }, [pagination]);
 
   // Log when loading states change
   useEffect(() => {
-    console.log('Loading states changed:', { loadingGames, loadingMoreGames, loadingProviders });
+
   }, [loadingGames, loadingMoreGames, loadingProviders]);
 
   // Log when error states change
   useEffect(() => {
-    console.log('Error states changed:', { gamesError, providersError });
+
   }, [gamesError, providersError]);
 
   // Log when selected provider changes
   useEffect(() => {
-    console.log('Selected provider changed:', selectedProvider);
+
   }, [selectedProvider]);
 
   // Log when search queries change
   useEffect(() => {
-    console.log('Search queries changed:', { providerSearchQuery, gameSearchQuery });
+
   }, [providerSearchQuery, gameSearchQuery]);
 
   const handleProviderSearch = (e) => {
@@ -211,17 +197,14 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
   };
 
   const handleGameSearchSubmit = () => {
-    console.log('Game search submitted:', gameSearchQuery);
     
     if (onGameSearch) {
       onGameSearch(gameSearchQuery);
     }
     
     // Reset games and fetch with new search term
-    console.log('Resetting casino games for search');
     dispatch(resetCasinoGames());
     
-    console.log('Fetching casino games with search term:', gameSearchQuery);
     dispatch(fetchCasinoGames({ 
       batchNumber: 0, 
       batchSize: 100, 
@@ -231,19 +214,14 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
   };
 
   const handleProviderSelect = (providerName) => {
-    console.log('Provider selected:', providerName);
     
     // If "All" is clicked (null) or the same provider is clicked again, deselect it
     const newProvider = selectedProvider === providerName ? null : providerName;
     setSelectedProvider(newProvider);
     
-    console.log('New provider:', newProvider);
-    
     // Reset games and fetch for selected provider
-    console.log('Resetting casino games');
     dispatch(resetCasinoGames());
     
-    console.log('Fetching casino games for provider:', newProvider || 'all');
     dispatch(fetchCasinoGames({ 
       batchNumber: 0, 
       batchSize: 100, 
@@ -254,7 +232,6 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
 
   const handlePlayGame = (game) => {
     // Handle game play action
-    console.log('Playing game:', game);
     // You can add navigation or game launching logic here
   };
 
@@ -293,29 +270,6 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
           // Also filter providers by provider search if active
           provider.providerName.toLowerCase().includes(providerSearchQuery.toLowerCase())
         );
-
-  console.log('CasinoProvidersGamesSection rendering with state:', {
-    gamesByProvider,
-    loadingGames,
-    loadingMoreGames,
-    gamesError,
-    providers,
-    loadingProviders,
-    providersError,
-    pagination
-  });
-  console.log('Selected provider:', selectedProvider);
-  console.log('Game search query:', gameSearchQuery);
-  console.log('Provider search query:', providerSearchQuery);
-  console.log('Filtered games by provider:', filteredGamesByProvider);
-  console.log('Filtered providers:', filteredProviders);
-  console.log('Provider filtering logic:', {
-    selectedProvider,
-    hasSelectedProvider: !!selectedProvider,
-    filteredProvidersCount: selectedProvider 
-      ? gamesByProvider.filter(provider => provider.providerName === selectedProvider).length
-      : gamesByProvider.length
-  });
 
   return (
     <div className="casino-main-sections-container">
@@ -376,7 +330,7 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
             const gamesContainer = gamesContainerRef.current;
             if (gamesContainer) {
               gamesContainer.scrollTop = gamesContainer.scrollHeight;
-              console.log('Scrolled to bottom');
+
             }
           }}
           className="casino-scroll-to-bottom-button"
@@ -403,7 +357,6 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
               <button 
                 className="casino-retry-button" 
                 onClick={() => {
-                  console.log('Retry button clicked for providers');
                   dispatch(fetchCasinoProviders());
                 }}
               >
@@ -431,18 +384,11 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
           ref={(el) => {
             gamesContainerRef.current = el;
             if (el) {
-              console.log('Games container ref set:', el);
-              // Log dimensions when ref is set
-              console.log('Initial container dimensions:', {
-                scrollHeight: el.scrollHeight,
-                clientHeight: el.clientHeight,
-                scrollTop: el.scrollTop
-              });
+
             }
           }}
           onScroll={() => {
-            // Direct scroll handler for testing
-            console.log('Direct scroll event detected');
+
           }}
         >
           {/* Manual trigger button for testing */}
@@ -454,7 +400,6 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
               <button 
                 className="casino-retry-button" 
                 onClick={() => {
-                  console.log('Retry button clicked for games');
                   dispatch(resetCasinoGames());
                   dispatch(fetchCasinoGames({ 
                     batchNumber: 0, 
@@ -550,5 +495,3 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
 };
 
 export default CasinoProvidersGamesSection;
-
-console.log('CasinoProvidersGamesSection exported');

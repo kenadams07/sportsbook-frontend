@@ -22,7 +22,7 @@ import {
 
 // Games Actions
 export const fetchCasinoGames = (params = {}) => {
-  console.log('fetchCasinoGames action called with params:', params);
+  // Removed console.log('fetchCasinoGames action called with params:', params);
   
   return {
     type: FETCH_CASINO_GAMES,
@@ -31,7 +31,7 @@ export const fetchCasinoGames = (params = {}) => {
 };
 
 export const fetchCasinoGamesSuccess = (payload) => {
-  console.log('fetchCasinoGamesSuccess action called with payload:', payload);
+  // Removed console.log('fetchCasinoGamesSuccess action called with payload:', payload);
   
   return {
     type: FETCH_CASINO_GAMES_SUCCESS,
@@ -40,7 +40,7 @@ export const fetchCasinoGamesSuccess = (payload) => {
 };
 
 export const fetchCasinoGamesFailure = (error) => {
-  console.log('fetchCasinoGamesFailure action called with error:', error);
+  // Removed console.log('fetchCasinoGamesFailure action called with error:', error);
   
   return {
     type: FETCH_CASINO_GAMES_FAILURE,
@@ -49,9 +49,9 @@ export const fetchCasinoGamesFailure = (error) => {
 };
 
 export const fetchMoreCasinoGames = (params) => {
-  console.log('fetchMoreCasinoGames action called with params:', params);
+  // Removed console.log('fetchMoreCasinoGames action called with params:', params);
   // Add stack trace to see where this is being called from
-  console.trace('fetchMoreCasinoGames call stack');
+  // Removed console.trace('fetchMoreCasinoGames call stack');
   
   return {
     type: FETCH_MORE_CASINO_GAMES,
@@ -60,7 +60,7 @@ export const fetchMoreCasinoGames = (params) => {
 };
 
 export const fetchMoreCasinoGamesSuccess = (payload) => {
-  console.log('fetchMoreCasinoGamesSuccess action called with payload:', payload);
+  // Removed console.log('fetchMoreCasinoGamesSuccess action called with payload:', payload);
   
   return {
     type: FETCH_MORE_CASINO_GAMES_SUCCESS,
@@ -69,7 +69,7 @@ export const fetchMoreCasinoGamesSuccess = (payload) => {
 };
 
 export const fetchMoreCasinoGamesFailure = (error) => {
-  console.log('fetchMoreCasinoGamesFailure action called with error:', error);
+  // Removed console.log('fetchMoreCasinoGamesFailure action called with error:', error);
   
   return {
     type: FETCH_MORE_CASINO_GAMES_FAILURE,
@@ -79,7 +79,7 @@ export const fetchMoreCasinoGamesFailure = (error) => {
 
 // Homepage Casino Games Actions (SUNO provider)
 export const fetchHomepageCasinoGames = (params = {}) => {
-  console.log('fetchHomepageCasinoGames action called with params:', params);
+  // Removed console.log('fetchHomepageCasinoGames action called with params:', params);
   
   return {
     type: FETCH_HOMEPAGE_CASINO_GAMES,
@@ -88,7 +88,7 @@ export const fetchHomepageCasinoGames = (params = {}) => {
 };
 
 export const fetchHomepageCasinoGamesSuccess = (payload) => {
-  console.log('fetchHomepageCasinoGamesSuccess action called with payload:', payload);
+  // Removed console.log('fetchHomepageCasinoGamesSuccess action called with payload:', payload);
   
   return {
     type: FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS,
@@ -97,7 +97,7 @@ export const fetchHomepageCasinoGamesSuccess = (payload) => {
 };
 
 export const fetchHomepageCasinoGamesFailure = (error) => {
-  console.log('fetchHomepageCasinoGamesFailure action called with error:', error);
+  // Removed console.log('fetchHomepageCasinoGamesFailure action called with error:', error);
   
   return {
     type: FETCH_HOMEPAGE_CASINO_GAMES_FAILURE,
@@ -107,7 +107,7 @@ export const fetchHomepageCasinoGamesFailure = (error) => {
 
 // Homepage Live Games Actions (SPRIBE provider)
 export const fetchHomepageLiveGames = (params = {}) => {
-  console.log('fetchHomepageLiveGames action called with params:', params);
+  // Removed console.log('fetchHomepageLiveGames action called with params:', params);
   
   return {
     type: FETCH_HOMEPAGE_LIVE_GAMES,
@@ -116,7 +116,7 @@ export const fetchHomepageLiveGames = (params = {}) => {
 };
 
 export const fetchHomepageLiveGamesSuccess = (payload) => {
-  console.log('fetchHomepageLiveGamesSuccess action called with payload:', payload);
+  // Removed console.log('fetchHomepageLiveGamesSuccess action called with payload:', payload);
   
   return {
     type: FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS,
@@ -125,7 +125,7 @@ export const fetchHomepageLiveGamesSuccess = (payload) => {
 };
 
 export const fetchHomepageLiveGamesFailure = (error) => {
-  console.log('fetchHomepageLiveGamesFailure action called with error:', error);
+  // Removed console.log('fetchHomepageLiveGamesFailure action called with error:', error);
   
   return {
     type: FETCH_HOMEPAGE_LIVE_GAMES_FAILURE,
@@ -135,7 +135,7 @@ export const fetchHomepageLiveGamesFailure = (error) => {
 
 // Reset games action
 export const resetCasinoGames = () => {
-  console.log('resetCasinoGames action called');
+  // Removed console.log('resetCasinoGames action called');
   
   return {
     type: RESET_CASINO_GAMES,
@@ -144,7 +144,7 @@ export const resetCasinoGames = () => {
 
 // Providers Actions
 export const fetchCasinoProviders = (params = {}) => {
-  console.log('fetchCasinoProviders action called with params:', params);
+  // Removed console.log('fetchCasinoProviders action called with params:', params);
   
   return {
     type: FETCH_CASINO_PROVIDERS,
@@ -153,7 +153,7 @@ export const fetchCasinoProviders = (params = {}) => {
 };
 
 export const fetchCasinoProvidersSuccess = (payload) => {
-  console.log('fetchCasinoProvidersSuccess action called with payload:', payload);
+  // Removed console.log('fetchCasinoProvidersSuccess action called with payload:', payload);
   
   return {
     type: FETCH_CASINO_PROVIDERS_SUCCESS,
@@ -162,7 +162,7 @@ export const fetchCasinoProvidersSuccess = (payload) => {
 };
 
 export const fetchCasinoProvidersFailure = (error) => {
-  console.log('fetchCasinoProvidersFailure action called with error:', error);
+  // Removed console.log('fetchCasinoProvidersFailure action called with error:', error);
   
   return {
     type: FETCH_CASINO_PROVIDERS_FAILURE,

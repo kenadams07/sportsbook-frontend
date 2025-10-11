@@ -40,11 +40,11 @@ function* getUserDataRequest(action) {
         yield call(action.callback, data);
       }
     } else {
-      console.log("getUserData failed");
+      // Removed console.log("getUserData failed");
       yield put(getUserDataFailure());
     }
   } catch (error) {
-    console.error("Error in getUserDataRequest:", error);
+    // Removed console.error("Error in getUserDataRequest:", error);
     yield put(getUserDataFailure());
   }
 }

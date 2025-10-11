@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ChevronDown, ChevronUp, Search, Globe, Monitor } from "lucide-react";
 import { SPORTS, SPORT_ID_BY_KEY } from "../../utils/CommonExports";
 import { Button } from "../ui/button";
@@ -6,6 +7,7 @@ import GameCard from "./GameCard";
 import { useLocation, useNavigate } from "react-router-dom";
 import SkeletonLoader from "../ui/SkeletonLoader";
 import { fetchSportsEvents } from "../../utils/sportsEventsApi";
+import { fetchUserBets } from "../../redux/Action/userBetsActions";
 
 function normalize(str = "") {
   return str.trim().toLowerCase();
@@ -113,6 +115,7 @@ function filterSports(sports, matchesBySport, searchTerm) {
 }
 
 export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setSelectedSport = () => {}, selectedMatch, onSelectedMatchOddsUpdate = () => {} }) {
+  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -251,7 +254,6 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
             
             // Check if we received valid data before processing
             if (!json || !Array.isArray(json.sports)) {
-              console.warn(`Invalid data received for sport ${sportKey}, skipping update`);
               return;
             }
             
@@ -303,7 +305,6 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
             if (error.name === 'AbortError') {
               return;
             }
-            console.error(`Error polling odds for sport ${sportKey}:`, error);
             // Don't stop polling on error, just log it
           });
       });
@@ -315,11 +316,9 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
         try {
           pollOdds();
         } catch (error) {
-          console.error("Error in pollOdds interval:", error);
         }
       }, 1000);
     } catch (error) {
-      console.error("Error setting up polling interval:", error);
     }
     
     return () => {
@@ -601,6 +600,9 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
                               };
                               setSelectedMatch(selectedMatchData);
                               setSelectedSport(sport);
+                              
+                              // The UserBetsSection component will automatically fetch bets when userId and eventId change
+                              // So we don't need to dispatch fetchUserBets here
                             }}
                           />
                         );

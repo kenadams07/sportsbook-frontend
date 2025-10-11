@@ -86,12 +86,12 @@ function* verifyEmailRequest(action) {
                 yield put(verifyEmailFailure(data));
             }
         } catch (apiError) {
-            console.error("API Error:", apiError);
+            // Removed console.error("API Error:", apiError);
             // Pass the error to the failure action
             yield put(verifyEmailFailure(apiError?.response?.data || apiError?.message || "Verification failed"));
         }
     } catch (error) {
-        console.error("Saga Error:", error);
+        // Removed console.error("Saga Error:", error);
         yield put(verifyEmailFailure(error?.message || "Verification failed"));
     }
 }

@@ -7,3 +7,5 @@ export * from "./auth/verifyEmailAction"
 export * from "./auth/logoutAction"
 
 export * from "./auth/getUserDataAction"
+
+export * from "./userBetsActions"

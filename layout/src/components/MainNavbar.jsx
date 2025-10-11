@@ -78,24 +78,24 @@ export default function MainNavbar() {
       const newSocket = new WebSocket('ws://localhost:3001'); // Adjust URL as needed
       
       newSocket.onopen = () => {
-        console.log('WebSocket connection established');
+        // Removed console.log('WebSocket connection established');
       };
 
       newSocket.onmessage = function(event) {
         const data = JSON.parse(event.data);
         
         if (data.type === 'exposureUpdate' && data.userId === userData._id) {
-          console.log(`User ${data.userId} exposure updated to ${data.exposure}`);
+          // Removed console.log(`User ${data.userId} exposure updated to ${data.exposure}`);
           setExposure(data.exposure);
         }
       };
 
       newSocket.onclose = () => {
-        console.log('WebSocket connection closed');
+        // Removed console.log('WebSocket connection closed');
       };
 
       newSocket.onerror = (error) => {
-        console.error('WebSocket error:', error);
+        // Removed console.error('WebSocket error:', error);
       };
 
       setSocket(newSocket);

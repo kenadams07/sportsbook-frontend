@@ -5,6 +5,7 @@ import VerifyEmail from "./auth/verifyEmailReducer";
 import GetUserData from "./auth/getUserDataReducer";
 import UpdateUserBalanceExposure from "./auth/updateUserBalanceExposureReducer";
 import CasinoGames from "./casinoReducer";
+import UserBets from "./userBetsReducer";
 
 const appReducer = combineReducers({
   Signup,
@@ -13,6 +14,7 @@ const appReducer = combineReducers({
   GetUserData,
   UpdateUserBalanceExposure,
   CasinoGames,
+  UserBets,
 });
 
 const reducers = (state, action) => {

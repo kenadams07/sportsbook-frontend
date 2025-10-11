@@ -75,7 +75,7 @@ export async function fetchSportsEvents(sportId, liveMatches = true) {
   } catch (error) {
     // Don't log aborted requests as errors
     if (error.name !== 'AbortError') {
-      console.error(`API request failed for sport_id=${sportId}:`, error.message);
+ 
     }
     // Even if the endpoint fails, we should return a valid structure to prevent app crashes
     return {

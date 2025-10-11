@@ -130,8 +130,7 @@ export default function UpcomingMatches() {
         const sportId = selectedSportKey ? SPORT_ID_BY_KEY[selectedSportKey] : undefined
         // Use the fetchSportsEvents function which now directly uses the backup endpoint
         const data = sportId ? await fetchSportsEvents(sportId, true) : { sports: [] };
-        console.log("Fetched data:", data); // Debug log
-        
+
         // Check if we received valid data
         if (!data || !Array.isArray(data.sports)) {
           throw new Error("Invalid data format received from API");
@@ -148,7 +147,6 @@ export default function UpcomingMatches() {
         oddsPrevRef.current = oddsMap
         setHighlightedOdds({})
       } catch (e) {
-        console.error("Error in fetchEvents:", e); // Debug log
         if (e?.name !== "AbortError") {
           const errorMessage = e?.message || "Failed to load events";
           setError(`Error loading events: ${errorMessage}`);
@@ -172,7 +170,6 @@ export default function UpcomingMatches() {
   
         // Check if we received valid data before processing
         if (!data || !Array.isArray(data.sports)) {
-          console.warn(`Invalid data received for sport ${selectedSportKey}, skipping update`);
           return;
         }
         
@@ -196,7 +193,6 @@ export default function UpcomingMatches() {
           setHighlightedOdds({})
         }, 1000)
       } catch (error) {
-        console.error("Error polling odds:", error);
         // Don't stop polling on error, just log it
       }
     }

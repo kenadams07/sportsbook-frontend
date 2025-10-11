@@ -28,10 +28,10 @@ function* loginRequest(action) {
         },
         successDuration: 4000,
         onSuccess: (res) => {
-          console.log("Login succeeded:", res.data);
+          // Removed console.log("Login succeeded:", res.data);
         },
         onError: (err) => {
-          console.log("Login failed:", err);
+          // Removed console.log("Login failed:", err);
         }
       })
     );

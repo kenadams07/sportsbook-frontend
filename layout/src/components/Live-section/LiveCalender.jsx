@@ -175,7 +175,7 @@ const LiveCalender = () => {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Button clicked');
+                // Removed console.log('Button clicked');
                 toggleDropdown();
               }}
             >
@@ -397,5 +397,3 @@ const LiveCalender = () => {
 };
 
 export default LiveCalender;
-
-

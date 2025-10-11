@@ -3459,7 +3459,7 @@ function UpcomingMatches() {
       try {
         const sportId = selectedSportKey ? SPORT_ID_BY_KEY[selectedSportKey] : void 0;
         const data = sportId ? await fetchSportsEvents(sportId, true) : { sports: [] };
-        console.log("Fetched data:", data);
+    
         if (!data || !Array.isArray(data.sports)) {
           throw new Error("Invalid data format received from API");
         }

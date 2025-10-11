@@ -31,7 +31,7 @@ const Games = () => {
 
   const handlePlayGame = (game) => {
     // Handle game play action
-    console.log('Playing game:', game)
+    // Removed console.log('Playing game:', game)
     // You can add navigation or game launching logic here
   }
 
