@@ -42,6 +42,7 @@ export class UsersController {
         birthdate: new Date(signupDto.birthdate),
         password: signupDto.password,
         passwordText: signupDto.password
+        // Note: parentId is not set during signup as this is for creating a new user without a parent
       };
 
       if (typeof payload.password !== 'string') {
@@ -108,7 +109,7 @@ export class UsersController {
         delete (newUser as any).passwordText;
         delete (newUser as any).token;
         
-        const emailSent = await this.usersService.sendVerificationEmail(newUser.email);
+        // const emailSent = await this.usersService.sendVerificationEmail(newUser.email);
         
         return res.status(200).json({
           success: true,

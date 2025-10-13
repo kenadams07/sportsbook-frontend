@@ -67,7 +67,10 @@ export class Users {
   @Column({ nullable: true })
   passwordHash: string;
 
-  @ManyToOne('Users', 'direntparent')
+  @Column({ nullable: true })
+  parentId: string;
+
+  @ManyToOne('Users', 'direntparent', { nullable: true })
   @JoinColumn({ name: 'parentId' })
   parent: 'Users';
 
