@@ -1677,6 +1677,12 @@ body {
   opacity: 1;
 }
 
+/* Hide the bottom game name when hovering over the card */
+.group:hover .casino-game-name-bottom {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
 .casino-game-title {
   color: #ffffff;
   font-size: 1.125rem;

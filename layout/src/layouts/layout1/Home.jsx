@@ -214,7 +214,7 @@ const Home = () => {
           <h1 className="text-white font-semibold">CASINO GAMES</h1>
           <button 
             className="text-button-primary-bg hover:text-button-primary-hover font-semibold"
-            onClick={() => navigate('/casino')}
+            onClick={() => navigate('/casino/slots')}
           >
             More →
           </button>
