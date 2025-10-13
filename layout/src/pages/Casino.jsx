@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import CasinoProvidersGamesSection from '../components/CasinoProvidersGamesSection';
+import { Carousel, CarouselContent, CarouselItem } from '../components/ui/carousel';
+
+// Casino banner images
+const casinoBanners = [
+  { id: 1, src: '/casinoBanners/casino1.png', alt: 'Casino Banner 1' },
+  { id: 2, src: '/casinoBanners/casino2.png', alt: 'Casino Banner 2' },
+];
 
 // Game category components
 const GameCategoryButton = ({ icon, label, isActive, onClick }) => (
@@ -19,11 +26,13 @@ const Casino = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState("home");
   const [searchQuery, setSearchQuery] = useState("");
+  const intervalRef = useRef(null);
+  const apiRef = useRef(null);
 
   // Navigation tabs - Home and Tournaments
   const tabs = [
-    { id: "home", label: "Home" },
-    { id: "tournaments", label: "Tournaments" }
+    { id: "home", label: "Home", to: "/casino" },
+    { id: "tournaments", label: "Tournaments", to: "/casino/tournaments" }
   ];
 
   // Game categories with icons
@@ -42,12 +51,44 @@ const Casino = () => {
 
   const [activeCategory, setActiveCategory] = useState("all");
 
-  // Handle tab change
-  const handleTabChange = (tabId) => {
-    if (tabId === "tournaments") {
-      navigate("/casino/tournaments");
-    } else {
-      setActiveTab(tabId);
+  // Set up carousel API reference and start autoplay
+  const setApi = (api) => {
+    apiRef.current = api;
+    
+    // Clear any existing interval
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    
+    // Start autoplay when API is available
+    if (api) {
+      intervalRef.current = setInterval(() => {
+        api.scrollNext();
+      }, 3000);
+    }
+  };
+
+  // Clear interval on unmount
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+
+  // Handle user interaction (pause autoplay and restart after interaction)
+  const handleUserInteraction = () => {
+    // Clear existing interval
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    
+    // Restart autoplay
+    if (apiRef.current) {
+      intervalRef.current = setInterval(() => {
+        apiRef.current.scrollNext();
+      }, 3000);
     }
   };
 
@@ -69,42 +110,73 @@ const Casino = () => {
   };
 
   return (
-    <div className="casino-container">
+    <div className="casino-container" style={{ paddingTop: '7rem' }}>
+      {/* Home/Tournaments Navigation - Matching Live section style with NavLink */}
+      <nav className="flex bg-live-secondary border-b border-live px-6 h-12 items-center gap-2 mb-6">
+        {tabs.map((tab) => (
+          <NavLink
+            key={tab.id}
+            to={tab.to}
+            className={({ isActive }) =>
+              `h-full flex items-center px-5 text-base font-semibold transition-colors duration-200 border-b-2 ${
+                isActive
+                  ? "text-live-primary border-live-accent bg-live-secondary"
+                  : "text-live-muted border-transparent hover:text-live-primary hover:border-live-accent"
+              }`
+            }
+          >
+            {tab.label}
+          </NavLink>
+        ))}
+      </nav>
+
+      {/* Carousel Container */}
+      <div className='w-full rounded-lg overflow-hidden shadow-lg mb-6'>
+        <Carousel 
+          className='w-full' 
+          opts={{ loop: true }}
+          setApi={setApi}
+          onMouseEnter={() => {
+            if (intervalRef.current) {
+              clearInterval(intervalRef.current);
+            }
+          }}
+          onMouseLeave={handleUserInteraction}
+        >
+          <CarouselContent className='custom-scrollbar'>
+            {casinoBanners.map((item) => (
+              <CarouselItem key={item.id} className='w-full'>
+                <div className='relative w-full'>
+                  <img
+                    src={item.src}
+                    alt={item.alt}
+                    className='w-full object-contain rounded-sm'
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </div>
+
       {/* Featured Game Banner */}
-      <div className="casino-featured-banner">
+      <div className="casino-featured-banner mb-6">
         <img 
           src="https://placehold.co/1600x800/2a2a2a/FFA500?text=Olympus+Hades+Megaways" 
           alt="Featured Game" 
           className="casino-banner-img"
         />
         
-        {/* Navigation Tabs Overlay */}
-        <div className="casino-tabs-overlay">
-          {tabs.map(tab => (
-            <button
-              key={tab.id}
-              className={`casino-tab-button ${activeTab === tab.id ? 'active' : ''}`}
-              onClick={() => handleTabChange(tab.id)}
-            >
-              {tab.label}
-              {activeTab === tab.id && (
-                <div className="casino-tab-underline"></div>
-              )}
-            </button>
-          ))}
-        </div>
-
         {/* Game Name Overlay */}
         <div className="casino-game-name-overlay">
           <div className="casino-game-name-badge">
             Olympus Hades megaways
           </div>
         </div>
-
       </div>
 
       {/* Game Categories */}
-      <div className="casino-categories-container">
+      <div className="casino-categories-container mb-6">
         <div className="casino-categories-flex">
           {gameCategories.map(category => (
             <GameCategoryButton
@@ -118,11 +190,13 @@ const Casino = () => {
         </div>
       </div>
 
-      {/* Reusable PROVIDERS/GAMES Section */}
-      <CasinoProvidersGamesSection 
-        onProviderSearch={handleProviderSearch}
-        onGameSearch={handleGameSearch}
-      />
+      {/* Reusable PROVIDERS/GAMES Section - Increased height */}
+      <div className="mb-6" style={{ height: '600px' }}>
+        <CasinoProvidersGamesSection 
+          onProviderSearch={handleProviderSearch}
+          onGameSearch={handleGameSearch}
+        />
+      </div>
     </div>
   );
 };

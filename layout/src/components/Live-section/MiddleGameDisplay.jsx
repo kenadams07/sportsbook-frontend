@@ -615,14 +615,14 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Expand/Collapse All button */}
+      {/* Expand/Collapse All button - Modified to show "All Markets" only with theme-matching shadow */}
       <div className="px-2 pb-2">
         <button
           onClick={toggleAllMarkets}
-          className="w-full text-left px-3 py-2 text-xs bg-live-primary hover:bg-live-hover rounded transition-colors flex items-center justify-between"
+          className="w-full text-left px-3 py-2 text-xs bg-live-primary hover:bg-live-hover rounded transition-colors flex items-center justify-between shadow-[0_2px_12px_var(--live-accent-primary)]"
         >
           <span className="text-live-primary font-medium">
-            {allMarketsExpanded ? "Collapse All" : "Expand All"} Markets
+            All Markets
           </span>
           <span className="text-live-accent text-xs">
             {filteredMarkets.length} markets

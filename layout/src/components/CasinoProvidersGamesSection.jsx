@@ -298,9 +298,9 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
           </button>
         </div>
 
-        {/* Game Search with Filter */}
-        <div className="casino-game-search-container">
-          <div className="casino-game-search-input-container">
+        {/* Game Search with Filter - stretched to fill remaining space */}
+        <div className="casino-game-search-container" style={{ flex: 1 }}>
+          <div className="casino-game-search-input-container" style={{ flex: 1 }}>
             <input
               type="text"
               placeholder="Game Search"
@@ -396,7 +396,7 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
           
           {gamesError ? (
             <div className="casino-error-message">
-              Error loading games: {gamesError}
+              Error loading games: {gamesError.message || gamesError.toString()}
               <button 
                 className="casino-retry-button" 
                 onClick={() => {
