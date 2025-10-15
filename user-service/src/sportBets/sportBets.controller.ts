@@ -36,4 +36,18 @@ export class SportBetsController {
   async placeBet(@Body() betData: any): Promise<any> {
     return this.sportBetsService.placeBet(betData);
   }
+
+  // New endpoint to get user bets with filtered results
+  @Get('user-bets-with-results')
+  async getUserBetsWithResults(
+    @Query('sports_id') sportsId: string,
+    @Query('event_id') eventId: string,
+    @Query('user_id') userId: string
+  ) {
+    if (!sportsId || !eventId || !userId) {
+      throw new Error('sports_id, event_id, and user_id are required');
+    }
+
+    return this.sportBetsService.getUserBetsWithResults(sportsId, eventId, userId);
+  }
 }

@@ -10,9 +10,13 @@ import { AppGateway } from '../app.gateway';
 import { BadRequestException } from '@nestjs/common';
 import { Markets } from '../markets/markets.entity';
 import { MarketType, ExposureStatus } from '../markets/markets.entity';
+import axios from 'axios';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class SportBetsService {
+  private readonly resultApiUrl: string;
+
   constructor(
     @InjectRepository(SportBets)
     private sportBetsRepository: Repository<SportBets>,
@@ -20,7 +24,10 @@ export class SportBetsService {
     private exposureRepository: Repository<Exposure>,
     private usersService: UsersService,
     private appGateway: AppGateway,
-  ) { }
+    private configService: ConfigService,
+  ) {
+    this.resultApiUrl = this.configService.get<string>('resultApiUrl', 'http://89.116.20.218:2700/result');
+  }
 
   findAll(): Promise<SportBets[]> {
     return this.sportBetsRepository.find();
@@ -264,5 +271,60 @@ export class SportBetsService {
     const exposure = Math.max(0, -minPnl);
 
     return { netPnl, exposure };
+  }
+
+  // New method to fetch user bets and filter results by market
+  async getUserBetsWithResults(sportsId: string, eventId: string, userId: string): Promise<any> {
+    try {
+      // Step 1: Fetch all bets for the user for the specific event
+      const userBets = await this.sportBetsRepository.find({
+        where: {
+          user: { id: userId },
+          eventId: eventId,
+          sportId: sportsId
+        },
+        order: {
+          createdAt: 'DESC'
+        }
+      });
+
+      if (!userBets || userBets.length === 0) {
+        return {
+          success: true,
+          message: 'No bets found for this user in this event',
+          data: {
+            bets: [],
+            results: []
+          }
+        };
+      }
+
+      // Step 2: Extract unique market IDs from user bets
+      const userMarketIds = [...new Set(userBets.map(bet => bet.marketId))];
+
+      // Step 3: Call the result API
+      const resultApiUrl = `${this.resultApiUrl}?event_id=${eventId}&sport_id=${sportsId}`;
+      const resultResponse = await axios.get(resultApiUrl);
+      const allResults: any[] = resultResponse.data;
+
+      // Step 4: Filter results to only include markets where user has placed bets
+      let filteredResults: any[] = [];
+      if (allResults && Array.isArray(allResults)) {
+        filteredResults = allResults.filter(result => 
+          userMarketIds.includes(result.marketId)
+        );
+      }
+
+      // Step 5: Return the data
+      return {
+        success: true,
+        data: {
+          bets: userBets,
+          results: filteredResults
+        }
+      };
+    } catch (error) {
+      throw new BadRequestException(`Error fetching user bets with results: ${error.message}`);
+    }
   }
 }
