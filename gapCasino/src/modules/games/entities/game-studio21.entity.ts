@@ -1,5 +1,5 @@
 import { Entity, Column } from 'typeorm';
-import { BaseEntity } from '../database/base.entity';
+import { BaseEntity } from '../../../database/base.entity';
 
 @Entity('studio21_games')
 export class Studio21Game extends BaseEntity {

@@ -9,6 +9,7 @@ import { GapCasinoModule } from './modules/games/gap-casino.module';
 import { GapCasinoTransactionModule } from './modules/games/gap-casino-transaction.module';
 import { GapCasinoUserTokenModule } from './modules/games/gap-casino-user-token.module';
 import { UtilsModule } from './common/utils';
+import { Studio21GameModule } from './modules/games/game-studio21.module';
 import databaseConfig from './config/database.config';
 
 @Module({
@@ -39,6 +40,7 @@ import databaseConfig from './config/database.config';
     GapCasinoTransactionModule,
     GapCasinoUserTokenModule,
     UtilsModule,
+    Studio21GameModule,
   ],
   controllers: [AppController],
   providers: [AppService],

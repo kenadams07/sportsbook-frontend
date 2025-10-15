@@ -6,6 +6,7 @@ import { GapCasinoTransaction, TransactionStatus } from './entities/gap-casino-t
 import { GapCasinoUserToken } from './entities/gap-casino-user-token.entity';
 import { User } from '../users/entities/user.entity';
 import { SignatureService } from '../../common/utils/signature.service';
+import { Studio21GameService } from './game-studio21.service';
 import * as fs from 'fs';
 import * as path from 'path';
 import axios from 'axios';
@@ -26,6 +27,7 @@ export class GapCasinoGameService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private signatureService: SignatureService,
+    private studio21GameService: Studio21GameService,
   ) {}
 
   async getGamesFromDB(requestParams: any): Promise<any> {
@@ -103,53 +105,70 @@ export class GapCasinoGameService {
 
   async getGames(): Promise<any> {
     try {
-      // Resolve the path to the JSON file
-      const filePath = path.resolve(__dirname, '../../../../GameList_Jul_20.json');
-
-      // Read and parse the JSON file
-      const data = await fs.promises.readFile(filePath, 'utf-8');
-      const parsedData = JSON.parse(data);
-
-      if (!Array.isArray(parsedData.Data)) {
-        throw new Error("Expected 'Data' to be an array.");
-      }
-
+      // Clear ALL existing games from the database
       await this.gapCasinoRepository.clear();
+      console.log('Cleared all existing games from database');
 
-      // Process each game in the JSON data
-      for (const element of parsedData.Data) {
-        const checkGame = await this.gapCasinoRepository.findOne({
-          where: {
-            name: element['Game Name'],
-            gameCode: element['Game Code'],
-          },
-        });
+      // Fetch Studio 21 games and add them to the database
+      try {
+        const studio21Games = await this.studio21GameService.getGameList();
+        if (studio21Games && Array.isArray(studio21Games)) {
+          console.log(`Fetched ${studio21Games.length} Studio 21 games`);
+          
+          for (const game of studio21Games) {
+            try {
+              const gapCasinoObj = {
+                gameId: game.game_id.toString(),
+                name: game.name,
+                gameCode: game.game_code,
+                category: game.category,
+                providerName: 'STUDIO21',
+                subProviderName: game.product,
+                status: game.enabled,
+                urlThumb: game.url_thumb,
+                // New fields from Studio 21 game response
+                product: game.product,
+                platforms: game.platforms,
+                freebetSupport: game.freebet_support,
+                blockedCountries: game.blocked_countries,
+                releaseDate: game.release_date,
+                inGameFreebets: game.in_game_freebets,
+                volatility: game.volatility,
+                rtp: game.rtp,
+                certifications: game.certifications,
+                languages: game.languages,
+                theme: game.theme,
+                technology: game.technology,
+                description: game.name,
+                tags: game.category,
+                features: game.technology ? game.technology.join(',') : '',
+              };
 
-        if (!checkGame) {
-          const gapCasinoObj = {
-            gameId: element['Game Id'],
-            name: element['Game Name'],
-            gameCode: element['Game Code'],
-            category: element.Category,
-            providerName: element['Provider Name'],
-            subProviderName: element['Sub Provider Name'],
-            status: element.Status === 'ACTIVE' ? true : false,
-            urlThumb: element['Url Thumb'],
-          };
+              const newGame = this.gapCasinoRepository.create(gapCasinoObj);
+              await this.gapCasinoRepository.save(newGame);
 
-          const newGame = this.gapCasinoRepository.create(gapCasinoObj);
-          await this.gapCasinoRepository.save(newGame);
-
-          // Generate token for the new game
-          const token = this.generateToken(newGame.id);
-          if (token) {
-            newGame.token = token;
-            await this.gapCasinoRepository.save(newGame);
+              // Generate token for the new game
+              const token = this.generateToken(newGame.id);
+              if (token) {
+                newGame.token = token;
+                await this.gapCasinoRepository.save(newGame);
+              }
+            } catch (gameError) {
+              console.error(`Error inserting game ${game.name}:`, gameError.message);
+            }
           }
+          
+          console.log(`Successfully inserted ${studio21Games.length} Studio 21 games`);
         }
+      } catch (studio21Error) {
+        console.error('Failed to fetch Studio 21 games:', studio21Error.message);
+        throw new Error(`Failed to fetch Studio 21 games: ${studio21Error.message}`);
       }
 
-      return parsedData.Data;
+      // Return all games from database
+      const allGames = await this.gapCasinoRepository.find();
+      console.log(`Total games in database: ${allGames.length}`);
+      return allGames;
     } catch (error) {
       throw new Error(`Failed to get games: ${error.message}`);
     }
@@ -1300,7 +1319,7 @@ export class GapCasinoGameService {
 
       // Group batch games by provider
       const batchGroupedGames: { [key: string]: any } = {};
-      const priorityProviders = ['SUNO', 'DC', 'EZUGI', 'RG'];
+      const priorityProviders = ['STUDIO21', 'SUNO', 'DC', 'EZUGI', 'RG'];
       
       batchGames.forEach((game) => {
         const provider = game.providerName || 'Unknown';
@@ -1386,10 +1405,11 @@ export class GapCasinoGameService {
       const groupedGames: { [key: string]: any } = {};
       
       // Define priority order for providers
-      const priorityProviders = ['SUNO', 'DC', 'EZUGI', 'RG'];
+      const priorityProviders = ['STUDIO21', 'SUNO', 'DC', 'EZUGI', 'RG']; // Updated priority list
       
       games.forEach((game) => {
-        const provider = game.providerName || 'Unknown';
+        // For backward compatibility, show STUDIO21 as SUNO in the response
+        const provider = game.providerName === 'STUDIO21' ? 'SUNO' : (game.providerName || 'Unknown');
         
         if (!groupedGames[provider]) {
           groupedGames[provider] = {
@@ -1404,7 +1424,7 @@ export class GapCasinoGameService {
           name: game.name,
           gameCode: game.gameCode,
           category: game.category,
-          providerName: game.providerName,
+          providerName: provider, // Use mapped provider name
           subProviderName: game.subProviderName,
           urlThumb: game.urlThumb,
           status: game.status,

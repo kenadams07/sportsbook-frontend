@@ -7,11 +7,13 @@ import { GapCasinoTransaction } from './entities/gap-casino-transaction.entity';
 import { GapCasinoUserToken } from './entities/gap-casino-user-token.entity';
 import { User } from '../users/entities/user.entity';
 import { UtilsModule } from '../../common/utils/utils.module';
+import { Studio21GameModule } from './game-studio21.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([GapCasino, GapCasinoTransaction, GapCasinoUserToken, User]),
     UtilsModule,
+    Studio21GameModule,
   ],
   controllers: [GapCasinoGameController],
   providers: [GapCasinoGameService],

@@ -31,6 +31,52 @@ export class GapCasino extends BaseEntity {
   @Column({ nullable: true })
   token: string;
 
+  // New fields for Studio 21 game data
+  @Column({ nullable: true })
+  product: string;
+
+  @Column({ type: 'simple-array', nullable: true })
+  platforms: string[];
+
+  @Column({ nullable: true })
+  freebetSupport: boolean;
+
+  @Column({ type: 'simple-array', nullable: true })
+  blockedCountries: string[];
+
+  @Column({ nullable: true })
+  releaseDate: string;
+
+  @Column({ nullable: true })
+  inGameFreebets: boolean;
+
+  @Column({ nullable: true })
+  volatility: number;
+
+  @Column({ nullable: true })
+  rtp: string;
+
+  @Column({ type: 'simple-array', nullable: true })
+  certifications: string[];
+
+  @Column({ type: 'simple-array', nullable: true })
+  languages: string[];
+
+  @Column({ type: 'simple-array', nullable: true })
+  theme: string[];
+
+  @Column({ type: 'simple-array', nullable: true })
+  technology: string[];
+
+  @Column({ nullable: true })
+  description: string;
+
+  @Column({ nullable: true })
+  tags: string;
+
+  @Column({ nullable: true })
+  features: string;
+
   // Note: createdAt and updatedAt are inherited from BaseEntity
   // They correspond to your Mongoose timestamps
   // createDate -> createdAt

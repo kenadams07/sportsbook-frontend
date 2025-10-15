@@ -1,4 +1,4 @@
-import { Studio21BaseDto } from './studio21-base.dto';
+import { Studio21BaseDto } from './base-studio21.dto';
 
 export class Studio21BetDto extends Studio21BaseDto {
   roundId: string;

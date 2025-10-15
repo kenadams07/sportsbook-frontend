@@ -1,11 +1,11 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between } from 'typeorm';
-import { Studio21Game } from '../entities/studio21-game.entity';
-import { Studio21Transaction, TransactionStatus } from '../entities/studio21-transaction.entity';
-import { Studio21UserToken } from '../entities/studio21-user-token.entity';
-import { User } from '../entities/user.entity';
-import { SignatureService } from '../utils/signature.service';
+import { Studio21Game } from './entities/game-studio21.entity';
+import { Studio21Transaction, TransactionStatus } from './entities/transaction-studio21.entity';
+import { Studio21UserToken } from './entities/user-token-studio21.entity';
+import { User } from './entities/user-studio21.entity';
+import { SignatureService } from '../../common/utils/studio21/signature-studio21.service';
 import * as fs from 'fs';
 import * as path from 'path';
 import axios from 'axios';
@@ -30,60 +30,101 @@ export class Studio21GameService {
 
   async getGameUrl(requestParams: any, authUserId: string): Promise<any> {
     try {
+      // Validate required parameters
+      if (!requestParams.gameId) {
+        throw new Error('Missing required parameter: gameId');
+      }
+      
+      if (!requestParams.gameCode) {
+        throw new Error('Missing required parameter: gameCode');
+      }
+      
       const user = await this.userRepository.findOne({
         where: { id: authUserId },
       });
 
-      const apiUrl = `${process.env.STUDIO21_BASE_URL}/login`;
+      const apiUrl = `${process.env.STUDIO21_BASE_URL}/games/url`;
+
+      // Get the real IP address from the request or use a default
+      const clientIp = requestParams.clientIp || '1.1.1.1';
 
       const requestData = {
-        operatorId: process.env.STUDIO21_OPERATOR_ID,
-        userId: user?.username,
-        providerName: requestParams.providerName,
-        platformId: 'desktop',
-        currency: 'USD', // Default currency, you might want to get this from user
-        clientIp: '1.1.1.1',
-        username: user?.username,
-        balance: user?.balance,
-        lobby: true,
-        gameId: requestParams.gameId,
+        partner_id: process.env.STUDIO21_PARTNER_ID,
+        user: user?.username || '',
+        token: this.generateToken(user?.id || ''),
+        platform: requestParams.platform || 'GPL_DESKTOP',
+        currency: user?.currencyId || 'USD',
+        country: requestParams.country || 'US',
+        lang: requestParams.lang || 'en',
+        ip: clientIp,
+        game_id: requestParams.gameId?.toString(), // Ensure game_id is a string
+        game_code: requestParams.gameCode,
+        lobby_url: requestParams.lobbyUrl || 'https://yourdomain.com/lobby',
+        deposit_url: requestParams.depositUrl || 'https://yourdomain.com/deposit'
+      };
+
+      console.log('Studio 21 Game URL Request Data:', requestData);
+
+      const dataStringify = JSON.stringify(requestData);
+      const encodedSignature = await this.signatureService.createSignature(dataStringify);
+
+      const headers = {
+        'Casino-Signature': encodedSignature,
+        'Content-Type': 'application/json',
+      };
+
+      console.log('Studio 21 API URL:', apiUrl);
+      console.log('Studio 21 Request Headers:', headers);
+
+      const response = await axios.post(apiUrl, requestData, { headers });
+
+      console.log('Studio 21 Game URL Response:', response.data);
+
+      // Store the token for later use
+      const userToken = this.studio21UserTokenRepository.create({
+        userId: user?.id,
+        studio21_token: requestData.token,
+      });
+      await this.studio21UserTokenRepository.save(userToken);
+
+      return response.data;
+    } catch (error) {
+      console.error('Studio 21 Game URL Error:', error.response?.data || error.message);
+      
+      // Log detailed error information
+      if (error.response) {
+        console.error('Error Status:', error.response.status);
+        console.error('Error Headers:', error.response.headers);
+        console.error('Error Data:', error.response.data);
+      }
+      
+      if (error?.code === 'ERR_BAD_REQUEST') {
+        throw new Error('Game not found');
+      }
+      throw new Error(`Failed to get game URL: ${error.message}`);
+    }
+  }
+
+  async getGameList(): Promise<any> {
+    try {
+      const apiUrl = `${process.env.STUDIO21_BASE_URL}/games/list`;
+      
+      const requestData = {
+        partner_id: process.env.STUDIO21_PARTNER_ID,
       };
 
       const dataStringify = JSON.stringify(requestData);
       const encodedSignature = await this.signatureService.createSignature(dataStringify);
 
       const headers = {
-        Signature: encodedSignature,
+        'Casino-Signature': encodedSignature,
         'Content-Type': 'application/json',
       };
 
       const response = await axios.post(apiUrl, requestData, { headers });
-
-      const yesterdayStart = new Date();
-      yesterdayStart.setDate(yesterdayStart.getDate() - 1);
-      yesterdayStart.setHours(0, 0, 0, 0);
-
-      const yesterdayEnd = new Date();
-      yesterdayEnd.setDate(yesterdayEnd.getDate() - 1);
-      yesterdayEnd.setHours(23, 59, 59, 999);
-
-      await this.studio21UserTokenRepository.delete({
-        userId: user?.id,
-        createdAt: Between(yesterdayStart, yesterdayEnd),
-      });
-
-      const userToken = this.studio21UserTokenRepository.create({
-        userId: user?.id,
-        studio21_token: response?.data?.token,
-      });
-      await this.studio21UserTokenRepository.save(userToken);
-
       return response.data;
     } catch (error) {
-      if (error?.code === 'ERR_BAD_REQUEST') {
-        throw new Error('Game not found');
-      }
-      throw new Error(`Failed to get game URL: ${error.message}`);
+      throw new Error(`Failed to get game list: ${error.message}`);
     }
   }
 
@@ -551,6 +592,9 @@ export class Studio21GameService {
 
   private generateToken(id: string): string {
     // Simple token generation - you might want to use a more secure method
+    if (!id) {
+      id = 'default';
+    }
     return `${id}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 }

@@ -23,7 +23,14 @@
     "test-games": "ts-node scripts/test-games.ts",
     "debug-service": "ts-node scripts/debug-service.ts",
     "check-thumbnails": "ts-node scripts/check-thumbnails.ts",
-    "get-all-games": "ts-node scripts/get-all-games.ts"
+    "get-all-games": "ts-node scripts/get-all-games.ts",
+    "update-studio21-games": "ts-node scripts/update-studio21-games.ts",
+    "verify-studio21-games": "ts-node scripts/verify-studio21-games.ts",
+    "cleanup-old-games": "ts-node scripts/cleanup-old-games.ts",
+    "update-provider-names": "ts-node scripts/update-provider-names.ts",
+    "test-studio21-game-url": "ts-node scripts/test-studio21-game-url.ts",
+    "test-game-url-endpoint": "ts-node scripts/test-game-url-endpoint.ts",
+    "test-frontend-simulation": "ts-node scripts/test-frontend-simulation.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

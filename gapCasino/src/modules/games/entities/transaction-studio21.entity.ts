@@ -1,5 +1,5 @@
 import { Entity, Column } from 'typeorm';
-import { BaseEntity } from '../database/base.entity';
+import { BaseEntity } from '../../../database/base.entity';
 
 export enum TransactionStatus {
   OPEN = 'open',
