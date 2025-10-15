@@ -5,6 +5,7 @@ import { GapCasino } from './entities/gap-casino.entity';
 import { GapCasinoTransaction, TransactionStatus } from './entities/gap-casino-transaction.entity';
 import { GapCasinoUserToken } from './entities/gap-casino-user-token.entity';
 import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
 import { SignatureService } from '../../common/utils/signature.service';
 import { Studio21GameService } from './game-studio21.service';
 import * as fs from 'fs';
@@ -26,6 +27,7 @@ export class GapCasinoGameService {
     private gapCasinoUserTokenRepository: Repository<GapCasinoUserToken>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private usersService: UsersService,
     private signatureService: SignatureService,
     private studio21GameService: Studio21GameService,
   ) {}
@@ -176,6 +178,7 @@ export class GapCasinoGameService {
 
   async getGameUrl(requestParams: any, authUserId: string): Promise<any> {
     try {
+      // Use local user repository for basic user info
       const user = await this.userRepository.findOne({
         where: { id: authUserId },
       });
@@ -250,6 +253,13 @@ export class GapCasinoGameService {
           return { status: 'OP_USER_NOT_FOUND' };
         }
 
+        // For operations requiring full user validation, use the user service
+        // const fullUser = await this.usersService.getUserById(user.id);
+        // if (!fullUser || !fullUser.betAllow || fullUser.status !== '1') {
+        //   return { status: 'OP_USER_DISABLED' };
+        // }
+
+        // For now, using local user data for basic checks
         if (!user.betAllow || user.status !== '1') {
           return { status: 'OP_USER_DISABLED' };
         }
@@ -297,6 +307,8 @@ export class GapCasinoGameService {
       if (signatureValid) {
         let debitAmount = requestParams.debitAmount;
         let data: any;
+        
+        // Use local user repository for basic user info
         const user = await this.userRepository.findOne({
           where: { username: requestParams.userId },
         });
@@ -310,6 +322,13 @@ export class GapCasinoGameService {
           data = { status: 'OP_INVALID_PARAMS' };
         } else {
           if (user !== null) {
+            // For operations requiring full user validation, use the user service
+            // const fullUser = await this.usersService.getUserById(user.id);
+            // if (!fullUser || !fullUser.betAllow || fullUser.status !== '1') {
+            //   data = { status: 'OP_USER_DISABLED' };
+            // } else {
+            
+            // For now, using local user data for basic checks
             if (user && user.betAllow && user.status == '1') {
               if (parseFloat(debitAmount) < 0) {
                 data = { status: 'OP_ERROR_NEGATIVE_DEBIT_AMOUNT' };
@@ -379,9 +398,14 @@ export class GapCasinoGameService {
 
                           let updatedBalance = user?.balance;
                           updatedBalance -= parseFloat(debitAmount);
+                          
+                          // Update balance in local repository
                           await this.userRepository.update(user.id, {
                             balance: updatedBalance,
                           });
+                          
+                          // Also update balance in the main user service for consistency
+                          // await this.usersService.updateUserBalance(user.id, updatedBalance);
 
                           // Assuming PKR handling, you might want to adjust this based on your actual currency logic
                           if (user?.currencyId && user?.currencyId?.toUpperCase() === 'PKR') {
@@ -442,6 +466,13 @@ export class GapCasinoGameService {
           data = { status: 'OP_INVALID_PARAMS' };
         } else {
           if (user !== null) {
+            // For operations requiring full user validation, use the user service
+            // const fullUser = await this.usersService.getUserById(user.id);
+            // if (!fullUser || !fullUser.betAllow || fullUser.status !== '1') {
+            //   data = { status: 'OP_USER_DISABLED' };
+            // } else {
+            
+            // For now, using local user data for basic checks
             if (user && user.betAllow && user.status == '1') {
               const gapCasinoToken = await this.gapCasinoUserTokenRepository.findOne({
                 where: {
@@ -541,9 +572,13 @@ export class GapCasinoGameService {
                           let updatedBalance = user?.balance;
                           updatedBalance += parseFloat(creditAmount);
 
+                          // Update balance in local repository
                           await this.userRepository.update(user.id, {
                             balance: updatedBalance,
                           });
+                          
+                          // Also update balance in the main user service for consistency
+                          // await this.usersService.updateUserBalance(user.id, updatedBalance);
 
                           const userBalance = await this.userRepository.findOne({
                             where: { id: user?.id },
@@ -622,6 +657,13 @@ export class GapCasinoGameService {
             });
 
             if (gapCasinoToken && gapCasinoToken.gap_casino_token === requestParams.token) {
+              // For operations requiring full user validation, use the user service
+              // const fullUser = await this.usersService.getUserById(user.id);
+              // if (!fullUser || !fullUser.betAllow || fullUser.status !== '1') {
+              //   data = { status: 'OP_USER_DISABLED' };
+              // } else {
+              
+              // For now, using local user data for basic checks
               if (user && user.betAllow && user.status == '1') {
                 balance = user.balance;
 
@@ -658,9 +700,14 @@ export class GapCasinoGameService {
 
                     let updatedBalance = user?.balance;
                     updatedBalance += parseFloat(amount);
+                    
+                    // Update balance in local repository
                     await this.userRepository.update(user.id, {
                       balance: updatedBalance,
                     });
+                    
+                    // Also update balance in the main user service for consistency
+                    // await this.usersService.updateUserBalance(user.id, updatedBalance);
 
                     // Assuming PKR handling, you might want to adjust this based on your actual currency logic
                     if (user?.currencyId && user?.currencyId?.toUpperCase() === 'PKR') {

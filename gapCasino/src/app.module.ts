@@ -10,6 +10,7 @@ import { GapCasinoTransactionModule } from './modules/games/gap-casino-transacti
 import { GapCasinoUserTokenModule } from './modules/games/gap-casino-user-token.module';
 import { UtilsModule } from './common/utils';
 import { Studio21GameModule } from './modules/games/game-studio21.module';
+import { HealthModule } from './modules/health/health.module';
 import databaseConfig from './config/database.config';
 
 @Module({
@@ -30,6 +31,7 @@ import databaseConfig from './config/database.config';
         synchronize: configService.get<boolean>('database.synchronize'),
         logging: configService.get<boolean>('database.logging'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        migrations: [__dirname + '/migrations/*{.ts,.js}'],
         autoLoadEntities: configService.get<boolean>('database.autoLoadEntities'),
       }),
       inject: [ConfigService],
@@ -41,6 +43,7 @@ import databaseConfig from './config/database.config';
     GapCasinoUserTokenModule,
     UtilsModule,
     Studio21GameModule,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -22,6 +22,6 @@ export class User extends BaseEntity {
   @Column({ default: '1' })
   status: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'currency_id', nullable: true })
   currencyId: string;
 }

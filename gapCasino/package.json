@@ -30,7 +30,8 @@
     "update-provider-names": "ts-node scripts/update-provider-names.ts",
     "test-studio21-game-url": "ts-node scripts/test-studio21-game-url.ts",
     "test-game-url-endpoint": "ts-node scripts/test-game-url-endpoint.ts",
-    "test-frontend-simulation": "ts-node scripts/test-frontend-simulation.ts"
+    "test-frontend-simulation": "ts-node scripts/test-frontend-simulation.ts",
+    "add-timestamp-columns": "node scripts/add-timestamp-columns.js"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

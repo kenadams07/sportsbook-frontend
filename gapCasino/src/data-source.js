@@ -1,6 +1,8 @@
-import { registerAs } from '@nestjs/config';
+require('dotenv/config');
+const { DataSource } = require('typeorm');
+const { resolve } = require('path');
 
-export default registerAs('database', () => ({
+const AppDataSource = new DataSource({
   type: process.env.DB_TYPE || 'postgres',
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT || '5432', 10),
@@ -9,7 +11,9 @@ export default registerAs('database', () => ({
   database: process.env.DB_NAME || 'sportsbook',
   synchronize: process.env.DB_SYNCHRONIZE === 'true',
   logging: process.env.NODE_ENV === 'development',
-  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-  migrations: [__dirname + '/../migrations/*{.ts,.js}'],
-  autoLoadEntities: process.env.DB_AUTO_LOAD_ENTITIES === 'true',
-}));
+  entities: [__dirname + '/**/*.entity{.ts,.js}'],
+  migrations: [__dirname + '/migrations/*{.ts,.js}'],
+  subscribers: [],
+});
+
+module.exports = { AppDataSource };

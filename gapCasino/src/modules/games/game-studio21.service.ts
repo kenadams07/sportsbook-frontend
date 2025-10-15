@@ -28,6 +28,35 @@ export class Studio21GameService {
     private signatureService: SignatureService,
   ) {}
 
+  /**
+   * Maps currency ID to proper currency code for Studio21 API
+   * @param currencyId The currency ID stored in the database
+   * @returns The proper currency code (e.g., "USD", "EUR")
+   */
+  private mapCurrencyIdToCode(currencyId: string | undefined): string {
+    // If currencyId is undefined, default to USD
+    if (!currencyId) {
+      return 'USD';
+    }
+    
+    // If currencyId is already a valid currency code, return it
+    if (currencyId && currencyId.length === 3 && currencyId.toUpperCase() === currencyId) {
+      return currencyId;
+    }
+    
+    // Default mapping - you may need to adjust this based on your actual currency IDs
+    const currencyMap: { [key: string]: string } = {
+      // Add your currency ID to code mappings here
+      // Example:
+      // '252943b1-4124-4eaf-ba8b-5ee06101fd70': 'USD',
+      // 'another-uuid': 'EUR',
+      // 'yet-another-uuid': 'GBP'
+    };
+    
+    // Return mapped currency code or default to USD
+    return currencyMap[currencyId] || 'USD';
+  }
+
   async getGameUrl(requestParams: any, authUserId: string): Promise<any> {
     try {
       // Validate required parameters
@@ -48,12 +77,15 @@ export class Studio21GameService {
       // Get the real IP address from the request or use a default
       const clientIp = requestParams.clientIp || '1.1.1.1';
 
+      // Map currency ID to proper currency code
+      const currencyCode = this.mapCurrencyIdToCode(user?.currencyId);
+
       const requestData = {
         partner_id: process.env.STUDIO21_PARTNER_ID,
         user: user?.username || '',
         token: this.generateToken(user?.id || ''),
         platform: requestParams.platform || 'GPL_DESKTOP',
-        currency: user?.currencyId || 'USD',
+        currency: currencyCode,
         country: requestParams.country || 'US',
         lang: requestParams.lang || 'en',
         ip: clientIp,
@@ -162,8 +194,11 @@ export class Studio21GameService {
 
         let balance = user?.balance || 0;
 
+        // Map currency ID to proper currency code
+        const currencyCode = this.mapCurrencyIdToCode(user?.currencyId);
+
         // Assuming PKR handling, you might want to adjust this based on your actual currency logic
-        if (user?.currencyId && user?.currencyId?.toUpperCase() === 'PKR') {
+        if (currencyCode && currencyCode?.toUpperCase() === 'PKR') {
           balance = balance / 1000; // Assuming STUDIO21.PKR value
         }
 
@@ -196,8 +231,11 @@ export class Studio21GameService {
           where: { username: requestParams.userId },
         });
 
+        // Map currency ID to proper currency code
+        const currencyCode = this.mapCurrencyIdToCode(user?.currencyId);
+
         // Assuming PKR handling, you might want to adjust this based on your actual currency logic
-        if (user?.currencyId && user?.currencyId?.toUpperCase() === 'PKR') {
+        if (currencyCode && currencyCode?.toUpperCase() === 'PKR') {
           debitAmount = (parseFloat(debitAmount) * 1000).toString(); // Assuming STUDIO21.PKR value
         }
 
@@ -264,7 +302,7 @@ export class Studio21GameService {
                             pl: 0,
                             prevBalance: user.balance,
                             currency: {
-                              code: user?.currencyId,
+                              code: currencyCode,
                               value: 1, // Default value, adjust as needed
                             },
                             status: TransactionStatus.OPEN,
@@ -279,7 +317,7 @@ export class Studio21GameService {
                           });
 
                           // Assuming PKR handling, you might want to adjust this based on your actual currency logic
-                          if (user?.currencyId && user?.currencyId?.toUpperCase() === 'PKR') {
+                          if (currencyCode && currencyCode?.toUpperCase() === 'PKR') {
                             balance = balance / 1000; // Assuming STUDIO21.PKR value
                           }
 
@@ -328,8 +366,11 @@ export class Studio21GameService {
           where: { username: requestParams.userId },
         });
 
+        // Map currency ID to proper currency code
+        const currencyCode = this.mapCurrencyIdToCode(user?.currencyId);
+
         // Assuming PKR handling, you might want to adjust this based on your actual currency logic
-        if (user?.currencyId && user?.currencyId?.toUpperCase() === 'PKR' && parseFloat(creditAmount) !== 0) {
+        if (currencyCode && currencyCode?.toUpperCase() === 'PKR' && parseFloat(creditAmount) !== 0) {
           creditAmount = (parseFloat(creditAmount) * 1000).toString(); // Assuming STUDIO21.PKR value
         }
 
@@ -391,7 +432,7 @@ export class Studio21GameService {
                           await this.studio21TransactionRepository.update(checkStatement.id, {
                             pl:
                               parseFloat(creditAmount) === 0
-                                ? user?.currencyId && user?.currencyId?.toUpperCase() === 'PKR'
+                                ? currencyCode && currencyCode?.toUpperCase() === 'PKR'
                                   ? -parseFloat(checkStatement?.stake.toString()) * 1000
                                   : -parseFloat(checkStatement?.stake.toString())
                                 : parseFloat(totalPl.toString()),
@@ -450,7 +491,7 @@ export class Studio21GameService {
                           });
 
                           // Assuming PKR handling, you might want to adjust this based on your actual currency logic
-                          if (user?.currencyId && user?.currencyId?.toUpperCase() === 'PKR') {
+                          if (currencyCode && currencyCode?.toUpperCase() === 'PKR') {
                             balance = balance / 1000; // Assuming STUDIO21.PKR value
                           }
 
@@ -500,8 +541,11 @@ export class Studio21GameService {
           where: { username: requestParams.userId },
         });
 
+        // Map currency ID to proper currency code
+        const currencyCode = this.mapCurrencyIdToCode(user?.currencyId);
+
         // Assuming PKR handling, you might want to adjust this based on your actual currency logic
-        if (user?.currencyId && user?.currencyId?.toUpperCase() === 'PKR' && parseFloat(amount) !== 0) {
+        if (currencyCode && currencyCode?.toUpperCase() === 'PKR' && parseFloat(amount) !== 0) {
           amount = (parseFloat(amount) * 1000).toString(); // Assuming STUDIO21.PKR value
         }
 
@@ -558,7 +602,7 @@ export class Studio21GameService {
                     });
 
                     // Assuming PKR handling, you might want to adjust this based on your actual currency logic
-                    if (user?.currencyId && user?.currencyId?.toUpperCase() === 'PKR') {
+                    if (currencyCode && currencyCode?.toUpperCase() === 'PKR') {
                       balance = balance / 1000; // Assuming STUDIO21.PKR value
                     }
 
