@@ -5,6 +5,8 @@ import {
   ManyToOne,
   OneToMany,
   JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Currency } from '../currency/currency.entity';
 import { Exposure } from '../exposure/exposure.entity';
@@ -89,7 +91,7 @@ export class Users {
 
   @Column({ type: 'int', default: 0 })
   creditReference: number;
-
+ 
   @Column({ type: 'int', default: 0 })
   balance: number;
 
@@ -113,6 +115,21 @@ export class Users {
     from: (value: string) => value ? parseFloat(value) : 0
   }})
   exposure: number;
+
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
+
+  @Column({ nullable: true })
+  gap_casino_token: string;
+
+  @Column({ nullable: true })
+  county: string;
+
+  @Column({ nullable: true })
+  city: string;
 
   @OneToMany(() => ResultTransaction, (resultTransaction) => resultTransaction.user)
   resultTransaction: ResultTransaction[];
