@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateUserBalanceExposure } from '../../redux/Action/auth/updateUserBalanceExposureAction';
-import { notifyError } from '../../utils/notificationService';
+import { notifyError, notifyInfo } from '../../utils/notificationService';
 import API from '../../utils/api';
 import UserBetsSection from './UserBetsSection';
 import { fetchUserBets, skipNextUserBetsFetch } from '../../redux/Action/userBetsActions';
@@ -331,7 +331,20 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
   };
 
   const handlePlaceBet = async () => {
-    if (!isAuthenticated || (!selectedTeam && !isMarketRunnerSelection)) {
+    // Check if match is suspended
+    if (matchIsSuspended) {
+      return;
+    }
+    
+    // Check if user has selected a team or market runner
+    if (!selectedTeam && !isMarketRunnerSelection) {
+      return;
+    }
+    
+    // Check if user is authenticated
+    if (!isAuthenticated) {
+      notifyInfo("Please Login/signup to place bet");
+      onLogin();
       return;
     }
 
@@ -733,6 +746,17 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
             </div>
           )}
 
+          {/* Only show BET button if match is not suspended */}
+          <button
+            className={`w-full px-2 py-1 rounded text-[10px] font-bold transition-colors cursor-pointer transition-all duration-200 mt-1 ${
+              !matchIsSuspended && (selectedTeam || isMarketRunnerSelection)
+                ? 'bg-live-accent hover:bg-live-warning border border-live-accent text-live-accent hover:text-live-dark hover:scale-[1.02] hover:shadow-[0_0_8px_var(--live-accent-primary)]'
+                : 'bg-live-tertiary border border-live text-live-accent cursor-not-allowed opacity-50'
+            }`}
+            onClick={handlePlaceBet}
+          >
+            {matchIsSuspended ? 'MATCH SUSPENDED' : 'BET'}
+          </button>
         </div>
 
         <div className="bg-live-secondary rounded p-3 flex items-center justify-center">
@@ -974,11 +998,10 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
         {/* Only show BET button if match is not suspended */}
         <button
           className={`w-full px-2.5 py-1.5 rounded text-sm font-bold transition-colors cursor-pointer color-yellowborder-solid transition-all duration-200 ${
-            !matchIsSuspended && isAuthenticated && (selectedTeam || isMarketRunnerSelection)
+            !matchIsSuspended && (selectedTeam || isMarketRunnerSelection)
               ? 'bg-live-accent hover:bg-live-warning border border-live-accent text-live-accent hover:text-live-dark hover:scale-[1.02] hover:shadow-[0_0_8px_var(--live-accent-primary)]'
               : 'bg-live-tertiary border border-live text-live-accent cursor-not-allowed opacity-50'
           }`}
-          disabled={matchIsSuspended || !isAuthenticated || (!selectedTeam && !isMarketRunnerSelection)}
           onClick={handlePlaceBet}
         >
           {matchIsSuspended ? 'MATCH SUSPENDED' : 'BET'}

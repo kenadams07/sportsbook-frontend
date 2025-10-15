@@ -90,8 +90,20 @@ export const fetchProvidersNames = async () => {
   }
 };
 
+// Keep track of pending requests to prevent duplicates
+let pendingRequests = {};
+
 // Fetch games with pagination
 export const fetchGames = async (batchNumber = 0, batchSize = 100, providerName = 'all', search = '') => {
+  // Create a unique key for this request
+  const requestKey = `${batchNumber}-${batchSize}-${providerName}-${search}`;
+  
+  // If this request is already pending, return the existing promise
+  if (pendingRequests[requestKey]) {
+    console.log('Duplicate request prevented for:', requestKey);
+    return pendingRequests[requestKey];
+  }
+  
   console.log('fetchGames API called with:', { batchNumber, batchSize, providerName, search });
   
   try {
@@ -102,11 +114,35 @@ export const fetchGames = async (batchNumber = 0, batchSize = 100, providerName 
       search
     };
     
-    const response = await casinoApi.get('/gap-casino-game/providers/games', { params });
+    // Store the promise in pending requests
+    pendingRequests[requestKey] = casinoApi.get('/gap-casino-game/providers/games', { params });
+    
+    const response = await pendingRequests[requestKey];
     console.log('fetchGames response:', response.data);
+    
+    // Remove from pending requests after completion
+    delete pendingRequests[requestKey];
+    
     return response.data;
   } catch (error) {
     console.error("Error fetching games:", error);
+    // Remove from pending requests on error
+    delete pendingRequests[requestKey];
+    throw error;
+  }
+};
+
+// Fetch game URL for launching games
+export const fetchGameUrl = async (gameId, gameCode) => {
+  console.log('fetchGameUrl API called with:', { gameId, gameCode });
+  
+  try {
+    const params = { gameId, gameCode };
+    const response = await casinoApi.get('/studio21-game/game-url', { params });
+    console.log('fetchGameUrl response:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching game URL:", error);
     throw error;
   }
 };

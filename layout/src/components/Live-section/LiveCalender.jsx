@@ -130,9 +130,65 @@ const LiveCalender = () => {
           };
         });
         setMatches(allMatches);
+        
+        // Automatically select the first match if no match is currently selected
+        if (allMatches.length > 0 && !selectedMatch) {
+          setSelectedMatch(allMatches[0]);
+        }
       })
       .finally(() => setLoading(false));
   }, [selectedSportKeys]);
+
+  // Poll odds for the selected match to keep them updated in real-time
+  useEffect(() => {
+    let intervalId;
+    
+    function pollOdds() {
+      // Only poll if we have a selected match
+      if (selectedMatch) {
+        const sportId = SPORT_ID_BY_KEY[selectedMatch.sportKey];
+        if (!sportId) return;
+        
+        fetchSportsEvents(sportId, false)
+          .then((json) => {
+            const list = json?.sports ?? [];
+            // Find the updated match data
+            const updatedMatch = list.find(m => m.eventId === selectedMatch.eventId);
+            
+            if (updatedMatch) {
+              // Update the selected match with new odds
+              const updatedOdds = extractOddsW1W2(updatedMatch.markets);
+              setSelectedMatch(prevMatch => {
+                // Only update if this is still the selected match
+                if (prevMatch && prevMatch.eventId === updatedMatch.eventId) {
+                  return {
+                    ...updatedMatch,
+                    sportKey: prevMatch.sportKey, // Preserve sportKey
+                    // Preserve any market runner selection if it exists
+                    selectedMarket: prevMatch.selectedMarket,
+                    selectedRunner: prevMatch.selectedRunner,
+                    selectedOdd: prevMatch.selectedOdd
+                  };
+                }
+                return prevMatch;
+              });
+            }
+          })
+          .catch(() => {
+            // Ignore errors to keep polling
+          });
+      }
+    }
+    
+    // Poll every second for real-time odds updates
+    intervalId = setInterval(pollOdds, 1000);
+    
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [selectedMatch]);
 
   const handleMatchClick = (match) => {
     setSelectedMatch(match);
@@ -165,7 +221,7 @@ const LiveCalender = () => {
   };
 
   return (
-    <div className="w-full mt-4">
+    <div className="w-full mt-4 flex flex-col h-[calc(100vh-80px)]">
       {/* Top bar akin to screenshot: left sport dropdown + date pills */}
       <div className="flex items-center gap-3 bg-live-tertiary text-live-primary px-2 py-2 rounded">
                  {/* Sport dropdown */}
@@ -247,69 +303,65 @@ const LiveCalender = () => {
             </div>
           )}
         </div>
-        {/* Date pills (static visuals to match layout) */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
-          {["22.08 FRI","23.08 SAT","24.08 SUN","25.08 MON","26.08 TUE","27.08 WED","28.08 THU"].map((d, i) => (
-            <button key={d} className={`px-3 py-1.5 rounded text-xs border border-live ${i===0 ? 'bg-live-primary' : 'bg-transparent'}`}>{d}</button>
-          ))}
-        </div>
+        {/* Removed static date pills */}
       </div>
 
       {/* Main content area with matches table and right sidebar */}
-      <div className="flex gap-4 mt-2">
+      <div className="flex gap-4 mt-2 flex-1 overflow-hidden">
         {/* Matches table */}
-                 <div className="flex-1 bg-live-tertiary text-live-primary rounded overflow-hidden">
-           <div className="flex items-center text-xs uppercase tracking-wide bg-live-primary">
-                           <div className="w-40 px-3 py-2 border-r border-live relative" ref={winnerDropdownRef}>
-                <button
-                  className="flex items-center gap-2 hover:bg-live-hover px-2 py-1 rounded text-xs uppercase tracking-wide"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsWinnerDropdownOpen(!isWinnerDropdownOpen);
-                  }}
-                >
-                 {selectedWinnerType === "winner" && "Winner"}
-                 {selectedWinnerType === "handicap" && "Handicap"}
-                 {selectedWinnerType === "totals" && "Totals"}
-                 <span className="opacity-70">{isWinnerDropdownOpen ? '▴' : '▾'}</span>
-               </button>
-               {isWinnerDropdownOpen && (
-                 <div className="absolute top-full left-0 mt-1 w-32 bg-live-tertiary border border-live rounded shadow-lg z-30" onClick={handleWinnerDropdownClick}>
-                   <ul className="py-1">
-                     <li>
-                       <button
-                         className={`w-full text-left px-3 py-2 text-xs hover:bg-live-primary ${selectedWinnerType === "winner" ? "bg-live-primary" : ""}`}
-                         onClick={() => setSelectedWinnerType("winner")}
-                       >
-                         Winner
-                       </button>
-                     </li>
-                     <li>
-                       <button
-                         className={`w-full text-left px-3 py-2 text-xs hover:bg-live-primary ${selectedWinnerType === "handicap" ? "bg-live-primary" : ""}`}
-                         onClick={() => setSelectedWinnerType("handicap")}
-                       >
-                         Handicap
-                       </button>
-                     </li>
-                     <li>
-                       <button
-                         className={`w-full text-left px-3 py-2 text-xs hover:bg-live-primary ${selectedWinnerType === "totals" ? "bg-live-primary" : ""}`}
-                         onClick={() => setSelectedWinnerType("totals")}
-                       >
-                         Totals
-                       </button>
-                     </li>
-                   </ul>
-                 </div>
-               )}
-             </div>
-             <div className="flex-1 px-3 py-2">&nbsp;</div>
-             <div className="w-28 px-3 py-2 text-center border-l border-live">W1</div>
-             <div className="w-28 px-3 py-2 text-center border-l border-live">-</div>
-             <div className="w-28 px-3 py-2 text-center border-l border-live">W2</div>
-           </div>
-          <div>
+        <div className="flex-1 bg-live-tertiary text-live-primary rounded overflow-hidden flex flex-col">
+          <div className="flex items-center text-xs uppercase tracking-wide bg-live-primary">
+            <div className="w-40 px-3 py-2 border-r border-live relative" ref={winnerDropdownRef}>
+              <button
+                className="flex items-center gap-2 hover:bg-live-hover px-2 py-1 rounded text-xs uppercase tracking-wide"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsWinnerDropdownOpen(!isWinnerDropdownOpen);
+                }}
+              >
+                {selectedWinnerType === "winner" && "Winner"}
+                {selectedWinnerType === "handicap" && "Handicap"}
+                {selectedWinnerType === "totals" && "Totals"}
+                <span className="opacity-70">{isWinnerDropdownOpen ? '▴' : '▾'}</span>
+              </button>
+              {isWinnerDropdownOpen && (
+                <div className="absolute top-full left-0 mt-1 w-32 bg-live-tertiary border border-live rounded shadow-lg z-30" onClick={handleWinnerDropdownClick}>
+                  <ul className="py-1">
+                    <li>
+                      <button
+                        className={`w-full text-left px-3 py-2 text-xs hover:bg-live-primary ${selectedWinnerType === "winner" ? "bg-live-primary" : ""}`}
+                        onClick={() => setSelectedWinnerType("winner")}
+                      >
+                        Winner
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className={`w-full text-left px-3 py-2 text-xs hover:bg-live-primary ${selectedWinnerType === "handicap" ? "bg-live-primary" : ""}`}
+                        onClick={() => setSelectedWinnerType("handicap")}
+                      >
+                        Handicap
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className={`w-full text-left px-3 py-2 text-xs hover:bg-live-primary ${selectedWinnerType === "totals" ? "bg-live-primary" : ""}`}
+                        onClick={() => setSelectedWinnerType("totals")}
+                      >
+                        Totals
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+            <div className="flex-1 px-3 py-2">&nbsp;</div>
+            <div className="w-28 px-3 py-2 text-center border-l border-live">W1</div>
+            <div className="w-28 px-3 py-2 text-center border-l border-live">-</div>
+            <div className="w-28 px-3 py-2 text-center border-l border-live">W2</div>
+          </div>
+          {/* Fixed height container with scrollable content */}
+          <div className="flex-1 overflow-y-auto">
             {loading ? (
               <div className="px-3 py-4 flex items-center justify-center">
                 <div className="flex flex-col items-center animate-pulse-scale">
@@ -323,51 +375,60 @@ const LiveCalender = () => {
             ) : matches.length === 0 ? (
               <div className="px-3 py-4 text-sm text-live-secondary">No matches</div>
             ) : (
-                             matches.map((m, idx) => {
-                 const odds = extractOddsW1W2(m.markets);
-                 const isSelected = selectedMatch?.eventId === m.eventId;
-                 const sport = SPORTS.find(s => s.key === m.sportKey);
-                 const SportIcon = sport?.icon;
-                 
-                 return (
-                   <div 
-                     key={m.eventId || idx} 
-                     className={`flex items-stretch border-t border-live-primary hover:bg-live-tertiary cursor-pointer ${isSelected ? 'bg-live-tertiary' : ''}`}
-                     onClick={() => handleMatchClick(m)}
-                   >
-                     <div className="w-40 flex items-center gap-2 px-3 py-3 text-xs text-live-secondary">
-                       <span className="inline-flex items-center gap-1">
-                         <span className="w-3 h-3 rounded-full bg-live-success" />
-                         <span>{formatDateTime(m.openDate)}</span>
-                       </span>
-                     </div>
-                     <div className="flex-1 px-3 py-2">
-                       <div className="flex items-center gap-2 text-sm text-live-primary">
-                         {SportIcon && <SportIcon className={`w-4 h-4 ${sport.color.replace('bg-','')}`} />}
-                         <span>{m.eventName || ''}</span>
-                       </div>
-                       <div className="text-[11px] text-live-muted">{m.competitionName || ''}</div>
-                     </div>
-                     <div className="w-28 px-3 py-3 text-center text-sm text-live-primary">{odds.w1}</div>
-                     <div className="w-28 px-3 py-3 text-center text-sm text-live-primary">-</div>
-                     <div className="w-28 px-3 py-3 text-center text-sm text-live-primary">{odds.w2}</div>
-                   </div>
-                 );
-               })
+              matches.map((m, idx) => {
+                const odds = extractOddsW1W2(m.markets);
+                const isSelected = selectedMatch?.eventId === m.eventId;
+                const sport = SPORTS.find(s => s.key === m.sportKey);
+                const SportIcon = sport?.icon;
+                
+                return (
+                  <div 
+                    key={m.eventId || idx} 
+                    className={`flex items-stretch border-b border-live-primary hover:bg-live-hover transition-colors duration-150 cursor-pointer ${isSelected ? 'bg-live-tertiary border-l-4 border-l-live-accent' : ''}`}
+                    onClick={() => handleMatchClick(m)}
+                  >
+                    <div className="w-40 flex items-center gap-2 px-3 py-3 text-xs text-live-secondary">
+                      <span className="inline-flex items-center gap-1">
+                        <span className="w-2 h-2 rounded-full bg-live-success"></span>
+                        <span>{formatDateTime(m.openDate)}</span>
+                      </span>
+                    </div>
+                    <div className="flex-1 px-3 py-3 flex flex-col justify-center">
+                      <div className="flex items-center gap-2 text-sm text-live-primary font-medium">
+                        {SportIcon && <SportIcon className={`w-4 h-4 ${sport.color.replace('bg-','')}`} />}
+                        <span className="truncate">{m.eventName || ''}</span>
+                      </div>
+                      <div className="text-[11px] text-live-muted truncate">{m.competitionName || ''}</div>
+                    </div>
+                    <div className="w-24 flex items-center justify-center px-2">
+                      <div className="bg-live-odds rounded px-2 py-1 text-center min-w-[50px]">
+                        <span className="text-xs font-bold text-live-accent">{odds.w1}</span>
+                      </div>
+                    </div>
+                    <div className="w-12 flex items-center justify-center px-1 text-live-muted">-</div>
+                    <div className="w-24 flex items-center justify-center px-2">
+                      <div className="bg-live-odds rounded px-2 py-1 text-center min-w-[50px]">
+                        <span className="text-xs font-bold text-live-accent">{odds.w2}</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
             )}
           </div>
         </div>
 
         {/* Right sidebar with RightEventInfoSection */}
-        <div className="w-80">
-                     <RightEventInfoSection 
-             selectedGame={selectedMatch ? {
-               team1: selectedMatch.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '',
-               team2: selectedMatch.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '',
-               timeLabel: formatDateTime(selectedMatch.openDate),
-               odds: extractOddsW1W2(selectedMatch.markets),
-               sport: SPORTS.find(s => s.key === selectedMatch.sportKey)
-             } : null}
+        <div className="w-80 flex flex-col">
+          <RightEventInfoSection 
+            selectedGame={selectedMatch ? {
+              ...selectedMatch,
+              team1: selectedMatch.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '',
+              team2: selectedMatch.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '',
+              timeLabel: formatDateTime(selectedMatch.openDate),
+              odds: extractOddsW1W2(selectedMatch.markets),
+              sport: SPORTS.find(s => s.key === selectedMatch.sportKey)
+            } : null}
             onLogin={handleLogin}
             onRegister={handleRegister}
             isCompact={true}

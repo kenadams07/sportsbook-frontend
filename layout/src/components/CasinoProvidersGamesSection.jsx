@@ -26,6 +26,9 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
   const [gameSearchQuery, setGameSearchQuery] = useState("");
   const [selectedProvider, setSelectedProvider] = useState(null);
   
+  // Ref for debounce timeout
+  const debounceRef = useRef(null);
+  
   // Ref for the games container
   const gamesContainerRef = useRef(null);
 
@@ -43,7 +46,7 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
     }));
   }, [dispatch]);
 
-  // Simple scroll handler
+  // Scroll handler with debounce to prevent excessive API calls
   const handleScroll = useCallback(() => {
     const gamesContainer = gamesContainerRef.current;
     if (!gamesContainer) {
@@ -51,60 +54,15 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
     }
 
     const { scrollTop, scrollHeight, clientHeight } = gamesContainer;
-    // Simple threshold for detecting near bottom
+    // Threshold for detecting near bottom
     const isNearBottom = scrollTop + clientHeight >= scrollHeight - 5;
 
-    // Simple check for loading more games - ONLY check the essential conditions
+    // Check for loading more games with additional safeguards
     if (isNearBottom && !loadingMoreGames && pagination.hasMore) {
-      dispatch(fetchMoreCasinoGames({
-        batchNumber: pagination.batchNumber + 1,
-        batchSize: 50,
-        providerName: selectedProvider || 'all',
-        search: gameSearchQuery
-      }));
-    }
-  }, [dispatch, loadingMoreGames, pagination, selectedProvider, gameSearchQuery]);
-
-  // Add scroll event listener
-  useEffect(() => {
-    const gamesContainer = gamesContainerRef.current;
-    
-    if (gamesContainer) {
-      // Remove any existing listener first
-      gamesContainer.removeEventListener('scroll', handleScroll);
-      // Add the scroll listener
-      gamesContainer.addEventListener('scroll', handleScroll);
-      
-      // Also manually call handleScroll once to check initial state
-      handleScroll();
-      
-      return () => {
-        gamesContainer.removeEventListener('scroll', handleScroll);
-      };
-    }
-  }, [handleScroll]);
-  
-  // Periodic check to see if we need to load more data
-  // This helps when the container isn't scrollable initially but might become scrollable
-  useEffect(() => {
-    // Only run this check if we have more data and we're not already loading
-    if (loadingMoreGames || !pagination.hasMore) return;
-    
-    const timer = setTimeout(() => {
-      const gamesContainer = gamesContainerRef.current;
-      if (!gamesContainer) return;
-      
-      // Check if container is scrollable
-      const isScrollable = gamesContainer.scrollHeight > gamesContainer.clientHeight;
-      const { scrollTop, scrollHeight, clientHeight } = gamesContainer;
-      const isNearBottom = scrollTop + clientHeight >= scrollHeight - 50;
-      
-      // If not scrollable or near bottom and we have more data, try to load more
-      if ((isNearBottom || !isScrollable) && pagination.hasMore) {
-        const totalGames = gamesByProvider.reduce((total, provider) => total + (provider.games?.length || 0), 0);
-        
-        // If we have some games, try loading more
-        if (totalGames > 0) {
+      // Add a small delay to prevent multiple rapid calls
+      setTimeout(() => {
+        // Double-check conditions after delay
+        if (!loadingMoreGames && pagination.hasMore) {
           dispatch(fetchMoreCasinoGames({
             batchNumber: pagination.batchNumber + 1,
             batchSize: 50,
@@ -112,11 +70,43 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
             search: gameSearchQuery
           }));
         }
-      }
-    }, 500); // Check after a short delay to allow rendering
+      }, 100);
+    }
+  }, [dispatch, loadingMoreGames, pagination, selectedProvider, gameSearchQuery]);
+
+  // Add scroll event listener with throttling
+  useEffect(() => {
+    const gamesContainer = gamesContainerRef.current;
     
-    return () => clearTimeout(timer);
-  }, [loadingMoreGames, pagination, dispatch, selectedProvider, gameSearchQuery]);
+    if (gamesContainer) {
+      // Throttled scroll handler to prevent excessive calls
+      let ticking = false;
+      
+      const throttledScroll = () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            handleScroll();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      };
+      
+      // Remove any existing listener first
+      gamesContainer.removeEventListener('scroll', throttledScroll);
+      // Add the throttled scroll listener
+      gamesContainer.addEventListener('scroll', throttledScroll);
+      
+      // Also manually call handleScroll once to check initial state
+      handleScroll();
+      
+      return () => {
+        gamesContainer.removeEventListener('scroll', throttledScroll);
+      };
+    }
+  }, [handleScroll]);
+  
+  // Removed periodic check to prevent infinite API calling
 
   // Log when component updates
   useEffect(() => {
@@ -185,9 +175,28 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
   const handleGameSearch = (e) => {
     const value = e.target.value;
     setGameSearchQuery(value);
-    if (onGameSearch) {
-      onGameSearch(value);
+    
+    // Clear existing debounce timeout
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
     }
+    
+    // Set new debounce timeout
+    debounceRef.current = setTimeout(() => {
+      if (onGameSearch) {
+        onGameSearch(value);
+      }
+      
+      // Reset games and fetch with new search term
+      dispatch(resetCasinoGames());
+      
+      dispatch(fetchCasinoGames({ 
+        batchNumber: 0, 
+        batchSize: 100, 
+        providerName: selectedProvider || 'all', 
+        search: value 
+      }));
+    }, 500); // 500ms debounce delay
   };
 
   const handleProviderSearchSubmit = () => {
@@ -387,8 +396,14 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
 
             }
           }}
-          onScroll={() => {
-
+          onScroll={(e) => {
+            // Throttle scroll events to prevent excessive calls
+            if (!this.scrollThrottle) {
+              this.scrollThrottle = setTimeout(() => {
+                this.scrollThrottle = null;
+              }, 100);
+              handleScroll();
+            }
           }}
         >
           {/* Manual trigger button for testing */}
@@ -438,7 +453,7 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
                   ) : (
                     <div className="casino-no-games">No games found</div>
                   )}
-                  {loadingMoreGames && (
+                  {loadingMoreGames && pagination.hasMore && (
                     <div className="casino-loading-more">Loading more games...</div>
                   )}
                 </div>
@@ -453,7 +468,7 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
                         onPlay={handlePlayGame}
                       />
                     ))}
-                    {loadingMoreGames && (
+                    {loadingMoreGames && pagination.hasMore && (
                       <div className="casino-loading-more">Loading more games...</div>
                     )}
                   </div>
@@ -483,7 +498,7 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
               ) : (
                 <div className="casino-no-games">No games found</div>
               )}
-              {loadingMoreGames && (
+              {loadingMoreGames && pagination.hasMore && (
                 <div className="casino-loading-more">Loading more games...</div>
               )}
             </div>

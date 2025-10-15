@@ -17,7 +17,10 @@ import {
   FETCH_HOMEPAGE_CASINO_GAMES_FAILURE,
   FETCH_HOMEPAGE_LIVE_GAMES,
   FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS,
-  FETCH_HOMEPAGE_LIVE_GAMES_FAILURE
+  FETCH_HOMEPAGE_LIVE_GAMES_FAILURE,
+  FETCH_CASINO_GAME_URL,
+  FETCH_CASINO_GAME_URL_SUCCESS,
+  FETCH_CASINO_GAME_URL_FAILURE
 } from "../Action/actionTypes";
 
 const INIT_STATE = {
@@ -289,6 +292,21 @@ const casinoReducer = (state = INIT_STATE, action) => {
         ...state, 
         loadingMoreProviders: false, 
         providersError: action.payload,
+      };
+      
+    // Casino Game URL Actions
+    case FETCH_CASINO_GAME_URL:
+      console.log('FETCH_CASINO_GAME_URL action received in reducer with payload:', action.payload);
+      // We don't need to update state for this action as it opens a new tab
+      return state;
+    case FETCH_CASINO_GAME_URL_SUCCESS:
+      // We don't need to update state for this action as it opens a new tab
+      return state;
+    case FETCH_CASINO_GAME_URL_FAILURE:
+      // We could show an error message here if needed
+      return { 
+        ...state, 
+        gamesError: action.payload,
       };
       
     default:

@@ -1,12 +1,37 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchCasinoGameUrl } from '../redux/Action/casinoActions';
 
 const CasinoGameCard = ({ game, onPlay }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const dispatch = useDispatch();
 
-  const handlePlayClick = () => {
+  const handlePlayClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('handlePlayClick called with game:', game);
+    
     if (onPlay) {
       onPlay(game);
+    }
+    
+    // Dispatch action to fetch game URL and open in new tab
+    // Check for different possible property names for gameId and gameCode
+    const gameId = game.gameId || game.id || game.GameId;
+    const gameCode = game.gameCode || game.code || game.GameCode;
+    
+    console.log('Extracted gameId and gameCode:', { gameId, gameCode });
+    
+    if (gameId && gameCode) {
+      console.log('Dispatching fetchCasinoGameUrl');
+      const result = dispatch(fetchCasinoGameUrl({ 
+        gameId: gameId, 
+        gameCode: gameCode 
+      }));
+      console.log('Dispatch result:', result);
+    } else {
+      console.log('Missing gameId or gameCode in game data:', game);
     }
   };
 
@@ -20,7 +45,7 @@ const CasinoGameCard = ({ game, onPlay }) => {
   };
 
   return (
-    <div className="casino-game-card group">
+    <div className="casino-game-card group" onClick={() => console.log('Game card clicked')}>
       {!imageLoaded && !imageError && (
         <div className="casino-game-card-img-loading">
           <div className="casino-game-card-img-shimmer"></div>
@@ -36,7 +61,10 @@ const CasinoGameCard = ({ game, onPlay }) => {
       />
       <div className="casino-game-overlay">
         <h3 className="casino-game-title">{game.name}</h3>
-        <button className="casino-play-button" onClick={handlePlayClick}>
+        <button 
+          className="casino-play-button" 
+          onClick={handlePlayClick}
+        >
           Play Now
         </button>
       </div>

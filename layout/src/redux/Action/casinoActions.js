@@ -17,7 +17,10 @@ import {
   FETCH_HOMEPAGE_CASINO_GAMES_FAILURE,
   FETCH_HOMEPAGE_LIVE_GAMES,
   FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS,
-  FETCH_HOMEPAGE_LIVE_GAMES_FAILURE
+  FETCH_HOMEPAGE_LIVE_GAMES_FAILURE,
+  FETCH_CASINO_GAME_URL,
+  FETCH_CASINO_GAME_URL_SUCCESS,
+  FETCH_CASINO_GAME_URL_FAILURE
 } from "./actionTypes";
 
 // Games Actions
@@ -182,5 +185,24 @@ export const fetchMoreCasinoProvidersSuccess = (payload) => ({
 
 export const fetchMoreCasinoProvidersFailure = (error) => ({
   type: FETCH_MORE_CASINO_PROVIDERS_FAILURE,
+  payload: error,
+});
+
+// Casino Game URL Actions
+export const fetchCasinoGameUrl = (params) => {
+  console.log('fetchCasinoGameUrl action dispatched with params:', params);
+  return {
+    type: FETCH_CASINO_GAME_URL,
+    payload: params,
+  };
+};
+
+export const fetchCasinoGameUrlSuccess = (payload) => ({
+  type: FETCH_CASINO_GAME_URL_SUCCESS,
+  payload,
+});
+
+export const fetchCasinoGameUrlFailure = (error) => ({
+  type: FETCH_CASINO_GAME_URL_FAILURE,
   payload: error,
 });

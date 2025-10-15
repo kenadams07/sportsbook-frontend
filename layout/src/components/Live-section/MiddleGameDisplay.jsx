@@ -130,12 +130,7 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
                 </div>
               </div>
 
-              {/* Center - Score display */}
-              <div className="text-center">
-                <div className="text-live-primary text-lg font-bold">
-                  {homeScore}-{awayScore} {match.status === 'IN_PLAY' ? (match.halfTimeScore ? `(${match.halfTimeScore})` : '') : ''} {match.status === 'IN_PLAY' ? (match.currentTime ? `${match.currentTime}'` : '') : ''}
-                </div>
-              </div>
+        
 
               {/* Right side - Current scores */}
               <div className="text-right space-y-3">
@@ -162,13 +157,6 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
         </div>
       </div>
 
-      {/* Sleek Navbar Below Image */}
-      <SleekNavbar 
-        onSearchChange={handleSearchChange}
-        searchValue={searchTerm}
-        onSearchClear={handleSearchClear}
-      />
-
       {/* Market Section - Scrollable area */}
       <div className="flex-grow overflow-hidden flex flex-col">
         {matchIsSuspended ? (
@@ -184,6 +172,8 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
             selectedMatch={match} 
             onRunnerSelect={onRunnerSelect}
             searchTerm={searchTerm}
+            onSearchChange={handleSearchChange}
+            onSearchClear={handleSearchClear}
           />
         )}
       </div>
@@ -345,11 +335,13 @@ function MarketItem({ market, isOpen, onToggle, highlightedOdds = {}, onRunnerSe
  * - Smooth expand/collapse by animating max-height using measured scrollHeight.
  * - Panel shell color: #3c3c3c, content background: #626262
  */
-function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
+function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearchChange, onSearchClear }) {
   const [markets, setMarkets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [expandedById, setExpandedById] = useState({});
   const [allMarketsExpanded, setAllMarketsExpanded] = useState(false);
+  const [filteredMarkets, setFilteredMarkets] = useState([]);
+  const [selectedMarketFilter, setSelectedMarketFilter] = useState('All');
   const prevMarketsRef = useRef([]);
   const intervalRef = useRef(null);
   const highlightedOddsRef = useRef({});
@@ -381,18 +373,28 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
     };
   }, []);
 
-  // Filter markets based on search term
-  const filteredMarkets = useMemo(() => {
-    if (!searchTerm) return markets;
+  // Filter markets based on search term and market filter
+  useEffect(() => {
+    let result = markets;
     
-    const term = searchTerm.toLowerCase().trim();
-    return markets.filter(market => 
-      market.marketName?.toLowerCase().includes(term) ||
-      market.runners?.some(runner => 
-        runner.runnerName?.toLowerCase().includes(term)
-      )
-    );
-  }, [markets, searchTerm]);
+    // Apply market filter
+    if (selectedMarketFilter !== 'All') {
+      result = result.filter(market => market.marketName === selectedMarketFilter);
+    }
+    
+    // Apply search term filter
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase().trim();
+      result = result.filter(market => 
+        market.marketName?.toLowerCase().includes(term) ||
+        market.runners?.some(runner => 
+          runner.runnerName?.toLowerCase().includes(term)
+        )
+      );
+    }
+    
+    setFilteredMarkets(result);
+  }, [markets, searchTerm, selectedMarketFilter]);
 
   // Fetch markets data with polling optimization
   useEffect(() => {
@@ -405,10 +407,12 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
       setLoading(true);
       // Clear previous markets immediately when switching matches
       setMarkets([]);
+      setFilteredMarkets([]);
       prevMarketsRef.current = [];
       // Reset expanded state for new match
       setExpandedById({});
       setAllMarketsExpanded(false);
+      setSelectedMarketFilter('All');
       
       // Cancel any ongoing fetch requests for the previous match
       if (currentFetchControllerRef.current) {
@@ -421,6 +425,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
     // Check if we have all required data to fetch markets
     if (!selectedMatch || !selectedMatch.eventId) {
       setMarkets([]);
+      setFilteredMarkets([]);
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
@@ -434,6 +439,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
     
     if (!sportKey) {
       setMarkets([]);
+      setFilteredMarkets([]);
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
@@ -452,6 +458,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
         
         if (!sportId) {
           setMarkets([]);
+          setFilteredMarkets([]);
           setLoading(false);
           return;
         }
@@ -573,6 +580,11 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
     setAllMarketsExpanded(!allMarketsExpanded);
   };
 
+  // Handle market filter change
+  const handleMarketFilter = (filter) => {
+    setSelectedMarketFilter(filter);
+  };
+
   // Split filtered markets into two columns
   const leftColumn = [];
   const rightColumn = [];
@@ -585,6 +597,19 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
       rightColumn.push({ ...market, id: marketId });
     }
   });
+
+  // Extract market names that appear more than twice for the navbar
+  const marketNameCounts = markets.reduce((acc, market) => {
+    const name = market.marketName;
+    if (name) {
+      acc[name] = (acc[name] || 0) + 1;
+    }
+    return acc;
+  }, {});
+  
+  const marketNames = Object.entries(marketNameCounts)
+    .filter(([name, count]) => count > 2)
+    .map(([name, count]) => name);
 
   // Show loading state when switching matches or when markets are loading
   if (loading) {
@@ -616,10 +641,10 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
   return (
     <div className="flex flex-col h-full">
       {/* Expand/Collapse All button - Modified to show "All Markets" only with theme-matching shadow */}
-      <div className="px-2 pb-2">
+      <div className="px-2 pb-2 pt-3 cursor-pointer">
         <button
           onClick={toggleAllMarkets}
-          className="w-full text-left px-3 py-2 text-xs bg-live-primary hover:bg-live-hover rounded transition-colors flex items-center justify-between shadow-[0_2px_12px_var(--live-accent-primary)]"
+          className="w-full text-left px-3 py-2 text-xs bg-live-primary hover:bg-live-hover cursor-pointer rounded transition-colors flex items-center justify-between shadow-[0_2px_12px_var(--live-accent-primary)]"
         >
           <span className="text-live-primary font-medium">
             All Markets
@@ -628,6 +653,17 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
             {filteredMarkets.length} markets
           </span>
         </button>
+      </div>
+
+      {/* Sleek Navbar with market names */}
+      <div className="px-2 pb-2">
+        <SleekNavbar 
+          onSearchChange={onSearchChange}
+          searchValue={searchTerm}
+          onSearchClear={onSearchClear}
+          marketNames={marketNames}
+          onMarketFilter={handleMarketFilter}
+        />
       </div>
 
       {/* Two-column layout for markets */}
@@ -671,24 +707,89 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '' }) {
 /**
  * SleekNavbar Component - Search bar with clear button
  */
-function SleekNavbar({ onSearchChange, searchValue, onSearchClear }) {
+function SleekNavbar({ onSearchChange, searchValue, onSearchClear, marketNames = [], onMarketFilter }) {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('All');
+
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen);
+    if (isSearchOpen) {
+      onSearchClear();
+    }
+  };
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    // Call the market filter function to filter markets based on selected tab
+    if (onMarketFilter) {
+      onMarketFilter(tab);
+    }
+  };
+
+  // Get unique market names from the marketNames prop
+  const uniqueMarketNames = [...new Set(marketNames)];
+
   return (
     <div className="bg-live-tertiary rounded-md px-3 py-2 flex items-center gap-2">
-      <IoSearchOutline className="text-live-primary flex-shrink-0" />
-      <input
-        type="text"
-        placeholder="Search markets or runners..."
-        className="flex-grow bg-transparent text-sm text-live-primary placeholder:text-live-muted focus:outline-none"
-        value={searchValue}
-        onChange={(e) => onSearchChange(e.target.value)}
-      />
-      {searchValue && (
-        <button
-          onClick={onSearchClear}
-          className="text-live-primary hover:text-live-accent flex-shrink-0"
-        >
-          <IoCloseOutline size={18} />
-        </button>
+      {isSearchOpen ? (
+        <>
+          <button
+            onClick={toggleSearch}
+            className="text-live-primary hover:text-live-accent flex-shrink-0 mr-3"
+          >
+            <IoCloseOutline size={18} />
+          </button>
+          <div className="h-6 w-px bg-live-primary mx-2"></div>
+          <input
+            type="text"
+            placeholder="Search markets or runners..."
+            className="flex-grow bg-transparent text-sm text-live-primary placeholder:text-live-muted focus:outline-none"
+            value={searchValue}
+            onChange={(e) => onSearchChange(e.target.value)}
+            autoFocus
+          />
+        </>
+      ) : (
+        <div className="flex items-center w-full overflow-x-auto">
+          <button
+            onClick={toggleSearch}
+            className="text-live-primary hover:text-live-accent flex-shrink-0 mr-3"
+          >
+            <IoSearchOutline size={18} />
+          </button>
+          <div className="h-6 w-px bg-live-primary mx-2"></div>
+          <div className="flex space-x-6 min-w-max">
+            <button 
+              className={`text-sm font-medium relative py-1 px-1 whitespace-nowrap cursor-pointer ${
+                activeTab === 'All' 
+                  ? 'text-live-accent' 
+                  : 'text-live-primary hover:text-live-accent'
+              }`}
+              onClick={() => handleTabClick('All')}
+            >
+              All
+              {activeTab === 'All' && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-live-accent"></div>
+              )}
+            </button>
+            {uniqueMarketNames.map((marketName, index) => (
+              <button 
+                key={index}
+                className={`text-sm font-medium relative py-1 px-1 whitespace-nowrap cursor-pointer ${
+                  activeTab === marketName 
+                    ? 'text-live-accent' 
+                    : 'text-live-primary hover:text-live-accent'
+                }`}
+                onClick={() => handleTabClick(marketName)}
+              >
+                {marketName}
+                {activeTab === marketName && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-live-accent"></div>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );

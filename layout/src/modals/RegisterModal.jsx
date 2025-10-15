@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { useEffect } from "react";
 import { User, Calendar as CalendarIcon } from "lucide-react";
@@ -7,6 +5,7 @@ import { Button } from "../components/ui/button";
 import { Calendar } from "../components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover";
 import { format } from "date-fns";
+import { Checkbox } from "../components/ui/checkbox"; // Added Checkbox import
 
 import {
   Dialog,
@@ -31,6 +30,7 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
   const [shouldReopenRegister, setShouldReopenRegister] = useState(false);
   const [date, setDate] = useState(null);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isConsentChecked, setIsConsentChecked] = useState(false); // Added consent state
   const [formData, setFormData] = useState({
     username: "",
     name: "",
@@ -64,6 +64,7 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
         confirmPassword: "",
       });
       setDate(null);
+      setIsConsentChecked(false); // Reset consent checkbox
     }
   }, [isOpen]);
 
@@ -85,6 +86,7 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
       confirmPassword: "",
     });
     setDate(null);
+    setIsConsentChecked(false); // Reset consent checkbox
     
     // Close the embedded login modal if it's open
     setIsLoginModalOpen(false);
@@ -108,6 +110,7 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
       newErrors.password = "Password must be at least 6 characters";
     if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = "Passwords do not match";
+    if (!isConsentChecked) newErrors.consent = "You must agree to the terms and conditions"; // Added consent validation
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -249,7 +252,7 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
                                 setIsCalendarOpen(false);
                               }
                             }}
-                            disabled={(date) => date > new Date()}
+                            disabled={(date) => date > new Date()} // Only restrict future dates, removed the 18-year restriction
                             initialFocus
                             className="bg-[#2a2a2a] text-white"
                             classNames={{
@@ -262,6 +265,7 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
                               nav_button: "border-gray-600 hover:bg-[#404040]",
                             }}
                           />
+
                         </PopoverContent>
                       </Popover>
                     </div>
@@ -289,23 +293,45 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
                 </div>
               </div>
 
+              {/* Consent Checkbox */}
+              <div className="pt-2">
+                <div className="flex items-start">
+                  <Checkbox
+                    id="consent"
+                    checked={isConsentChecked}
+                    onCheckedChange={setIsConsentChecked}
+                    className="mt-1 border-gray-400 data-[state=checked]:bg-yellow-500 data-[state=checked]:border-yellow-500"
+                  />
+                  <label htmlFor="consent" className="ml-2 text-sm text-gray-300">
+                    By signing up, I confirm that I am at least 18 years old and understand that betting involves real money and carries a risk of financial loss. I acknowledge that gambling can become addictive and agree to participate responsibly. I accept that the platform is not responsible for any losses incurred and that I am solely responsible for my betting activities.
+                  </label>
+                </div>
+                {errors.consent && (
+                  <p className="input-error mt-1 text-sm">
+                    {errors.consent}
+                  </p>
+                )}
+              </div>
+
               {/* Submit Button */}
               <div className="pt-4">
                 <Button
                   type="submit"
-                  className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-12 text-base"
+                  className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-12 text-base cursor-pointer"
+                  disabled={!isConsentChecked}
                 >
                   REGISTER
                 </Button>
               </div>
+
+              <div className="flex items-center justify-center mt-6 pt-4 border-t border-gray-600">
+                <Button variant="ghost" className="text-gray-400 hover:text-white text-sm hover:bg-[#404040]">
+                  <User className="w-4 h-4 mr-2" />
+                  Contact support
+                </Button>
+              </div>
             </form>
 
-            <div className="flex items-center justify-center mt-6 pt-4 border-t border-gray-600">
-              <Button variant="ghost" className="text-gray-400 hover:text-white text-sm hover:bg-[#404040]">
-                <User className="w-4 h-4 mr-2" />
-                Contact support
-              </Button>
-            </div>
           </div>
         </DialogContent>
       </Dialog>

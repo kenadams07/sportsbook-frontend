@@ -55,7 +55,7 @@ const Home = () => {
     dispatch(fetchHomepageCasinoGames({ 
       batchNumber: 0, 
       batchSize: 5, 
-      providerName: 'SUNO', 
+      providerName: 'STUDIO21', 
       search: '' 
     }));
     
@@ -248,7 +248,7 @@ const Home = () => {
       </div>
       
       {/* Live Games Section */}
-      <div className='mx-1 mt-8'>
+      {/* <div className='mx-1 mt-8'>
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-white font-semibold">LIVE GAMES</h1>
           <button 
@@ -284,7 +284,7 @@ const Home = () => {
             ))}
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   )
 }
