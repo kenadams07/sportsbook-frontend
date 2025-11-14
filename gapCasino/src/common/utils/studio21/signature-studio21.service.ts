@@ -16,6 +16,10 @@ export class SignatureService {
       
       // Look for keys in multiple possible locations
       const possiblePaths = [
+        // Current directory
+        path.resolve('.', 'ec.key'),
+        path.resolve('.', 'ec.pub'),
+        path.resolve('.', 'studio21-pub.key'),
         // When running from dist/src
         path.resolve(__dirname, '..', '..', '..', 'ec.key'),
         path.resolve(__dirname, '..', '..', '..', 'ec.pub'),
@@ -30,18 +34,23 @@ export class SignatureService {
         path.resolve(__dirname, '..', '..', '..', '..', 'studio21-pub.key'),
       ];
       
+      console.log('Studio21 Signature Service - Searching for keys in possible locations:');
+      possiblePaths.forEach((p, i) => {
+        if (i % 3 === 0) console.log(`  Checking: ${path.dirname(p)}`);
+        console.log(`    ${fs.existsSync(p) ? '✓' : '✗'} ${path.basename(p)}: ${p}`);
+      });
+      
       // Try to find the keys in any of the possible locations
       for (let i = 0; i < possiblePaths.length; i += 3) {
         const privPath = possiblePaths[i];
         const pubPath = possiblePaths[i + 1];
         const studio21Path = possiblePaths[i + 2];
         
-        console.log(`Checking for keys at: ${path.dirname(privPath)}`);
-        
         if (fs.existsSync(privPath) && fs.existsSync(pubPath)) {
           privPemPath = privPath;
           pubPemPath = pubPath;
           studio21PubKeyPath = studio21Path;
+          console.log(`Studio21 Signature Service - Found keys at: ${path.dirname(privPath)}`);
           break;
         }
       }
@@ -52,15 +61,14 @@ export class SignatureService {
         console.log('Studio21 Signature Service - Operator signature keys loaded successfully from:', privPemPath);
       } else {
         console.warn('Studio21 Signature Service - Operator signature keys not found.');
-        console.log('Current directory:', __dirname);
-        console.log('Files in current directory:', fs.readdirSync(__dirname));
-        console.log('Files in parent directory:', fs.readdirSync(path.resolve(__dirname, '..')));
-        console.log('Files in grandparent directory:', fs.readdirSync(path.resolve(__dirname, '..', '..')));
-        console.log('Files in great-grandparent directory:', fs.readdirSync(path.resolve(__dirname, '..', '..', '..')));
+        console.log('Current directory:', process.cwd());
+        console.log('Files in current directory:', fs.readdirSync('.'));
         
         // Try to find the keys by searching up the directory tree
         let currentDir = __dirname;
-        while (currentDir !== path.resolve(currentDir, '..')) {
+        let attempts = 0;
+        const maxAttempts = 10;
+        while (currentDir !== path.resolve(currentDir, '..') && attempts < maxAttempts) {
           const testPrivPath = path.join(currentDir, 'ec.key');
           const testPubPath = path.join(currentDir, 'ec.pub');
           const testStudio21Path = path.join(currentDir, 'studio21-pub.key');
@@ -76,6 +84,7 @@ export class SignatureService {
           }
           
           currentDir = path.resolve(currentDir, '..');
+          attempts++;
         }
       }
       
@@ -85,7 +94,9 @@ export class SignatureService {
       } else if (studio21PubKeyPath) {
         // Try to find the Studio21 key by searching up the directory tree
         let currentDir = __dirname;
-        while (currentDir !== path.resolve(currentDir, '..')) {
+        let attempts = 0;
+        const maxAttempts = 10;
+        while (currentDir !== path.resolve(currentDir, '..') && attempts < maxAttempts) {
           const testStudio21Path = path.join(currentDir, 'studio21-pub.key');
           
           if (fs.existsSync(testStudio21Path)) {
@@ -96,6 +107,7 @@ export class SignatureService {
           }
           
           currentDir = path.resolve(currentDir, '..');
+          attempts++;
         }
       } else {
         console.warn('Studio21 Signature Service - Studio21 public key not found.');
@@ -108,7 +120,8 @@ export class SignatureService {
       });
     } catch (error) {
       console.warn('Studio21 Signature Service - Error loading signature keys:', error.message);
-      console.log('Current directory:', __dirname);
+      console.log('Current directory:', process.cwd());
+      console.log('Files in current directory:', fs.readdirSync('.'));
     }
   }
 
@@ -148,19 +161,19 @@ export class SignatureService {
     }
     
     try {
-      // Try to verify with operator's public key first
-      if (this.pubKey) {
-        const verify = crypto.createVerify('RSA-SHA256');
-        verify.update(data, 'utf8');
-        const isValid = verify.verify(this.pubKey, signature, 'base64');
-        if (isValid) return true;
-      }
-      
-      // If that fails, try with Studio 21's public key
+      // Try to verify with Studio 21's public key first (for Wallet API requests)
       if (this.studio21PubKey) {
         const verify = crypto.createVerify('RSA-SHA256');
         verify.update(data, 'utf8');
         const isValid = verify.verify(this.studio21PubKey, signature, 'base64');
+        if (isValid) return true;
+      }
+      
+      // If that fails, try with operator's public key (for Games API responses)
+      if (this.pubKey) {
+        const verify = crypto.createVerify('RSA-SHA256');
+        verify.update(data, 'utf8');
+        const isValid = verify.verify(this.pubKey, signature, 'base64');
         return isValid;
       }
       
@@ -202,5 +215,17 @@ export class SignatureService {
    */
   loadStudio21PubKeyFromString(pubKey: string): void {
     this.studio21PubKey = pubKey;
+  }
+  
+  /**
+   * @description Check if keys are loaded
+   * @returns Object with key status
+   */
+  getKeyStatus(): { privKey: boolean; pubKey: boolean; studio21PubKey: boolean } {
+    return {
+      privKey: !!this.privKey,
+      pubKey: !!this.pubKey,
+      studio21PubKey: !!this.studio21PubKey,
+    };
   }
 }

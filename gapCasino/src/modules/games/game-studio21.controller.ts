@@ -97,22 +97,33 @@ export class Studio21GameController {
     @Res() res: Response,
   ) {
     try {
-      const encodedSignature = req.headers['signature'] as string;
+      // Extract Casino-Signature header as per Studio 21 specification
+      const encodedSignature = req.headers['casino-signature'] as string;
       const result = await this.studio21GameService.getBalance(
         requestParams,
         encodedSignature,
       );
-      res.setHeader('content-type', 'application/json');
-      res.setHeader(
-        'Signature',
-        await this.signatureService.createSignature(JSON.stringify(result)),
-      );
+      
+      // Create signature for response as per Studio 21 specification
+      const responseSignature = await this.signatureService.createSignature(JSON.stringify(result));
+      
+      // Set proper headers
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Casino-Signature', responseSignature);
+      
       return res.status(HttpStatus.OK).json(result);
     } catch (error) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      // Create error response signature
+      const errorResponse = {
         status: 'error',
         message: error.message,
-      });
+      };
+      const responseSignature = await this.signatureService.createSignature(JSON.stringify(errorResponse));
+      
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Casino-Signature', responseSignature);
+      
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errorResponse);
     }
   }
 
@@ -123,22 +134,33 @@ export class Studio21GameController {
     @Res() res: Response,
   ) {
     try {
-      const encodedSignature = req.headers['signature'] as string;
+      // Extract Casino-Signature header as per Studio 21 specification
+      const encodedSignature = req.headers['casino-signature'] as string;
       const result = await this.studio21GameService.placeBet(
         requestParams,
         encodedSignature,
       );
-      res.setHeader('content-type', 'application/json');
-      res.setHeader(
-        'Signature',
-        await this.signatureService.createSignature(JSON.stringify(result)),
-      );
+      
+      // Create signature for response as per Studio 21 specification
+      const responseSignature = await this.signatureService.createSignature(JSON.stringify(result));
+      
+      // Set proper headers
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Casino-Signature', responseSignature);
+      
       return res.status(HttpStatus.OK).json(result);
     } catch (error) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      // Create error response signature
+      const errorResponse = {
         status: 'error',
         message: error.message,
-      });
+      };
+      const responseSignature = await this.signatureService.createSignature(JSON.stringify(errorResponse));
+      
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Casino-Signature', responseSignature);
+      
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errorResponse);
     }
   }
 
@@ -149,22 +171,33 @@ export class Studio21GameController {
     @Res() res: Response,
   ) {
     try {
-      const encodedSignature = req.headers['signature'] as string;
+      // Extract Casino-Signature header as per Studio 21 specification
+      const encodedSignature = req.headers['casino-signature'] as string;
       const result = await this.studio21GameService.processResult(
         requestParams,
         encodedSignature,
       );
-      res.setHeader('content-type', 'application/json');
-      res.setHeader(
-        'Signature',
-        await this.signatureService.createSignature(JSON.stringify(result)),
-      );
+      
+      // Create signature for response as per Studio 21 specification
+      const responseSignature = await this.signatureService.createSignature(JSON.stringify(result));
+      
+      // Set proper headers
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Casino-Signature', responseSignature);
+      
       return res.status(HttpStatus.OK).json(result);
     } catch (error) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      // Create error response signature
+      const errorResponse = {
         status: 'error',
         message: error.message,
-      });
+      };
+      const responseSignature = await this.signatureService.createSignature(JSON.stringify(errorResponse));
+      
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Casino-Signature', responseSignature);
+      
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errorResponse);
     }
   }
 
@@ -175,22 +208,33 @@ export class Studio21GameController {
     @Res() res: Response,
   ) {
     try {
-      const encodedSignature = req.headers['signature'] as string;
+      // Extract Casino-Signature header as per Studio 21 specification
+      const encodedSignature = req.headers['casino-signature'] as string;
       const result = await this.studio21GameService.processRollback(
         requestParams,
         encodedSignature,
       );
-      res.setHeader('content-type', 'application/json');
-      res.setHeader(
-        'Signature',
-        await this.signatureService.createSignature(JSON.stringify(result)),
-      );
+      
+      // Create signature for response as per Studio 21 specification
+      const responseSignature = await this.signatureService.createSignature(JSON.stringify(result));
+      
+      // Set proper headers
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Casino-Signature', responseSignature);
+      
       return res.status(HttpStatus.OK).json(result);
     } catch (error) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      // Create error response signature
+      const errorResponse = {
         status: 'error',
         message: error.message,
-      });
+      };
+      const responseSignature = await this.signatureService.createSignature(JSON.stringify(errorResponse));
+      
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Casino-Signature', responseSignature);
+      
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errorResponse);
     }
   }
 }

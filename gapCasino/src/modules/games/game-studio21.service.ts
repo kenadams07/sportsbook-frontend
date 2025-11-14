@@ -26,7 +26,10 @@ export class Studio21GameService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private signatureService: SignatureService,
-  ) {}
+  ) {
+    // Log key status on service initialization
+    console.log('Studio21GameService initialized, key status:', this.signatureService.getKeyStatus());
+  }
 
   /**
    * Maps currency ID to proper currency code for Studio21 API
@@ -59,6 +62,9 @@ export class Studio21GameService {
 
   async getGameUrl(requestParams: any, authUserId: string): Promise<any> {
     try {
+      console.log('Studio21GameService.getGameUrl called with params:', requestParams);
+      console.log('Studio21GameService key status:', this.signatureService.getKeyStatus());
+      
       // Validate required parameters
       if (!requestParams.gameId) {
         throw new Error('Missing required parameter: gameId');
@@ -98,6 +104,7 @@ export class Studio21GameService {
       console.log('Studio 21 Game URL Request Data:', requestData);
 
       const dataStringify = JSON.stringify(requestData);
+      console.log('Studio21GameService creating signature for request data...');
       const encodedSignature = await this.signatureService.createSignature(dataStringify);
 
       const headers = {
@@ -139,6 +146,9 @@ export class Studio21GameService {
 
   async getGameList(): Promise<any> {
     try {
+      console.log('Studio21GameService.getGameList called');
+      console.log('Studio21GameService key status:', this.signatureService.getKeyStatus());
+      
       const apiUrl = `${process.env.STUDIO21_BASE_URL}/games/list`;
       
       const requestData = {
@@ -146,6 +156,7 @@ export class Studio21GameService {
       };
 
       const dataStringify = JSON.stringify(requestData);
+      console.log('Studio21GameService creating signature for game list request...');
       const encodedSignature = await this.signatureService.createSignature(dataStringify);
 
       const headers = {
