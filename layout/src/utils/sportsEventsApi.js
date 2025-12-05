@@ -67,7 +67,12 @@ export async function fetchSportsEvents(sportId, liveMatches = true) {
 
     const data = await response.json();
    
-    // API returns data directly in { sports: [...], status: ..., errorDescription: ... } format
+    // API returns data in { status: "...", errorDescription: "", sports: [...] } format
+    // Check if the response indicates success
+    if (data.status !== "RS_OK") {
+      throw new Error(`API error: ${data.errorDescription || 'Unknown error'}`);
+    }
+    
     return {
       sports: data?.sports || [],
       eventsCount: data?.sports?.length || 0
@@ -75,7 +80,7 @@ export async function fetchSportsEvents(sportId, liveMatches = true) {
   } catch (error) {
     // Don't log aborted requests as errors
     if (error.name !== 'AbortError') {
- 
+      console.error('Error fetching sports events:', error.message);
     }
     // Even if the endpoint fails, we should return a valid structure to prevent app crashes
     return {
@@ -130,6 +135,11 @@ export async function fetchMarketsData(eventId, sportId) {
     }
 
     const data = await response.json();
+    
+    // Check if the response indicates success
+    if (data.status !== "RS_OK") {
+      throw new Error(`API error: ${data.errorDescription || 'Unknown error'}`);
+    }
     
     // Return markets data from the nested structure
     return data?.event?.markets?.matchOdds || [];
