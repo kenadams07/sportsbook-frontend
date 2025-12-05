@@ -26,6 +26,7 @@ async function bootstrap() {
     preflightContinue: false,
   });
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3001);
+  console.log(`🚀 Admin service running on: http://localhost:${process.env.PORT ?? 3001}`);
 }
 bootstrap();
