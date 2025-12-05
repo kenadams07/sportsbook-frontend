@@ -8,10 +8,10 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   
   // Load environment variables with fallback defaults
-  const EVENTS_API_URL = env.VITE_EVENTS_API_URL 
-  const MARKETS_API_URL = env.VITE_MARKETS_API_URL
-  const USERS_API_URL = env.VITE_USERS_API_URL 
-  const CASINO_API_URL = env.VITE_CASINO_API_URL 
+  const EVENTS_API_URL = env.VITE_EVENTS_API_URL || 'http://89.116.20.218:2700';
+  const MARKETS_API_URL = env.VITE_MARKETS_API_URL || 'http://89.116.20.218:2700';
+  const USERS_API_URL = env.VITE_USERS_API_URL || 'http://localhost:3001';
+  const CASINO_API_URL = env.VITE_CASINO_API_URL || 'http://localhost:3003';
 
   return {
     server: {
