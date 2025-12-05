@@ -16,7 +16,14 @@ async function bootstrap() {
   app.useWebSocketAdapter(new WsAdapter(app));
 
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:5002', 'https://odds-api.xfair91.com', 'http://odds-api.xfair91.com'],
+    origin: [
+      'http://localhost:3000', 
+      'http://localhost:5002', 
+      'https://odds-api.xfair91.com', 
+      'http://odds-api.xfair91.com',
+      'https://user-api.xfair91.com',
+      'http://user-api.xfair91.com'
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Authorization, X-Requested-With, Accept',
     credentials: true,

@@ -9,11 +9,16 @@ async function bootstrap() {
   // Create express router for proxy endpoints
   const router = express.Router();
   
-  // Enable CORS for your frontend
+  // Enable CORS for your frontend and handle preflight requests
   router.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*'); // Allow all origins for flexibility
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+      res.header('Access-Control-Max-Age', '86400'); // Cache preflight for 24 hours
+      return res.status(204).send();
+    }
     next();
   });
 
