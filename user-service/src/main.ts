@@ -15,16 +15,9 @@ async function bootstrap() {
 
   app.useWebSocketAdapter(new WsAdapter(app));
 
-  // More specific CORS configuration
+  // Allow all domains for CORS (permissive configuration)
   app.enableCors({
-    origin: [
-      'http://localhost:3000', 
-      'http://localhost:5002', 
-      'https://odds-api.xfair91.com', 
-      'http://odds-api.xfair91.com',
-      'https://user-api.xfair91.com',
-      'http://user-api.xfair91.com'
-    ],
+    origin: '*',
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
     credentials: true,
@@ -35,7 +28,7 @@ async function bootstrap() {
   // Handle OPTIONS requests globally using Express instance
   const expressInstance = app.getHttpAdapter().getInstance();
   expressInstance.options('*', (req, res) => {
-    res.header('Access-Control-Allow-Origin', 'https://user-api.xfair91.com');
+    res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
     res.header('Access-Control-Allow-Credentials', 'true');
