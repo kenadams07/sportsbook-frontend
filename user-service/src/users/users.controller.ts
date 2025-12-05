@@ -35,6 +35,11 @@ export class UsersController {
   @Post('signup')
   async create(@Body(new ValidationPipe()) signupDto: SignupDto, @Res() res) {
     try {
+      // Set CORS headers manually since we're using @Res()
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+      
       const payload: Partial<Users> = { 
         username: signupDto.username,
         name: signupDto.name,
@@ -109,8 +114,6 @@ export class UsersController {
         delete (newUser as any).passwordText;
         delete (newUser as any).token;
         
-        // const emailSent = await this.usersService.sendVerificationEmail(newUser.email);
-        
         return res.status(200).json({
           success: true,
           message: 'Signup Success.',
@@ -120,6 +123,11 @@ export class UsersController {
       }
 
     } catch (error) {
+      // Set CORS headers for error responses as well
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+      
       return res.status(error.status || 500).json(
         errorResponse(
           error.response?.message || error.message || 'Something went wrong',
@@ -132,6 +140,11 @@ export class UsersController {
   @Post('login')
   async login(@Body(new ValidationPipe()) loginDto: LoginDto, @Res() res) {
     try {
+      // Set CORS headers manually since we're using @Res()
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+      
       const { emailOrUsername, password, rememberMe } = loginDto;
       
       let user: Users | null = null;
@@ -199,6 +212,11 @@ export class UsersController {
       });
       
     } catch (error) {
+      // Set CORS headers for error responses as well
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+      
       return res.status(error.status || 500).json(
         errorResponse(
           error.response?.message || error.message || 'Something went wrong',
@@ -293,6 +311,11 @@ export class UsersController {
   @Get('profile')
   async getProfile(@Req() req, @Headers('authorization') authHeader: string, @Res() res) {
     try {
+      // Set CORS headers manually since we're using @Res()
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+      
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json(errorResponse('Authorization token is required', 401));
       }
@@ -352,6 +375,11 @@ export class UsersController {
         data: response
       });
     } catch (error) {
+      // Set CORS headers for error responses as well
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+      
       return res.status(error.status || 500).json(
         errorResponse(
           error.response?.message || error.message || 'Something went wrong',
