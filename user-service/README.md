@@ -87,6 +87,26 @@ Check out a few resources that may come in handy when working with NestJS:
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
+## Running Without Docker
+
+To run the user service without Docker while preserving the current structure, follow these steps:
+
+1. Make sure you have PostgreSQL, Redis, and RabbitMQ running locally or accessible externally
+2. Copy `.env.local` to `.env` and update the connection details as needed:
+   ```
+   cp .env.local .env
+   ```
+3. Install dependencies:
+   ```
+   npm install
+   ```
+4. Run the service in development mode:
+   ```
+   npm run start:dev
+   ```
+
+For detailed instructions, see [RUN_WITHOUT_DOCKER.md](file:///c%3A/Users/hp/Desktop/Repos/Sportsbook-User/Sportsbook-backend/user-service/RUN_WITHOUT_DOCKER.md)
+
 ## Stay in touch
 
 - Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)

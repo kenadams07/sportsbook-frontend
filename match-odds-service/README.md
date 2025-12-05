@@ -96,3 +96,28 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+## Proxy Functionality
+
+This service includes proxy endpoints that forward requests to a third-party API:
+
+- `/api/events` - Proxies requests to the third-party events endpoint
+- `/api/markets` - Proxies requests to the third-party markets endpoint
+
+### Configuration
+
+The third-party API base URL is configurable through the `MATCH_ODDS_API` environment variable.
+Default value is `http://89.116.20.218:2700`.
+
+Example configuration in `.env`:
+```
+MATCH_ODDS_API=http://89.116.20.218:2700
+```
+
+### How It Works
+
+1. Frontend makes requests to http://localhost:3003/api/events and http://localhost:3003/api/markets
+2. The match-odds service receives these requests
+3. The service forwards them to the third-party API
+4. The service returns the third-party API response to the frontend
+5. No CORS issues since both frontend and backend service are part of your system

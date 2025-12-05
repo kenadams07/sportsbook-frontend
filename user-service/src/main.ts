@@ -27,6 +27,6 @@ async function bootstrap() {
   });
 
   await app.listen(process.env.PORT ?? 3001);
-  console.log(`🚀 Admin service running on: http://localhost:${process.env.PORT ?? 3001}`);
+  console.log(`🚀 User service running on: http://localhost:${process.env.PORT ?? 3001}`);
 }
 bootstrap();
