@@ -30,7 +30,7 @@ async function bootstrap() {
       const baseUrl = process.env.MATCH_ODDS_API || 'http://89.116.20.218:2700';
       const url = `${baseUrl}/events${queryParams ? `?${queryParams}` : ''}`;
       
-      console.log(`Proxying request to: ${url}`);
+   
       
       const response = await axios.default.get(url, {
         headers: {
@@ -57,7 +57,7 @@ async function bootstrap() {
       const baseUrl = process.env.MATCH_ODDS_API || 'http://89.116.20.218:2700';
       const url = `${baseUrl}/markets${queryParams ? `?${queryParams}` : ''}`;
       
-      console.log(`Proxying request to: ${url}`);
+    
       
       const response = await axios.default.get(url, {
         headers: {
