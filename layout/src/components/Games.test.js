@@ -55,7 +55,7 @@ describe('Games Component', () => {
 
     // Verify API call was made with correct parameters
     expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:3005/api/gap-casino-game/providers/games?batchNumber=0&batchSize=5&providerName=SPRIBE&search='
+      'http://localhost:3003/api/gap-casino-game/providers/games?batchNumber=0&batchSize=5&providerName=SPRIBE&search='
     );
   });
 

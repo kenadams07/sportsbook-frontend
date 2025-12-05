@@ -1,5 +1,5 @@
 import { importShared } from './__federation_fn_import.js';
-import { e as createLucideIcon, j as jsxRuntimeExports, f as createContextScope, l as useId, m as Primitive, n as composeEventHandlers, u as useComposedRefs, o as useControllableState, p as useCallbackRef, q as createPopperScope, r as Root2, A as Anchor, s as Presence, t as Portal$1, v as hideOthers, w as dispatchDiscreteCustomEvent, x as ReactRemoveScroll, y as useFocusGuards, g as createSlot, F as FocusScope, D as DismissableLayer, z as Content, H as Arrow, J as composeRefs, h as cn, K as useNavigate, M as useLocation, N as ChevronDown, X, Q as useDispatch, S as useSelector, T as Link, U as User, V as RegisterModal, W as LoginModal, Y as Toaster$1, Z as NavLink, _ as Outlet } from './__federation_expose_LayoutApp.js';
+import { e as createLucideIcon, j as jsxRuntimeExports, f as createContextScope, l as useId, m as Primitive, n as composeEventHandlers, u as useComposedRefs, o as useControllableState, p as useCallbackRef, q as createPopperScope, r as Root2, s as Anchor, t as Presence, v as Portal$1, w as hideOthers, x as dispatchDiscreteCustomEvent, y as ReactRemoveScroll, z as useFocusGuards, g as createSlot, F as FocusScope, D as DismissableLayer, H as Content, J as Arrow, K as composeRefs, h as cn, M as useNavigate, N as useLocation, Q as ChevronDown, X, S as useDispatch, T as useSelector, V as Link, U as User, W as RegisterModal, Y as LoginModal, Z as Toaster$1, _ as NavLink, $ as Outlet } from './__federation_expose_LayoutApp.js';
 import { c as createCollection, u as useDirection, D as DepositModal } from './DepositModal.js';
 import { g as getUserData, l as logout } from './getUserDataAction.js';
 
@@ -1688,20 +1688,16 @@ function MainNavbar() {
     if (isAuthenticated && userData?._id) {
       const newSocket = new WebSocket("ws://localhost:3001");
       newSocket.onopen = () => {
-        console.log("WebSocket connection established");
       };
       newSocket.onmessage = function(event) {
         const data = JSON.parse(event.data);
         if (data.type === "exposureUpdate" && data.userId === userData._id) {
-          console.log(`User ${data.userId} exposure updated to ${data.exposure}`);
           setExposure(data.exposure);
         }
       };
       newSocket.onclose = () => {
-        console.log("WebSocket connection closed");
       };
       newSocket.onerror = (error) => {
-        console.error("WebSocket error:", error);
       };
       setSocket(newSocket);
       return () => {

@@ -4,7 +4,7 @@ const testGamesApi = async () => {
     console.log('Testing games API with SPRIBE provider...');
     
     // Using the same endpoint as in the Games component
-    const response = await fetch('http://localhost:3005/api/gap-casino-game/providers/games?batchNumber=0&batchSize=5&providerName=SPRIBE&search=');
+    const response = await fetch('http://localhost:3003/api/gap-casino-game/providers/games?batchNumber=0&batchSize=5&providerName=SPRIBE&search=');
     
     if (!response.ok) {
       throw new Error(`API request failed with status ${response.status}`);

@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   
   server: {
-    port: 3003,
+    port: 9000,
     strictPort: true,
     cors: true,
     fs: {
@@ -81,7 +81,7 @@ export default defineConfig({
       },
       // Proxy for the casino API to avoid CORS issues
       '/casino-api': {
-        target: 'http://localhost:3005',
+        target: 'http://localhost:3003',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/casino-api/, '/api'),
         configure: (proxy, options) => {

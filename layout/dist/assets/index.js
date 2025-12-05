@@ -1,6 +1,6 @@
 import { importShared } from './__federation_fn_import.js';
-import LayoutApp, { k as getLocalStorageItem, $ as SIGNUP_FAILURE, a0 as SIGNUP_SUCCESS, a1 as SIGNUP, c as GET_USER_DATA_SUCCESS, a2 as UPDATE_USER_BALANCE_EXPOSURE_SUCCESS, a3 as UPDATE_USER_BALANCE_EXPOSURE, a as LOGOUT_SUCCESS, a4 as LOGIN_FAILURE, a5 as LOGIN_SUCCESS, a6 as LOGIN, a7 as VERIFY_EMAIL_FAILURE, a8 as VERIFY_EMAIL_SUCCESS, a9 as VERIFY_EMAIL, d as GET_USER_DATA_FAILURE, G as GET_USER_DATA, aa as UPDATE_USER_BALANCE_EXPOSURE_FAILURE, ab as notifyPromise, ac as api, ad as setLocalStorageItem, ae as signupSuccess, af as loginSuccess, ag as signupFailure, ah as loginFailure, ai as verifyEmailSuccess, aj as verifyEmailFailure, L as LOGOUT, ak as removeLocalStorageItem, al as updateUserBalanceExposureFailure, am as updateUserBalanceExposureSuccess, j as jsxRuntimeExports, an as Provider_default } from './__federation_expose_LayoutApp.js';
-import { r as reactDomExports } from './index2.js';
+import LayoutApp, { k as getLocalStorageItem, a0 as SIGNUP_FAILURE, a1 as SIGNUP_SUCCESS, a2 as SIGNUP, c as GET_USER_DATA_SUCCESS, a3 as UPDATE_USER_BALANCE_EXPOSURE_SUCCESS, a4 as UPDATE_USER_BALANCE_EXPOSURE, a as LOGOUT_SUCCESS, a5 as LOGIN_FAILURE, a6 as LOGIN_SUCCESS, a7 as LOGIN, a8 as VERIFY_EMAIL_FAILURE, a9 as VERIFY_EMAIL_SUCCESS, aa as VERIFY_EMAIL, d as GET_USER_DATA_FAILURE, G as GET_USER_DATA, ab as UPDATE_USER_BALANCE_EXPOSURE_FAILURE, ac as FETCH_CASINO_GAME_URL_FAILURE, ad as FETCH_CASINO_GAME_URL_SUCCESS, ae as FETCH_CASINO_GAME_URL, af as FETCH_MORE_CASINO_PROVIDERS_FAILURE, ag as FETCH_MORE_CASINO_PROVIDERS_SUCCESS, ah as FETCH_MORE_CASINO_PROVIDERS, ai as FETCH_CASINO_PROVIDERS_FAILURE, aj as FETCH_CASINO_PROVIDERS_SUCCESS, ak as FETCH_CASINO_PROVIDERS, al as FETCH_HOMEPAGE_LIVE_GAMES_FAILURE, am as FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS, an as FETCH_HOMEPAGE_LIVE_GAMES, ao as FETCH_HOMEPAGE_CASINO_GAMES_FAILURE, ap as FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS, aq as FETCH_HOMEPAGE_CASINO_GAMES, ar as RESET_CASINO_GAMES, as as FETCH_MORE_CASINO_GAMES_FAILURE, at as FETCH_MORE_CASINO_GAMES_SUCCESS, au as FETCH_MORE_CASINO_GAMES, av as FETCH_CASINO_GAMES_FAILURE, aw as FETCH_CASINO_GAMES_SUCCESS, ax as FETCH_CASINO_GAMES, ay as SKIP_NEXT_USER_BETS_FETCH, az as FETCH_USER_BETS_FAILURE, aA as FETCH_USER_BETS_SUCCESS, aB as FETCH_USER_BETS, aC as notifyPromise, aD as api, aE as setLocalStorageItem, aF as signupSuccess, aG as loginSuccess, aH as signupFailure, aI as loginFailure, aJ as verifyEmailSuccess, aK as verifyEmailFailure, L as LOGOUT, aL as removeLocalStorageItem, aM as updateUserBalanceExposureFailure, aN as updateUserBalanceExposureSuccess, aO as axios, aP as notifyError, aQ as fetchCasinoProvidersSuccess, aR as fetchCasinoProvidersFailure, aS as fetchMoreCasinoProvidersSuccess, aT as fetchCasinoGamesSuccess, aU as fetchCasinoGamesFailure, aV as fetchMoreCasinoGamesSuccess, aW as fetchMoreCasinoGamesFailure, aX as fetchHomepageCasinoGamesSuccess, aY as fetchHomepageCasinoGamesFailure, aZ as fetchHomepageLiveGamesSuccess, a_ as fetchHomepageLiveGamesFailure, a$ as fetchCasinoGameUrlSuccess, b0 as fetchCasinoGameUrlFailure, b1 as fetchUserBetsSuccess, b2 as fetchUserBetsFailure, j as jsxRuntimeExports, b3 as Provider_default } from './__federation_expose_LayoutApp.js';
+import { r as reactDomExports } from './index3.js';
 import { a as logoutSuccess, b as logoutFailure, c as getUserDataSuccess, d as getUserDataFailure } from './getUserDataAction.js';
 
 var client = {};
@@ -1587,12 +1587,12 @@ function applyMiddleware(...middlewares) {
   };
 }
 
-const INIT_STATE$3 = {
+const INIT_STATE$5 = {
   loading: false,
   userData: getLocalStorageItem("userData") || {},
 };
 
-const signupReducer = (state = INIT_STATE$3, action) => {
+const signupReducer = (state = INIT_STATE$5, action) => {
   switch (action.type) {
     case SIGNUP:
       return { ...state, loading: true, isAuthenticated: false };
@@ -1609,13 +1609,13 @@ const signupReducer = (state = INIT_STATE$3, action) => {
   }
 };
 
-const INIT_STATE$2 = {
+const INIT_STATE$4 = {
   loading: false,
   userData: getLocalStorageItem("userData") || {},
   isAuthenticated: !!getLocalStorageItem("token"),
 };
 
-const loginReducer = (state = INIT_STATE$2, action) => {
+const loginReducer = (state = INIT_STATE$4, action) => {
   switch (action.type) {
     case LOGIN:
       return { ...state, loading: true, isAuthenticated: false, error: null };
@@ -1703,13 +1703,13 @@ const verifyEmailReducer = (state = initialState$1, action) => {
   }
 };
 
-const INIT_STATE$1 = {
+const INIT_STATE$3 = {
   loading: false,
   userData: {},
   error: null,
 };
 
-const getUserDataReducer = (state = INIT_STATE$1, action) => {
+const getUserDataReducer = (state = INIT_STATE$3, action) => {
   switch (action.type) {
     case GET_USER_DATA:
       
@@ -1730,12 +1730,12 @@ const getUserDataReducer = (state = INIT_STATE$1, action) => {
   }
 };
 
-const INIT_STATE = {
+const INIT_STATE$2 = {
   loading: false,
   error: null,
 };
 
-const updateUserBalanceExposureReducer = (state = INIT_STATE, action) => {
+const updateUserBalanceExposureReducer = (state = INIT_STATE$2, action) => {
   switch (action.type) {
     case UPDATE_USER_BALANCE_EXPOSURE:
       return { ...state, loading: true, error: null };
@@ -1752,12 +1752,356 @@ const updateUserBalanceExposureReducer = (state = INIT_STATE, action) => {
   }
 };
 
+const INIT_STATE$1 = {
+  // Games state
+  gamesByProvider: [],
+  loadingGames: false,
+  loadingMoreGames: false,
+  gamesError: null,
+  
+  // Homepage Casino Games state (SUNO provider)
+  homepageCasinoGames: [],
+  loadingHomepageCasinoGames: false,
+  homepageCasinoGamesError: null,
+  
+  // Homepage Live Games state (SPRIBE provider)
+  homepageLiveGames: [],
+  loadingHomepageLiveGames: false,
+  homepageLiveGamesError: null,
+  
+  // Providers state
+  providers: [],
+  loadingProviders: false,
+  loadingMoreProviders: false,
+  providersError: null,
+  
+  // Pagination
+  pagination: {
+    hasMore: true,
+    batchNumber: 0,
+    batchSize: 50,
+    providerName: 'all',
+    search: '',
+  },
+};
+
+const casinoReducer = (state = INIT_STATE$1, action) => {
+  console.log('Casino reducer called with action:', action.type);
+  console.log('Current state:', state);
+  
+  switch (action.type) {
+    // Games Actions
+    case FETCH_CASINO_GAMES:
+      console.log('Fetching casino games action dispatched');
+      
+      return { 
+        ...state, 
+        loadingGames: true, 
+        gamesError: null,
+        gamesByProvider: [], // Reset games when fetching new ones
+        pagination: {
+          ...state.pagination,
+          batchNumber: 0,
+          providerName: action.payload.providerName || 'all',
+          search: action.payload.search || '',
+        }
+      };
+    case FETCH_CASINO_GAMES_SUCCESS:
+      console.log('Casino games fetched successfully:', { 
+        data: action.payload.data || action.payload,
+        pagination: action.payload.pagination
+      });
+      
+      // Log the pagination update
+      const updatedPaginationForInitial = action.payload.pagination 
+        ? { 
+            ...state.pagination, 
+            ...action.payload.pagination
+          }
+        : state.pagination;
+      
+      console.log('Updated pagination for initial fetch:', updatedPaginationForInitial);
+      
+      return {
+        ...state,
+        loadingGames: false,
+        gamesByProvider: action.payload.data || action.payload,
+        pagination: updatedPaginationForInitial,
+        gamesError: null,
+      };
+    case FETCH_CASINO_GAMES_FAILURE:
+      return { 
+        ...state, 
+        loadingGames: false, 
+        gamesError: action.payload,
+        gamesByProvider: [],
+      };
+    case FETCH_MORE_CASINO_GAMES:
+      console.log('Fetching more casino games action dispatched');
+      
+      return { 
+        ...state, 
+        loadingMoreGames: true, 
+        gamesError: null 
+      };
+    case FETCH_MORE_CASINO_GAMES_SUCCESS:
+      // Group games by provider
+      const newGamesByProvider = action.payload.data || action.payload;
+      const mergedGamesByProvider = [...state.gamesByProvider];
+      
+      console.log('Merging new games with existing games:', { 
+        newGamesByProvider, 
+        existingGames: state.gamesByProvider,
+        pagination: action.payload.pagination
+      });
+      
+      // Log pagination update
+      console.log('Updating pagination with:', action.payload.pagination);
+      console.log('Current pagination state:', state.pagination);
+      
+      // Merge new games with existing ones by provider
+      newGamesByProvider.forEach(newProvider => {
+        const existingProviderIndex = mergedGamesByProvider.findIndex(
+          p => p.providerName === newProvider.providerName
+        );
+        
+        if (existingProviderIndex >= 0) {
+          // Merge games for existing provider
+          mergedGamesByProvider[existingProviderIndex] = {
+            ...mergedGamesByProvider[existingProviderIndex],
+            games: [
+              ...mergedGamesByProvider[existingProviderIndex].games,
+              ...newProvider.games
+            ]
+          };
+        } else {
+          // Add new provider
+          mergedGamesByProvider.push(newProvider);
+        }
+      });
+      
+      console.log('Merged games by provider:', mergedGamesByProvider);
+      
+      // Create updated pagination object
+      // Use the pagination data from the API response, but increment batchNumber
+      const updatedPagination = action.payload.pagination 
+        ? { 
+            ...state.pagination, 
+            ...action.payload.pagination,
+            batchNumber: state.pagination.batchNumber + 1
+          }
+        : { 
+            ...state.pagination,
+            batchNumber: state.pagination.batchNumber + 1
+          };
+      
+      console.log('Updated pagination:', updatedPagination);
+      
+      return {
+        ...state,
+        loadingMoreGames: false,
+        gamesByProvider: mergedGamesByProvider,
+        pagination: updatedPagination,
+        gamesError: null,
+      };
+    case FETCH_MORE_CASINO_GAMES_FAILURE:
+      return { 
+        ...state, 
+        loadingMoreGames: false, 
+        gamesError: action.payload,
+      };
+    case RESET_CASINO_GAMES:
+      console.log('Resetting casino games');
+      
+      return {
+        ...state,
+        gamesByProvider: [],
+        pagination: {
+          ...state.pagination,
+          batchNumber: 0,
+          search: '',
+        }
+      };
+      
+    // Homepage Casino Games Actions (SUNO provider)
+    case FETCH_HOMEPAGE_CASINO_GAMES:
+      console.log('Fetching homepage casino games action dispatched');
+      
+      return { 
+        ...state, 
+        loadingHomepageCasinoGames: true, 
+        homepageCasinoGamesError: null
+      };
+    case FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS:
+      console.log('Homepage casino games fetched successfully:', action.payload);
+      
+      return {
+        ...state,
+        loadingHomepageCasinoGames: false,
+        homepageCasinoGames: action.payload.data || action.payload,
+        homepageCasinoGamesError: null,
+      };
+    case FETCH_HOMEPAGE_CASINO_GAMES_FAILURE:
+      return { 
+        ...state, 
+        loadingHomepageCasinoGames: false, 
+        homepageCasinoGamesError: action.payload,
+        homepageCasinoGames: [],
+      };
+      
+    // Homepage Live Games Actions (SPRIBE provider)
+    case FETCH_HOMEPAGE_LIVE_GAMES:
+      console.log('Fetching homepage live games action dispatched');
+      
+      return { 
+        ...state, 
+        loadingHomepageLiveGames: true, 
+        homepageLiveGamesError: null
+      };
+    case FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS:
+      console.log('Homepage live games fetched successfully:', action.payload);
+      
+      return {
+        ...state,
+        loadingHomepageLiveGames: false,
+        homepageLiveGames: action.payload.data || action.payload,
+        homepageLiveGamesError: null,
+      };
+    case FETCH_HOMEPAGE_LIVE_GAMES_FAILURE:
+      return { 
+        ...state, 
+        loadingHomepageLiveGames: false, 
+        homepageLiveGamesError: action.payload,
+        homepageLiveGames: [],
+      };
+      
+    // Providers Actions
+    case FETCH_CASINO_PROVIDERS:
+      return { ...state, loadingProviders: true, providersError: null };
+    case FETCH_CASINO_PROVIDERS_SUCCESS:
+      console.log('Casino providers fetched successfully:', { 
+        data: action.payload.data || action.payload,
+        pagination: action.payload.pagination
+      });
+      
+      return {
+        ...state,
+        loadingProviders: false,
+        providers: action.payload.data || action.payload,
+        pagination: action.payload.pagination 
+          ? action.payload.pagination 
+          : state.pagination,
+        providersError: null,
+      };
+    case FETCH_CASINO_PROVIDERS_FAILURE:
+      return { 
+        ...state, 
+        loadingProviders: false, 
+        providersError: action.payload,
+        providers: [],
+      };
+    case FETCH_MORE_CASINO_PROVIDERS:
+      return { 
+        ...state, 
+        loadingMoreProviders: true, 
+        providersError: null 
+      };
+    case FETCH_MORE_CASINO_PROVIDERS_SUCCESS:
+      return {
+        ...state,
+        loadingMoreProviders: false,
+        providers: [...state.providers, ...(action.payload.data || action.payload)],
+        pagination: action.payload.pagination 
+          ? { ...state.pagination, ...action.payload.pagination }
+          : state.pagination,
+        providersError: null,
+      };
+    case FETCH_MORE_CASINO_PROVIDERS_FAILURE:
+      return { 
+        ...state, 
+        loadingMoreProviders: false, 
+        providersError: action.payload,
+      };
+      
+    // Casino Game URL Actions
+    case FETCH_CASINO_GAME_URL:
+      console.log('FETCH_CASINO_GAME_URL action received in reducer with payload:', action.payload);
+      // We don't need to update state for this action as it opens a new tab
+      return state;
+    case FETCH_CASINO_GAME_URL_SUCCESS:
+      // We don't need to update state for this action as it opens a new tab
+      return state;
+    case FETCH_CASINO_GAME_URL_FAILURE:
+      // We could show an error message here if needed
+      return { 
+        ...state, 
+        gamesError: action.payload,
+      };
+      
+    default:
+      return state;
+  }
+};
+
+const INIT_STATE = {
+  bets: [],
+  loading: false,
+  error: null,
+  skipNextFetch: false,
+};
+
+const userBetsReducer = (state = INIT_STATE, action) => {
+  switch (action.type) {
+    case FETCH_USER_BETS:
+      // If we're supposed to skip this fetch, just reset the flag and don't do anything
+      if (state.skipNextFetch) {
+        return {
+          ...state,
+          skipNextFetch: false,
+        };
+      }
+      
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+      
+    case FETCH_USER_BETS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        bets: action.payload,
+        error: null,
+      };
+      
+    case FETCH_USER_BETS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        bets: [],
+        error: action.payload,
+      };
+      
+    case SKIP_NEXT_USER_BETS_FETCH:
+      return {
+        ...state,
+        skipNextFetch: true,
+      };
+      
+    default:
+      return state;
+  }
+};
+
 const appReducer = combineReducers({
   Signup: signupReducer,
   Login: loginReducer,
   VerifyEmail: verifyEmailReducer,
   GetUserData: getUserDataReducer,
   UpdateUserBalanceExposure: updateUserBalanceExposureReducer,
+  CasinoGames: casinoReducer,
+  UserBets: userBetsReducer,
 });
 
 const reducers = (state, action) => {
@@ -1850,7 +2194,7 @@ function* signupRequest(action) {
   try {
     // Extract the actual payload from the action
     const  payload  = action.payload || action;
-
+    // Removed console.log("action.payload in signup saga", payload);
     
     const data = yield call(() =>
       notifyPromise(() => api.post("/users/signup", payload), {
@@ -1878,7 +2222,7 @@ function* signupRequest(action) {
           // Handle success callback
         },
         onError: (err) => {
-      
+          // Removed console.log("Signup failed:", err);
         }
       })
     );
@@ -1898,7 +2242,7 @@ function* signupRequest(action) {
     }
 
   } catch (error) {
-    console.error("Signup error caught in saga:", error);
+    // Removed console.error("Signup error caught in saga:", error);
     yield put(signupFailure());
   }
 }
@@ -1934,10 +2278,10 @@ function* loginRequest(action) {
         },
         successDuration: 4000,
         onSuccess: (res) => {
-  
+          // Removed console.log("Login succeeded:", res.data);
         },
         onError: (err) => {
-       
+          // Removed console.log("Login failed:", err);
         }
       })
     );
@@ -2046,12 +2390,12 @@ function* verifyEmailRequest(action) {
                 yield put(verifyEmailFailure(data));
             }
         } catch (apiError) {
-            console.error("API Error:", apiError);
+            // Removed console.error("API Error:", apiError);
             // Pass the error to the failure action
             yield put(verifyEmailFailure(apiError?.response?.data || apiError?.message || "Verification failed"));
         }
     } catch (error) {
-        console.error("Saga Error:", error);
+        // Removed console.error("Saga Error:", error);
         yield put(verifyEmailFailure(error?.message || "Verification failed"));
     }
 }
@@ -2084,7 +2428,7 @@ function* logoutRequest(action) {
     // Redirect to home page immediately
     window.location.href = "/home";
   } catch (error) {
-    console.error("Logout error:", error);
+    // Removed console.error("Logout error:", error);
     yield put(logoutFailure());
   }
 }
@@ -2133,11 +2477,11 @@ function* getUserDataRequest(action) {
         yield call(action.callback, data);
       }
     } else {
-      console.log("getUserData failed");
+      // Removed console.log("getUserData failed");
       yield put(getUserDataFailure());
     }
   } catch (error) {
-    console.error("Error in getUserDataRequest:", error);
+    // Removed console.error("Error in getUserDataRequest:", error);
     yield put(getUserDataFailure());
   }
 }
@@ -2260,6 +2604,545 @@ function* rootSaga$1() {
   yield all([watchUpdateUserBalanceExposureAPI()]);
 }
 
+// Use proxy path to avoid CORS issues in development
+const CASINO_PROXY_PATH = '/casino-api';
+
+const casinoApi = axios.create({
+  baseURL: CASINO_PROXY_PATH,
+  timeout: 15000, // Increase timeout to 15 seconds
+});
+
+casinoApi.interceptors.request.use(
+  (config) => {
+    // Log request for debugging
+    console.log("Casino API Request:", config.method?.toUpperCase(), config.url, config.params);
+    
+    // Ensure proper headers
+    config.headers['Content-Type'] = 'application/json';
+    
+    const token = getLocalStorageItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    console.error("Casino API Request Error:", error);
+    return Promise.reject(error);
+  }
+);
+
+casinoApi.interceptors.response.use(
+  (response) => {
+    // Log successful response for debugging
+    console.log("Casino API Response:", response.status, response.data);
+    if (response?.data?.meta?.status === 401) {
+      handleUnauthorized(response.data.meta.message);
+      return Promise.reject(
+        new Error(response.data.meta.message || "Unauthorized")
+      );
+    }
+    return response;
+  },
+  (error) => {
+    // Log error response for debugging
+    console.error("Casino API Error Response:", error.response?.status, error.response?.data, error.message);
+    
+    if (error.code === 'ECONNABORTED') {
+      console.error('Request timeout');
+      notifyError('Request timeout. Please try again.');
+      return Promise.reject(new Error('Request timeout. Please try again.'));
+    }
+    
+    if (!error.response) {
+      console.error('Network Error - Cannot connect to server');
+      notifyError('Cannot connect to casino server. Please check your connection.');
+      return Promise.reject(new Error('Cannot connect to casino server. Please check your connection.'));
+    }
+    
+    if (error?.response?.status === 401 || error?.response?.data?.meta?.status === 401) {
+      handleUnauthorized("Please login again.");
+    }
+    
+    return Promise.reject(error);
+  }
+);
+
+function handleUnauthorized(message) {
+  notifyError(message);
+  removeLocalStorageItem("token");
+  removeLocalStorageItem("userData");
+  window.location.href = "/";
+}
+
+// Fetch providers names
+const fetchProvidersNames = async () => {
+  console.log('fetchProvidersNames API called');
+  
+  try {
+    const response = await casinoApi.get('/gap-casino-game/providers/names');
+    console.log('fetchProvidersNames response:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching providers names:", error);
+    throw error;
+  }
+};
+
+// Keep track of pending requests to prevent duplicates
+let pendingRequests = {};
+
+// Fetch games with pagination
+const fetchGames = async (batchNumber = 0, batchSize = 100, providerName = 'all', search = '') => {
+  // Create a unique key for this request
+  const requestKey = `${batchNumber}-${batchSize}-${providerName}-${search}`;
+  
+  // If this request is already pending, return the existing promise
+  if (pendingRequests[requestKey]) {
+    console.log('Duplicate request prevented for:', requestKey);
+    return pendingRequests[requestKey];
+  }
+  
+  console.log('fetchGames API called with:', { batchNumber, batchSize, providerName, search });
+  
+  try {
+    const params = {
+      batchNumber,
+      batchSize,
+      providerName,
+      search
+    };
+    
+    // Store the promise in pending requests
+    pendingRequests[requestKey] = casinoApi.get('/gap-casino-game/providers/games', { params });
+    
+    const response = await pendingRequests[requestKey];
+    console.log('fetchGames response:', response.data);
+    
+    // Remove from pending requests after completion
+    delete pendingRequests[requestKey];
+    
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching games:", error);
+    // Remove from pending requests on error
+    delete pendingRequests[requestKey];
+    throw error;
+  }
+};
+
+// Fetch game URL for launching games
+const fetchGameUrl = async (gameId, gameCode) => {
+  console.log('fetchGameUrl API called with:', { gameId, gameCode });
+  
+  try {
+    const params = { gameId, gameCode };
+    const response = await casinoApi.get('/studio21-game/game-url', { params });
+    console.log('fetchGameUrl response:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching game URL:", error);
+    throw error;
+  }
+};
+
+// Worker saga to fetch casino providers
+function* fetchCasinoProvidersRequest(action) {
+  // Removed console.log('fetchCasinoProvidersRequest saga called with action:', action);
+  
+  try {
+    // Removed console.log('Fetching casino providers');
+    
+    // Make API call to fetch providers names
+    const response = yield call(fetchProvidersNames);
+    
+    // Removed console.log('API response for providers:', response);
+    
+    // Check if response is successful
+    if (response?.status === "success") {
+      // Extract provider names from the response
+      const providersData = response.data.map(providerName => ({
+        providerName: providerName
+      }));
+      
+      // Removed console.log('Providers data processed:', providersData);
+      
+      // Dispatch success action with the providers data
+      yield put(fetchCasinoProvidersSuccess({
+        data: providersData,
+        pagination: { hasMore: false } // No more data since we're fetching all at once
+      }));
+    } else {
+      // Dispatch failure action with error message
+      const errorMessage = response?.message || "Failed to fetch casino providers";
+      // Removed console.error('Failed to fetch casino providers:', errorMessage);
+      yield put(fetchCasinoProvidersFailure(errorMessage));
+    }
+  } catch (error) {
+    // Dispatch failure action with error message
+    const errorMessage = error.response?.data?.message || error.message || "Failed to fetch casino providers";
+    // Removed console.error('Error fetching casino providers:', errorMessage);
+    yield put(fetchCasinoProvidersFailure(errorMessage));
+  }
+}
+
+// Worker saga to fetch more casino providers (not needed with new approach)
+function* fetchMoreCasinoProvidersRequest(action) {
+  // With the new endpoint that fetches all providers, we don't need to fetch more
+  // But we'll keep this function to avoid breaking the saga structure
+  yield put(fetchMoreCasinoProvidersSuccess({
+    data: [],
+    pagination: { hasMore: false }
+  }));
+}
+
+// Worker saga to fetch casino games
+function* fetchCasinoGamesRequest(action) {
+  // Removed console.log('fetchCasinoGamesRequest saga called with action:', action);
+  
+  try {
+    const { batchNumber = 0, batchSize = 50, providerName = 'all', search = '' } = action.payload;
+    
+    // Removed console.log('Fetching casino games with:', { batchNumber, batchSize, providerName, search });
+    
+    // Make API call to fetch games with pagination
+    const response = yield call(fetchGames, batchNumber, batchSize, providerName, search);
+    
+    // Removed console.log('API response for games:', response);
+    
+    // Check if response is successful
+    if (response?.status === "success") {
+      // Use the hasMore value from the API response if available, otherwise calculate it
+      const hasMore = response.pagination?.hasMore !== undefined ? 
+        response.pagination.hasMore : 
+        response.data.length >= batchSize;
+      
+      // Dispatch success action with the data
+      yield put(fetchCasinoGamesSuccess({
+        data: response.data,
+        pagination: {
+          hasMore: hasMore,
+          batchNumber: response.pagination?.batchNumber || batchNumber,
+          batchSize: response.pagination?.batchSize || batchSize,
+          providerName: response.pagination?.providerName || providerName,
+          search: response.pagination?.searchQuery || search
+        }
+      }));
+    } else {
+      // Dispatch failure action with error message
+      const errorMessage = response?.message || "Failed to fetch casino games";
+      // Removed console.error('Failed to fetch casino games:', errorMessage);
+      yield put(fetchCasinoGamesFailure(errorMessage));
+    }
+  } catch (error) {
+    // Dispatch failure action with error message
+    const errorMessage = error.response?.data?.message || error.message || "Failed to fetch casino games";
+    // Removed console.error('Error fetching casino games:', errorMessage);
+    yield put(fetchCasinoGamesFailure(errorMessage));
+  }
+}
+
+// Keep track of recent requests to prevent infinite loops
+let recentRequests = [];
+const MAX_RECENT_REQUESTS = 5;
+
+// Worker saga to fetch more casino games
+function* fetchMoreCasinoGamesRequest(action) {
+  const { batchNumber, batchSize = 50, providerName = 'all', search = '' } = action.payload;
+  
+  // Create a unique identifier for this request
+  const requestIdentifier = `${batchNumber}-${providerName}-${search}`;
+  
+  // Check if this request was recently made
+  if (recentRequests.includes(requestIdentifier)) {
+    console.log('Skipping duplicate request:', requestIdentifier);
+    return;
+  }
+  
+  // Add to recent requests
+  recentRequests.push(requestIdentifier);
+  
+  // Keep only the most recent requests
+  if (recentRequests.length > MAX_RECENT_REQUESTS) {
+    recentRequests.shift();
+  }
+  
+  try {
+    // Removed console.log('Fetching more casino games with:', { batchNumber, batchSize, providerName, search });
+    
+    // Make API call to fetch games with pagination
+    const response = yield call(fetchGames, batchNumber, batchSize, providerName, search);
+    
+    // Removed console.log('API response for more games:', response);
+    
+    // Check if response is successful
+    if (response?.status === "success") {
+      // Use the hasMore value from the API response
+      const hasMore = response.pagination?.hasMore || false;
+      
+      // Prevent infinite loading if no more data
+      if (!hasMore) {
+        console.log('No more data to load, stopping pagination');
+        return;
+      }
+      
+      // Removed console.log('More games fetched successfully, hasMore:', hasMore, 'batchNumber:', batchNumber);
+      
+      // Dispatch success action with the data
+      yield put(fetchMoreCasinoGamesSuccess({
+        data: response.data,
+        pagination: {
+          hasMore: hasMore,
+          batchNumber: batchNumber, // Use the batchNumber from the request
+          batchSize: response.pagination?.batchSize || batchSize,
+          providerName: response.pagination?.providerName || providerName,
+          search: response.pagination?.searchQuery || search
+        }
+      }));
+    } else {
+      // Dispatch failure action with error message
+      const errorMessage = response?.message || "Failed to fetch more casino games";
+      // Removed console.error('Failed to fetch more casino games:', errorMessage);
+      yield put(fetchMoreCasinoGamesFailure(errorMessage));
+    }
+  } catch (error) {
+    // Dispatch failure action with error message
+    const errorMessage = error.response?.data?.message || error.message || "Failed to fetch more casino games";
+    // Removed console.error('Error fetching more casino games:', errorMessage);
+    yield put(fetchMoreCasinoGamesFailure(errorMessage));
+  }
+}
+
+// Worker saga to fetch casino game URL
+function* fetchCasinoGameUrlRequest(action) {
+  console.log('fetchCasinoGameUrlRequest saga worker called with action:', action);
+  
+  try {
+    const { gameId, gameCode } = action.payload;
+    
+    console.log('Fetching casino game URL with:', { gameId, gameCode });
+    
+    // Make API call to fetch game URL
+    const response = yield call(fetchGameUrl, gameId, gameCode);
+    
+    console.log('API response for game URL:', response);
+    
+    // Check if response is successful
+    if (response?.status === "success") {
+      // Dispatch success action with the data
+      yield put(fetchCasinoGameUrlSuccess(response.data));
+      
+      // Open the game URL in a new tab
+      if (response.data?.url) {
+        window.open(response.data.url, '_blank');
+      }
+    } else {
+      // Dispatch failure action with error message
+      const errorMessage = response?.message || "Failed to fetch game URL";
+      console.error('Failed to fetch game URL:', errorMessage);
+      yield put(fetchCasinoGameUrlFailure(errorMessage));
+    }
+  } catch (error) {
+    // Dispatch failure action with error message
+    const errorMessage = error.response?.data?.message || error.message || "Failed to fetch game URL";
+    console.error('Error fetching game URL:', errorMessage);
+    yield put(fetchCasinoGameUrlFailure(errorMessage));
+  }
+}
+
+// Worker saga to fetch homepage casino games (SUNO provider)
+function* fetchHomepageCasinoGamesRequest(action) {
+
+  
+  try {
+    const { batchNumber = 0, batchSize = 5, providerName = 'STUDIO21', search = '' } = action.payload;
+    
+
+    
+    // Make API call to fetch games with pagination
+    const response = yield call(fetchGames, batchNumber, batchSize, providerName, search);
+    
+
+    
+    // Check if response is successful
+    if (response?.status === "success") {
+      // Dispatch success action with the data
+      yield put(fetchHomepageCasinoGamesSuccess({
+        data: response.data,
+        pagination: {
+          hasMore: response.pagination?.hasMore || false,
+          batchNumber: response.pagination?.batchNumber || batchNumber,
+          batchSize: response.pagination?.batchSize || batchSize,
+          providerName: response.pagination?.providerName || providerName,
+          search: response.pagination?.searchQuery || search
+        }
+      }));
+    } else {
+      // Dispatch failure action with error message
+      const errorMessage = response?.message || "Failed to fetch homepage casino games";
+      // Removed console.error('Failed to fetch homepage casino games:', errorMessage);
+      yield put(fetchHomepageCasinoGamesFailure(errorMessage));
+    }
+  } catch (error) {
+    // Dispatch failure action with error message
+    const errorMessage = error.response?.data?.message || error.message || "Failed to fetch homepage casino games";
+    // Removed console.error('Error fetching homepage casino games:', errorMessage);
+    yield put(fetchHomepageCasinoGamesFailure(errorMessage));
+  }
+}
+
+// Worker saga to fetch homepage live games (SPRIBE provider)
+function* fetchHomepageLiveGamesRequest(action) {
+  // Removed console.log('fetchHomepageLiveGamesRequest saga called with action:', action);
+  
+  try {
+    const { batchNumber = 0, batchSize = 5, providerName = 'SPRIBE', search = '' } = action.payload;
+    
+    // Removed console.log('Fetching homepage live games with:', { batchNumber, batchSize, providerName, search });
+    
+    // Make API call to fetch games with pagination
+    const response = yield call(fetchGames, batchNumber, batchSize, providerName, search);
+    
+    // Removed console.log('API response for homepage live games:', response);
+    
+    // Check if response is successful
+    if (response?.status === "success") {
+      // Dispatch success action with the data
+      yield put(fetchHomepageLiveGamesSuccess({
+        data: response.data,
+        pagination: {
+          hasMore: response.pagination?.hasMore || false,
+          batchNumber: response.pagination?.batchNumber || batchNumber,
+          batchSize: response.pagination?.batchSize || batchSize,
+          providerName: response.pagination?.providerName || providerName,
+          search: response.pagination?.searchQuery || search
+        }
+      }));
+    } else {
+      // Dispatch failure action with error message
+      const errorMessage = response?.message || "Failed to fetch homepage live games";
+      // Removed console.error('Failed to fetch homepage live games:', errorMessage);
+      yield put(fetchHomepageLiveGamesFailure(errorMessage));
+    }
+  } catch (error) {
+    // Dispatch failure action with error message
+    const errorMessage = error.response?.data?.message || error.message || "Failed to fetch homepage live games";
+    // Removed console.error('Error fetching homepage live games:', errorMessage);
+    yield put(fetchHomepageLiveGamesFailure(errorMessage));
+  }
+}
+
+// Watcher saga to watch for FETCH_CASINO_PROVIDERS action
+function* watchFetchCasinoProviders() {
+  // Removed console.log('watchFetchCasinoProviders saga started');
+  yield takeEvery$1(FETCH_CASINO_PROVIDERS, fetchCasinoProvidersRequest);
+}
+
+// Watcher saga to watch for FETCH_MORE_CASINO_PROVIDERS action
+function* watchFetchMoreCasinoProviders() {
+  // Removed console.log('watchFetchMoreCasinoProviders saga started');
+  yield takeEvery$1(FETCH_MORE_CASINO_PROVIDERS, fetchMoreCasinoProvidersRequest);
+}
+
+// Watcher saga to watch for FETCH_CASINO_GAMES action
+function* watchFetchCasinoGames() {
+  // Removed console.log('watchFetchCasinoGames saga started');
+  yield takeEvery$1(FETCH_CASINO_GAMES, fetchCasinoGamesRequest);
+}
+
+// Watcher saga to watch for FETCH_MORE_CASINO_GAMES action
+function* watchFetchMoreCasinoGames() {
+  // Removed console.log('watchFetchMoreCasinoGames saga started');
+  yield takeEvery$1(FETCH_MORE_CASINO_GAMES, fetchMoreCasinoGamesRequest);
+}
+
+// Watcher saga to watch for FETCH_HOMEPAGE_CASINO_GAMES action
+function* watchFetchHomepageCasinoGames() {
+  // Removed console.log('watchFetchHomepageCasinoGames saga started');
+  yield takeEvery$1(FETCH_HOMEPAGE_CASINO_GAMES, fetchHomepageCasinoGamesRequest);
+}
+
+// Watcher saga to watch for FETCH_HOMEPAGE_LIVE_GAMES action
+function* watchFetchHomepageLiveGames() {
+  // Removed console.log('watchFetchHomepageLiveGames saga started');
+  yield takeEvery$1(FETCH_HOMEPAGE_LIVE_GAMES, fetchHomepageLiveGamesRequest);
+}
+
+// Watcher saga to watch for FETCH_CASINO_GAME_URL action
+function* watchFetchCasinoGameUrl() {
+  console.log('watchFetchCasinoGameUrl saga started');
+  yield takeEvery$1(FETCH_CASINO_GAME_URL, fetchCasinoGameUrlRequest);
+}
+
+// Root saga
+function* casinoSaga() {
+  console.log('casinoSaga root saga started');
+  yield all([
+    watchFetchCasinoProviders(), 
+    watchFetchMoreCasinoProviders(),
+    watchFetchCasinoGames(), 
+    watchFetchMoreCasinoGames(),
+    watchFetchHomepageCasinoGames(),
+    watchFetchHomepageLiveGames(),
+    watchFetchCasinoGameUrl()
+  ]);
+}
+
+/**
+ * Fetch user bets from the API
+ * @param {string} userId - The user ID
+ * @param {string} eventId - The event ID
+ * @returns {Promise<Object>} - The response data containing user bets
+ */
+async function fetchUserBets(userId, eventId) {
+  try {
+    const response = await api.get(`/sportBets/my-bets?userId=${userId}&eventId=${eventId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching user bets:", error);
+    throw error;
+  }
+}
+
+// Worker saga to fetch user bets
+function* fetchUserBetsRequest(action) {
+  try {
+    const { userId, eventId } = action.payload;
+    
+    // Make API call to fetch user bets
+    const response = yield call(fetchUserBets, userId, eventId);
+    
+    // Check if response is successful
+    if (response?.status === "success") {
+      // Dispatch success action with the bets data
+      yield put(fetchUserBetsSuccess(response.data));
+    } else if (Array.isArray(response)) {
+      // Handle case where response is directly an array of bets
+      yield put(fetchUserBetsSuccess(response));
+    } else {
+      // Dispatch failure action with error message
+      const errorMessage = response?.message || "Failed to fetch user bets";
+      yield put(fetchUserBetsFailure(errorMessage));
+    }
+  } catch (error) {
+    // Dispatch failure action with error message
+    const errorMessage = error.response?.data?.message || error.message || "Failed to fetch user bets";
+    yield put(fetchUserBetsFailure(errorMessage));
+  }
+}
+
+// Watcher saga to watch for FETCH_USER_BETS action
+function* watchFetchUserBets() {
+  yield takeEvery$1(FETCH_USER_BETS, fetchUserBetsRequest);
+}
+
+// Root saga
+function* userBetsSaga() {
+  yield all([
+    watchFetchUserBets(),
+  ]);
+}
+
 function* rootSaga() {
   yield all([
     rootSaga$6(),
@@ -2268,6 +3151,8 @@ function* rootSaga() {
     rootSaga$3(),
     rootSaga$2(),
     rootSaga$1(),
+    casinoSaga(),
+    userBetsSaga(),
   ]);
 }
 

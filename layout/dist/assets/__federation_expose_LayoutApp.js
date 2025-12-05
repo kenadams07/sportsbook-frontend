@@ -1,5 +1,5 @@
 import { importShared } from './__federation_fn_import.js';
-import { r as reactExports } from './index3.js';
+import { r as reactExports } from './index2.js';
 
 var jsxRuntime = {exports: {}};
 
@@ -103,7 +103,7 @@ const __variableDynamicImportRuntimeHelper = (glob, path, segs) => {
   });
 };
 
-const {createContext: createContext$2,Component,createElement: createElement$2,useContext: useContext$2,useState: useState$m,useMemo: useMemo$4,forwardRef: forwardRef$2} = await importShared('react');
+const {createContext: createContext$2,Component,createElement: createElement$2,useContext: useContext$2,useState: useState$o,useMemo: useMemo$5,forwardRef: forwardRef$2} = await importShared('react');
 
 
 const ErrorBoundaryContext = createContext$2(null);
@@ -781,41 +781,41 @@ var validRequestMethodsArr = [
   ...validMutationMethodsArr
 ];
 new Set(validRequestMethodsArr);
-const React$1n = await importShared('react');
+const React$1q = await importShared('react');
 
-var DataRouterContext = React$1n.createContext(null);
+var DataRouterContext = React$1q.createContext(null);
 DataRouterContext.displayName = "DataRouter";
-var DataRouterStateContext = React$1n.createContext(null);
+var DataRouterStateContext = React$1q.createContext(null);
 DataRouterStateContext.displayName = "DataRouterState";
-var RSCRouterContext = React$1n.createContext(false);
+var RSCRouterContext = React$1q.createContext(false);
 function useIsRSCRouterContext() {
-  return React$1n.useContext(RSCRouterContext);
+  return React$1q.useContext(RSCRouterContext);
 }
-var ViewTransitionContext = React$1n.createContext({
+var ViewTransitionContext = React$1q.createContext({
   isTransitioning: false
 });
 ViewTransitionContext.displayName = "ViewTransition";
-var FetchersContext = React$1n.createContext(
+var FetchersContext = React$1q.createContext(
   /* @__PURE__ */ new Map()
 );
 FetchersContext.displayName = "Fetchers";
-var AwaitContext = React$1n.createContext(null);
+var AwaitContext = React$1q.createContext(null);
 AwaitContext.displayName = "Await";
-var NavigationContext = React$1n.createContext(
+var NavigationContext = React$1q.createContext(
   null
 );
 NavigationContext.displayName = "Navigation";
-var LocationContext = React$1n.createContext(
+var LocationContext = React$1q.createContext(
   null
 );
 LocationContext.displayName = "Location";
-var RouteContext = React$1n.createContext({
+var RouteContext = React$1q.createContext({
   outlet: null,
   matches: [],
   isDataRoute: false
 });
 RouteContext.displayName = "Route";
-var RouteErrorContext = React$1n.createContext(null);
+var RouteErrorContext = React$1q.createContext(null);
 RouteErrorContext.displayName = "RouteError";
 const React2$2 = await importShared('react');
 
@@ -3408,9 +3408,9 @@ const colorFunctionRegex = /^(rgba?|hsla?|hwb|(ok)?(lab|lch)|color-mix)\(.+\)$/;
 const shadowRegex = /^(inset_)?-?((\d+)?\.?(\d+)[a-z]+|0)_-?((\d+)?\.?(\d+)[a-z]+|0)/;
 const imageRegex = /^(url|image|image-set|cross-fade|element|(repeating-)?(linear|radial|conic)-gradient)\(.+\)$/;
 const isFraction = value => fractionRegex.test(value);
-const isNumber$1 = value => !!value && !Number.isNaN(Number(value));
+const isNumber$2 = value => !!value && !Number.isNaN(Number(value));
 const isInteger = value => !!value && Number.isInteger(Number(value));
-const isPercent = value => value.endsWith('%') && isNumber$1(value.slice(0, -1));
+const isPercent = value => value.endsWith('%') && isNumber$2(value.slice(0, -1));
 const isTshirtSize = value => tshirtUnitRegex.test(value);
 const isAny = () => true;
 const isLengthOnly = value =>
@@ -3425,7 +3425,7 @@ const isAnyNonArbitrary = value => !isArbitraryValue(value) && !isArbitraryVaria
 const isArbitrarySize = value => getIsArbitraryValue(value, isLabelSize, isNever);
 const isArbitraryValue = value => arbitraryValueRegex.test(value);
 const isArbitraryLength = value => getIsArbitraryValue(value, isLabelLength, isLengthOnly);
-const isArbitraryNumber = value => getIsArbitraryValue(value, isLabelNumber, isNumber$1);
+const isArbitraryNumber = value => getIsArbitraryValue(value, isLabelNumber, isNumber$2);
 const isArbitraryPosition = value => getIsArbitraryValue(value, isLabelPosition, isNever);
 const isArbitraryImage = value => getIsArbitraryValue(value, isLabelImage, isImage);
 const isArbitraryShadow = value => getIsArbitraryValue(value, isLabelShadow, isShadow);
@@ -3536,16 +3536,16 @@ const getDefaultConfig = () => {
   const scaleRadius = () => [
   // Deprecated since Tailwind CSS v4.0.0
   '', 'none', 'full', themeRadius, isArbitraryVariable, isArbitraryValue];
-  const scaleBorderWidth = () => ['', isNumber$1, isArbitraryVariableLength, isArbitraryLength];
+  const scaleBorderWidth = () => ['', isNumber$2, isArbitraryVariableLength, isArbitraryLength];
   const scaleLineStyle = () => ['solid', 'dashed', 'dotted', 'double'];
   const scaleBlendMode = () => ['normal', 'multiply', 'screen', 'overlay', 'darken', 'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion', 'hue', 'saturation', 'color', 'luminosity'];
-  const scaleMaskImagePosition = () => [isNumber$1, isPercent, isArbitraryVariablePosition, isArbitraryPosition];
+  const scaleMaskImagePosition = () => [isNumber$2, isPercent, isArbitraryVariablePosition, isArbitraryPosition];
   const scaleBlur = () => [
   // Deprecated since Tailwind CSS v4.0.0
   '', 'none', themeBlur, isArbitraryVariable, isArbitraryValue];
-  const scaleRotate = () => ['none', isNumber$1, isArbitraryVariable, isArbitraryValue];
-  const scaleScale = () => ['none', isNumber$1, isArbitraryVariable, isArbitraryValue];
-  const scaleSkew = () => [isNumber$1, isArbitraryVariable, isArbitraryValue];
+  const scaleRotate = () => ['none', isNumber$2, isArbitraryVariable, isArbitraryValue];
+  const scaleScale = () => ['none', isNumber$2, isArbitraryVariable, isArbitraryValue];
+  const scaleSkew = () => [isNumber$2, isArbitraryVariable, isArbitraryValue];
   const scaleTranslate = () => [isFraction, 'full', ...scaleUnambiguousSpacing()];
   return {
     cacheSize: 500,
@@ -3565,7 +3565,7 @@ const getDefaultConfig = () => {
       perspective: ['dramatic', 'near', 'normal', 'midrange', 'distant', 'none'],
       radius: [isTshirtSize],
       shadow: [isTshirtSize],
-      spacing: ['px', isNumber$1],
+      spacing: ['px', isNumber$2],
       text: [isTshirtSize],
       'text-shadow': [isTshirtSize],
       tracking: ['tighter', 'tight', 'normal', 'wide', 'wider', 'widest']
@@ -3592,7 +3592,7 @@ const getDefaultConfig = () => {
        * @see https://tailwindcss.com/docs/columns
        */
       columns: [{
-        columns: [isNumber$1, isArbitraryValue, isArbitraryVariable, themeContainer]
+        columns: [isNumber$2, isArbitraryValue, isArbitraryVariable, themeContainer]
       }],
       /**
        * Break After
@@ -3823,21 +3823,21 @@ const getDefaultConfig = () => {
        * @see https://tailwindcss.com/docs/flex
        */
       flex: [{
-        flex: [isNumber$1, isFraction, 'auto', 'initial', 'none', isArbitraryValue]
+        flex: [isNumber$2, isFraction, 'auto', 'initial', 'none', isArbitraryValue]
       }],
       /**
        * Flex Grow
        * @see https://tailwindcss.com/docs/flex-grow
        */
       grow: [{
-        grow: ['', isNumber$1, isArbitraryVariable, isArbitraryValue]
+        grow: ['', isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Flex Shrink
        * @see https://tailwindcss.com/docs/flex-shrink
        */
       shrink: [{
-        shrink: ['', isNumber$1, isArbitraryVariable, isArbitraryValue]
+        shrink: ['', isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Order
@@ -4302,7 +4302,7 @@ const getDefaultConfig = () => {
        * @see https://tailwindcss.com/docs/line-clamp
        */
       'line-clamp': [{
-        'line-clamp': [isNumber$1, 'none', isArbitraryVariable, isArbitraryNumber]
+        'line-clamp': [isNumber$2, 'none', isArbitraryVariable, isArbitraryNumber]
       }],
       /**
        * Line Height
@@ -4372,7 +4372,7 @@ const getDefaultConfig = () => {
        * @see https://tailwindcss.com/docs/text-decoration-thickness
        */
       'text-decoration-thickness': [{
-        decoration: [isNumber$1, 'from-font', 'auto', isArbitraryVariable, isArbitraryLength]
+        decoration: [isNumber$2, 'from-font', 'auto', isArbitraryVariable, isArbitraryLength]
       }],
       /**
        * Text Decoration Color
@@ -4386,7 +4386,7 @@ const getDefaultConfig = () => {
        * @see https://tailwindcss.com/docs/text-underline-offset
        */
       'underline-offset': [{
-        'underline-offset': [isNumber$1, 'auto', isArbitraryVariable, isArbitraryValue]
+        'underline-offset': [isNumber$2, 'auto', isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Text Transform
@@ -4852,14 +4852,14 @@ const getDefaultConfig = () => {
        * @see https://tailwindcss.com/docs/outline-offset
        */
       'outline-offset': [{
-        'outline-offset': [isNumber$1, isArbitraryVariable, isArbitraryValue]
+        'outline-offset': [isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Outline Width
        * @see https://tailwindcss.com/docs/outline-width
        */
       'outline-w': [{
-        outline: ['', isNumber$1, isArbitraryVariableLength, isArbitraryLength]
+        outline: ['', isNumber$2, isArbitraryVariableLength, isArbitraryLength]
       }],
       /**
        * Outline Color
@@ -4929,7 +4929,7 @@ const getDefaultConfig = () => {
        * @see https://github.com/tailwindlabs/tailwindcss/blob/v4.0.0/packages/tailwindcss/src/utilities.ts#L4158
        */
       'ring-offset-w': [{
-        'ring-offset': [isNumber$1, isArbitraryLength]
+        'ring-offset': [isNumber$2, isArbitraryLength]
       }],
       /**
        * Ring Offset Color
@@ -4973,7 +4973,7 @@ const getDefaultConfig = () => {
        * @see https://tailwindcss.com/docs/opacity
        */
       opacity: [{
-        opacity: [isNumber$1, isArbitraryVariable, isArbitraryValue]
+        opacity: [isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Mix Blend Mode
@@ -5008,7 +5008,7 @@ const getDefaultConfig = () => {
        * @see https://tailwindcss.com/docs/mask-image
        */
       'mask-image-linear-pos': [{
-        'mask-linear': [isNumber$1]
+        'mask-linear': [isNumber$2]
       }],
       'mask-image-linear-from-pos': [{
         'mask-linear-from': scaleMaskImagePosition()
@@ -5122,7 +5122,7 @@ const getDefaultConfig = () => {
         'mask-radial-at': scalePosition()
       }],
       'mask-image-conic-pos': [{
-        'mask-conic': [isNumber$1]
+        'mask-conic': [isNumber$2]
       }],
       'mask-image-conic-from-pos': [{
         'mask-conic-from': scaleMaskImagePosition()
@@ -5209,14 +5209,14 @@ const getDefaultConfig = () => {
        * @see https://tailwindcss.com/docs/brightness
        */
       brightness: [{
-        brightness: [isNumber$1, isArbitraryVariable, isArbitraryValue]
+        brightness: [isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Contrast
        * @see https://tailwindcss.com/docs/contrast
        */
       contrast: [{
-        contrast: [isNumber$1, isArbitraryVariable, isArbitraryValue]
+        contrast: [isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Drop Shadow
@@ -5239,35 +5239,35 @@ const getDefaultConfig = () => {
        * @see https://tailwindcss.com/docs/grayscale
        */
       grayscale: [{
-        grayscale: ['', isNumber$1, isArbitraryVariable, isArbitraryValue]
+        grayscale: ['', isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Hue Rotate
        * @see https://tailwindcss.com/docs/hue-rotate
        */
       'hue-rotate': [{
-        'hue-rotate': [isNumber$1, isArbitraryVariable, isArbitraryValue]
+        'hue-rotate': [isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Invert
        * @see https://tailwindcss.com/docs/invert
        */
       invert: [{
-        invert: ['', isNumber$1, isArbitraryVariable, isArbitraryValue]
+        invert: ['', isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Saturate
        * @see https://tailwindcss.com/docs/saturate
        */
       saturate: [{
-        saturate: [isNumber$1, isArbitraryVariable, isArbitraryValue]
+        saturate: [isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Sepia
        * @see https://tailwindcss.com/docs/sepia
        */
       sepia: [{
-        sepia: ['', isNumber$1, isArbitraryVariable, isArbitraryValue]
+        sepia: ['', isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Backdrop Filter
@@ -5290,56 +5290,56 @@ const getDefaultConfig = () => {
        * @see https://tailwindcss.com/docs/backdrop-brightness
        */
       'backdrop-brightness': [{
-        'backdrop-brightness': [isNumber$1, isArbitraryVariable, isArbitraryValue]
+        'backdrop-brightness': [isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Backdrop Contrast
        * @see https://tailwindcss.com/docs/backdrop-contrast
        */
       'backdrop-contrast': [{
-        'backdrop-contrast': [isNumber$1, isArbitraryVariable, isArbitraryValue]
+        'backdrop-contrast': [isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Backdrop Grayscale
        * @see https://tailwindcss.com/docs/backdrop-grayscale
        */
       'backdrop-grayscale': [{
-        'backdrop-grayscale': ['', isNumber$1, isArbitraryVariable, isArbitraryValue]
+        'backdrop-grayscale': ['', isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Backdrop Hue Rotate
        * @see https://tailwindcss.com/docs/backdrop-hue-rotate
        */
       'backdrop-hue-rotate': [{
-        'backdrop-hue-rotate': [isNumber$1, isArbitraryVariable, isArbitraryValue]
+        'backdrop-hue-rotate': [isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Backdrop Invert
        * @see https://tailwindcss.com/docs/backdrop-invert
        */
       'backdrop-invert': [{
-        'backdrop-invert': ['', isNumber$1, isArbitraryVariable, isArbitraryValue]
+        'backdrop-invert': ['', isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Backdrop Opacity
        * @see https://tailwindcss.com/docs/backdrop-opacity
        */
       'backdrop-opacity': [{
-        'backdrop-opacity': [isNumber$1, isArbitraryVariable, isArbitraryValue]
+        'backdrop-opacity': [isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Backdrop Saturate
        * @see https://tailwindcss.com/docs/backdrop-saturate
        */
       'backdrop-saturate': [{
-        'backdrop-saturate': [isNumber$1, isArbitraryVariable, isArbitraryValue]
+        'backdrop-saturate': [isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Backdrop Sepia
        * @see https://tailwindcss.com/docs/backdrop-sepia
        */
       'backdrop-sepia': [{
-        'backdrop-sepia': ['', isNumber$1, isArbitraryVariable, isArbitraryValue]
+        'backdrop-sepia': ['', isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       // --------------
       // --- Tables ---
@@ -5408,7 +5408,7 @@ const getDefaultConfig = () => {
        * @see https://tailwindcss.com/docs/transition-duration
        */
       duration: [{
-        duration: [isNumber$1, 'initial', isArbitraryVariable, isArbitraryValue]
+        duration: [isNumber$2, 'initial', isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Transition Timing Function
@@ -5422,7 +5422,7 @@ const getDefaultConfig = () => {
        * @see https://tailwindcss.com/docs/transition-delay
        */
       delay: [{
-        delay: [isNumber$1, isArbitraryVariable, isArbitraryValue]
+        delay: [isNumber$2, isArbitraryVariable, isArbitraryValue]
       }],
       /**
        * Animation
@@ -5866,7 +5866,7 @@ const getDefaultConfig = () => {
        * @see https://tailwindcss.com/docs/stroke-width
        */
       'stroke-w': [{
-        stroke: [isNumber$1, isArbitraryVariableLength, isArbitraryLength, isArbitraryNumber]
+        stroke: [isNumber$2, isArbitraryVariableLength, isArbitraryLength, isArbitraryNumber]
       }],
       /**
        * Stroke
@@ -5948,12 +5948,752 @@ function cn$1(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-const React$1m = await importShared('react');
-const {useState: useState$l} = React$1m;
+var withSelector = {exports: {}};
 
+var useSyncExternalStoreWithSelector_production = {};
+
+/**
+ * @license React
+ * use-sync-external-store-with-selector.production.js
+ *
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+var React$1p = reactExports;
+function is(x, y) {
+  return (x === y && (0 !== x || 1 / x === 1 / y)) || (x !== x && y !== y);
+}
+var objectIs = "function" === typeof Object.is ? Object.is : is,
+  useSyncExternalStore = React$1p.useSyncExternalStore,
+  useRef$c = React$1p.useRef,
+  useEffect$i = React$1p.useEffect,
+  useMemo$4 = React$1p.useMemo,
+  useDebugValue = React$1p.useDebugValue;
+useSyncExternalStoreWithSelector_production.useSyncExternalStoreWithSelector = function (
+  subscribe,
+  getSnapshot,
+  getServerSnapshot,
+  selector,
+  isEqual
+) {
+  var instRef = useRef$c(null);
+  if (null === instRef.current) {
+    var inst = { hasValue: false, value: null };
+    instRef.current = inst;
+  } else inst = instRef.current;
+  instRef = useMemo$4(
+    function () {
+      function memoizedSelector(nextSnapshot) {
+        if (!hasMemo) {
+          hasMemo = true;
+          memoizedSnapshot = nextSnapshot;
+          nextSnapshot = selector(nextSnapshot);
+          if (void 0 !== isEqual && inst.hasValue) {
+            var currentSelection = inst.value;
+            if (isEqual(currentSelection, nextSnapshot))
+              return (memoizedSelection = currentSelection);
+          }
+          return (memoizedSelection = nextSnapshot);
+        }
+        currentSelection = memoizedSelection;
+        if (objectIs(memoizedSnapshot, nextSnapshot)) return currentSelection;
+        var nextSelection = selector(nextSnapshot);
+        if (void 0 !== isEqual && isEqual(currentSelection, nextSelection))
+          return (memoizedSnapshot = nextSnapshot), currentSelection;
+        memoizedSnapshot = nextSnapshot;
+        return (memoizedSelection = nextSelection);
+      }
+      var hasMemo = false,
+        memoizedSnapshot,
+        memoizedSelection,
+        maybeGetServerSnapshot =
+          void 0 === getServerSnapshot ? null : getServerSnapshot;
+      return [
+        function () {
+          return memoizedSelector(getSnapshot());
+        },
+        null === maybeGetServerSnapshot
+          ? void 0
+          : function () {
+              return memoizedSelector(maybeGetServerSnapshot());
+            }
+      ];
+    },
+    [getSnapshot, getServerSnapshot, selector, isEqual]
+  );
+  var value = useSyncExternalStore(subscribe, instRef[0], instRef[1]);
+  useEffect$i(
+    function () {
+      inst.hasValue = true;
+      inst.value = value;
+    },
+    [value]
+  );
+  useDebugValue(value);
+  return value;
+};
+
+{
+  withSelector.exports = useSyncExternalStoreWithSelector_production;
+}
+
+var withSelectorExports = withSelector.exports;
+
+const React$1o = await importShared('react');
+function defaultNoopBatch(callback) {
+  callback();
+}
+function createListenerCollection() {
+  let first = null;
+  let last = null;
+  return {
+    clear() {
+      first = null;
+      last = null;
+    },
+    notify() {
+      defaultNoopBatch(() => {
+        let listener = first;
+        while (listener) {
+          listener.callback();
+          listener = listener.next;
+        }
+      });
+    },
+    get() {
+      const listeners = [];
+      let listener = first;
+      while (listener) {
+        listeners.push(listener);
+        listener = listener.next;
+      }
+      return listeners;
+    },
+    subscribe(callback) {
+      let isSubscribed = true;
+      const listener = last = {
+        callback,
+        next: null,
+        prev: last
+      };
+      if (listener.prev) {
+        listener.prev.next = listener;
+      } else {
+        first = listener;
+      }
+      return function unsubscribe() {
+        if (!isSubscribed || first === null) return;
+        isSubscribed = false;
+        if (listener.next) {
+          listener.next.prev = listener.prev;
+        } else {
+          last = listener.prev;
+        }
+        if (listener.prev) {
+          listener.prev.next = listener.next;
+        } else {
+          first = listener.next;
+        }
+      };
+    }
+  };
+}
+var nullListeners = {
+  notify() {
+  },
+  get: () => []
+};
+function createSubscription(store, parentSub) {
+  let unsubscribe;
+  let listeners = nullListeners;
+  let subscriptionsAmount = 0;
+  let selfSubscribed = false;
+  function addNestedSub(listener) {
+    trySubscribe();
+    const cleanupListener = listeners.subscribe(listener);
+    let removed = false;
+    return () => {
+      if (!removed) {
+        removed = true;
+        cleanupListener();
+        tryUnsubscribe();
+      }
+    };
+  }
+  function notifyNestedSubs() {
+    listeners.notify();
+  }
+  function handleChangeWrapper() {
+    if (subscription.onStateChange) {
+      subscription.onStateChange();
+    }
+  }
+  function isSubscribed() {
+    return selfSubscribed;
+  }
+  function trySubscribe() {
+    subscriptionsAmount++;
+    if (!unsubscribe) {
+      unsubscribe = store.subscribe(handleChangeWrapper);
+      listeners = createListenerCollection();
+    }
+  }
+  function tryUnsubscribe() {
+    subscriptionsAmount--;
+    if (unsubscribe && subscriptionsAmount === 0) {
+      unsubscribe();
+      unsubscribe = void 0;
+      listeners.clear();
+      listeners = nullListeners;
+    }
+  }
+  function trySubscribeSelf() {
+    if (!selfSubscribed) {
+      selfSubscribed = true;
+      trySubscribe();
+    }
+  }
+  function tryUnsubscribeSelf() {
+    if (selfSubscribed) {
+      selfSubscribed = false;
+      tryUnsubscribe();
+    }
+  }
+  const subscription = {
+    addNestedSub,
+    notifyNestedSubs,
+    handleChangeWrapper,
+    isSubscribed,
+    trySubscribe: trySubscribeSelf,
+    tryUnsubscribe: tryUnsubscribeSelf,
+    getListeners: () => listeners
+  };
+  return subscription;
+}
+var canUseDOM$1 = () => !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
+var isDOM = /* @__PURE__ */ canUseDOM$1();
+var isRunningInReactNative = () => typeof navigator !== "undefined" && navigator.product === "ReactNative";
+var isReactNative = /* @__PURE__ */ isRunningInReactNative();
+var getUseIsomorphicLayoutEffect = () => isDOM || isReactNative ? React$1o.useLayoutEffect : React$1o.useEffect;
+var useIsomorphicLayoutEffect$2 = /* @__PURE__ */ getUseIsomorphicLayoutEffect();
+var ContextKey = /* @__PURE__ */ Symbol.for(`react-redux-context`);
+var gT = typeof globalThis !== "undefined" ? globalThis : (
+  /* fall back to a per-module scope (pre-8.1 behaviour) if `globalThis` is not available */
+  {}
+);
+function getContext() {
+  if (!React$1o.createContext) return {};
+  const contextMap = gT[ContextKey] ??= /* @__PURE__ */ new Map();
+  let realContext = contextMap.get(React$1o.createContext);
+  if (!realContext) {
+    realContext = React$1o.createContext(
+      null
+    );
+    contextMap.set(React$1o.createContext, realContext);
+  }
+  return realContext;
+}
+var ReactReduxContext = /* @__PURE__ */ getContext();
+function Provider(providerProps) {
+  const { children, context, serverState, store } = providerProps;
+  const contextValue = React$1o.useMemo(() => {
+    const subscription = createSubscription(store);
+    const baseContextValue = {
+      store,
+      subscription,
+      getServerState: serverState ? () => serverState : void 0
+    };
+    {
+      return baseContextValue;
+    }
+  }, [store, serverState]);
+  const previousState = React$1o.useMemo(() => store.getState(), [store]);
+  useIsomorphicLayoutEffect$2(() => {
+    const { subscription } = contextValue;
+    subscription.onStateChange = subscription.notifyNestedSubs;
+    subscription.trySubscribe();
+    if (previousState !== store.getState()) {
+      subscription.notifyNestedSubs();
+    }
+    return () => {
+      subscription.tryUnsubscribe();
+      subscription.onStateChange = void 0;
+    };
+  }, [contextValue, previousState]);
+  const Context = context || ReactReduxContext;
+  return /* @__PURE__ */ React$1o.createElement(Context.Provider, { value: contextValue }, children);
+}
+var Provider_default = Provider;
+function createReduxContextHook(context = ReactReduxContext) {
+  return function useReduxContext2() {
+    const contextValue = React$1o.useContext(context);
+    return contextValue;
+  };
+}
+var useReduxContext = /* @__PURE__ */ createReduxContextHook();
+function createStoreHook(context = ReactReduxContext) {
+  const useReduxContext2 = context === ReactReduxContext ? useReduxContext : (
+    // @ts-ignore
+    createReduxContextHook(context)
+  );
+  const useStore2 = () => {
+    const { store } = useReduxContext2();
+    return store;
+  };
+  Object.assign(useStore2, {
+    withTypes: () => useStore2
+  });
+  return useStore2;
+}
+var useStore = /* @__PURE__ */ createStoreHook();
+function createDispatchHook(context = ReactReduxContext) {
+  const useStore2 = context === ReactReduxContext ? useStore : createStoreHook(context);
+  const useDispatch2 = () => {
+    const store = useStore2();
+    return store.dispatch;
+  };
+  Object.assign(useDispatch2, {
+    withTypes: () => useDispatch2
+  });
+  return useDispatch2;
+}
+var useDispatch = /* @__PURE__ */ createDispatchHook();
+var refEquality = (a, b) => a === b;
+function createSelectorHook(context = ReactReduxContext) {
+  const useReduxContext2 = context === ReactReduxContext ? useReduxContext : createReduxContextHook(context);
+  const useSelector2 = (selector, equalityFnOrOptions = {}) => {
+    const { equalityFn = refEquality } = typeof equalityFnOrOptions === "function" ? { equalityFn: equalityFnOrOptions } : equalityFnOrOptions;
+    const reduxContext = useReduxContext2();
+    const { store, subscription, getServerState } = reduxContext;
+    React$1o.useRef(true);
+    const wrappedSelector = React$1o.useCallback(
+      {
+        [selector.name](state) {
+          const selected = selector(state);
+          return selected;
+        }
+      }[selector.name],
+      [selector]
+    );
+    const selectedState = withSelectorExports.useSyncExternalStoreWithSelector(
+      subscription.addNestedSub,
+      store.getState,
+      getServerState || store.getState,
+      wrappedSelector,
+      equalityFn
+    );
+    React$1o.useDebugValue(selectedState);
+    return selectedState;
+  };
+  Object.assign(useSelector2, {
+    withTypes: () => useSelector2
+  });
+  return useSelector2;
+}
+var useSelector = /* @__PURE__ */ createSelectorHook();
+
+//  Auth - Signup
+const SIGNUP = "SIGNUP";
+const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
+const SIGNUP_FAILURE = "SIGNUP_FAILURE";
+
+//  Auth - Login
+const LOGIN = "LOGIN";
+const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+const LOGIN_FAILURE = "LOGIN_FAILURE";
+
+// Auth - Logout
+const LOGOUT = "LOGOUT";
+const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
+const LOGOUT_FAILURE = "LOGOUT_FAILURE";
+
+// Auth - Verify Email
+const VERIFY_EMAIL = "VERIFY_EMAIL";
+const VERIFY_EMAIL_SUCCESS = "VERIFY_EMAIL_SUCCESS";
+const VERIFY_EMAIL_FAILURE = "VERIFY_EMAIL_FAILURE";
+
+// Auth - Get User Data
+const GET_USER_DATA = "GET_USER_DATA";
+const GET_USER_DATA_SUCCESS = "GET_USER_DATA_SUCCESS";
+const GET_USER_DATA_FAILURE = "GET_USER_DATA_FAILURE";
+
+// Auth - Update User Balance and Exposure
+const UPDATE_USER_BALANCE_EXPOSURE = "UPDATE_USER_BALANCE_EXPOSURE";
+const UPDATE_USER_BALANCE_EXPOSURE_SUCCESS = "UPDATE_USER_BALANCE_EXPOSURE_SUCCESS";
+const UPDATE_USER_BALANCE_EXPOSURE_FAILURE = "UPDATE_USER_BALANCE_EXPOSURE_FAILURE";
+
+// User Bets
+const FETCH_USER_BETS = "FETCH_USER_BETS";
+const FETCH_USER_BETS_SUCCESS = "FETCH_USER_BETS_SUCCESS";
+const FETCH_USER_BETS_FAILURE = "FETCH_USER_BETS_FAILURE";
+const SKIP_NEXT_USER_BETS_FETCH = "SKIP_NEXT_USER_BETS_FETCH";
+
+// Casino Games
+const FETCH_CASINO_GAMES = "FETCH_CASINO_GAMES";
+const FETCH_CASINO_GAMES_SUCCESS = "FETCH_CASINO_GAMES_SUCCESS";
+const FETCH_CASINO_GAMES_FAILURE = "FETCH_CASINO_GAMES_FAILURE";
+const FETCH_MORE_CASINO_GAMES = "FETCH_MORE_CASINO_GAMES";
+const FETCH_MORE_CASINO_GAMES_SUCCESS = "FETCH_MORE_CASINO_GAMES_SUCCESS";
+const FETCH_MORE_CASINO_GAMES_FAILURE = "FETCH_MORE_CASINO_GAMES_FAILURE";
+const RESET_CASINO_GAMES = "RESET_CASINO_GAMES";
+
+// Homepage Casino Games (SUNO provider)
+const FETCH_HOMEPAGE_CASINO_GAMES = "FETCH_HOMEPAGE_CASINO_GAMES";
+const FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS = "FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS";
+const FETCH_HOMEPAGE_CASINO_GAMES_FAILURE = "FETCH_HOMEPAGE_CASINO_GAMES_FAILURE";
+
+// Homepage Live Games (SPRIBE provider)
+const FETCH_HOMEPAGE_LIVE_GAMES = "FETCH_HOMEPAGE_LIVE_GAMES";
+const FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS = "FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS";
+const FETCH_HOMEPAGE_LIVE_GAMES_FAILURE = "FETCH_HOMEPAGE_LIVE_GAMES_FAILURE";
+
+// Casino Providers
+const FETCH_CASINO_PROVIDERS = "FETCH_CASINO_PROVIDERS";
+const FETCH_CASINO_PROVIDERS_SUCCESS = "FETCH_CASINO_PROVIDERS_SUCCESS";
+const FETCH_CASINO_PROVIDERS_FAILURE = "FETCH_CASINO_PROVIDERS_FAILURE";
+const FETCH_MORE_CASINO_PROVIDERS = "FETCH_MORE_CASINO_PROVIDERS";
+const FETCH_MORE_CASINO_PROVIDERS_SUCCESS = "FETCH_MORE_CASINO_PROVIDERS_SUCCESS";
+const FETCH_MORE_CASINO_PROVIDERS_FAILURE = "FETCH_MORE_CASINO_PROVIDERS_FAILURE";
+
+// Casino Game URL
+const FETCH_CASINO_GAME_URL = "FETCH_CASINO_GAME_URL";
+const FETCH_CASINO_GAME_URL_SUCCESS = "FETCH_CASINO_GAME_URL_SUCCESS";
+const FETCH_CASINO_GAME_URL_FAILURE = "FETCH_CASINO_GAME_URL_FAILURE";
+
+// Games Actions
+const fetchCasinoGames = (params = {}) => {
+  // Removed console.log('fetchCasinoGames action called with params:', params);
+  
+  return {
+    type: FETCH_CASINO_GAMES,
+    payload: params,
+  };
+};
+
+const fetchCasinoGamesSuccess = (payload) => {
+  // Removed console.log('fetchCasinoGamesSuccess action called with payload:', payload);
+  
+  return {
+    type: FETCH_CASINO_GAMES_SUCCESS,
+    payload,
+  };
+};
+
+const fetchCasinoGamesFailure = (error) => {
+  // Removed console.log('fetchCasinoGamesFailure action called with error:', error);
+  
+  return {
+    type: FETCH_CASINO_GAMES_FAILURE,
+    payload: error,
+  };
+};
+
+const fetchMoreCasinoGames = (params) => {
+  // Removed console.log('fetchMoreCasinoGames action called with params:', params);
+  // Add stack trace to see where this is being called from
+  // Removed console.trace('fetchMoreCasinoGames call stack');
+  
+  return {
+    type: FETCH_MORE_CASINO_GAMES,
+    payload: params,
+  };
+};
+
+const fetchMoreCasinoGamesSuccess = (payload) => {
+  // Removed console.log('fetchMoreCasinoGamesSuccess action called with payload:', payload);
+  
+  return {
+    type: FETCH_MORE_CASINO_GAMES_SUCCESS,
+    payload,
+  };
+};
+
+const fetchMoreCasinoGamesFailure = (error) => {
+  // Removed console.log('fetchMoreCasinoGamesFailure action called with error:', error);
+  
+  return {
+    type: FETCH_MORE_CASINO_GAMES_FAILURE,
+    payload: error,
+  };
+};
+
+// Homepage Casino Games Actions (SUNO provider)
+const fetchHomepageCasinoGames = (params = {}) => {
+  // Removed console.log('fetchHomepageCasinoGames action called with params:', params);
+  
+  return {
+    type: FETCH_HOMEPAGE_CASINO_GAMES,
+    payload: params,
+  };
+};
+
+const fetchHomepageCasinoGamesSuccess = (payload) => {
+  // Removed console.log('fetchHomepageCasinoGamesSuccess action called with payload:', payload);
+  
+  return {
+    type: FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS,
+    payload,
+  };
+};
+
+const fetchHomepageCasinoGamesFailure = (error) => {
+  // Removed console.log('fetchHomepageCasinoGamesFailure action called with error:', error);
+  
+  return {
+    type: FETCH_HOMEPAGE_CASINO_GAMES_FAILURE,
+    payload: error,
+  };
+};
+
+// Homepage Live Games Actions (SPRIBE provider)
+const fetchHomepageLiveGames = (params = {}) => {
+  // Removed console.log('fetchHomepageLiveGames action called with params:', params);
+  
+  return {
+    type: FETCH_HOMEPAGE_LIVE_GAMES,
+    payload: params,
+  };
+};
+
+const fetchHomepageLiveGamesSuccess = (payload) => {
+  // Removed console.log('fetchHomepageLiveGamesSuccess action called with payload:', payload);
+  
+  return {
+    type: FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS,
+    payload,
+  };
+};
+
+const fetchHomepageLiveGamesFailure = (error) => {
+  // Removed console.log('fetchHomepageLiveGamesFailure action called with error:', error);
+  
+  return {
+    type: FETCH_HOMEPAGE_LIVE_GAMES_FAILURE,
+    payload: error,
+  };
+};
+
+// Reset games action
+const resetCasinoGames = () => {
+  // Removed console.log('resetCasinoGames action called');
+  
+  return {
+    type: RESET_CASINO_GAMES,
+  };
+};
+
+// Providers Actions
+const fetchCasinoProviders = (params = {}) => {
+  // Removed console.log('fetchCasinoProviders action called with params:', params);
+  
+  return {
+    type: FETCH_CASINO_PROVIDERS,
+    payload: params,
+  };
+};
+
+const fetchCasinoProvidersSuccess = (payload) => {
+  // Removed console.log('fetchCasinoProvidersSuccess action called with payload:', payload);
+  
+  return {
+    type: FETCH_CASINO_PROVIDERS_SUCCESS,
+    payload,
+  };
+};
+
+const fetchCasinoProvidersFailure = (error) => {
+  // Removed console.log('fetchCasinoProvidersFailure action called with error:', error);
+  
+  return {
+    type: FETCH_CASINO_PROVIDERS_FAILURE,
+    payload: error,
+  };
+};
+
+const fetchMoreCasinoProvidersSuccess = (payload) => ({
+  type: FETCH_MORE_CASINO_PROVIDERS_SUCCESS,
+  payload,
+});
+
+// Casino Game URL Actions
+const fetchCasinoGameUrl = (params) => {
+  console.log('fetchCasinoGameUrl action dispatched with params:', params);
+  return {
+    type: FETCH_CASINO_GAME_URL,
+    payload: params,
+  };
+};
+
+const fetchCasinoGameUrlSuccess = (payload) => ({
+  type: FETCH_CASINO_GAME_URL_SUCCESS,
+  payload,
+});
+
+const fetchCasinoGameUrlFailure = (error) => ({
+  type: FETCH_CASINO_GAME_URL_FAILURE,
+  payload: error,
+});
+
+const React$1n = await importShared('react');
+const {useState: useState$n} = React$1n;
+const CasinoGameCard = ({ game, onPlay }) => {
+  const [imageLoaded, setImageLoaded] = useState$n(false);
+  const [imageError, setImageError] = useState$n(false);
+  const dispatch = useDispatch();
+  const handlePlayClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("handlePlayClick called with game:", game);
+    if (onPlay) {
+      onPlay(game);
+    }
+    const gameId = game.gameId || game.id || game.GameId;
+    const gameCode = game.gameCode || game.code || game.GameCode;
+    console.log("Extracted gameId and gameCode:", { gameId, gameCode });
+    if (gameId && gameCode) {
+      console.log("Dispatching fetchCasinoGameUrl");
+      const result = dispatch(fetchCasinoGameUrl({
+        gameId,
+        gameCode
+      }));
+      console.log("Dispatch result:", result);
+    } else {
+      console.log("Missing gameId or gameCode in game data:", game);
+    }
+  };
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+  const handleImageError = (e) => {
+    setImageError(true);
+    e.target.src = "https://placehold.co/300x200/2a2a2a/CCCCCC?text=No+Image";
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-game-card group", onClick: () => console.log("Game card clicked"), children: [
+    !imageLoaded && !imageError && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-game-card-img-loading", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-game-card-img-shimmer" }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "img",
+      {
+        src: imageError ? "https://placehold.co/300x200/2a2a2a/CCCCCC?text=No+Image" : game.urlThumb,
+        alt: game.name,
+        className: `casino-game-card-img ${imageLoaded ? "casino-game-card-img-loaded" : ""}`,
+        onLoad: handleImageLoad,
+        onError: handleImageError,
+        style: { display: imageLoaded || imageError ? "block" : "none" }
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-game-overlay", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "casino-game-title", children: game.name }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          className: "casino-play-button",
+          onClick: handlePlayClick,
+          children: "Play Now"
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-age-badge", children: "+18" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-game-name-bottom", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "casino-game-name-bottom-text", children: game.name }) })
+  ] });
+};
+
+const React$1m = await importShared('react');
+const {useState: useState$m,useEffect: useEffect$h,useCallback: useCallback$3,useRef: useRef$b,useMemo: useMemo$3} = React$1m;
 const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
-  const [providerSearchQuery, setProviderSearchQuery] = useState$l("");
-  const [gameSearchQuery, setGameSearchQuery] = useState$l("");
+  const dispatch = useDispatch();
+  const {
+    gamesByProvider,
+    loadingGames,
+    loadingMoreGames,
+    gamesError,
+    providers,
+    loadingProviders,
+    providersError,
+    pagination
+  } = useSelector((state) => state.CasinoGames);
+  const [providerSearchQuery, setProviderSearchQuery] = useState$m("");
+  const [gameSearchQuery, setGameSearchQuery] = useState$m("");
+  const [selectedProvider, setSelectedProvider] = useState$m(null);
+  const debounceRef = useRef$b(null);
+  const gamesContainerRef = useRef$b(null);
+  useEffect$h(() => {
+    dispatch(fetchCasinoProviders());
+    dispatch(fetchCasinoGames({
+      batchNumber: 0,
+      batchSize: 50,
+      providerName: "all",
+      search: ""
+    }));
+  }, [dispatch]);
+  const handleScroll = useCallback$3(() => {
+    const gamesContainer = gamesContainerRef.current;
+    if (!gamesContainer) {
+      return;
+    }
+    const { scrollTop, scrollHeight, clientHeight } = gamesContainer;
+    const isNearBottom = scrollTop + clientHeight >= scrollHeight - 5;
+    if (isNearBottom && !loadingMoreGames && pagination.hasMore) {
+      setTimeout(() => {
+        if (!loadingMoreGames && pagination.hasMore) {
+          dispatch(fetchMoreCasinoGames({
+            batchNumber: pagination.batchNumber + 1,
+            batchSize: 50,
+            providerName: selectedProvider || "all",
+            search: gameSearchQuery
+          }));
+        }
+      }, 100);
+    }
+  }, [dispatch, loadingMoreGames, pagination, selectedProvider, gameSearchQuery]);
+  useEffect$h(() => {
+    const gamesContainer = gamesContainerRef.current;
+    if (gamesContainer) {
+      let ticking = false;
+      const throttledScroll = () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            handleScroll();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      };
+      gamesContainer.removeEventListener("scroll", throttledScroll);
+      gamesContainer.addEventListener("scroll", throttledScroll);
+      handleScroll();
+      return () => {
+        gamesContainer.removeEventListener("scroll", throttledScroll);
+      };
+    }
+  }, [handleScroll]);
+  useEffect$h(() => {
+    const gamesContainer = gamesContainerRef.current;
+    if (gamesContainer) {
+      const isScrollable = gamesContainer.scrollHeight > gamesContainer.clientHeight;
+      if (!isScrollable) {
+        const totalGames = gamesByProvider.reduce((total, provider) => total + (provider.games?.length || 0), 0);
+        if (totalGames > 0 && pagination.hasMore) ;
+      }
+    }
+  }, [gamesByProvider, pagination]);
+  useEffect$h(() => {
+  }, [providers]);
+  useEffect$h(() => {
+    const gamesContainer = gamesContainerRef.current;
+    if (gamesContainer) {
+      gamesContainer.scrollHeight > gamesContainer.clientHeight;
+    }
+  }, [pagination]);
+  useEffect$h(() => {
+  }, [loadingGames, loadingMoreGames, loadingProviders]);
+  useEffect$h(() => {
+  }, [gamesError, providersError]);
+  useEffect$h(() => {
+  }, [selectedProvider]);
+  useEffect$h(() => {
+  }, [providerSearchQuery, gameSearchQuery]);
   const handleProviderSearch = (e) => {
     const value = e.target.value;
     setProviderSearchQuery(value);
@@ -5964,9 +6704,21 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
   const handleGameSearch = (e) => {
     const value = e.target.value;
     setGameSearchQuery(value);
-    if (onGameSearch) {
-      onGameSearch(value);
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
     }
+    debounceRef.current = setTimeout(() => {
+      if (onGameSearch) {
+        onGameSearch(value);
+      }
+      dispatch(resetCasinoGames());
+      dispatch(fetchCasinoGames({
+        batchNumber: 0,
+        batchSize: 100,
+        providerName: selectedProvider || "all",
+        search: value
+      }));
+    }, 500);
   };
   const handleProviderSearchSubmit = () => {
     if (onProviderSearch) {
@@ -5977,7 +6729,53 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
     if (onGameSearch) {
       onGameSearch(gameSearchQuery);
     }
+    dispatch(resetCasinoGames());
+    dispatch(fetchCasinoGames({
+      batchNumber: 0,
+      batchSize: 100,
+      providerName: selectedProvider || "all",
+      search: gameSearchQuery
+    }));
   };
+  const handleProviderSelect = (providerName) => {
+    const newProvider = selectedProvider === providerName ? null : providerName;
+    setSelectedProvider(newProvider);
+    dispatch(resetCasinoGames());
+    dispatch(fetchCasinoGames({
+      batchNumber: 0,
+      batchSize: 100,
+      providerName: newProvider || "all",
+      search: gameSearchQuery
+    }));
+  };
+  const handlePlayGame = (game) => {
+  };
+  const filteredProviders = providers.filter(
+    (provider) => provider.providerName.toLowerCase().includes(providerSearchQuery.toLowerCase())
+  );
+  const filteredGamesByProvider = selectedProvider ? gamesByProvider.filter((provider) => provider.providerName === selectedProvider).map((provider) => ({
+    ...provider,
+    games: provider.games.filter(
+      (game) => (
+        // When game search is active, apply game filter across all games
+        gameSearchQuery ? game.name.toLowerCase().includes(gameSearchQuery.toLowerCase()) : true
+      )
+    )
+  })) : gamesByProvider.map((provider) => ({
+    ...provider,
+    games: provider.games.filter(
+      (game) => (
+        // When game search is active, apply game filter across all games
+        gameSearchQuery ? game.name.toLowerCase().includes(gameSearchQuery.toLowerCase()) : true
+      )
+    )
+  })).filter(
+    (provider) => (
+      // Only show providers that have games after filtering
+      provider.games.length > 0 && // Also filter providers by provider search if active
+      provider.providerName.toLowerCase().includes(providerSearchQuery.toLowerCase())
+    )
+  );
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-main-sections-container", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-section-headers", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-section-header casino-providers-header", children: "PROVIDERS" }),
@@ -5998,8 +6796,8 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "casino-search-button", onClick: handleProviderSearchSubmit, children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { xmlns: "http://www.w3.org/2000/svg", className: "h-4 w-4", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" }) }) })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-game-search-container", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-game-search-input-container", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-game-search-container", style: { flex: 1 }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-game-search-input-container", style: { flex: 1 }, children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             "input",
             {
@@ -6014,279 +6812,1884 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
           /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "casino-game-search-button", onClick: handleGameSearchSubmit, children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { xmlns: "http://www.w3.org/2000/svg", className: "h-4 w-4", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" }) }) })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "casino-filter-button", children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { xmlns: "http://www.w3.org/2000/svg", className: "h-5 w-5", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M4 6h16M4 12h16m-7 6h7" }) }) })
-      ] })
-    ] })
-  ] });
-};
-
-const React$1l = await importShared('react');
-const {useState: useState$k} = React$1l;
-const GameCategoryButton = ({ icon, label, isActive, onClick }) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-  "div",
-  {
-    className: `casino-category-button ${isActive ? "active" : ""}`,
-    onClick,
-    children: [
-      icon,
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `casino-category-label ${isActive ? "active" : "inactive"}`, children: label })
-    ]
-  }
-);
-const GameCard$1 = ({ image, title, description }) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-game-card group", children: [
-  /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "img",
-    {
-      src: image,
-      alt: title,
-      className: "casino-game-card-img"
-    }
-  ),
-  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-game-overlay", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "casino-game-title", children: title }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "casino-game-description", children: description }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "casino-play-button", children: "Play Now" })
-  ] }),
-  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-age-badge", children: "+18" }),
-  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-game-name-bottom", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "casino-game-name-bottom-text", children: title }) })
-] });
-const casinoGames = [
-  {
-    id: 1,
-    title: "Olympus Hades Megaways",
-    image: "https://placehold.co/300x200/2a2a2a/FFA500?text=Olympus+Hades",
-    description: "Ancient Greek mythology themed game"
-  },
-  {
-    id: 2,
-    title: "Fortune Tiger",
-    image: "https://placehold.co/300x200/2a2a2a/FF5500?text=Fortune+Tiger",
-    description: "Asian-inspired slots game"
-  },
-  {
-    id: 3,
-    title: "Wolf Gold",
-    image: "https://placehold.co/300x200/2a2a2a/CCCCCC?text=Wolf+Gold",
-    description: "Wildlife themed slots with bonus features"
-  },
-  {
-    id: 4,
-    title: "Book of Dead",
-    image: "https://placehold.co/300x200/2a2a2a/FFCC00?text=Book+of+Dead",
-    description: "Ancient Egyptian adventure"
-  },
-  {
-    id: 5,
-    title: "Gonzo's Quest",
-    image: "https://placehold.co/300x200/2a2a2a/00AAFF?text=Gonzo+Quest",
-    description: "Search for El Dorado with cascading reels"
-  },
-  {
-    id: 6,
-    title: "Starburst",
-    image: "https://placehold.co/300x200/2a2a2a/FF00FF?text=Starburst",
-    description: "Colorful cosmic slot with expanding wilds"
-  }
-];
-const Casino = () => {
-  const navigate = useNavigate();
-  useLocation();
-  const [activeTab, setActiveTab] = useState$k("home");
-  const [searchQuery, setSearchQuery] = useState$k("");
-  const tabs = [
-    { id: "home", label: "Home" },
-    { id: "tournaments", label: "Tournaments" }
-  ];
-  const gameCategories = [
-    { id: "all", label: "All Games", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-all", children: "All" }) },
-    { id: "popular", label: "Popular Games", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "P" }) },
-    { id: "table", label: "Table Games", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "T" }) },
-    { id: "arcade", label: "Arcade Games", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "A" }) },
-    { id: "video", label: "Video Bingo", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "V" }) },
-    { id: "instant", label: "Instant Game", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "I" }) },
-    { id: "betting", label: "Betting Games", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "B" }) },
-    { id: "megaways", label: "Megaways", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "M" }) },
-    { id: "lottery", label: "Lottery Games", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "L" }) },
-    { id: "slots", label: "Top Slots", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "S" }) }
-  ];
-  const [activeCategory, setActiveCategory] = useState$k("all");
-  const handleTabChange = (tabId) => {
-    if (tabId === "tournaments") {
-      navigate("/casino/tournaments");
-    } else {
-      setActiveTab(tabId);
-    }
-  };
-  const handleCategoryChange = (categoryId) => {
-    setActiveCategory(categoryId);
-  };
-  const handleProviderSearch = (query) => {
-    setSearchQuery(query);
-  };
-  const handleGameSearch = (query) => {
-    setSearchQuery(query);
-  };
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-container", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-featured-banner", children: [
+      ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "img",
-        {
-          src: "https://placehold.co/1600x800/2a2a2a/FFA500?text=Olympus+Hades+Megaways",
-          alt: "Featured Game",
-          className: "casino-banner-img"
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-tabs-overlay", children: tabs.map((tab) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "button",
         {
-          className: `casino-tab-button ${activeTab === tab.id ? "active" : ""}`,
-          onClick: () => handleTabChange(tab.id),
-          children: [
-            tab.label,
-            activeTab === tab.id && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-tab-underline" })
-          ]
-        },
-        tab.id
-      )) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-game-name-overlay", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-game-name-badge", children: "Olympus Hades megaways" }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-responsible-gaming", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "PLEASE GAMBLE RESPONSIBLY" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "BEGAMBLEAWARE.ORG" })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-categories-container", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-categories-flex", children: gameCategories.map((category) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-      GameCategoryButton,
-      {
-        icon: category.icon,
-        label: category.label,
-        isActive: activeCategory === category.id,
-        onClick: () => handleCategoryChange(category.id)
-      },
-      category.id
-    )) }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      CasinoProvidersGamesSection,
-      {
-        onProviderSearch: handleProviderSearch,
-        onGameSearch: handleGameSearch
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-game-grid-container", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-game-grid-flex", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-providers-placeholder" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-games-container", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-games-grid", children: casinoGames.map((game) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-        GameCard$1,
-        {
-          title: game.title,
-          image: game.image,
-          description: game.description
-        },
-        game.id
-      )) }) })
-    ] }) })
-  ] });
-};
-
-const React$1k = await importShared('react');
-const {useState: useState$j} = React$1k;
-const CasinoTournaments = () => {
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState$j("tournaments");
-  const tabs = [
-    { id: "home", label: "Home" },
-    { id: "tournaments", label: "Tournaments" }
-  ];
-  const handleTabChange = (tabId) => {
-    if (tabId === "home") {
-      navigate("/casino/slots");
-    } else {
-      setActiveTab(tabId);
-    }
-  };
-  const tournaments = [
-    {
-      id: 1,
-      title: "Summer Slots Championship",
-      prize: "$50,000",
-      dates: "Aug 1 - Aug 31, 2025",
-      image: "https://placehold.co/400x200/2a2a2a/FFA500?text=Summer+Championship"
-    },
-    {
-      id: 2,
-      title: "Weekend Warriors",
-      prize: "$10,000",
-      dates: "Every Weekend",
-      image: "https://placehold.co/400x200/2a2a2a/FF5500?text=Weekend+Warriors"
-    },
-    {
-      id: 3,
-      title: "Megaways Masters",
-      prize: "$25,000",
-      dates: "Sep 15 - Sep 30, 2025",
-      image: "https://placehold.co/400x200/2a2a2a/00AAFF?text=Megaways+Masters"
-    }
-  ];
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-black text-white min-h-screen pb-10", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-full h-[300px] overflow-hidden", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "img",
-        {
-          src: "https://placehold.co/1600x600/2a2a2a/FFCC00?text=Casino+Tournaments",
-          alt: "Tournaments Banner",
-          className: "w-full h-full object-cover"
+          onClick: () => {
+            const gamesContainer = gamesContainerRef.current;
+            if (gamesContainer) {
+              gamesContainer.scrollTop = gamesContainer.scrollHeight;
+            }
+          },
+          className: "casino-scroll-to-bottom-button",
+          children: "Scroll to Bottom"
         }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-0 left-0 right-0 flex space-x-8 px-8 py-4", children: tabs.map((tab) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "button",
-        {
-          className: cn$1(
-            "text-base font-medium px-2 py-1 relative",
-            activeTab === tab.id ? "text-white" : "text-gray-400 hover:text-gray-200"
-          ),
-          onClick: () => handleTabChange(tab.id),
-          children: [
-            tab.label,
-            activeTab === tab.id && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-0 left-0 w-full h-1 bg-yellow-500 rounded-t-md" })
-          ]
-        },
-        tab.id
-      )) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute bottom-0 left-0 right-0 text-center p-8 bg-gradient-to-t from-black to-transparent", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-3xl font-bold uppercase mb-2", children: "CASINO TOURNAMENTS" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-300", children: "Compete for massive prizes in our exclusive tournaments" })
-      ] })
+      )
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto px-4 py-10", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-2xl font-bold mb-6", children: "Active Tournaments" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6", children: tournaments.map((tournament) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-gray-800 rounded-lg overflow-hidden shadow-lg", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-content-container", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-providers-list", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "img",
+          "div",
           {
-            src: tournament.image,
-            alt: tournament.title,
-            className: "w-full h-48 object-cover"
+            className: `casino-provider-item ${selectedProvider === null ? "selected" : ""}`,
+            onClick: () => handleProviderSelect(null),
+            children: "All"
           }
         ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xl font-bold mb-2", children: tournament.title }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center mb-4", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-400 text-sm", children: "Prize Pool" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-yellow-500 font-bold", children: tournament.prize })
+        providersError ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-error-message", children: [
+          "Error loading providers: ",
+          providersError,
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              className: "casino-retry-button",
+              onClick: () => {
+                dispatch(fetchCasinoProviders());
+              },
+              children: "Retry"
+            }
+          )
+        ] }) : filteredProviders.length > 0 ? filteredProviders.map((provider, index) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            className: `casino-provider-item ${selectedProvider === provider.providerName ? "selected" : ""}`,
+            onClick: () => handleProviderSelect(provider.providerName),
+            children: provider.providerName
+          },
+          index
+        )) : !loadingProviders && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-no-data", children: "No providers found" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "div",
+        {
+          className: "casino-games-display",
+          ref: (el) => {
+            gamesContainerRef.current = el;
+          },
+          onScroll: (e) => {
+            if (!(void 0).scrollThrottle) {
+              (void 0).scrollThrottle = setTimeout(() => {
+                (void 0).scrollThrottle = null;
+              }, 100);
+              handleScroll();
+            }
+          },
+          children: gamesError ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-error-message", children: [
+            "Error loading games: ",
+            gamesError.message || gamesError.toString(),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                className: "casino-retry-button",
+                onClick: () => {
+                  dispatch(resetCasinoGames());
+                  dispatch(fetchCasinoGames({
+                    batchNumber: 0,
+                    batchSize: 100,
+                    providerName: selectedProvider || "all",
+                    search: gameSearchQuery
+                  }));
+                },
+                children: "Retry"
+              }
+            )
+          ] }) : loadingGames && gamesByProvider.length === 0 || loadingProviders && providers.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-loading", children: "Loading casino data..." }) : selectedProvider !== null ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "casino-provider-heading", children: [
+              selectedProvider === null ? "All" : selectedProvider,
+              " Games"
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-400 text-sm", children: "Dates" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-white", children: tournament.dates })
+            selectedProvider === null ? (
+              // Show all games when "All" is selected
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-all-games", children: [
+                filteredGamesByProvider.length > 0 ? filteredGamesByProvider.map((provider, providerIndex) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-provider-section", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "casino-provider-heading", children: provider.providerName }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-games-grid", children: provider.games.map((game, gameIndex) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    CasinoGameCard,
+                    {
+                      game,
+                      onPlay: handlePlayGame
+                    },
+                    `${provider.providerName}-${game.gameId}-${gameIndex}`
+                  )) })
+                ] }, providerIndex)) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-no-games", children: "No games found" }),
+                loadingMoreGames && pagination.hasMore && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-loading-more", children: "Loading more games..." })
+              ] })
+            ) : (
+              // Show games for a specific provider
+              filteredGamesByProvider.length > 0 && filteredGamesByProvider[0].games.length > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-games-grid", children: [
+                filteredGamesByProvider[0].games.map((game, index) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  CasinoGameCard,
+                  {
+                    game,
+                    onPlay: handlePlayGame
+                  },
+                  `${game.providerName}-${game.gameId}-${index}`
+                )),
+                loadingMoreGames && pagination.hasMore && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-loading-more", children: "Loading more games..." })
+              ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-no-games", children: "No games found" })
+            )
+          ] }) : (
+            // Display all providers with their games when no provider is selected (initial view)
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-all-games", children: [
+              filteredGamesByProvider.length > 0 ? filteredGamesByProvider.map((provider, providerIndex) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-provider-section", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "casino-provider-heading", children: provider.providerName }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-games-grid", children: provider.games.map((game, gameIndex) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  CasinoGameCard,
+                  {
+                    game,
+                    onPlay: handlePlayGame
+                  },
+                  `${provider.providerName}-${game.gameId}-${gameIndex}`
+                )) })
+              ] }, providerIndex)) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-no-games", children: "No games found" }),
+              loadingMoreGames && pagination.hasMore && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-loading-more", children: "Loading more games..." })
             ] })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "w-full bg-yellow-500 text-black font-bold py-3 rounded-md hover:bg-yellow-600 transition duration-200", children: "Join Tournament" })
-        ] })
-      ] }, tournament.id)) })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto px-4 py-10", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-2xl font-bold mb-6", children: "Upcoming Tournaments" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-gray-900 p-6 rounded-lg", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-center text-gray-400", children: "Stay tuned for more exciting tournaments coming soon!" }) })
+          )
+        }
+      )
     ] })
   ] });
 };
+
+function isObject$3(subject) {
+  return Object.prototype.toString.call(subject) === '[object Object]';
+}
+function isRecord(subject) {
+  return isObject$3(subject) || Array.isArray(subject);
+}
+function canUseDOM() {
+  return !!(typeof window !== 'undefined' && window.document && window.document.createElement);
+}
+function areOptionsEqual(optionsA, optionsB) {
+  const optionsAKeys = Object.keys(optionsA);
+  const optionsBKeys = Object.keys(optionsB);
+  if (optionsAKeys.length !== optionsBKeys.length) return false;
+  const breakpointsA = JSON.stringify(Object.keys(optionsA.breakpoints || {}));
+  const breakpointsB = JSON.stringify(Object.keys(optionsB.breakpoints || {}));
+  if (breakpointsA !== breakpointsB) return false;
+  return optionsAKeys.every(key => {
+    const valueA = optionsA[key];
+    const valueB = optionsB[key];
+    if (typeof valueA === 'function') return `${valueA}` === `${valueB}`;
+    if (!isRecord(valueA) || !isRecord(valueB)) return valueA === valueB;
+    return areOptionsEqual(valueA, valueB);
+  });
+}
+function sortAndMapPluginToOptions(plugins) {
+  return plugins.concat().sort((a, b) => a.name > b.name ? 1 : -1).map(plugin => plugin.options);
+}
+function arePluginsEqual(pluginsA, pluginsB) {
+  if (pluginsA.length !== pluginsB.length) return false;
+  const optionsA = sortAndMapPluginToOptions(pluginsA);
+  const optionsB = sortAndMapPluginToOptions(pluginsB);
+  return optionsA.every((optionA, index) => {
+    const optionB = optionsB[index];
+    return areOptionsEqual(optionA, optionB);
+  });
+}
+
+function isNumber$1(subject) {
+  return typeof subject === 'number';
+}
+function isString$2(subject) {
+  return typeof subject === 'string';
+}
+function isBoolean$2(subject) {
+  return typeof subject === 'boolean';
+}
+function isObject$2(subject) {
+  return Object.prototype.toString.call(subject) === '[object Object]';
+}
+function mathAbs(n) {
+  return Math.abs(n);
+}
+function mathSign(n) {
+  return Math.sign(n);
+}
+function deltaAbs(valueB, valueA) {
+  return mathAbs(valueB - valueA);
+}
+function factorAbs(valueB, valueA) {
+  if (valueB === 0 || valueA === 0) return 0;
+  if (mathAbs(valueB) <= mathAbs(valueA)) return 0;
+  const diff = deltaAbs(mathAbs(valueB), mathAbs(valueA));
+  return mathAbs(diff / valueB);
+}
+function roundToTwoDecimals(num) {
+  return Math.round(num * 100) / 100;
+}
+function arrayKeys(array) {
+  return objectKeys(array).map(Number);
+}
+function arrayLast(array) {
+  return array[arrayLastIndex(array)];
+}
+function arrayLastIndex(array) {
+  return Math.max(0, array.length - 1);
+}
+function arrayIsLastIndex(array, index) {
+  return index === arrayLastIndex(array);
+}
+function arrayFromNumber(n, startAt = 0) {
+  return Array.from(Array(n), (_, i) => startAt + i);
+}
+function objectKeys(object) {
+  return Object.keys(object);
+}
+function objectsMergeDeep(objectA, objectB) {
+  return [objectA, objectB].reduce((mergedObjects, currentObject) => {
+    objectKeys(currentObject).forEach(key => {
+      const valueA = mergedObjects[key];
+      const valueB = currentObject[key];
+      const areObjects = isObject$2(valueA) && isObject$2(valueB);
+      mergedObjects[key] = areObjects ? objectsMergeDeep(valueA, valueB) : valueB;
+    });
+    return mergedObjects;
+  }, {});
+}
+function isMouseEvent(evt, ownerWindow) {
+  return typeof ownerWindow.MouseEvent !== 'undefined' && evt instanceof ownerWindow.MouseEvent;
+}
+
+function Alignment(align, viewSize) {
+  const predefined = {
+    start,
+    center,
+    end
+  };
+  function start() {
+    return 0;
+  }
+  function center(n) {
+    return end(n) / 2;
+  }
+  function end(n) {
+    return viewSize - n;
+  }
+  function measure(n, index) {
+    if (isString$2(align)) return predefined[align](n);
+    return align(viewSize, n, index);
+  }
+  const self = {
+    measure
+  };
+  return self;
+}
+
+function EventStore() {
+  let listeners = [];
+  function add(node, type, handler, options = {
+    passive: true
+  }) {
+    let removeListener;
+    if ('addEventListener' in node) {
+      node.addEventListener(type, handler, options);
+      removeListener = () => node.removeEventListener(type, handler, options);
+    } else {
+      const legacyMediaQueryList = node;
+      legacyMediaQueryList.addListener(handler);
+      removeListener = () => legacyMediaQueryList.removeListener(handler);
+    }
+    listeners.push(removeListener);
+    return self;
+  }
+  function clear() {
+    listeners = listeners.filter(remove => remove());
+  }
+  const self = {
+    add,
+    clear
+  };
+  return self;
+}
+
+function Animations(ownerDocument, ownerWindow, update, render) {
+  const documentVisibleHandler = EventStore();
+  const fixedTimeStep = 1000 / 60;
+  let lastTimeStamp = null;
+  let accumulatedTime = 0;
+  let animationId = 0;
+  function init() {
+    documentVisibleHandler.add(ownerDocument, 'visibilitychange', () => {
+      if (ownerDocument.hidden) reset();
+    });
+  }
+  function destroy() {
+    stop();
+    documentVisibleHandler.clear();
+  }
+  function animate(timeStamp) {
+    if (!animationId) return;
+    if (!lastTimeStamp) {
+      lastTimeStamp = timeStamp;
+      update();
+      update();
+    }
+    const timeElapsed = timeStamp - lastTimeStamp;
+    lastTimeStamp = timeStamp;
+    accumulatedTime += timeElapsed;
+    while (accumulatedTime >= fixedTimeStep) {
+      update();
+      accumulatedTime -= fixedTimeStep;
+    }
+    const alpha = accumulatedTime / fixedTimeStep;
+    render(alpha);
+    if (animationId) {
+      animationId = ownerWindow.requestAnimationFrame(animate);
+    }
+  }
+  function start() {
+    if (animationId) return;
+    animationId = ownerWindow.requestAnimationFrame(animate);
+  }
+  function stop() {
+    ownerWindow.cancelAnimationFrame(animationId);
+    lastTimeStamp = null;
+    accumulatedTime = 0;
+    animationId = 0;
+  }
+  function reset() {
+    lastTimeStamp = null;
+    accumulatedTime = 0;
+  }
+  const self = {
+    init,
+    destroy,
+    start,
+    stop,
+    update,
+    render
+  };
+  return self;
+}
+
+function Axis(axis, contentDirection) {
+  const isRightToLeft = contentDirection === 'rtl';
+  const isVertical = axis === 'y';
+  const scroll = isVertical ? 'y' : 'x';
+  const cross = isVertical ? 'x' : 'y';
+  const sign = !isVertical && isRightToLeft ? -1 : 1;
+  const startEdge = getStartEdge();
+  const endEdge = getEndEdge();
+  function measureSize(nodeRect) {
+    const {
+      height,
+      width
+    } = nodeRect;
+    return isVertical ? height : width;
+  }
+  function getStartEdge() {
+    if (isVertical) return 'top';
+    return isRightToLeft ? 'right' : 'left';
+  }
+  function getEndEdge() {
+    if (isVertical) return 'bottom';
+    return isRightToLeft ? 'left' : 'right';
+  }
+  function direction(n) {
+    return n * sign;
+  }
+  const self = {
+    scroll,
+    cross,
+    startEdge,
+    endEdge,
+    measureSize,
+    direction
+  };
+  return self;
+}
+
+function Limit(min = 0, max = 0) {
+  const length = mathAbs(min - max);
+  function reachedMin(n) {
+    return n < min;
+  }
+  function reachedMax(n) {
+    return n > max;
+  }
+  function reachedAny(n) {
+    return reachedMin(n) || reachedMax(n);
+  }
+  function constrain(n) {
+    if (!reachedAny(n)) return n;
+    return reachedMin(n) ? min : max;
+  }
+  function removeOffset(n) {
+    if (!length) return n;
+    return n - length * Math.ceil((n - max) / length);
+  }
+  const self = {
+    length,
+    max,
+    min,
+    constrain,
+    reachedAny,
+    reachedMax,
+    reachedMin,
+    removeOffset
+  };
+  return self;
+}
+
+function Counter(max, start, loop) {
+  const {
+    constrain
+  } = Limit(0, max);
+  const loopEnd = max + 1;
+  let counter = withinLimit(start);
+  function withinLimit(n) {
+    return !loop ? constrain(n) : mathAbs((loopEnd + n) % loopEnd);
+  }
+  function get() {
+    return counter;
+  }
+  function set(n) {
+    counter = withinLimit(n);
+    return self;
+  }
+  function add(n) {
+    return clone().set(get() + n);
+  }
+  function clone() {
+    return Counter(max, get(), loop);
+  }
+  const self = {
+    get,
+    set,
+    add,
+    clone
+  };
+  return self;
+}
+
+function DragHandler(axis, rootNode, ownerDocument, ownerWindow, target, dragTracker, location, animation, scrollTo, scrollBody, scrollTarget, index, eventHandler, percentOfView, dragFree, dragThreshold, skipSnaps, baseFriction, watchDrag) {
+  const {
+    cross: crossAxis,
+    direction
+  } = axis;
+  const focusNodes = ['INPUT', 'SELECT', 'TEXTAREA'];
+  const nonPassiveEvent = {
+    passive: false
+  };
+  const initEvents = EventStore();
+  const dragEvents = EventStore();
+  const goToNextThreshold = Limit(50, 225).constrain(percentOfView.measure(20));
+  const snapForceBoost = {
+    mouse: 300,
+    touch: 400
+  };
+  const freeForceBoost = {
+    mouse: 500,
+    touch: 600
+  };
+  const baseSpeed = dragFree ? 43 : 25;
+  let isMoving = false;
+  let startScroll = 0;
+  let startCross = 0;
+  let pointerIsDown = false;
+  let preventScroll = false;
+  let preventClick = false;
+  let isMouse = false;
+  function init(emblaApi) {
+    if (!watchDrag) return;
+    function downIfAllowed(evt) {
+      if (isBoolean$2(watchDrag) || watchDrag(emblaApi, evt)) down(evt);
+    }
+    const node = rootNode;
+    initEvents.add(node, 'dragstart', evt => evt.preventDefault(), nonPassiveEvent).add(node, 'touchmove', () => undefined, nonPassiveEvent).add(node, 'touchend', () => undefined).add(node, 'touchstart', downIfAllowed).add(node, 'mousedown', downIfAllowed).add(node, 'touchcancel', up).add(node, 'contextmenu', up).add(node, 'click', click, true);
+  }
+  function destroy() {
+    initEvents.clear();
+    dragEvents.clear();
+  }
+  function addDragEvents() {
+    const node = isMouse ? ownerDocument : rootNode;
+    dragEvents.add(node, 'touchmove', move, nonPassiveEvent).add(node, 'touchend', up).add(node, 'mousemove', move, nonPassiveEvent).add(node, 'mouseup', up);
+  }
+  function isFocusNode(node) {
+    const nodeName = node.nodeName || '';
+    return focusNodes.includes(nodeName);
+  }
+  function forceBoost() {
+    const boost = dragFree ? freeForceBoost : snapForceBoost;
+    const type = isMouse ? 'mouse' : 'touch';
+    return boost[type];
+  }
+  function allowedForce(force, targetChanged) {
+    const next = index.add(mathSign(force) * -1);
+    const baseForce = scrollTarget.byDistance(force, !dragFree).distance;
+    if (dragFree || mathAbs(force) < goToNextThreshold) return baseForce;
+    if (skipSnaps && targetChanged) return baseForce * 0.5;
+    return scrollTarget.byIndex(next.get(), 0).distance;
+  }
+  function down(evt) {
+    const isMouseEvt = isMouseEvent(evt, ownerWindow);
+    isMouse = isMouseEvt;
+    preventClick = dragFree && isMouseEvt && !evt.buttons && isMoving;
+    isMoving = deltaAbs(target.get(), location.get()) >= 2;
+    if (isMouseEvt && evt.button !== 0) return;
+    if (isFocusNode(evt.target)) return;
+    pointerIsDown = true;
+    dragTracker.pointerDown(evt);
+    scrollBody.useFriction(0).useDuration(0);
+    target.set(location);
+    addDragEvents();
+    startScroll = dragTracker.readPoint(evt);
+    startCross = dragTracker.readPoint(evt, crossAxis);
+    eventHandler.emit('pointerDown');
+  }
+  function move(evt) {
+    const isTouchEvt = !isMouseEvent(evt, ownerWindow);
+    if (isTouchEvt && evt.touches.length >= 2) return up(evt);
+    const lastScroll = dragTracker.readPoint(evt);
+    const lastCross = dragTracker.readPoint(evt, crossAxis);
+    const diffScroll = deltaAbs(lastScroll, startScroll);
+    const diffCross = deltaAbs(lastCross, startCross);
+    if (!preventScroll && !isMouse) {
+      if (!evt.cancelable) return up(evt);
+      preventScroll = diffScroll > diffCross;
+      if (!preventScroll) return up(evt);
+    }
+    const diff = dragTracker.pointerMove(evt);
+    if (diffScroll > dragThreshold) preventClick = true;
+    scrollBody.useFriction(0.3).useDuration(0.75);
+    animation.start();
+    target.add(direction(diff));
+    evt.preventDefault();
+  }
+  function up(evt) {
+    const currentLocation = scrollTarget.byDistance(0, false);
+    const targetChanged = currentLocation.index !== index.get();
+    const rawForce = dragTracker.pointerUp(evt) * forceBoost();
+    const force = allowedForce(direction(rawForce), targetChanged);
+    const forceFactor = factorAbs(rawForce, force);
+    const speed = baseSpeed - 10 * forceFactor;
+    const friction = baseFriction + forceFactor / 50;
+    preventScroll = false;
+    pointerIsDown = false;
+    dragEvents.clear();
+    scrollBody.useDuration(speed).useFriction(friction);
+    scrollTo.distance(force, !dragFree);
+    isMouse = false;
+    eventHandler.emit('pointerUp');
+  }
+  function click(evt) {
+    if (preventClick) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      preventClick = false;
+    }
+  }
+  function pointerDown() {
+    return pointerIsDown;
+  }
+  const self = {
+    init,
+    destroy,
+    pointerDown
+  };
+  return self;
+}
+
+function DragTracker(axis, ownerWindow) {
+  const logInterval = 170;
+  let startEvent;
+  let lastEvent;
+  function readTime(evt) {
+    return evt.timeStamp;
+  }
+  function readPoint(evt, evtAxis) {
+    const property = evtAxis || axis.scroll;
+    const coord = `client${property === 'x' ? 'X' : 'Y'}`;
+    return (isMouseEvent(evt, ownerWindow) ? evt : evt.touches[0])[coord];
+  }
+  function pointerDown(evt) {
+    startEvent = evt;
+    lastEvent = evt;
+    return readPoint(evt);
+  }
+  function pointerMove(evt) {
+    const diff = readPoint(evt) - readPoint(lastEvent);
+    const expired = readTime(evt) - readTime(startEvent) > logInterval;
+    lastEvent = evt;
+    if (expired) startEvent = evt;
+    return diff;
+  }
+  function pointerUp(evt) {
+    if (!startEvent || !lastEvent) return 0;
+    const diffDrag = readPoint(lastEvent) - readPoint(startEvent);
+    const diffTime = readTime(evt) - readTime(startEvent);
+    const expired = readTime(evt) - readTime(lastEvent) > logInterval;
+    const force = diffDrag / diffTime;
+    const isFlick = diffTime && !expired && mathAbs(force) > 0.1;
+    return isFlick ? force : 0;
+  }
+  const self = {
+    pointerDown,
+    pointerMove,
+    pointerUp,
+    readPoint
+  };
+  return self;
+}
+
+function NodeRects() {
+  function measure(node) {
+    const {
+      offsetTop,
+      offsetLeft,
+      offsetWidth,
+      offsetHeight
+    } = node;
+    const offset = {
+      top: offsetTop,
+      right: offsetLeft + offsetWidth,
+      bottom: offsetTop + offsetHeight,
+      left: offsetLeft,
+      width: offsetWidth,
+      height: offsetHeight
+    };
+    return offset;
+  }
+  const self = {
+    measure
+  };
+  return self;
+}
+
+function PercentOfView(viewSize) {
+  function measure(n) {
+    return viewSize * (n / 100);
+  }
+  const self = {
+    measure
+  };
+  return self;
+}
+
+function ResizeHandler(container, eventHandler, ownerWindow, slides, axis, watchResize, nodeRects) {
+  const observeNodes = [container].concat(slides);
+  let resizeObserver;
+  let containerSize;
+  let slideSizes = [];
+  let destroyed = false;
+  function readSize(node) {
+    return axis.measureSize(nodeRects.measure(node));
+  }
+  function init(emblaApi) {
+    if (!watchResize) return;
+    containerSize = readSize(container);
+    slideSizes = slides.map(readSize);
+    function defaultCallback(entries) {
+      for (const entry of entries) {
+        if (destroyed) return;
+        const isContainer = entry.target === container;
+        const slideIndex = slides.indexOf(entry.target);
+        const lastSize = isContainer ? containerSize : slideSizes[slideIndex];
+        const newSize = readSize(isContainer ? container : slides[slideIndex]);
+        const diffSize = mathAbs(newSize - lastSize);
+        if (diffSize >= 0.5) {
+          emblaApi.reInit();
+          eventHandler.emit('resize');
+          break;
+        }
+      }
+    }
+    resizeObserver = new ResizeObserver(entries => {
+      if (isBoolean$2(watchResize) || watchResize(emblaApi, entries)) {
+        defaultCallback(entries);
+      }
+    });
+    ownerWindow.requestAnimationFrame(() => {
+      observeNodes.forEach(node => resizeObserver.observe(node));
+    });
+  }
+  function destroy() {
+    destroyed = true;
+    if (resizeObserver) resizeObserver.disconnect();
+  }
+  const self = {
+    init,
+    destroy
+  };
+  return self;
+}
+
+function ScrollBody(location, offsetLocation, previousLocation, target, baseDuration, baseFriction) {
+  let scrollVelocity = 0;
+  let scrollDirection = 0;
+  let scrollDuration = baseDuration;
+  let scrollFriction = baseFriction;
+  let rawLocation = location.get();
+  let rawLocationPrevious = 0;
+  function seek() {
+    const displacement = target.get() - location.get();
+    const isInstant = !scrollDuration;
+    let scrollDistance = 0;
+    if (isInstant) {
+      scrollVelocity = 0;
+      previousLocation.set(target);
+      location.set(target);
+      scrollDistance = displacement;
+    } else {
+      previousLocation.set(location);
+      scrollVelocity += displacement / scrollDuration;
+      scrollVelocity *= scrollFriction;
+      rawLocation += scrollVelocity;
+      location.add(scrollVelocity);
+      scrollDistance = rawLocation - rawLocationPrevious;
+    }
+    scrollDirection = mathSign(scrollDistance);
+    rawLocationPrevious = rawLocation;
+    return self;
+  }
+  function settled() {
+    const diff = target.get() - offsetLocation.get();
+    return mathAbs(diff) < 0.001;
+  }
+  function duration() {
+    return scrollDuration;
+  }
+  function direction() {
+    return scrollDirection;
+  }
+  function velocity() {
+    return scrollVelocity;
+  }
+  function useBaseDuration() {
+    return useDuration(baseDuration);
+  }
+  function useBaseFriction() {
+    return useFriction(baseFriction);
+  }
+  function useDuration(n) {
+    scrollDuration = n;
+    return self;
+  }
+  function useFriction(n) {
+    scrollFriction = n;
+    return self;
+  }
+  const self = {
+    direction,
+    duration,
+    velocity,
+    seek,
+    settled,
+    useBaseFriction,
+    useBaseDuration,
+    useFriction,
+    useDuration
+  };
+  return self;
+}
+
+function ScrollBounds(limit, location, target, scrollBody, percentOfView) {
+  const pullBackThreshold = percentOfView.measure(10);
+  const edgeOffsetTolerance = percentOfView.measure(50);
+  const frictionLimit = Limit(0.1, 0.99);
+  let disabled = false;
+  function shouldConstrain() {
+    if (disabled) return false;
+    if (!limit.reachedAny(target.get())) return false;
+    if (!limit.reachedAny(location.get())) return false;
+    return true;
+  }
+  function constrain(pointerDown) {
+    if (!shouldConstrain()) return;
+    const edge = limit.reachedMin(location.get()) ? 'min' : 'max';
+    const diffToEdge = mathAbs(limit[edge] - location.get());
+    const diffToTarget = target.get() - location.get();
+    const friction = frictionLimit.constrain(diffToEdge / edgeOffsetTolerance);
+    target.subtract(diffToTarget * friction);
+    if (!pointerDown && mathAbs(diffToTarget) < pullBackThreshold) {
+      target.set(limit.constrain(target.get()));
+      scrollBody.useDuration(25).useBaseFriction();
+    }
+  }
+  function toggleActive(active) {
+    disabled = !active;
+  }
+  const self = {
+    shouldConstrain,
+    constrain,
+    toggleActive
+  };
+  return self;
+}
+
+function ScrollContain(viewSize, contentSize, snapsAligned, containScroll, pixelTolerance) {
+  const scrollBounds = Limit(-contentSize + viewSize, 0);
+  const snapsBounded = measureBounded();
+  const scrollContainLimit = findScrollContainLimit();
+  const snapsContained = measureContained();
+  function usePixelTolerance(bound, snap) {
+    return deltaAbs(bound, snap) <= 1;
+  }
+  function findScrollContainLimit() {
+    const startSnap = snapsBounded[0];
+    const endSnap = arrayLast(snapsBounded);
+    const min = snapsBounded.lastIndexOf(startSnap);
+    const max = snapsBounded.indexOf(endSnap) + 1;
+    return Limit(min, max);
+  }
+  function measureBounded() {
+    return snapsAligned.map((snapAligned, index) => {
+      const {
+        min,
+        max
+      } = scrollBounds;
+      const snap = scrollBounds.constrain(snapAligned);
+      const isFirst = !index;
+      const isLast = arrayIsLastIndex(snapsAligned, index);
+      if (isFirst) return max;
+      if (isLast) return min;
+      if (usePixelTolerance(min, snap)) return min;
+      if (usePixelTolerance(max, snap)) return max;
+      return snap;
+    }).map(scrollBound => parseFloat(scrollBound.toFixed(3)));
+  }
+  function measureContained() {
+    if (contentSize <= viewSize + pixelTolerance) return [scrollBounds.max];
+    if (containScroll === 'keepSnaps') return snapsBounded;
+    const {
+      min,
+      max
+    } = scrollContainLimit;
+    return snapsBounded.slice(min, max);
+  }
+  const self = {
+    snapsContained,
+    scrollContainLimit
+  };
+  return self;
+}
+
+function ScrollLimit(contentSize, scrollSnaps, loop) {
+  const max = scrollSnaps[0];
+  const min = loop ? max - contentSize : arrayLast(scrollSnaps);
+  const limit = Limit(min, max);
+  const self = {
+    limit
+  };
+  return self;
+}
+
+function ScrollLooper(contentSize, limit, location, vectors) {
+  const jointSafety = 0.1;
+  const min = limit.min + jointSafety;
+  const max = limit.max + jointSafety;
+  const {
+    reachedMin,
+    reachedMax
+  } = Limit(min, max);
+  function shouldLoop(direction) {
+    if (direction === 1) return reachedMax(location.get());
+    if (direction === -1) return reachedMin(location.get());
+    return false;
+  }
+  function loop(direction) {
+    if (!shouldLoop(direction)) return;
+    const loopDistance = contentSize * (direction * -1);
+    vectors.forEach(v => v.add(loopDistance));
+  }
+  const self = {
+    loop
+  };
+  return self;
+}
+
+function ScrollProgress(limit) {
+  const {
+    max,
+    length
+  } = limit;
+  function get(n) {
+    const currentLocation = n - max;
+    return length ? currentLocation / -length : 0;
+  }
+  const self = {
+    get
+  };
+  return self;
+}
+
+function ScrollSnaps(axis, alignment, containerRect, slideRects, slidesToScroll) {
+  const {
+    startEdge,
+    endEdge
+  } = axis;
+  const {
+    groupSlides
+  } = slidesToScroll;
+  const alignments = measureSizes().map(alignment.measure);
+  const snaps = measureUnaligned();
+  const snapsAligned = measureAligned();
+  function measureSizes() {
+    return groupSlides(slideRects).map(rects => arrayLast(rects)[endEdge] - rects[0][startEdge]).map(mathAbs);
+  }
+  function measureUnaligned() {
+    return slideRects.map(rect => containerRect[startEdge] - rect[startEdge]).map(snap => -mathAbs(snap));
+  }
+  function measureAligned() {
+    return groupSlides(snaps).map(g => g[0]).map((snap, index) => snap + alignments[index]);
+  }
+  const self = {
+    snaps,
+    snapsAligned
+  };
+  return self;
+}
+
+function SlideRegistry(containSnaps, containScroll, scrollSnaps, scrollContainLimit, slidesToScroll, slideIndexes) {
+  const {
+    groupSlides
+  } = slidesToScroll;
+  const {
+    min,
+    max
+  } = scrollContainLimit;
+  const slideRegistry = createSlideRegistry();
+  function createSlideRegistry() {
+    const groupedSlideIndexes = groupSlides(slideIndexes);
+    const doNotContain = !containSnaps || containScroll === 'keepSnaps';
+    if (scrollSnaps.length === 1) return [slideIndexes];
+    if (doNotContain) return groupedSlideIndexes;
+    return groupedSlideIndexes.slice(min, max).map((group, index, groups) => {
+      const isFirst = !index;
+      const isLast = arrayIsLastIndex(groups, index);
+      if (isFirst) {
+        const range = arrayLast(groups[0]) + 1;
+        return arrayFromNumber(range);
+      }
+      if (isLast) {
+        const range = arrayLastIndex(slideIndexes) - arrayLast(groups)[0] + 1;
+        return arrayFromNumber(range, arrayLast(groups)[0]);
+      }
+      return group;
+    });
+  }
+  const self = {
+    slideRegistry
+  };
+  return self;
+}
+
+function ScrollTarget(loop, scrollSnaps, contentSize, limit, targetVector) {
+  const {
+    reachedAny,
+    removeOffset,
+    constrain
+  } = limit;
+  function minDistance(distances) {
+    return distances.concat().sort((a, b) => mathAbs(a) - mathAbs(b))[0];
+  }
+  function findTargetSnap(target) {
+    const distance = loop ? removeOffset(target) : constrain(target);
+    const ascDiffsToSnaps = scrollSnaps.map((snap, index) => ({
+      diff: shortcut(snap - distance, 0),
+      index
+    })).sort((d1, d2) => mathAbs(d1.diff) - mathAbs(d2.diff));
+    const {
+      index
+    } = ascDiffsToSnaps[0];
+    return {
+      index,
+      distance
+    };
+  }
+  function shortcut(target, direction) {
+    const targets = [target, target + contentSize, target - contentSize];
+    if (!loop) return target;
+    if (!direction) return minDistance(targets);
+    const matchingTargets = targets.filter(t => mathSign(t) === direction);
+    if (matchingTargets.length) return minDistance(matchingTargets);
+    return arrayLast(targets) - contentSize;
+  }
+  function byIndex(index, direction) {
+    const diffToSnap = scrollSnaps[index] - targetVector.get();
+    const distance = shortcut(diffToSnap, direction);
+    return {
+      index,
+      distance
+    };
+  }
+  function byDistance(distance, snap) {
+    const target = targetVector.get() + distance;
+    const {
+      index,
+      distance: targetSnapDistance
+    } = findTargetSnap(target);
+    const reachedBound = !loop && reachedAny(target);
+    if (!snap || reachedBound) return {
+      index,
+      distance
+    };
+    const diffToSnap = scrollSnaps[index] - targetSnapDistance;
+    const snapDistance = distance + shortcut(diffToSnap, 0);
+    return {
+      index,
+      distance: snapDistance
+    };
+  }
+  const self = {
+    byDistance,
+    byIndex,
+    shortcut
+  };
+  return self;
+}
+
+function ScrollTo(animation, indexCurrent, indexPrevious, scrollBody, scrollTarget, targetVector, eventHandler) {
+  function scrollTo(target) {
+    const distanceDiff = target.distance;
+    const indexDiff = target.index !== indexCurrent.get();
+    targetVector.add(distanceDiff);
+    if (distanceDiff) {
+      if (scrollBody.duration()) {
+        animation.start();
+      } else {
+        animation.update();
+        animation.render(1);
+        animation.update();
+      }
+    }
+    if (indexDiff) {
+      indexPrevious.set(indexCurrent.get());
+      indexCurrent.set(target.index);
+      eventHandler.emit('select');
+    }
+  }
+  function distance(n, snap) {
+    const target = scrollTarget.byDistance(n, snap);
+    scrollTo(target);
+  }
+  function index(n, direction) {
+    const targetIndex = indexCurrent.clone().set(n);
+    const target = scrollTarget.byIndex(targetIndex.get(), direction);
+    scrollTo(target);
+  }
+  const self = {
+    distance,
+    index
+  };
+  return self;
+}
+
+function SlideFocus(root, slides, slideRegistry, scrollTo, scrollBody, eventStore, eventHandler, watchFocus) {
+  const focusListenerOptions = {
+    passive: true,
+    capture: true
+  };
+  let lastTabPressTime = 0;
+  function init(emblaApi) {
+    if (!watchFocus) return;
+    function defaultCallback(index) {
+      const nowTime = new Date().getTime();
+      const diffTime = nowTime - lastTabPressTime;
+      if (diffTime > 10) return;
+      eventHandler.emit('slideFocusStart');
+      root.scrollLeft = 0;
+      const group = slideRegistry.findIndex(group => group.includes(index));
+      if (!isNumber$1(group)) return;
+      scrollBody.useDuration(0);
+      scrollTo.index(group, 0);
+      eventHandler.emit('slideFocus');
+    }
+    eventStore.add(document, 'keydown', registerTabPress, false);
+    slides.forEach((slide, slideIndex) => {
+      eventStore.add(slide, 'focus', evt => {
+        if (isBoolean$2(watchFocus) || watchFocus(emblaApi, evt)) {
+          defaultCallback(slideIndex);
+        }
+      }, focusListenerOptions);
+    });
+  }
+  function registerTabPress(event) {
+    if (event.code === 'Tab') lastTabPressTime = new Date().getTime();
+  }
+  const self = {
+    init
+  };
+  return self;
+}
+
+function Vector1D(initialValue) {
+  let value = initialValue;
+  function get() {
+    return value;
+  }
+  function set(n) {
+    value = normalizeInput(n);
+  }
+  function add(n) {
+    value += normalizeInput(n);
+  }
+  function subtract(n) {
+    value -= normalizeInput(n);
+  }
+  function normalizeInput(n) {
+    return isNumber$1(n) ? n : n.get();
+  }
+  const self = {
+    get,
+    set,
+    add,
+    subtract
+  };
+  return self;
+}
+
+function Translate(axis, container) {
+  const translate = axis.scroll === 'x' ? x : y;
+  const containerStyle = container.style;
+  let previousTarget = null;
+  let disabled = false;
+  function x(n) {
+    return `translate3d(${n}px,0px,0px)`;
+  }
+  function y(n) {
+    return `translate3d(0px,${n}px,0px)`;
+  }
+  function to(target) {
+    if (disabled) return;
+    const newTarget = roundToTwoDecimals(axis.direction(target));
+    if (newTarget === previousTarget) return;
+    containerStyle.transform = translate(newTarget);
+    previousTarget = newTarget;
+  }
+  function toggleActive(active) {
+    disabled = !active;
+  }
+  function clear() {
+    if (disabled) return;
+    containerStyle.transform = '';
+    if (!container.getAttribute('style')) container.removeAttribute('style');
+  }
+  const self = {
+    clear,
+    to,
+    toggleActive
+  };
+  return self;
+}
+
+function SlideLooper(axis, viewSize, contentSize, slideSizes, slideSizesWithGaps, snaps, scrollSnaps, location, slides) {
+  const roundingSafety = 0.5;
+  const ascItems = arrayKeys(slideSizesWithGaps);
+  const descItems = arrayKeys(slideSizesWithGaps).reverse();
+  const loopPoints = startPoints().concat(endPoints());
+  function removeSlideSizes(indexes, from) {
+    return indexes.reduce((a, i) => {
+      return a - slideSizesWithGaps[i];
+    }, from);
+  }
+  function slidesInGap(indexes, gap) {
+    return indexes.reduce((a, i) => {
+      const remainingGap = removeSlideSizes(a, gap);
+      return remainingGap > 0 ? a.concat([i]) : a;
+    }, []);
+  }
+  function findSlideBounds(offset) {
+    return snaps.map((snap, index) => ({
+      start: snap - slideSizes[index] + roundingSafety + offset,
+      end: snap + viewSize - roundingSafety + offset
+    }));
+  }
+  function findLoopPoints(indexes, offset, isEndEdge) {
+    const slideBounds = findSlideBounds(offset);
+    return indexes.map(index => {
+      const initial = isEndEdge ? 0 : -contentSize;
+      const altered = isEndEdge ? contentSize : 0;
+      const boundEdge = isEndEdge ? 'end' : 'start';
+      const loopPoint = slideBounds[index][boundEdge];
+      return {
+        index,
+        loopPoint,
+        slideLocation: Vector1D(-1),
+        translate: Translate(axis, slides[index]),
+        target: () => location.get() > loopPoint ? initial : altered
+      };
+    });
+  }
+  function startPoints() {
+    const gap = scrollSnaps[0];
+    const indexes = slidesInGap(descItems, gap);
+    return findLoopPoints(indexes, contentSize, false);
+  }
+  function endPoints() {
+    const gap = viewSize - scrollSnaps[0] - 1;
+    const indexes = slidesInGap(ascItems, gap);
+    return findLoopPoints(indexes, -contentSize, true);
+  }
+  function canLoop() {
+    return loopPoints.every(({
+      index
+    }) => {
+      const otherIndexes = ascItems.filter(i => i !== index);
+      return removeSlideSizes(otherIndexes, viewSize) <= 0.1;
+    });
+  }
+  function loop() {
+    loopPoints.forEach(loopPoint => {
+      const {
+        target,
+        translate,
+        slideLocation
+      } = loopPoint;
+      const shiftLocation = target();
+      if (shiftLocation === slideLocation.get()) return;
+      translate.to(shiftLocation);
+      slideLocation.set(shiftLocation);
+    });
+  }
+  function clear() {
+    loopPoints.forEach(loopPoint => loopPoint.translate.clear());
+  }
+  const self = {
+    canLoop,
+    clear,
+    loop,
+    loopPoints
+  };
+  return self;
+}
+
+function SlidesHandler(container, eventHandler, watchSlides) {
+  let mutationObserver;
+  let destroyed = false;
+  function init(emblaApi) {
+    if (!watchSlides) return;
+    function defaultCallback(mutations) {
+      for (const mutation of mutations) {
+        if (mutation.type === 'childList') {
+          emblaApi.reInit();
+          eventHandler.emit('slidesChanged');
+          break;
+        }
+      }
+    }
+    mutationObserver = new MutationObserver(mutations => {
+      if (destroyed) return;
+      if (isBoolean$2(watchSlides) || watchSlides(emblaApi, mutations)) {
+        defaultCallback(mutations);
+      }
+    });
+    mutationObserver.observe(container, {
+      childList: true
+    });
+  }
+  function destroy() {
+    if (mutationObserver) mutationObserver.disconnect();
+    destroyed = true;
+  }
+  const self = {
+    init,
+    destroy
+  };
+  return self;
+}
+
+function SlidesInView(container, slides, eventHandler, threshold) {
+  const intersectionEntryMap = {};
+  let inViewCache = null;
+  let notInViewCache = null;
+  let intersectionObserver;
+  let destroyed = false;
+  function init() {
+    intersectionObserver = new IntersectionObserver(entries => {
+      if (destroyed) return;
+      entries.forEach(entry => {
+        const index = slides.indexOf(entry.target);
+        intersectionEntryMap[index] = entry;
+      });
+      inViewCache = null;
+      notInViewCache = null;
+      eventHandler.emit('slidesInView');
+    }, {
+      root: container.parentElement,
+      threshold
+    });
+    slides.forEach(slide => intersectionObserver.observe(slide));
+  }
+  function destroy() {
+    if (intersectionObserver) intersectionObserver.disconnect();
+    destroyed = true;
+  }
+  function createInViewList(inView) {
+    return objectKeys(intersectionEntryMap).reduce((list, slideIndex) => {
+      const index = parseInt(slideIndex);
+      const {
+        isIntersecting
+      } = intersectionEntryMap[index];
+      const inViewMatch = inView && isIntersecting;
+      const notInViewMatch = !inView && !isIntersecting;
+      if (inViewMatch || notInViewMatch) list.push(index);
+      return list;
+    }, []);
+  }
+  function get(inView = true) {
+    if (inView && inViewCache) return inViewCache;
+    if (!inView && notInViewCache) return notInViewCache;
+    const slideIndexes = createInViewList(inView);
+    if (inView) inViewCache = slideIndexes;
+    if (!inView) notInViewCache = slideIndexes;
+    return slideIndexes;
+  }
+  const self = {
+    init,
+    destroy,
+    get
+  };
+  return self;
+}
+
+function SlideSizes(axis, containerRect, slideRects, slides, readEdgeGap, ownerWindow) {
+  const {
+    measureSize,
+    startEdge,
+    endEdge
+  } = axis;
+  const withEdgeGap = slideRects[0] && readEdgeGap;
+  const startGap = measureStartGap();
+  const endGap = measureEndGap();
+  const slideSizes = slideRects.map(measureSize);
+  const slideSizesWithGaps = measureWithGaps();
+  function measureStartGap() {
+    if (!withEdgeGap) return 0;
+    const slideRect = slideRects[0];
+    return mathAbs(containerRect[startEdge] - slideRect[startEdge]);
+  }
+  function measureEndGap() {
+    if (!withEdgeGap) return 0;
+    const style = ownerWindow.getComputedStyle(arrayLast(slides));
+    return parseFloat(style.getPropertyValue(`margin-${endEdge}`));
+  }
+  function measureWithGaps() {
+    return slideRects.map((rect, index, rects) => {
+      const isFirst = !index;
+      const isLast = arrayIsLastIndex(rects, index);
+      if (isFirst) return slideSizes[index] + startGap;
+      if (isLast) return slideSizes[index] + endGap;
+      return rects[index + 1][startEdge] - rect[startEdge];
+    }).map(mathAbs);
+  }
+  const self = {
+    slideSizes,
+    slideSizesWithGaps,
+    startGap,
+    endGap
+  };
+  return self;
+}
+
+function SlidesToScroll(axis, viewSize, slidesToScroll, loop, containerRect, slideRects, startGap, endGap, pixelTolerance) {
+  const {
+    startEdge,
+    endEdge,
+    direction
+  } = axis;
+  const groupByNumber = isNumber$1(slidesToScroll);
+  function byNumber(array, groupSize) {
+    return arrayKeys(array).filter(i => i % groupSize === 0).map(i => array.slice(i, i + groupSize));
+  }
+  function bySize(array) {
+    if (!array.length) return [];
+    return arrayKeys(array).reduce((groups, rectB, index) => {
+      const rectA = arrayLast(groups) || 0;
+      const isFirst = rectA === 0;
+      const isLast = rectB === arrayLastIndex(array);
+      const edgeA = containerRect[startEdge] - slideRects[rectA][startEdge];
+      const edgeB = containerRect[startEdge] - slideRects[rectB][endEdge];
+      const gapA = !loop && isFirst ? direction(startGap) : 0;
+      const gapB = !loop && isLast ? direction(endGap) : 0;
+      const chunkSize = mathAbs(edgeB - gapB - (edgeA + gapA));
+      if (index && chunkSize > viewSize + pixelTolerance) groups.push(rectB);
+      if (isLast) groups.push(array.length);
+      return groups;
+    }, []).map((currentSize, index, groups) => {
+      const previousSize = Math.max(groups[index - 1] || 0);
+      return array.slice(previousSize, currentSize);
+    });
+  }
+  function groupSlides(array) {
+    return groupByNumber ? byNumber(array, slidesToScroll) : bySize(array);
+  }
+  const self = {
+    groupSlides
+  };
+  return self;
+}
+
+function Engine(root, container, slides, ownerDocument, ownerWindow, options, eventHandler) {
+  // Options
+  const {
+    align,
+    axis: scrollAxis,
+    direction,
+    startIndex,
+    loop,
+    duration,
+    dragFree,
+    dragThreshold,
+    inViewThreshold,
+    slidesToScroll: groupSlides,
+    skipSnaps,
+    containScroll,
+    watchResize,
+    watchSlides,
+    watchDrag,
+    watchFocus
+  } = options;
+  // Measurements
+  const pixelTolerance = 2;
+  const nodeRects = NodeRects();
+  const containerRect = nodeRects.measure(container);
+  const slideRects = slides.map(nodeRects.measure);
+  const axis = Axis(scrollAxis, direction);
+  const viewSize = axis.measureSize(containerRect);
+  const percentOfView = PercentOfView(viewSize);
+  const alignment = Alignment(align, viewSize);
+  const containSnaps = !loop && !!containScroll;
+  const readEdgeGap = loop || !!containScroll;
+  const {
+    slideSizes,
+    slideSizesWithGaps,
+    startGap,
+    endGap
+  } = SlideSizes(axis, containerRect, slideRects, slides, readEdgeGap, ownerWindow);
+  const slidesToScroll = SlidesToScroll(axis, viewSize, groupSlides, loop, containerRect, slideRects, startGap, endGap, pixelTolerance);
+  const {
+    snaps,
+    snapsAligned
+  } = ScrollSnaps(axis, alignment, containerRect, slideRects, slidesToScroll);
+  const contentSize = -arrayLast(snaps) + arrayLast(slideSizesWithGaps);
+  const {
+    snapsContained,
+    scrollContainLimit
+  } = ScrollContain(viewSize, contentSize, snapsAligned, containScroll, pixelTolerance);
+  const scrollSnaps = containSnaps ? snapsContained : snapsAligned;
+  const {
+    limit
+  } = ScrollLimit(contentSize, scrollSnaps, loop);
+  // Indexes
+  const index = Counter(arrayLastIndex(scrollSnaps), startIndex, loop);
+  const indexPrevious = index.clone();
+  const slideIndexes = arrayKeys(slides);
+  // Animation
+  const update = ({
+    dragHandler,
+    scrollBody,
+    scrollBounds,
+    options: {
+      loop
+    }
+  }) => {
+    if (!loop) scrollBounds.constrain(dragHandler.pointerDown());
+    scrollBody.seek();
+  };
+  const render = ({
+    scrollBody,
+    translate,
+    location,
+    offsetLocation,
+    previousLocation,
+    scrollLooper,
+    slideLooper,
+    dragHandler,
+    animation,
+    eventHandler,
+    scrollBounds,
+    options: {
+      loop
+    }
+  }, alpha) => {
+    const shouldSettle = scrollBody.settled();
+    const withinBounds = !scrollBounds.shouldConstrain();
+    const hasSettled = loop ? shouldSettle : shouldSettle && withinBounds;
+    const hasSettledAndIdle = hasSettled && !dragHandler.pointerDown();
+    if (hasSettledAndIdle) animation.stop();
+    const interpolatedLocation = location.get() * alpha + previousLocation.get() * (1 - alpha);
+    offsetLocation.set(interpolatedLocation);
+    if (loop) {
+      scrollLooper.loop(scrollBody.direction());
+      slideLooper.loop();
+    }
+    translate.to(offsetLocation.get());
+    if (hasSettledAndIdle) eventHandler.emit('settle');
+    if (!hasSettled) eventHandler.emit('scroll');
+  };
+  const animation = Animations(ownerDocument, ownerWindow, () => update(engine), alpha => render(engine, alpha));
+  // Shared
+  const friction = 0.68;
+  const startLocation = scrollSnaps[index.get()];
+  const location = Vector1D(startLocation);
+  const previousLocation = Vector1D(startLocation);
+  const offsetLocation = Vector1D(startLocation);
+  const target = Vector1D(startLocation);
+  const scrollBody = ScrollBody(location, offsetLocation, previousLocation, target, duration, friction);
+  const scrollTarget = ScrollTarget(loop, scrollSnaps, contentSize, limit, target);
+  const scrollTo = ScrollTo(animation, index, indexPrevious, scrollBody, scrollTarget, target, eventHandler);
+  const scrollProgress = ScrollProgress(limit);
+  const eventStore = EventStore();
+  const slidesInView = SlidesInView(container, slides, eventHandler, inViewThreshold);
+  const {
+    slideRegistry
+  } = SlideRegistry(containSnaps, containScroll, scrollSnaps, scrollContainLimit, slidesToScroll, slideIndexes);
+  const slideFocus = SlideFocus(root, slides, slideRegistry, scrollTo, scrollBody, eventStore, eventHandler, watchFocus);
+  // Engine
+  const engine = {
+    ownerDocument,
+    ownerWindow,
+    eventHandler,
+    containerRect,
+    slideRects,
+    animation,
+    axis,
+    dragHandler: DragHandler(axis, root, ownerDocument, ownerWindow, target, DragTracker(axis, ownerWindow), location, animation, scrollTo, scrollBody, scrollTarget, index, eventHandler, percentOfView, dragFree, dragThreshold, skipSnaps, friction, watchDrag),
+    eventStore,
+    percentOfView,
+    index,
+    indexPrevious,
+    limit,
+    location,
+    offsetLocation,
+    previousLocation,
+    options,
+    resizeHandler: ResizeHandler(container, eventHandler, ownerWindow, slides, axis, watchResize, nodeRects),
+    scrollBody,
+    scrollBounds: ScrollBounds(limit, offsetLocation, target, scrollBody, percentOfView),
+    scrollLooper: ScrollLooper(contentSize, limit, offsetLocation, [location, offsetLocation, previousLocation, target]),
+    scrollProgress,
+    scrollSnapList: scrollSnaps.map(scrollProgress.get),
+    scrollSnaps,
+    scrollTarget,
+    scrollTo,
+    slideLooper: SlideLooper(axis, viewSize, contentSize, slideSizes, slideSizesWithGaps, snaps, scrollSnaps, offsetLocation, slides),
+    slideFocus,
+    slidesHandler: SlidesHandler(container, eventHandler, watchSlides),
+    slidesInView,
+    slideIndexes,
+    slideRegistry,
+    slidesToScroll,
+    target,
+    translate: Translate(axis, container)
+  };
+  return engine;
+}
+
+function EventHandler() {
+  let listeners = {};
+  let api;
+  function init(emblaApi) {
+    api = emblaApi;
+  }
+  function getListeners(evt) {
+    return listeners[evt] || [];
+  }
+  function emit(evt) {
+    getListeners(evt).forEach(e => e(api, evt));
+    return self;
+  }
+  function on(evt, cb) {
+    listeners[evt] = getListeners(evt).concat([cb]);
+    return self;
+  }
+  function off(evt, cb) {
+    listeners[evt] = getListeners(evt).filter(e => e !== cb);
+    return self;
+  }
+  function clear() {
+    listeners = {};
+  }
+  const self = {
+    init,
+    emit,
+    off,
+    on,
+    clear
+  };
+  return self;
+}
+
+const defaultOptions$2 = {
+  align: 'center',
+  axis: 'x',
+  container: null,
+  slides: null,
+  containScroll: 'trimSnaps',
+  direction: 'ltr',
+  slidesToScroll: 1,
+  inViewThreshold: 0,
+  breakpoints: {},
+  dragFree: false,
+  dragThreshold: 10,
+  loop: false,
+  skipSnaps: false,
+  duration: 25,
+  startIndex: 0,
+  active: true,
+  watchDrag: true,
+  watchResize: true,
+  watchSlides: true,
+  watchFocus: true
+};
+
+function OptionsHandler(ownerWindow) {
+  function mergeOptions(optionsA, optionsB) {
+    return objectsMergeDeep(optionsA, optionsB || {});
+  }
+  function optionsAtMedia(options) {
+    const optionsAtMedia = options.breakpoints || {};
+    const matchedMediaOptions = objectKeys(optionsAtMedia).filter(media => ownerWindow.matchMedia(media).matches).map(media => optionsAtMedia[media]).reduce((a, mediaOption) => mergeOptions(a, mediaOption), {});
+    return mergeOptions(options, matchedMediaOptions);
+  }
+  function optionsMediaQueries(optionsList) {
+    return optionsList.map(options => objectKeys(options.breakpoints || {})).reduce((acc, mediaQueries) => acc.concat(mediaQueries), []).map(ownerWindow.matchMedia);
+  }
+  const self = {
+    mergeOptions,
+    optionsAtMedia,
+    optionsMediaQueries
+  };
+  return self;
+}
+
+function PluginsHandler(optionsHandler) {
+  let activePlugins = [];
+  function init(emblaApi, plugins) {
+    activePlugins = plugins.filter(({
+      options
+    }) => optionsHandler.optionsAtMedia(options).active !== false);
+    activePlugins.forEach(plugin => plugin.init(emblaApi, optionsHandler));
+    return plugins.reduce((map, plugin) => Object.assign(map, {
+      [plugin.name]: plugin
+    }), {});
+  }
+  function destroy() {
+    activePlugins = activePlugins.filter(plugin => plugin.destroy());
+  }
+  const self = {
+    init,
+    destroy
+  };
+  return self;
+}
+
+function EmblaCarousel(root, userOptions, userPlugins) {
+  const ownerDocument = root.ownerDocument;
+  const ownerWindow = ownerDocument.defaultView;
+  const optionsHandler = OptionsHandler(ownerWindow);
+  const pluginsHandler = PluginsHandler(optionsHandler);
+  const mediaHandlers = EventStore();
+  const eventHandler = EventHandler();
+  const {
+    mergeOptions,
+    optionsAtMedia,
+    optionsMediaQueries
+  } = optionsHandler;
+  const {
+    on,
+    off,
+    emit
+  } = eventHandler;
+  const reInit = reActivate;
+  let destroyed = false;
+  let engine;
+  let optionsBase = mergeOptions(defaultOptions$2, EmblaCarousel.globalOptions);
+  let options = mergeOptions(optionsBase);
+  let pluginList = [];
+  let pluginApis;
+  let container;
+  let slides;
+  function storeElements() {
+    const {
+      container: userContainer,
+      slides: userSlides
+    } = options;
+    const customContainer = isString$2(userContainer) ? root.querySelector(userContainer) : userContainer;
+    container = customContainer || root.children[0];
+    const customSlides = isString$2(userSlides) ? container.querySelectorAll(userSlides) : userSlides;
+    slides = [].slice.call(customSlides || container.children);
+  }
+  function createEngine(options) {
+    const engine = Engine(root, container, slides, ownerDocument, ownerWindow, options, eventHandler);
+    if (options.loop && !engine.slideLooper.canLoop()) {
+      const optionsWithoutLoop = Object.assign({}, options, {
+        loop: false
+      });
+      return createEngine(optionsWithoutLoop);
+    }
+    return engine;
+  }
+  function activate(withOptions, withPlugins) {
+    if (destroyed) return;
+    optionsBase = mergeOptions(optionsBase, withOptions);
+    options = optionsAtMedia(optionsBase);
+    pluginList = withPlugins || pluginList;
+    storeElements();
+    engine = createEngine(options);
+    optionsMediaQueries([optionsBase, ...pluginList.map(({
+      options
+    }) => options)]).forEach(query => mediaHandlers.add(query, 'change', reActivate));
+    if (!options.active) return;
+    engine.translate.to(engine.location.get());
+    engine.animation.init();
+    engine.slidesInView.init();
+    engine.slideFocus.init(self);
+    engine.eventHandler.init(self);
+    engine.resizeHandler.init(self);
+    engine.slidesHandler.init(self);
+    if (engine.options.loop) engine.slideLooper.loop();
+    if (container.offsetParent && slides.length) engine.dragHandler.init(self);
+    pluginApis = pluginsHandler.init(self, pluginList);
+  }
+  function reActivate(withOptions, withPlugins) {
+    const startIndex = selectedScrollSnap();
+    deActivate();
+    activate(mergeOptions({
+      startIndex
+    }, withOptions), withPlugins);
+    eventHandler.emit('reInit');
+  }
+  function deActivate() {
+    engine.dragHandler.destroy();
+    engine.eventStore.clear();
+    engine.translate.clear();
+    engine.slideLooper.clear();
+    engine.resizeHandler.destroy();
+    engine.slidesHandler.destroy();
+    engine.slidesInView.destroy();
+    engine.animation.destroy();
+    pluginsHandler.destroy();
+    mediaHandlers.clear();
+  }
+  function destroy() {
+    if (destroyed) return;
+    destroyed = true;
+    mediaHandlers.clear();
+    deActivate();
+    eventHandler.emit('destroy');
+    eventHandler.clear();
+  }
+  function scrollTo(index, jump, direction) {
+    if (!options.active || destroyed) return;
+    engine.scrollBody.useBaseFriction().useDuration(jump === true ? 0 : options.duration);
+    engine.scrollTo.index(index, direction || 0);
+  }
+  function scrollNext(jump) {
+    const next = engine.index.add(1).get();
+    scrollTo(next, jump, -1);
+  }
+  function scrollPrev(jump) {
+    const prev = engine.index.add(-1).get();
+    scrollTo(prev, jump, 1);
+  }
+  function canScrollNext() {
+    const next = engine.index.add(1).get();
+    return next !== selectedScrollSnap();
+  }
+  function canScrollPrev() {
+    const prev = engine.index.add(-1).get();
+    return prev !== selectedScrollSnap();
+  }
+  function scrollSnapList() {
+    return engine.scrollSnapList;
+  }
+  function scrollProgress() {
+    return engine.scrollProgress.get(engine.offsetLocation.get());
+  }
+  function selectedScrollSnap() {
+    return engine.index.get();
+  }
+  function previousScrollSnap() {
+    return engine.indexPrevious.get();
+  }
+  function slidesInView() {
+    return engine.slidesInView.get();
+  }
+  function slidesNotInView() {
+    return engine.slidesInView.get(false);
+  }
+  function plugins() {
+    return pluginApis;
+  }
+  function internalEngine() {
+    return engine;
+  }
+  function rootNode() {
+    return root;
+  }
+  function containerNode() {
+    return container;
+  }
+  function slideNodes() {
+    return slides;
+  }
+  const self = {
+    canScrollNext,
+    canScrollPrev,
+    containerNode,
+    internalEngine,
+    destroy,
+    off,
+    on,
+    emit,
+    plugins,
+    previousScrollSnap,
+    reInit,
+    rootNode,
+    scrollNext,
+    scrollPrev,
+    scrollProgress,
+    scrollSnapList,
+    scrollTo,
+    selectedScrollSnap,
+    slideNodes,
+    slidesInView,
+    slidesNotInView
+  };
+  activate(userOptions, userPlugins);
+  setTimeout(() => eventHandler.emit('init'), 0);
+  return self;
+}
+EmblaCarousel.globalOptions = undefined;
+
+const {useRef: useRef$a,useState: useState$l,useCallback: useCallback$2,useEffect: useEffect$g} = await importShared('react');
+
+function useEmblaCarousel(options = {}, plugins = []) {
+  const storedOptions = useRef$a(options);
+  const storedPlugins = useRef$a(plugins);
+  const [emblaApi, setEmblaApi] = useState$l();
+  const [viewport, setViewport] = useState$l();
+  const reInit = useCallback$2(() => {
+    if (emblaApi) emblaApi.reInit(storedOptions.current, storedPlugins.current);
+  }, [emblaApi]);
+  useEffect$g(() => {
+    if (areOptionsEqual(storedOptions.current, options)) return;
+    storedOptions.current = options;
+    reInit();
+  }, [options, reInit]);
+  useEffect$g(() => {
+    if (arePluginsEqual(storedPlugins.current, plugins)) return;
+    storedPlugins.current = plugins;
+    reInit();
+  }, [plugins, reInit]);
+  useEffect$g(() => {
+    if (canUseDOM() && viewport) {
+      EmblaCarousel.globalOptions = useEmblaCarousel.globalOptions;
+      const newEmblaApi = EmblaCarousel(viewport, storedOptions.current, storedPlugins.current);
+      setEmblaApi(newEmblaApi);
+      return () => newEmblaApi.destroy();
+    } else {
+      setEmblaApi(undefined);
+    }
+  }, [viewport, setEmblaApi]);
+  return [setViewport, emblaApi];
+}
+useEmblaCarousel.globalOptions = undefined;
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -6407,11 +8810,25 @@ const createLucideIcon = (iconName, iconNode) => {
  */
 
 
-const __iconNode$g = [
+const __iconNode$h = [
   ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
   ["path", { d: "M19 12H5", key: "x3x0zl" }]
 ];
-const ArrowLeft = createLucideIcon("arrow-left", __iconNode$g);
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$h);
+
+/**
+ * @license lucide-react v0.525.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$g = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+];
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$g);
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -6654,168 +9071,8 @@ const __iconNode = [
 ];
 const X = createLucideIcon("x", __iconNode);
 
-const React$1j = await importShared('react');
-
-var DefaultContext = {
-  color: undefined,
-  size: undefined,
-  className: undefined,
-  style: undefined,
-  attr: undefined
-};
-var IconContext = React$1j.createContext && /*#__PURE__*/React$1j.createContext(DefaultContext);
-
-var _excluded = ["attr", "size", "title"];
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } } return target; }
-function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), true).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == typeof i ? i : i + ""; }
-function _toPrimitive(t, r) { if ("object" != typeof t || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r); if ("object" != typeof i) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-const React$1i = await importShared('react');
-function Tree2Element(tree) {
-  return tree && tree.map((node, i) => /*#__PURE__*/React$1i.createElement(node.tag, _objectSpread({
-    key: i
-  }, node.attr), Tree2Element(node.child)));
-}
-function GenIcon(data) {
-  return props => /*#__PURE__*/React$1i.createElement(IconBase, _extends({
-    attr: _objectSpread({}, data.attr)
-  }, props), Tree2Element(data.child));
-}
-function IconBase(props) {
-  var elem = conf => {
-    var {
-        attr,
-        size,
-        title
-      } = props,
-      svgProps = _objectWithoutProperties(props, _excluded);
-    var computedSize = size || conf.size || "1em";
-    var className;
-    if (conf.className) className = conf.className;
-    if (props.className) className = (className ? className + " " : "") + props.className;
-    return /*#__PURE__*/React$1i.createElement("svg", _extends({
-      stroke: "currentColor",
-      fill: "currentColor",
-      strokeWidth: "0"
-    }, conf.attr, attr, svgProps, {
-      className: className,
-      style: _objectSpread(_objectSpread({
-        color: props.color || conf.color
-      }, conf.style), props.style),
-      height: computedSize,
-      width: computedSize,
-      xmlns: "http://www.w3.org/2000/svg"
-    }), title && /*#__PURE__*/React$1i.createElement("title", null, title), props.children);
-  };
-  return IconContext !== undefined ? /*#__PURE__*/React$1i.createElement(IconContext.Consumer, null, conf => elem(conf)) : elem(DefaultContext);
-}
-
-// THIS FILE IS AUTO GENERATED
-function IoMdFootball (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M256 48C141.3 48 48 141.3 48 256s93.3 208 208 208 208-93.3 208-208S370.7 48 256 48zM127 238.2l39.2 17.9 17.1 66.9-15.6 29.3-57.2-.7C95.6 329 86.2 303.1 83 276.3l44-38.1zm217.3 114.1L328.7 323l17.1-67 39.1-17.8 44 38.1c-3.1 26.8-12.6 52.7-27.5 75.3l-57.1.7zm32.4-146.2l-43.6 19.6-61.1-51.6v-47.2l47.9-32.6c29.8 11.9 56.4 32.3 75.6 57.8l-18.8 54zM191.3 94.4l47.7 32.5v47.2l-61 51.5-43-19.6-18.7-53.6c19.3-26.1 45.1-46 75-58zM218.4 426c-.7-.2-1.3-.3-2-.5l-20.5-55.1 14.7-29.4h90.8l15 30.3-19.8 53.9c-1 .2-2 .5-3 .7-11.5 2.3-27 3.8-40.4 4.1-11.7-.1-23.4-1.5-34.8-4z"},"child":[]}]})(props);
-}
-
-// THIS FILE IS AUTO GENERATED
-function MdSportsCricket (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 24 24"},"child":[{"tag":"path","attr":{"fill":"none","d":"M0 0h24v24H0z"},"child":[]},{"tag":"path","attr":{"d":"M15.05 12.81 6.56 4.32a.996.996 0 0 0-1.41 0L2.32 7.15a.996.996 0 0 0 0 1.41l8.49 8.49c.39.39 1.02.39 1.41 0l2.83-2.83a.996.996 0 0 0 0-1.41zM14.341 17.756l1.414-1.414 4.243 4.243-1.414 1.414z"},"child":[]},{"tag":"circle","attr":{"cx":"18.5","cy":"5.5","r":"3.5"},"child":[]}]})(props);
-}
-
-// THIS FILE IS AUTO GENERATED
-function CiBasketball (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 24 24"},"child":[{"tag":"g","attr":{"id":"Basketball"},"child":[{"tag":"path","attr":{"d":"M19.02,4.971a9.941,9.941,0,1,0,0,14.05A9.941,9.941,0,0,0,19.02,4.971Zm-13.34.71a8.894,8.894,0,0,1,6.05-2.6,8.812,8.812,0,0,1-2.61,6.04,8.75,8.75,0,0,1-6.04,2.61A8.875,8.875,0,0,1,5.68,5.681ZM3.1,12.731a9.772,9.772,0,0,0,6.73-2.9,9.8,9.8,0,0,0,2.9-6.73,8.908,8.908,0,0,1,5.23,2.24L5.34,17.951A8.881,8.881,0,0,1,3.1,12.731Zm8.18,8.17a8.872,8.872,0,0,1-5.23-2.24L18.66,6.041a8.91,8.91,0,0,1,2.24,5.24,9.86,9.86,0,0,0-9.62,9.62Zm7.04-2.59a8.856,8.856,0,0,1-6.04,2.61,8.851,8.851,0,0,1,8.64-8.64A8.847,8.847,0,0,1,18.32,18.311Z"},"child":[]}]}]})(props);
-}
-
-// THIS FILE IS AUTO GENERATED
-function GiBaseballBat (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M429.725 54.54c-3.023.094-5.838 1.16-8.16 3.48l-.055.056-.057.055s-115.29 111.285-169.37 169.364c-28.277 30.37-56.8 65.693-88.448 102.922l17.726 17.73c37.02-31.78 72.285-60.387 103.388-88.236 58.86-52.703 169.174-169.187 169.174-169.187l.084-.09.088-.088c11.49-11.49-7.83-35.118-23.063-35.988-.438-.025-.874-.032-1.305-.018zM151.89 344.13c-17.598 20.413-36.214 41.272-56.33 62.114l10.327 10.248c20.79-20.14 41.52-38.848 61.828-56.54l-15.824-15.823zm-80.21 63.776l-9.9 9.9 32.652 32.4 9.9-9.9-32.652-32.4z"},"child":[]}]})(props);
-}function GiBoxingGlove (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M141.977 56.943c-.635.004-1.27.02-1.905.053-2.903.145-5.805.58-8.7 1.326-28.33 7.294-56.425 29.248-77.058 57.844-20.632 28.596-33.67 63.593-33.554 95.455.06 16.533 6.94 27.84 18.886 36.927 7.29 5.544 16.59 9.97 27.032 13.23-1.023-14.32-.482-29.776 3.957-42.71l16.844 5.783c-15.886 57.862 18.713 102.134 69.65 142.007-2.305-28.866 2.355-59.986 15.7-91.345-1.265-7.76-1.14-16.392.57-25.664 4.65-25.21 20.01-56.115 49.88-93.414l14.59 11.68c-28.65 35.777-42.302 64.575-46.09 85.122-3.79 20.548 1.342 31.848 10.048 38.176 8.706 6.328 23.24 8.047 40.315 2.526 17.073-5.522 36.13-18.136 52.42-38.405 40.154-49.957 56.8-91.026 58.064-120.484 1.265-29.46-11.115-47.414-32.752-56.937C276.602 59.067 191.21 80.82 119.7 162.938l-14.095-12.272c26.81-30.786 55.632-54.11 84.143-70.29-15.18-14.578-31.464-23.538-47.77-23.433zm230.76 85.89c-.65-.005-1.303.005-1.956.01-3.553 34.283-22.66 75.888-61.65 124.397-18.358 22.844-40.163 37.666-61.237 44.48-21.075 6.816-41.974 5.77-57.053-5.19-2.737-1.99-5.203-4.298-7.387-6.887-20.753 63.805-2.12 122.793 34.906 158.587 25.613 24.76 60.005 38.354 97.472 34.727 37.467-3.627 78.5-24.527 116.943-70.998 84.462-102.102 71.214-199.61 19.823-247.646-21.08-19.702-48.703-31.302-79.862-31.482z"},"child":[]}]})(props);
-}function GiDart (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M134.745 22.098c-4.538-.146-9.08 1.43-14.893 7.243-5.586 5.586-11.841 21.725-15.248 35.992-.234.979-.444 1.907-.654 2.836l114.254 105.338c-7.18-28.538-17.555-59.985-29.848-86.75-11.673-25.418-25.249-46.657-37.514-57.024-6.132-5.183-11.56-7.488-16.097-7.635zM92.528 82.122L82.124 92.526 243.58 267.651l24.072-24.072L92.528 82.122zm-24.357 21.826c-.929.21-1.857.42-2.836.654-14.267 3.407-30.406 9.662-35.993 15.248-5.813 5.813-7.39 10.355-7.244 14.893.147 4.538 2.452 9.965 7.635 16.098 10.367 12.265 31.608 25.842 57.025 37.515 26.766 12.293 58.211 22.669 86.749 29.848L68.17 103.948zM280.899 255.79l-25.107 25.107 73.265 79.469 31.31-31.31L280.9 255.79zm92.715 85.476l-32.346 32.344 2.07 2.246c.061.058 4.419 4.224 10.585 6.28 6.208 2.069 12.71 2.88 21.902-6.313 9.192-9.192 8.38-15.694 6.31-21.902-2.057-6.174-6.235-10.54-6.283-10.59l-2.238-2.065zm20.172 41.059a46.23 46.23 0 0 1-5.233 6.226 46.241 46.241 0 0 1-6.226 5.235L489.91 489.91l-96.125-107.586z"},"child":[]}]})(props);
-}function GiDiamonds (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M431.76 256c-69 42.24-137.27 126.89-175.76 224.78C217.51 382.89 149.25 298.24 80.24 256c69-42.24 137.27-126.89 175.76-224.78C294.49 129.11 362.75 213.76 431.76 256z"},"child":[]}]})(props);
-}function GiFishing (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M455 32v198.47a16 16 0 0 0-7 13.208 16 16 0 0 0 7 13.226v66.774c0 5.75-1.877 8.85-4.262 10.836-2.384 1.987-5.657 2.887-9.258 2.287-7.16-1.193-16.37-8.05-16.474-28.77h15.533l-31.606-42.997-1.914 42.645H407c0 .106.005.21.006.316l-.002.035h.002c.128 26.794 14.79 43.74 31.514 46.527 8.4 1.4 17.126-.702 23.742-6.215C468.877 342.83 473 333.928 473 323.678v-66.79a16 16 0 0 0 7-13.21 16 16 0 0 0-7-13.227V32h-18zM191.97 142.678l-14.505.052 6.484 12.97c11.004 22.014 13.562 44.94 6.306 70.484 16.372-7.893 32.52-14.514 47.04-19.09 17.127-5.4 34.613-8.823 52.304-10.633-9.637-11.92-19.864-24.137-33.348-34.056-16.005-11.772-36.664-19.825-64.283-19.726zM321.173 212.9c-26.903-.003-53.246 3.41-78.47 11.362-29.805 9.395-69.467 29.167-100.985 50.238-15.76 10.536-29.53 21.437-38.99 31.195-9.458 9.76-13.73 18.572-13.73 21.983 0 1.115.658 3.355 3.328 6.55 2.67 3.192 7.133 7.02 12.975 10.918 11.683 7.798 28.768 15.954 48.064 23.338 10.86 4.156 22.445 8.07 34.225 11.647 4.63-5.44 9.13-10.773 13.082-15.685 4.6-5.715 8.51-10.923 11.09-14.957 1.933-3.025 2.8-5.784 3.103-6.27.1-.164.138-.074.133.343l18 .235c-.085 6.563-2.86 10.362-6.07 15.387-3.212 5.024-7.426 10.575-12.233 16.548-4.236 5.265-9.016 10.898-13.816 16.536 17.5-3.984 36.32-7.97 52.87-12.55 12.883-3.567 24.274-7.546 31.738-11.62 7.465-4.075 9.47-7.418 9.518-8.744l17.988.654c-.408 11.207-9.133 18.567-18.883 23.89-9.6 5.24-21.69 9.302-34.956 12.995 4.813.746 9.442 1.37 13.81 1.84 28.785 3.106 68.376 3.102 102.03-1.568 16.827-2.335 32.197-5.863 43.777-10.45 5.082-2.014 9.168-4.26 12.53-6.534-12.215-3.44-26.56-7.368-41.294-13.414-20.51-8.417-40.92-20.97-46.713-43.135-3.522-13.476 2.455-25.923 10.693-35.452 8.24-9.53 19.04-17.607 28.994-25.555s18.976-15.81 23.584-22.865c3.85-5.896 5.066-10.28 2.94-16.24-27.796-6.15-55.635-10.113-82.942-10.573-1.798-.03-3.595-.044-5.388-.045zm-307.55 24.39l11.028 15.585c25.106 35.484 28.82 103.86 19.66 151.705L41.4 419.783l14.653-4.99c31.135-10.605 49.9-25.726 63.056-41.373-8.873-4.267-16.915-8.706-23.8-13.3-6.772-4.52-12.463-9.17-16.792-14.35C74.188 340.594 71 334.563 71 327.68c0-12.59 7.967-23.33 18.807-34.512 4.653-4.8 10.03-9.647 15.92-14.486-18.32-23.38-43.376-37.776-73.06-39.977l-19.042-1.412zm332.317 10.388a16 16 0 0 1 16 16 16 16 0 0 1-16 16 16 16 0 0 1-16-16 16 16 0 0 1 16-16z"},"child":[]}]})(props);
-}function GiHockey (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M404.4 18l-18.642 48.578 62.498 9.41L470.98 18zm-25.246 65.787l-48.8 127.158-5.004.89c-15.403 2.74-30.98 5.11-46.71 7.157l39.094 85.52c16.356-5.765 32.46-11.918 48.248-18.555l75.54-192.78zM259.89 221.27c-7.35.832-14.732 1.598-22.146 2.294l35.307 95.586c9.26-2.82 18.453-5.743 27.573-8.777zm-40.744 3.898c-8.13.642-16.292 1.215-24.49 1.71l33.377 105.138c9.296-2.495 18.54-5.066 27.727-7.725zm-43.058 2.71c-8.492.4-17.02.73-25.576.99l30.465 115.087c9.92-2.39 19.797-4.84 29.623-7.365zm-138.71.907c-3.157.074-5.14 1.152-7.48 3.582-2.672 2.778-5.33 7.782-7.164 14.528-3.668 13.49-4.03 33.372-1.15 53.046 2.88 19.676 8.982 39.287 16.787 52.623 3.904 6.667 8.216 11.694 12.234 14.576 3.974 2.85 7.286 3.764 11.17 3.22 8.434-1.778 16.847-3.575 25.265-5.368l17.26-135.365c-21.577.08-43.32-.193-65.22-.8l-.137-.005-.134-.008c-.505-.03-.98-.04-1.43-.03zm94.636.547c-3.175.06-6.364.093-9.547.137l-16.774 131.538c19.35-4.177 38.62-8.448 57.758-12.908zm270.412 144.063c-25.497 0-48.55 4.41-64.422 11.023-7.936 3.307-14.03 7.183-17.72 10.818-3.69 3.635-4.858 6.554-4.858 9.16 0 2.603 1.17 5.522 4.86 9.157 3.69 3.635 9.782 7.51 17.718 10.818 15.872 6.615 38.925 11.025 64.422 11.025 25.496 0 48.547-4.41 64.42-11.024 7.936-3.306 14.028-7.182 17.718-10.817 3.69-3.635 4.862-6.554 4.862-9.158 0-2.605-1.17-5.524-4.862-9.16-3.69-3.634-9.782-7.51-17.718-10.817-15.873-6.613-38.924-11.023-64.42-11.023zm-87 59.304v27.695c0 2.604 1.17 5.523 4.86 9.158 3.69 3.635 9.782 7.51 17.718 10.818 15.872 6.615 38.925 11.025 64.422 11.025 25.496 0 48.547-4.41 64.42-11.024 7.936-3.306 14.028-7.182 17.718-10.817 3.69-3.635 4.862-6.554 4.862-9.158V432.7c-4.59 3.128-9.84 5.863-15.656 8.286-18.873 7.864-43.82 12.41-71.344 12.41-27.523 0-52.47-4.546-71.344-12.41-5.816-2.423-11.068-5.158-15.656-8.287z"},"child":[]}]})(props);
-}function GiPingPongBat (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M323.438 21.28c-1.136-.002-2.276.004-3.407.032-5.167.13-10.286.566-15.342 1.313-40.45 5.973-78.013 31.68-108.5 65.5-30.488 33.82-53.72 75.57-65.688 111.563-5.985 17.996-9.117 34.56-9.22 47.593-.1 13.034 2.973 21.942 7.282 26.25L238.438 383.44c4.31 4.31 13.25 7.383 26.282 7.28 11.386-.088 25.464-2.49 40.842-7.093 1.27-18.692 9.452-36.646 22.875-49.906 14.647-14.47 34.892-22.75 55.563-22.75 12.415 0 24.67 3.01 35.656 8.53 1.406-1.22 2.808-2.443 4.188-3.688 33.82-30.487 59.558-68.05 65.53-108.5 5.974-40.45-6.884-84.572-53.5-131.187C396.362 36.61 358.65 21.37 323.438 21.28zM135.375 305.814c.336 28.81-13.204 52.198-32.063 71.75-23.56 24.425-54.908 45.003-80.78 69.843 5.21 17.185 8.287 25.638 12.374 29.78 4.09 4.146 12.346 7.215 29.594 12.283 24.656-25.833 44.44-57.94 68.5-82 12.625-12.627 26.7-23.098 43.594-28.408 8.804-2.766 18.313-3.977 28.5-3.53l-69.72-69.72zM384 328.969c-15.79 0-31.774 6.565-42.906 17.56-11.132 10.998-17.724 26.717-17.72 42.22.006 15.497 6.59 31.23 17.72 42.22 11.13 10.988 27.12 17.53 42.906 17.53 15.785 0 31.775-6.542 42.906-17.53 11.13-10.99 17.714-26.723 17.72-42.22.004-15.503-6.588-31.222-17.72-42.22-11.132-10.995-27.115-17.56-42.906-17.56z"},"child":[]}]})(props);
-}function GiRugbyConversion (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M247 18v135.193c5.95-3.097 11.95-6.065 18-8.89V18h-18zm192 0v247.6l-174-.688v-60.457c-6.182 5.902-12.18 11.908-18 18V311h18v-28.088l174 .688V311h18V18h-18zm-80.1 71.914c-7.024-.18-15.588 2.472-20.54 6.463-7.925 6.386-14.468 22.533-9.155 29.127 5.313 6.594 22.48 3.634 30.406-2.752 7.926-6.386 14.47-22.533 9.158-29.127-1.993-2.473-5.653-3.602-9.868-3.71zm-54.125 57.334C168.5 198.266 48.38 324.17 25.043 471.803l17.316 3.365c15.157-100.106 61.737-149.502 92.28-179.856C120.173 337.77 79.376 405.92 78.27 482.145l21.605 4.2c4.238-108.047 78.028-244.59 204.902-339.097zM241.068 329v158h30V329h-30zm191.618 0v158h30V329h-30z"},"child":[]}]})(props);
-}function GiRunningNinja (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M378.321 58.818c-3.95 6.585-5.374 14.345-2.228 20.761 8.425 5.494 50.968 15.802 47.286 29.773-.784 2.301-1.087 3.54-1.515 5.224-7.4-6.764-22.462-10.05-27.902-9.049-4.832.843-9.721 3.05-14.44 3.248-5.986-.032-11.34-1.516-15.925-4.254 3.24 8.943 14.85 15.537 22.049 14.412 11.318-2.258 23.535 3.723 31.779 6.67-5.055 13.86-22.014 7.334-22.014 7.334l-121.937-28.02L253.44 90.45 236.1 108.17l88.945 29.131-120.023 2.676-29.907-12.486-40.77 23.617 182.99 13.291-56.212 59.426h99.22c19.341-15.746 63.009-51.2 63.645-50.793 12.867 29.973 33.256 19.023 48.815 1.55 4.515-5.069 9.47 12.362 12.021-16.015.64-1 1.217-2.011 1.772-3.03-18.028-7.661-48.58 5.732-31.817-17.992 5.135-7.262 20.776-5.296 36.871 3.97.582-15.262-1.056-42.396-15.484-48.39-14.85-6.169-34.024-5.48-41.316 2.682-9.946-16.88-39.574-19.07-51.307-20.764-3.453-5.429-4.558-10.479-5.223-16.226zm-188.328 59.236l-4.558 4.034 16.138 6.853 10.852-10.887zm276.578 24.354c6.542 4.808 7.01 5.943 11.393 6.1 1.597-1.021 5.12-4.613 1.857-5.37l-11.04-2.203c-1.14-.204-2.02.646-2.21 1.473zM148.167 160.44l-5.95 5.264h22.43l5.952-5.264zm-39.285 13.598l-12 15.357h15.855l5.461-6.414h42.592l-7.937 6.94h15.953l16-15.356zm15.664 15.933L20.251 309.592l23.027-4.516 98.618-115.104zM251.3 234.216L119.878 373.16l-16.697 4.265s-12.898 29.813-18.834 65.059c7.659 4.113 17.39-8.02 17.39-8.02s-1.1 13.09 6.64 9.743c14.097-28.569 29.864-58.248 29.864-58.248l159.721-121.877 20.994 5.584 27.758 7.386-62.557 58.727-11.238-12.15s-34.319 38.069-47.305 66.224c4.13 4.74 20.33-7.64 20.33-7.64s-5.369 9.615 1.932 9.31c17.808-16.694 29.682-29.826 29.682-29.826l132.82-98.543-48.23-28.938z"},"child":[]}]})(props);
-}function GiShuttlecock (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M256 25.577c-29.75 0-50.618 10.68-64.973 28.623-12.914 16.144-20.364 38.79-21.74 65.377h173.426c-1.376-26.586-8.826-49.233-21.74-65.377C306.618 36.257 285.75 25.577 256 25.577zm-87 112v14h174v-14H169zm12.443 32l-4.802 30H176v3.994l-12.357 77.167c1.428-.63 3.16-1.226 5.207-1.283.305-.01.616-.005.935.012.85.045 1.748.188 2.694.46 3.733 1.07 5.666 3.31 7.077 5.24.48.654.894 1.32 1.287 1.993l3.455-21.583h23.69l-.94 14.123c.77-.11 1.58-.17 2.448-.154.41.007.832.028 1.266.066 6.942.61 10.032 4.716 13.134 8.764.19.248.377.51.565.766l1.568-23.565h21.327v16.658c2.24-1.575 4.94-2.658 8.643-2.658 4.105 0 6.98 1.33 9.357 3.188v-17.188h22.065l1.726 21.443c2.796-3.567 5.923-6.866 12.088-7.408 2.057-.18 3.828.007 5.41.44l-1.166-14.475h23.25l3.41 20.04c.103-.15.194-.303.303-.452 1.41-1.928 3.344-4.17 7.078-5.24.947-.27 1.845-.414 2.695-.46.32-.016.63-.02.935-.01 2.137.06 3.942.705 5.405 1.364.392.176.757.372 1.125.566L336 200.966v-1.39h-.236l-5.104-30H312.4l5.104 30h-17.336l-2.414-30h-18.06l2.415 30h-16.753v-30h-18v30h-16.933l1.998-30h-18.04l-2 30H194.87l4.804-30h-18.23zm10.543 48h19.2l-2 30h-22.004l4.804-30zm37.24 0h18.13v30H227.23l1.997-30zm36.13 0h18.203l2.413 30h-20.616v-30zm36.26 0h18.95l5.104 30h-21.64l-2.413-30zm-92.542 81.246c-.26.187-.317.13-.615.403-2.248 2.058-5.392 5.725-8.773 10.486-6.76 9.522-14.636 23.43-21.718 39.035-14.166 31.21-24.75 69.83-20.933 93.586 1.633 10.164 4.142 16.383 9.713 22.98 5.046 5.977 13.334 12.386 25.902 20.348 7.703-3.16 13.956-6.07 19.063-8.903-6.09-7.457-9.938-16.05-12.442-25.98-7.73-30.66 1.108-71.263 13.133-105.434 2.81-7.982 5.82-15.557 8.914-22.56-1.638-4.26-3.286-8.186-4.902-11.6-2.498-5.278-4.953-9.437-6.807-11.856-.245-.322-.31-.274-.536-.504zm93.852 0c-.226.23-.29.182-.537.504-1.855 2.42-4.31 6.578-6.808 11.856-1.616 3.414-3.264 7.34-4.902 11.6 3.093 7.003 6.105 14.578 8.914 22.56 12.025 34.17 20.863 74.775 13.133 105.435-2.504 9.93-6.35 18.522-12.442 25.98 5.107 2.83 11.36 5.743 19.063 8.903 12.568-7.96 20.856-14.37 25.902-20.347 5.57-6.597 8.08-12.816 9.713-22.98 3.817-23.757-6.767-62.376-20.932-93.586-7.08-15.605-14.957-29.513-21.717-39.035-3.38-4.76-6.525-8.428-8.772-10.486-.297-.274-.353-.216-.614-.403zm-135.95 1.635c-1.903 1.823-4.114 4.144-6.685 7.29-7.01 8.585-15.662 21.378-23.95 35.925-16.576 29.093-31.543 65.874-32.223 89.785-.508 17.885 2.766 27.703 19.418 46.533 10.897-3.552 18.163-7.016 23.65-11.34-4.07-7.05-6.53-14.81-7.92-23.462-5.017-31.22 7.342-70.893 22.313-103.88 3.214-7.082 6.57-13.796 9.96-20.047-.554-3.766-1.154-7.28-1.798-10.41-.892-4.343-1.857-7.72-2.765-10.392zm178.05 0c-.91 2.672-1.874 6.05-2.766 10.39-.644 3.132-1.244 6.646-1.797 10.413 3.39 6.252 6.745 12.966 9.96 20.048 14.97 32.987 27.33 72.66 22.313 103.88-1.39 8.653-3.85 16.412-7.922 23.46 5.488 4.326 12.754 7.79 23.65 11.343 16.653-18.83 19.927-28.647 19.42-46.532-.68-23.91-15.648-60.692-32.224-89.785-8.288-14.547-16.94-27.34-23.95-35.924-2.572-3.148-4.783-5.47-6.685-7.292zm-96.97 9.328c-.153.258-.3.483-.454.746-5.9 10.077-12.528 24.62-18.217 40.785-11.378 32.33-18.54 71.73-12.658 95.06 2.516 9.983 5.562 15.958 11.69 22.042 5.55 5.51 14.366 11.172 27.583 18.003 13.217-6.83 22.034-12.493 27.584-18.004 6.127-6.085 9.173-12.06 11.69-22.042 5.882-23.332-1.28-62.73-12.66-95.06-5.688-16.166-12.315-30.71-18.216-40.786-.154-.263-.3-.488-.455-.746L256 465.108l-7.943-155.322z"},"child":[]}]})(props);
-}function GiSoccerField (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M23 119v274h466V119H23zm18 18h206v79.016c-18.25 4.135-32 20.537-32 39.984 0 19.447 13.75 35.85 32 39.984V375H41v-62h64V199H41v-62zm224 0h206v62h-64v114h64v62H265v-79.016c18.25-4.135 32-20.537 32-39.984 0-19.447-13.75-35.85-32-39.984V137zM41 217h46v78H41v-78zm384 0h46v78h-46v-78zm-178 17.793v42.414c-8.27-3.467-14-11.6-14-21.207 0-9.606 5.73-17.74 14-21.207zm18 0c8.27 3.467 14 11.6 14 21.207 0 9.606-5.73 17.74-14 21.207v-42.414z"},"child":[]}]})(props);
-}
-
-// THIS FILE IS AUTO GENERATED
-function FaDice (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 640 512"},"child":[{"tag":"path","attr":{"d":"M592 192H473.26c12.69 29.59 7.12 65.2-17 89.32L320 417.58V464c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48V240c0-26.51-21.49-48-48-48zM480 376c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm-46.37-186.7L258.7 14.37c-19.16-19.16-50.23-19.16-69.39 0L14.37 189.3c-19.16 19.16-19.16 50.23 0 69.39L189.3 433.63c19.16 19.16 50.23 19.16 69.39 0L433.63 258.7c19.16-19.17 19.16-50.24 0-69.4zM96 248c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm128 128c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm0-128c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm0-128c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm128 128c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24z"},"child":[]}]})(props);
-}function FaFootballBall (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 496 512"},"child":[{"tag":"path","attr":{"d":"M481.5 60.3c-4.8-18.2-19.1-32.5-37.3-37.4C420.3 16.5 383 8.9 339.4 8L496 164.8c-.8-43.5-8.2-80.6-14.5-104.5zm-467 391.4c4.8 18.2 19.1 32.5 37.3 37.4 23.9 6.4 61.2 14 104.8 14.9L0 347.2c.8 43.5 8.2 80.6 14.5 104.5zM4.2 283.4L220.4 500c132.5-19.4 248.8-118.7 271.5-271.4L275.6 12C143.1 31.4 26.8 130.7 4.2 283.4zm317.3-123.6c3.1-3.1 8.2-3.1 11.3 0l11.3 11.3c3.1 3.1 3.1 8.2 0 11.3l-28.3 28.3 28.3 28.3c3.1 3.1 3.1 8.2 0 11.3l-11.3 11.3c-3.1 3.1-8.2 3.1-11.3 0l-28.3-28.3-22.6 22.7 28.3 28.3c3.1 3.1 3.1 8.2 0 11.3l-11.3 11.3c-3.1 3.1-8.2 3.1-11.3 0L248 278.6l-22.6 22.6 28.3 28.3c3.1 3.1 3.1 8.2 0 11.3l-11.3 11.3c-3.1 3.1-8.2 3.1-11.3 0l-28.3-28.3-28.3 28.3c-3.1 3.1-8.2 3.1-11.3 0l-11.3-11.3c-3.1-3.1-3.1-8.2 0-11.3l28.3-28.3-28.3-28.2c-3.1-3.1-3.1-8.2 0-11.3l11.3-11.3c3.1-3.1 8.2-3.1 11.3 0l28.3 28.3 22.6-22.6-28.3-28.3c-3.1-3.1-3.1-8.2 0-11.3l11.3-11.3c3.1-3.1 8.2-3.1 11.3 0l28.3 28.3 22.6-22.6-28.3-28.3c-3.1-3.1-3.1-8.2 0-11.3l11.3-11.3c3.1-3.1 8.2-3.1 11.3 0l28.3 28.3 28.3-28.5z"},"child":[]}]})(props);
-}function FaGripHorizontal (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 448 512"},"child":[{"tag":"path","attr":{"d":"M96 288H32c-17.67 0-32 14.33-32 32v64c0 17.67 14.33 32 32 32h64c17.67 0 32-14.33 32-32v-64c0-17.67-14.33-32-32-32zm160 0h-64c-17.67 0-32 14.33-32 32v64c0 17.67 14.33 32 32 32h64c17.67 0 32-14.33 32-32v-64c0-17.67-14.33-32-32-32zm160 0h-64c-17.67 0-32 14.33-32 32v64c0 17.67 14.33 32 32 32h64c17.67 0 32-14.33 32-32v-64c0-17.67-14.33-32-32-32zM96 96H32c-17.67 0-32 14.33-32 32v64c0 17.67 14.33 32 32 32h64c17.67 0 32-14.33 32-32v-64c0-17.67-14.33-32-32-32zm160 0h-64c-17.67 0-32 14.33-32 32v64c0 17.67 14.33 32 32 32h64c17.67 0 32-14.33 32-32v-64c0-17.67-14.33-32-32-32zm160 0h-64c-17.67 0-32 14.33-32 32v64c0 17.67 14.33 32 32 32h64c17.67 0 32-14.33 32-32v-64c0-17.67-14.33-32-32-32z"},"child":[]}]})(props);
-}function FaInfoCircle (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"},"child":[]}]})(props);
-}function FaStar (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 576 512"},"child":[{"tag":"path","attr":{"d":"M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"},"child":[]}]})(props);
-}function FaTableTennis (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M496.2 296.5C527.7 218.7 512 126.2 449 63.1 365.1-21 229-21 145.1 63.1l-56 56.1 211.5 211.5c46.1-62.1 131.5-77.4 195.6-34.2zm-217.9 79.7L57.9 155.9c-27.3 45.3-21.7 105 17.3 144.1l34.5 34.6L6.7 424c-8.6 7.5-9.1 20.7-1 28.8l53.4 53.5c8 8.1 21.2 7.6 28.7-1L177.1 402l35.7 35.7c19.7 19.7 44.6 30.5 70.3 33.3-7.1-17-11-35.6-11-55.1-.1-13.8 2.5-27 6.2-39.7zM416 320c-53 0-96 43-96 96s43 96 96 96 96-43 96-96-43-96-96-96z"},"child":[]}]})(props);
-}function FaVolleyballBall (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M231.39 243.48a285.56 285.56 0 0 0-22.7-105.7c-90.8 42.4-157.5 122.4-180.3 216.8a249 249 0 0 0 56.9 81.1 333.87 333.87 0 0 1 146.1-192.2zm-36.9-134.4a284.23 284.23 0 0 0-57.4-70.7c-91 49.8-144.8 152.9-125 262.2 33.4-83.1 98.4-152 182.4-191.5zm187.6 165.1c8.6-99.8-27.3-197.5-97.5-264.4-14.7-1.7-51.6-5.5-98.9 8.5A333.87 333.87 0 0 1 279.19 241a285 285 0 0 0 102.9 33.18zm-124.7 9.5a286.33 286.33 0 0 0-80.2 72.6c82 57.3 184.5 75.1 277.5 47.8a247.15 247.15 0 0 0 42.2-89.9 336.1 336.1 0 0 1-80.9 10.4c-54.6-.1-108.9-14.1-158.6-40.9zm-98.3 99.7c-15.2 26-25.7 54.4-32.1 84.2a247.07 247.07 0 0 0 289-22.1c-112.9 16.1-203.3-24.8-256.9-62.1zm180.3-360.6c55.3 70.4 82.5 161.2 74.6 253.6a286.59 286.59 0 0 0 89.7-14.2c0-2 .3-4 .3-6 0-107.8-68.7-199.1-164.6-233.4z"},"child":[]}]})(props);
-}
-
-// THIS FILE IS AUTO GENERATED
-function RiBilliardsLine (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 24 24","fill":"currentColor"},"child":[{"tag":"path","attr":{"d":"M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2ZM12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4ZM12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6ZM12 7.75C10.6193 7.75 9.5 8.86929 9.5 10.25C9.5 10.8815 9.73416 11.4584 10.1209 11.8966C9.5553 12.354 9.2 13.0149 9.2 13.75C9.2 15.1307 10.4536 16.25 12 16.25C13.5464 16.25 14.8 15.1307 14.8 13.75C14.8 13.0149 14.4447 12.354 13.8796 11.8984C14.2658 11.4584 14.5 10.8815 14.5 10.25C14.5 8.86929 13.3807 7.75 12 7.75ZM12 12.75C12.7535 12.75 13.3 13.238 13.3 13.75C13.3 14.262 12.7535 14.75 12 14.75C11.2465 14.75 10.7 14.262 10.7 13.75C10.7 13.238 11.2465 12.75 12 12.75ZM12 9.25C12.5523 9.25 13 9.69772 13 10.25C13 10.8023 12.5523 11.25 12 11.25C11.4477 11.25 11 10.8023 11 10.25C11 9.69772 11.4477 9.25 12 9.25Z"},"child":[]}]})(props);
-}
-
-const SPORTS = [
-  { key: "soccer", icon: IoMdFootball, color: "text-chart-5 bg-chart-5", sportNames: ["Soccer"] },
-  { key: "cricket", icon: MdSportsCricket, color: "text-chart-1 bg-chart-1", sportNames: ["Cricket"] },
-  { key: "basketball", icon: CiBasketball, color: "text-chart-2 bg-chart-2", sportNames: ["Basketball"] },
-  { key: "baseball", icon: GiBaseballBat, color: "text-chart-6 bg-chart-6", sportNames: ["Baseball"] },
-  { key: "tennis", icon: FaTableTennis, color: "text-chart-3 bg-chart-3", sportNames: ["Tennis"] },
-  { key: "american_football", icon: FaFootballBall, color: "text-chart-4 bg-chart-4", sportNames: ["American Football"] },
-  { key: "volleyball", icon: FaVolleyballBall, color: "text-chart-7 bg-chart-7", sportNames: ["Volleyball"] },
-  { key: "table_tennis", icon: GiPingPongBat, color: "text-chart-8 bg-chart-8", sportNames: ["Table Tennis"] },
-  { key: "mma", icon: GiBoxingGlove, color: "text-chart-9 bg-chart-9", sportNames: ["MMA"] },
-  { key: "kabaddi", icon: GiRunningNinja, color: "text-chart-10 bg-chart-10", sportNames: ["Kabaddi"] },
-  { key: "ice_hockey", icon: GiHockey, color: "text-chart-11 bg-chart-11", sportNames: ["Ice Hockey"] },
-  { key: "badminton", icon: GiShuttlecock, color: "text-chart-12 bg-chart-12", sportNames: ["Badminton"] },
-  { key: "rugby", icon: GiRugbyConversion, color: "text-chart-13 bg-chart-13", sportNames: ["Rugby"] },
-  { key: "darts", icon: GiDart, color: "text-chart-14 bg-chart-14", sportNames: ["Darts"] },
-  { key: "snooker", icon: RiBilliardsLine, color: "text-chart-15 bg-chart-15", sportNames: ["Snooker"] },
-  { key: "futsal", icon: GiSoccerField, color: "text-chart-16 bg-chart-16", sportNames: ["Futsal"] },
-];
-
-const SPORT_ID_BY_KEY = {
-  basketball: "sr:sport:2",
-  table_tennis: "sr:sport:20",
-  soccer: "sr:sport:1",
-  baseball: "sr:sport:3",
-  mma: "sr:sport:117",
-  kabaddi: "sr:sport:138",
-  ice_hockey: "sr:sport:4",
-  tennis: "sr:sport:5",
-  cricket: "sr:sport:21",
-  badminton: "sr:sport:31",
-  american_football: "sr:sport:16",
-  rugby: "sr:sport:12",
-  darts: "sr:sport:22",
-  volleyball: "sr:sport:23",
-  snooker: "sr:sport:19",
-  futsal: "sr:sport:29",
-};
-
 // packages/react/compose-refs/src/compose-refs.tsx
-const React$1h = await importShared('react');
+const React$1l = await importShared('react');
 
 function setRef(ref, value) {
   if (typeof ref === "function") {
@@ -6849,29 +9106,29 @@ function composeRefs(...refs) {
   };
 }
 function useComposedRefs(...refs) {
-  return React$1h.useCallback(composeRefs(...refs), refs);
+  return React$1l.useCallback(composeRefs(...refs), refs);
 }
 
 // src/slot.tsx
-const React$1g = await importShared('react');
+const React$1k = await importShared('react');
 // @__NO_SIDE_EFFECTS__
 function createSlot(ownerName) {
   const SlotClone = /* @__PURE__ */ createSlotClone(ownerName);
-  const Slot2 = React$1g.forwardRef((props, forwardedRef) => {
+  const Slot2 = React$1k.forwardRef((props, forwardedRef) => {
     const { children, ...slotProps } = props;
-    const childrenArray = React$1g.Children.toArray(children);
+    const childrenArray = React$1k.Children.toArray(children);
     const slottable = childrenArray.find(isSlottable);
     if (slottable) {
       const newElement = slottable.props.children;
       const newChildren = childrenArray.map((child) => {
         if (child === slottable) {
-          if (React$1g.Children.count(newElement) > 1) return React$1g.Children.only(null);
-          return React$1g.isValidElement(newElement) ? newElement.props.children : null;
+          if (React$1k.Children.count(newElement) > 1) return React$1k.Children.only(null);
+          return React$1k.isValidElement(newElement) ? newElement.props.children : null;
         } else {
           return child;
         }
       });
-      return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children: React$1g.isValidElement(newElement) ? React$1g.cloneElement(newElement, void 0, newChildren) : null });
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children: React$1k.isValidElement(newElement) ? React$1k.cloneElement(newElement, void 0, newChildren) : null });
     }
     return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children });
   });
@@ -6881,24 +9138,24 @@ function createSlot(ownerName) {
 var Slot$2 = /* @__PURE__ */ createSlot("Slot");
 // @__NO_SIDE_EFFECTS__
 function createSlotClone(ownerName) {
-  const SlotClone = React$1g.forwardRef((props, forwardedRef) => {
+  const SlotClone = React$1k.forwardRef((props, forwardedRef) => {
     const { children, ...slotProps } = props;
-    if (React$1g.isValidElement(children)) {
+    if (React$1k.isValidElement(children)) {
       const childrenRef = getElementRef$2(children);
       const props2 = mergeProps(slotProps, children.props);
-      if (children.type !== React$1g.Fragment) {
+      if (children.type !== React$1k.Fragment) {
         props2.ref = forwardedRef ? composeRefs(forwardedRef, childrenRef) : childrenRef;
       }
-      return React$1g.cloneElement(children, props2);
+      return React$1k.cloneElement(children, props2);
     }
-    return React$1g.Children.count(children) > 1 ? React$1g.Children.only(null) : null;
+    return React$1k.Children.count(children) > 1 ? React$1k.Children.only(null) : null;
   });
   SlotClone.displayName = `${ownerName}.SlotClone`;
   return SlotClone;
 }
 var SLOTTABLE_IDENTIFIER = Symbol("radix.slottable");
 function isSlottable(child) {
-  return React$1g.isValidElement(child) && typeof child.type === "function" && "__radixId" in child.type && child.type.__radixId === SLOTTABLE_IDENTIFIER;
+  return React$1k.isValidElement(child) && typeof child.type === "function" && "__radixId" in child.type && child.type.__radixId === SLOTTABLE_IDENTIFIER;
 }
 function mergeProps(slotProps, childProps) {
   const overrideProps = { ...childProps };
@@ -6979,7 +9236,7 @@ const cva = (base, config)=>(props)=>{
         return cx(base, getVariantClassNames, getCompoundVariantClassNames, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
     };
 
-const React$1f = await importShared('react');
+const React$1j = await importShared('react');
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
@@ -7005,7 +9262,7 @@ const buttonVariants = cva(
     }
   }
 );
-const Button$1 = React$1f.forwardRef(
+const Button$1 = React$1j.forwardRef(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot$2 : "button";
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -7020,6 +9277,577 @@ const Button$1 = React$1f.forwardRef(
   }
 );
 Button$1.displayName = "Button";
+
+const React$1i = await importShared('react');
+const CarouselContext = React$1i.createContext(null);
+function useCarousel() {
+  const context = React$1i.useContext(CarouselContext);
+  if (!context) {
+    throw new Error("useCarousel must be used within a <Carousel />");
+  }
+  return context;
+}
+function Carousel({
+  orientation = "horizontal",
+  opts,
+  setApi,
+  plugins,
+  className,
+  children,
+  ...props
+}) {
+  const [carouselRef, api] = useEmblaCarousel({
+    ...opts,
+    axis: orientation === "horizontal" ? "x" : "y"
+  }, plugins);
+  const [canScrollPrev, setCanScrollPrev] = React$1i.useState(false);
+  const [canScrollNext, setCanScrollNext] = React$1i.useState(false);
+  const onSelect = React$1i.useCallback((api2) => {
+    if (!api2) return;
+    setCanScrollPrev(api2.canScrollPrev());
+    setCanScrollNext(api2.canScrollNext());
+  }, []);
+  const scrollPrev = React$1i.useCallback(() => {
+    api?.scrollPrev();
+  }, [api]);
+  const scrollNext = React$1i.useCallback(() => {
+    api?.scrollNext();
+  }, [api]);
+  const handleKeyDown = React$1i.useCallback((event) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      scrollPrev();
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      scrollNext();
+    }
+  }, [scrollPrev, scrollNext]);
+  React$1i.useEffect(() => {
+    if (!api || !setApi) return;
+    setApi(api);
+  }, [api, setApi]);
+  React$1i.useEffect(() => {
+    if (!api) return;
+    onSelect(api);
+    api.on("reInit", onSelect);
+    api.on("select", onSelect);
+    return () => {
+      api?.off("select", onSelect);
+    };
+  }, [api, onSelect]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    CarouselContext.Provider,
+    {
+      value: {
+        carouselRef,
+        api,
+        opts,
+        orientation: orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
+        scrollPrev,
+        scrollNext,
+        canScrollPrev,
+        canScrollNext
+      },
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "div",
+        {
+          onKeyDownCapture: handleKeyDown,
+          className: cn$1("relative", className),
+          role: "region",
+          "aria-roledescription": "carousel",
+          "data-slot": "carousel",
+          ...props,
+          children
+        }
+      )
+    }
+  );
+}
+function CarouselContent({
+  className,
+  ...props
+}) {
+  const { carouselRef, orientation } = useCarousel();
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "div",
+    {
+      ref: carouselRef,
+      className: "overflow-hidden",
+      "data-slot": "carousel-content",
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "div",
+        {
+          className: cn$1(
+            "flex",
+            orientation === "horizontal" ? "-ml-4" : "-mt-4 flex-col",
+            className
+          ),
+          ...props
+        }
+      )
+    }
+  );
+}
+function CarouselItem({
+  className,
+  ...props
+}) {
+  const { orientation } = useCarousel();
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "div",
+    {
+      role: "group",
+      "aria-roledescription": "slide",
+      "data-slot": "carousel-item",
+      className: cn$1(
+        "min-w-0 shrink-0 grow-0 basis-full",
+        orientation === "horizontal" ? "pl-4" : "pt-4",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function CarouselPrevious({
+  className,
+  variant = "outline",
+  size = "icon",
+  ...props
+}) {
+  const { orientation, scrollPrev, canScrollPrev } = useCarousel();
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    Button$1,
+    {
+      "data-slot": "carousel-previous",
+      variant,
+      size,
+      className: cn$1("absolute size-8 rounded-full", orientation === "horizontal" ? "top-1/2 -left-12 -translate-y-1/2" : "-top-12 left-1/2 -translate-x-1/2 rotate-90", className),
+      disabled: !canScrollPrev,
+      onClick: scrollPrev,
+      ...props,
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowLeft, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sr-only", children: "Previous slide" })
+      ]
+    }
+  );
+}
+function CarouselNext({
+  className,
+  variant = "outline",
+  size = "icon",
+  ...props
+}) {
+  const { orientation, scrollNext, canScrollNext } = useCarousel();
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    Button$1,
+    {
+      "data-slot": "carousel-next",
+      variant,
+      size,
+      className: cn$1("absolute size-8 rounded-full", orientation === "horizontal" ? "top-1/2 -right-12 -translate-y-1/2" : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90", className),
+      disabled: !canScrollNext,
+      onClick: scrollNext,
+      ...props,
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sr-only", children: "Next slide" })
+      ]
+    }
+  );
+}
+
+const React$1h = await importShared('react');
+const {useState: useState$k,useRef: useRef$9,useEffect: useEffect$f} = React$1h;
+const casinoBanners = [
+  { id: 1, src: "/casinoBanners/casino1.png", alt: "Casino Banner 1" },
+  { id: 2, src: "/casinoBanners/casino2.png", alt: "Casino Banner 2" }
+];
+const GameCategoryButton = ({ icon, label, isActive, onClick }) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+  "div",
+  {
+    className: `casino-category-button ${isActive ? "active" : ""}`,
+    onClick,
+    children: [
+      icon,
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `casino-category-label ${isActive ? "active" : "inactive"}`, children: label })
+    ]
+  }
+);
+const Casino = () => {
+  useNavigate();
+  useLocation();
+  const [activeTab, setActiveTab] = useState$k("home");
+  const [searchQuery, setSearchQuery] = useState$k("");
+  const intervalRef = useRef$9(null);
+  const apiRef = useRef$9(null);
+  const tabs = [
+    { id: "home", label: "Home", to: "/casino" },
+    { id: "tournaments", label: "Tournaments", to: "/casino/tournaments" }
+  ];
+  const gameCategories = [
+    { id: "all", label: "All Games", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-all", children: "All" }) },
+    { id: "popular", label: "Popular Games", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "P" }) },
+    { id: "table", label: "Table Games", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "T" }) },
+    { id: "arcade", label: "Arcade Games", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "A" }) },
+    { id: "video", label: "Video Bingo", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "V" }) },
+    { id: "instant", label: "Instant Game", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "I" }) },
+    { id: "betting", label: "Betting Games", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "B" }) },
+    { id: "megaways", label: "Megaways", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "M" }) },
+    { id: "lottery", label: "Lottery Games", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "L" }) },
+    { id: "slots", label: "Top Slots", icon: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-category-icon-container casino-category-icon-default", children: "S" }) }
+  ];
+  const [activeCategory, setActiveCategory] = useState$k("all");
+  const setApi = (api) => {
+    apiRef.current = api;
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    if (api) {
+      intervalRef.current = setInterval(() => {
+        api.scrollNext();
+      }, 3e3);
+    }
+  };
+  useEffect$f(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+  const handleUserInteraction = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    if (apiRef.current) {
+      intervalRef.current = setInterval(() => {
+        apiRef.current.scrollNext();
+      }, 3e3);
+    }
+  };
+  const handleCategoryChange = (categoryId) => {
+    setActiveCategory(categoryId);
+  };
+  const handleProviderSearch = (query) => {
+    setSearchQuery(query);
+  };
+  const handleGameSearch = (query) => {
+    setSearchQuery(query);
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-container", style: { paddingTop: "7rem" }, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "flex bg-live-secondary border-b border-live px-6 h-12 items-center gap-2 mb-6", children: tabs.map((tab) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      NavLink,
+      {
+        to: tab.to,
+        className: ({ isActive }) => `h-full flex items-center px-5 text-base font-semibold transition-colors duration-200 border-b-2 ${isActive ? "text-live-primary border-live-accent bg-live-secondary" : "text-live-muted border-transparent hover:text-live-primary hover:border-live-accent"}`,
+        children: tab.label
+      },
+      tab.id
+    )) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full rounded-lg overflow-hidden shadow-lg mb-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Carousel,
+      {
+        className: "w-full",
+        opts: { loop: true },
+        setApi,
+        onMouseEnter: () => {
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+          }
+        },
+        onMouseLeave: handleUserInteraction,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(CarouselContent, { className: "custom-scrollbar", children: casinoBanners.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(CarouselItem, { className: "w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "img",
+          {
+            src: item.src,
+            alt: item.alt,
+            className: "w-full object-contain rounded-sm"
+          }
+        ) }) }, item.id)) })
+      }
+    ) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "casino-featured-banner mb-6", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "img",
+        {
+          src: "https://placehold.co/1600x800/2a2a2a/FFA500?text=Olympus+Hades+Megaways",
+          alt: "Featured Game",
+          className: "casino-banner-img"
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-game-name-overlay", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-game-name-badge", children: "Olympus Hades megaways" }) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-categories-container mb-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-categories-flex", children: gameCategories.map((category) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      GameCategoryButton,
+      {
+        icon: category.icon,
+        label: category.label,
+        isActive: activeCategory === category.id,
+        onClick: () => handleCategoryChange(category.id)
+      },
+      category.id
+    )) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-6", style: { height: "600px" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      CasinoProvidersGamesSection,
+      {
+        onProviderSearch: handleProviderSearch,
+        onGameSearch: handleGameSearch
+      }
+    ) })
+  ] });
+};
+
+const React$1g = await importShared('react');
+const {useState: useState$j} = React$1g;
+const CasinoTournaments = () => {
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState$j("tournaments");
+  const tabs = [
+    { id: "home", label: "Home" },
+    { id: "tournaments", label: "Tournaments" }
+  ];
+  const handleTabChange = (tabId) => {
+    if (tabId === "home") {
+      navigate("/casino/slots");
+    } else {
+      setActiveTab(tabId);
+    }
+  };
+  const tournaments = [
+    {
+      id: 1,
+      title: "Summer Slots Championship",
+      prize: "$50,000",
+      dates: "Aug 1 - Aug 31, 2025",
+      image: "https://placehold.co/400x200/2a2a2a/FFA500?text=Summer+Championship"
+    },
+    {
+      id: 2,
+      title: "Weekend Warriors",
+      prize: "$10,000",
+      dates: "Every Weekend",
+      image: "https://placehold.co/400x200/2a2a2a/FF5500?text=Weekend+Warriors"
+    },
+    {
+      id: 3,
+      title: "Megaways Masters",
+      prize: "$25,000",
+      dates: "Sep 15 - Sep 30, 2025",
+      image: "https://placehold.co/400x200/2a2a2a/00AAFF?text=Megaways+Masters"
+    }
+  ];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-black text-white min-h-screen pb-10", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-full h-[300px] overflow-hidden", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "img",
+        {
+          src: "https://placehold.co/1600x600/2a2a2a/FFCC00?text=Casino+Tournaments",
+          alt: "Tournaments Banner",
+          className: "w-full h-full object-cover"
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-0 left-0 right-0 flex space-x-8 px-8 py-4", children: tabs.map((tab) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          className: cn$1(
+            "text-base font-medium px-2 py-1 relative",
+            activeTab === tab.id ? "text-white" : "text-gray-400 hover:text-gray-200"
+          ),
+          onClick: () => handleTabChange(tab.id),
+          children: [
+            tab.label,
+            activeTab === tab.id && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-0 left-0 w-full h-1 bg-yellow-500 rounded-t-md" })
+          ]
+        },
+        tab.id
+      )) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute bottom-0 left-0 right-0 text-center p-8 bg-gradient-to-t from-black to-transparent", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-3xl font-bold uppercase mb-2", children: "CASINO TOURNAMENTS" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-300", children: "Compete for massive prizes in our exclusive tournaments" })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto px-4 py-10", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-2xl font-bold mb-6", children: "Active Tournaments" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6", children: tournaments.map((tournament) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-gray-800 rounded-lg overflow-hidden shadow-lg", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "img",
+          {
+            src: tournament.image,
+            alt: tournament.title,
+            className: "w-full h-48 object-cover"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xl font-bold mb-2", children: tournament.title }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center mb-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-400 text-sm", children: "Prize Pool" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-yellow-500 font-bold", children: tournament.prize })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-400 text-sm", children: "Dates" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-white", children: tournament.dates })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "w-full bg-yellow-500 text-black font-bold py-3 rounded-md hover:bg-yellow-600 transition duration-200", children: "Join Tournament" })
+        ] })
+      ] }, tournament.id)) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto px-4 py-10", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-2xl font-bold mb-6", children: "Upcoming Tournaments" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-gray-900 p-6 rounded-lg", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-center text-gray-400", children: "Stay tuned for more exciting tournaments coming soon!" }) })
+    ] })
+  ] });
+};
+
+const React$1f = await importShared('react');
+
+var DefaultContext = {
+  color: undefined,
+  size: undefined,
+  className: undefined,
+  style: undefined,
+  attr: undefined
+};
+var IconContext = React$1f.createContext && /*#__PURE__*/React$1f.createContext(DefaultContext);
+
+var _excluded = ["attr", "size", "title"];
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } } return target; }
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), true).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == typeof i ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != typeof t || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r); if ("object" != typeof i) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+const React$1e = await importShared('react');
+function Tree2Element(tree) {
+  return tree && tree.map((node, i) => /*#__PURE__*/React$1e.createElement(node.tag, _objectSpread({
+    key: i
+  }, node.attr), Tree2Element(node.child)));
+}
+function GenIcon(data) {
+  return props => /*#__PURE__*/React$1e.createElement(IconBase, _extends({
+    attr: _objectSpread({}, data.attr)
+  }, props), Tree2Element(data.child));
+}
+function IconBase(props) {
+  var elem = conf => {
+    var {
+        attr,
+        size,
+        title
+      } = props,
+      svgProps = _objectWithoutProperties(props, _excluded);
+    var computedSize = size || conf.size || "1em";
+    var className;
+    if (conf.className) className = conf.className;
+    if (props.className) className = (className ? className + " " : "") + props.className;
+    return /*#__PURE__*/React$1e.createElement("svg", _extends({
+      stroke: "currentColor",
+      fill: "currentColor",
+      strokeWidth: "0"
+    }, conf.attr, attr, svgProps, {
+      className: className,
+      style: _objectSpread(_objectSpread({
+        color: props.color || conf.color
+      }, conf.style), props.style),
+      height: computedSize,
+      width: computedSize,
+      xmlns: "http://www.w3.org/2000/svg"
+    }), title && /*#__PURE__*/React$1e.createElement("title", null, title), props.children);
+  };
+  return IconContext !== undefined ? /*#__PURE__*/React$1e.createElement(IconContext.Consumer, null, conf => elem(conf)) : elem(DefaultContext);
+}
+
+// THIS FILE IS AUTO GENERATED
+function IoMdFootball (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M256 48C141.3 48 48 141.3 48 256s93.3 208 208 208 208-93.3 208-208S370.7 48 256 48zM127 238.2l39.2 17.9 17.1 66.9-15.6 29.3-57.2-.7C95.6 329 86.2 303.1 83 276.3l44-38.1zm217.3 114.1L328.7 323l17.1-67 39.1-17.8 44 38.1c-3.1 26.8-12.6 52.7-27.5 75.3l-57.1.7zm32.4-146.2l-43.6 19.6-61.1-51.6v-47.2l47.9-32.6c29.8 11.9 56.4 32.3 75.6 57.8l-18.8 54zM191.3 94.4l47.7 32.5v47.2l-61 51.5-43-19.6-18.7-53.6c19.3-26.1 45.1-46 75-58zM218.4 426c-.7-.2-1.3-.3-2-.5l-20.5-55.1 14.7-29.4h90.8l15 30.3-19.8 53.9c-1 .2-2 .5-3 .7-11.5 2.3-27 3.8-40.4 4.1-11.7-.1-23.4-1.5-34.8-4z"},"child":[]}]})(props);
+}
+
+// THIS FILE IS AUTO GENERATED
+function MdSportsCricket (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 24 24"},"child":[{"tag":"path","attr":{"fill":"none","d":"M0 0h24v24H0z"},"child":[]},{"tag":"path","attr":{"d":"M15.05 12.81 6.56 4.32a.996.996 0 0 0-1.41 0L2.32 7.15a.996.996 0 0 0 0 1.41l8.49 8.49c.39.39 1.02.39 1.41 0l2.83-2.83a.996.996 0 0 0 0-1.41zM14.341 17.756l1.414-1.414 4.243 4.243-1.414 1.414z"},"child":[]},{"tag":"circle","attr":{"cx":"18.5","cy":"5.5","r":"3.5"},"child":[]}]})(props);
+}
+
+// THIS FILE IS AUTO GENERATED
+function CiBasketball (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 24 24"},"child":[{"tag":"g","attr":{"id":"Basketball"},"child":[{"tag":"path","attr":{"d":"M19.02,4.971a9.941,9.941,0,1,0,0,14.05A9.941,9.941,0,0,0,19.02,4.971Zm-13.34.71a8.894,8.894,0,0,1,6.05-2.6,8.812,8.812,0,0,1-2.61,6.04,8.75,8.75,0,0,1-6.04,2.61A8.875,8.875,0,0,1,5.68,5.681ZM3.1,12.731a9.772,9.772,0,0,0,6.73-2.9,9.8,9.8,0,0,0,2.9-6.73,8.908,8.908,0,0,1,5.23,2.24L5.34,17.951A8.881,8.881,0,0,1,3.1,12.731Zm8.18,8.17a8.872,8.872,0,0,1-5.23-2.24L18.66,6.041a8.91,8.91,0,0,1,2.24,5.24,9.86,9.86,0,0,0-9.62,9.62Zm7.04-2.59a8.856,8.856,0,0,1-6.04,2.61,8.851,8.851,0,0,1,8.64-8.64A8.847,8.847,0,0,1,18.32,18.311Z"},"child":[]}]}]})(props);
+}
+
+// THIS FILE IS AUTO GENERATED
+function GiBaseballBat (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M429.725 54.54c-3.023.094-5.838 1.16-8.16 3.48l-.055.056-.057.055s-115.29 111.285-169.37 169.364c-28.277 30.37-56.8 65.693-88.448 102.922l17.726 17.73c37.02-31.78 72.285-60.387 103.388-88.236 58.86-52.703 169.174-169.187 169.174-169.187l.084-.09.088-.088c11.49-11.49-7.83-35.118-23.063-35.988-.438-.025-.874-.032-1.305-.018zM151.89 344.13c-17.598 20.413-36.214 41.272-56.33 62.114l10.327 10.248c20.79-20.14 41.52-38.848 61.828-56.54l-15.824-15.823zm-80.21 63.776l-9.9 9.9 32.652 32.4 9.9-9.9-32.652-32.4z"},"child":[]}]})(props);
+}function GiBoxingGlove (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M141.977 56.943c-.635.004-1.27.02-1.905.053-2.903.145-5.805.58-8.7 1.326-28.33 7.294-56.425 29.248-77.058 57.844-20.632 28.596-33.67 63.593-33.554 95.455.06 16.533 6.94 27.84 18.886 36.927 7.29 5.544 16.59 9.97 27.032 13.23-1.023-14.32-.482-29.776 3.957-42.71l16.844 5.783c-15.886 57.862 18.713 102.134 69.65 142.007-2.305-28.866 2.355-59.986 15.7-91.345-1.265-7.76-1.14-16.392.57-25.664 4.65-25.21 20.01-56.115 49.88-93.414l14.59 11.68c-28.65 35.777-42.302 64.575-46.09 85.122-3.79 20.548 1.342 31.848 10.048 38.176 8.706 6.328 23.24 8.047 40.315 2.526 17.073-5.522 36.13-18.136 52.42-38.405 40.154-49.957 56.8-91.026 58.064-120.484 1.265-29.46-11.115-47.414-32.752-56.937C276.602 59.067 191.21 80.82 119.7 162.938l-14.095-12.272c26.81-30.786 55.632-54.11 84.143-70.29-15.18-14.578-31.464-23.538-47.77-23.433zm230.76 85.89c-.65-.005-1.303.005-1.956.01-3.553 34.283-22.66 75.888-61.65 124.397-18.358 22.844-40.163 37.666-61.237 44.48-21.075 6.816-41.974 5.77-57.053-5.19-2.737-1.99-5.203-4.298-7.387-6.887-20.753 63.805-2.12 122.793 34.906 158.587 25.613 24.76 60.005 38.354 97.472 34.727 37.467-3.627 78.5-24.527 116.943-70.998 84.462-102.102 71.214-199.61 19.823-247.646-21.08-19.702-48.703-31.302-79.862-31.482z"},"child":[]}]})(props);
+}function GiDart (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M134.745 22.098c-4.538-.146-9.08 1.43-14.893 7.243-5.586 5.586-11.841 21.725-15.248 35.992-.234.979-.444 1.907-.654 2.836l114.254 105.338c-7.18-28.538-17.555-59.985-29.848-86.75-11.673-25.418-25.249-46.657-37.514-57.024-6.132-5.183-11.56-7.488-16.097-7.635zM92.528 82.122L82.124 92.526 243.58 267.651l24.072-24.072L92.528 82.122zm-24.357 21.826c-.929.21-1.857.42-2.836.654-14.267 3.407-30.406 9.662-35.993 15.248-5.813 5.813-7.39 10.355-7.244 14.893.147 4.538 2.452 9.965 7.635 16.098 10.367 12.265 31.608 25.842 57.025 37.515 26.766 12.293 58.211 22.669 86.749 29.848L68.17 103.948zM280.899 255.79l-25.107 25.107 73.265 79.469 31.31-31.31L280.9 255.79zm92.715 85.476l-32.346 32.344 2.07 2.246c.061.058 4.419 4.224 10.585 6.28 6.208 2.069 12.71 2.88 21.902-6.313 9.192-9.192 8.38-15.694 6.31-21.902-2.057-6.174-6.235-10.54-6.283-10.59l-2.238-2.065zm20.172 41.059a46.23 46.23 0 0 1-5.233 6.226 46.241 46.241 0 0 1-6.226 5.235L489.91 489.91l-96.125-107.586z"},"child":[]}]})(props);
+}function GiHockey (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M404.4 18l-18.642 48.578 62.498 9.41L470.98 18zm-25.246 65.787l-48.8 127.158-5.004.89c-15.403 2.74-30.98 5.11-46.71 7.157l39.094 85.52c16.356-5.765 32.46-11.918 48.248-18.555l75.54-192.78zM259.89 221.27c-7.35.832-14.732 1.598-22.146 2.294l35.307 95.586c9.26-2.82 18.453-5.743 27.573-8.777zm-40.744 3.898c-8.13.642-16.292 1.215-24.49 1.71l33.377 105.138c9.296-2.495 18.54-5.066 27.727-7.725zm-43.058 2.71c-8.492.4-17.02.73-25.576.99l30.465 115.087c9.92-2.39 19.797-4.84 29.623-7.365zm-138.71.907c-3.157.074-5.14 1.152-7.48 3.582-2.672 2.778-5.33 7.782-7.164 14.528-3.668 13.49-4.03 33.372-1.15 53.046 2.88 19.676 8.982 39.287 16.787 52.623 3.904 6.667 8.216 11.694 12.234 14.576 3.974 2.85 7.286 3.764 11.17 3.22 8.434-1.778 16.847-3.575 25.265-5.368l17.26-135.365c-21.577.08-43.32-.193-65.22-.8l-.137-.005-.134-.008c-.505-.03-.98-.04-1.43-.03zm94.636.547c-3.175.06-6.364.093-9.547.137l-16.774 131.538c19.35-4.177 38.62-8.448 57.758-12.908zm270.412 144.063c-25.497 0-48.55 4.41-64.422 11.023-7.936 3.307-14.03 7.183-17.72 10.818-3.69 3.635-4.858 6.554-4.858 9.16 0 2.603 1.17 5.522 4.86 9.157 3.69 3.635 9.782 7.51 17.718 10.818 15.872 6.615 38.925 11.025 64.422 11.025 25.496 0 48.547-4.41 64.42-11.024 7.936-3.306 14.028-7.182 17.718-10.817 3.69-3.635 4.862-6.554 4.862-9.158 0-2.605-1.17-5.524-4.862-9.16-3.69-3.634-9.782-7.51-17.718-10.817-15.873-6.613-38.924-11.023-64.42-11.023zm-87 59.304v27.695c0 2.604 1.17 5.523 4.86 9.158 3.69 3.635 9.782 7.51 17.718 10.818 15.872 6.615 38.925 11.025 64.422 11.025 25.496 0 48.547-4.41 64.42-11.024 7.936-3.306 14.028-7.182 17.718-10.817 3.69-3.635 4.862-6.554 4.862-9.158V432.7c-4.59 3.128-9.84 5.863-15.656 8.286-18.873 7.864-43.82 12.41-71.344 12.41-27.523 0-52.47-4.546-71.344-12.41-5.816-2.423-11.068-5.158-15.656-8.287z"},"child":[]}]})(props);
+}function GiPingPongBat (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M323.438 21.28c-1.136-.002-2.276.004-3.407.032-5.167.13-10.286.566-15.342 1.313-40.45 5.973-78.013 31.68-108.5 65.5-30.488 33.82-53.72 75.57-65.688 111.563-5.985 17.996-9.117 34.56-9.22 47.593-.1 13.034 2.973 21.942 7.282 26.25L238.438 383.44c4.31 4.31 13.25 7.383 26.282 7.28 11.386-.088 25.464-2.49 40.842-7.093 1.27-18.692 9.452-36.646 22.875-49.906 14.647-14.47 34.892-22.75 55.563-22.75 12.415 0 24.67 3.01 35.656 8.53 1.406-1.22 2.808-2.443 4.188-3.688 33.82-30.487 59.558-68.05 65.53-108.5 5.974-40.45-6.884-84.572-53.5-131.187C396.362 36.61 358.65 21.37 323.438 21.28zM135.375 305.814c.336 28.81-13.204 52.198-32.063 71.75-23.56 24.425-54.908 45.003-80.78 69.843 5.21 17.185 8.287 25.638 12.374 29.78 4.09 4.146 12.346 7.215 29.594 12.283 24.656-25.833 44.44-57.94 68.5-82 12.625-12.627 26.7-23.098 43.594-28.408 8.804-2.766 18.313-3.977 28.5-3.53l-69.72-69.72zM384 328.969c-15.79 0-31.774 6.565-42.906 17.56-11.132 10.998-17.724 26.717-17.72 42.22.006 15.497 6.59 31.23 17.72 42.22 11.13 10.988 27.12 17.53 42.906 17.53 15.785 0 31.775-6.542 42.906-17.53 11.13-10.99 17.714-26.723 17.72-42.22.004-15.503-6.588-31.222-17.72-42.22-11.132-10.995-27.115-17.56-42.906-17.56z"},"child":[]}]})(props);
+}function GiRugbyConversion (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M247 18v135.193c5.95-3.097 11.95-6.065 18-8.89V18h-18zm192 0v247.6l-174-.688v-60.457c-6.182 5.902-12.18 11.908-18 18V311h18v-28.088l174 .688V311h18V18h-18zm-80.1 71.914c-7.024-.18-15.588 2.472-20.54 6.463-7.925 6.386-14.468 22.533-9.155 29.127 5.313 6.594 22.48 3.634 30.406-2.752 7.926-6.386 14.47-22.533 9.158-29.127-1.993-2.473-5.653-3.602-9.868-3.71zm-54.125 57.334C168.5 198.266 48.38 324.17 25.043 471.803l17.316 3.365c15.157-100.106 61.737-149.502 92.28-179.856C120.173 337.77 79.376 405.92 78.27 482.145l21.605 4.2c4.238-108.047 78.028-244.59 204.902-339.097zM241.068 329v158h30V329h-30zm191.618 0v158h30V329h-30z"},"child":[]}]})(props);
+}function GiRunningNinja (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M378.321 58.818c-3.95 6.585-5.374 14.345-2.228 20.761 8.425 5.494 50.968 15.802 47.286 29.773-.784 2.301-1.087 3.54-1.515 5.224-7.4-6.764-22.462-10.05-27.902-9.049-4.832.843-9.721 3.05-14.44 3.248-5.986-.032-11.34-1.516-15.925-4.254 3.24 8.943 14.85 15.537 22.049 14.412 11.318-2.258 23.535 3.723 31.779 6.67-5.055 13.86-22.014 7.334-22.014 7.334l-121.937-28.02L253.44 90.45 236.1 108.17l88.945 29.131-120.023 2.676-29.907-12.486-40.77 23.617 182.99 13.291-56.212 59.426h99.22c19.341-15.746 63.009-51.2 63.645-50.793 12.867 29.973 33.256 19.023 48.815 1.55 4.515-5.069 9.47 12.362 12.021-16.015.64-1 1.217-2.011 1.772-3.03-18.028-7.661-48.58 5.732-31.817-17.992 5.135-7.262 20.776-5.296 36.871 3.97.582-15.262-1.056-42.396-15.484-48.39-14.85-6.169-34.024-5.48-41.316 2.682-9.946-16.88-39.574-19.07-51.307-20.764-3.453-5.429-4.558-10.479-5.223-16.226zm-188.328 59.236l-4.558 4.034 16.138 6.853 10.852-10.887zm276.578 24.354c6.542 4.808 7.01 5.943 11.393 6.1 1.597-1.021 5.12-4.613 1.857-5.37l-11.04-2.203c-1.14-.204-2.02.646-2.21 1.473zM148.167 160.44l-5.95 5.264h22.43l5.952-5.264zm-39.285 13.598l-12 15.357h15.855l5.461-6.414h42.592l-7.937 6.94h15.953l16-15.356zm15.664 15.933L20.251 309.592l23.027-4.516 98.618-115.104zM251.3 234.216L119.878 373.16l-16.697 4.265s-12.898 29.813-18.834 65.059c7.659 4.113 17.39-8.02 17.39-8.02s-1.1 13.09 6.64 9.743c14.097-28.569 29.864-58.248 29.864-58.248l159.721-121.877 20.994 5.584 27.758 7.386-62.557 58.727-11.238-12.15s-34.319 38.069-47.305 66.224c4.13 4.74 20.33-7.64 20.33-7.64s-5.369 9.615 1.932 9.31c17.808-16.694 29.682-29.826 29.682-29.826l132.82-98.543-48.23-28.938z"},"child":[]}]})(props);
+}function GiShuttlecock (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M256 25.577c-29.75 0-50.618 10.68-64.973 28.623-12.914 16.144-20.364 38.79-21.74 65.377h173.426c-1.376-26.586-8.826-49.233-21.74-65.377C306.618 36.257 285.75 25.577 256 25.577zm-87 112v14h174v-14H169zm12.443 32l-4.802 30H176v3.994l-12.357 77.167c1.428-.63 3.16-1.226 5.207-1.283.305-.01.616-.005.935.012.85.045 1.748.188 2.694.46 3.733 1.07 5.666 3.31 7.077 5.24.48.654.894 1.32 1.287 1.993l3.455-21.583h23.69l-.94 14.123c.77-.11 1.58-.17 2.448-.154.41.007.832.028 1.266.066 6.942.61 10.032 4.716 13.134 8.764.19.248.377.51.565.766l1.568-23.565h21.327v16.658c2.24-1.575 4.94-2.658 8.643-2.658 4.105 0 6.98 1.33 9.357 3.188v-17.188h22.065l1.726 21.443c2.796-3.567 5.923-6.866 12.088-7.408 2.057-.18 3.828.007 5.41.44l-1.166-14.475h23.25l3.41 20.04c.103-.15.194-.303.303-.452 1.41-1.928 3.344-4.17 7.078-5.24.947-.27 1.845-.414 2.695-.46.32-.016.63-.02.935-.01 2.137.06 3.942.705 5.405 1.364.392.176.757.372 1.125.566L336 200.966v-1.39h-.236l-5.104-30H312.4l5.104 30h-17.336l-2.414-30h-18.06l2.415 30h-16.753v-30h-18v30h-16.933l1.998-30h-18.04l-2 30H194.87l4.804-30h-18.23zm10.543 48h19.2l-2 30h-22.004l4.804-30zm37.24 0h18.13v30H227.23l1.997-30zm36.13 0h18.203l2.413 30h-20.616v-30zm36.26 0h18.95l5.104 30h-21.64l-2.413-30zm-92.542 81.246c-.26.187-.317.13-.615.403-2.248 2.058-5.392 5.725-8.773 10.486-6.76 9.522-14.636 23.43-21.718 39.035-14.166 31.21-24.75 69.83-20.933 93.586 1.633 10.164 4.142 16.383 9.713 22.98 5.046 5.977 13.334 12.386 25.902 20.348 7.703-3.16 13.956-6.07 19.063-8.903-6.09-7.457-9.938-16.05-12.442-25.98-7.73-30.66 1.108-71.263 13.133-105.434 2.81-7.982 5.82-15.557 8.914-22.56-1.638-4.26-3.286-8.186-4.902-11.6-2.498-5.278-4.953-9.437-6.807-11.856-.245-.322-.31-.274-.536-.504zm93.852 0c-.226.23-.29.182-.537.504-1.855 2.42-4.31 6.578-6.808 11.856-1.616 3.414-3.264 7.34-4.902 11.6 3.093 7.003 6.105 14.578 8.914 22.56 12.025 34.17 20.863 74.775 13.133 105.435-2.504 9.93-6.35 18.522-12.442 25.98 5.107 2.83 11.36 5.743 19.063 8.903 12.568-7.96 20.856-14.37 25.902-20.347 5.57-6.597 8.08-12.816 9.713-22.98 3.817-23.757-6.767-62.376-20.932-93.586-7.08-15.605-14.957-29.513-21.717-39.035-3.38-4.76-6.525-8.428-8.772-10.486-.297-.274-.353-.216-.614-.403zm-135.95 1.635c-1.903 1.823-4.114 4.144-6.685 7.29-7.01 8.585-15.662 21.378-23.95 35.925-16.576 29.093-31.543 65.874-32.223 89.785-.508 17.885 2.766 27.703 19.418 46.533 10.897-3.552 18.163-7.016 23.65-11.34-4.07-7.05-6.53-14.81-7.92-23.462-5.017-31.22 7.342-70.893 22.313-103.88 3.214-7.082 6.57-13.796 9.96-20.047-.554-3.766-1.154-7.28-1.798-10.41-.892-4.343-1.857-7.72-2.765-10.392zm178.05 0c-.91 2.672-1.874 6.05-2.766 10.39-.644 3.132-1.244 6.646-1.797 10.413 3.39 6.252 6.745 12.966 9.96 20.048 14.97 32.987 27.33 72.66 22.313 103.88-1.39 8.653-3.85 16.412-7.922 23.46 5.488 4.326 12.754 7.79 23.65 11.343 16.653-18.83 19.927-28.647 19.42-46.532-.68-23.91-15.648-60.692-32.224-89.785-8.288-14.547-16.94-27.34-23.95-35.924-2.572-3.148-4.783-5.47-6.685-7.292zm-96.97 9.328c-.153.258-.3.483-.454.746-5.9 10.077-12.528 24.62-18.217 40.785-11.378 32.33-18.54 71.73-12.658 95.06 2.516 9.983 5.562 15.958 11.69 22.042 5.55 5.51 14.366 11.172 27.583 18.003 13.217-6.83 22.034-12.493 27.584-18.004 6.127-6.085 9.173-12.06 11.69-22.042 5.882-23.332-1.28-62.73-12.66-95.06-5.688-16.166-12.315-30.71-18.216-40.786-.154-.263-.3-.488-.455-.746L256 465.108l-7.943-155.322z"},"child":[]}]})(props);
+}function GiSoccerField (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M23 119v274h466V119H23zm18 18h206v79.016c-18.25 4.135-32 20.537-32 39.984 0 19.447 13.75 35.85 32 39.984V375H41v-62h64V199H41v-62zm224 0h206v62h-64v114h64v62H265v-79.016c18.25-4.135 32-20.537 32-39.984 0-19.447-13.75-35.85-32-39.984V137zM41 217h46v78H41v-78zm384 0h46v78h-46v-78zm-178 17.793v42.414c-8.27-3.467-14-11.6-14-21.207 0-9.606 5.73-17.74 14-21.207zm18 0c8.27 3.467 14 11.6 14 21.207 0 9.606-5.73 17.74-14 21.207v-42.414z"},"child":[]}]})(props);
+}
+
+// THIS FILE IS AUTO GENERATED
+function FaFootballBall (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 496 512"},"child":[{"tag":"path","attr":{"d":"M481.5 60.3c-4.8-18.2-19.1-32.5-37.3-37.4C420.3 16.5 383 8.9 339.4 8L496 164.8c-.8-43.5-8.2-80.6-14.5-104.5zm-467 391.4c4.8 18.2 19.1 32.5 37.3 37.4 23.9 6.4 61.2 14 104.8 14.9L0 347.2c.8 43.5 8.2 80.6 14.5 104.5zM4.2 283.4L220.4 500c132.5-19.4 248.8-118.7 271.5-271.4L275.6 12C143.1 31.4 26.8 130.7 4.2 283.4zm317.3-123.6c3.1-3.1 8.2-3.1 11.3 0l11.3 11.3c3.1 3.1 3.1 8.2 0 11.3l-28.3 28.3 28.3 28.3c3.1 3.1 3.1 8.2 0 11.3l-11.3 11.3c-3.1 3.1-8.2 3.1-11.3 0l-28.3-28.3-22.6 22.7 28.3 28.3c3.1 3.1 3.1 8.2 0 11.3l-11.3 11.3c-3.1 3.1-8.2 3.1-11.3 0L248 278.6l-22.6 22.6 28.3 28.3c3.1 3.1 3.1 8.2 0 11.3l-11.3 11.3c-3.1 3.1-8.2 3.1-11.3 0l-28.3-28.3-28.3 28.3c-3.1 3.1-8.2 3.1-11.3 0l-11.3-11.3c-3.1-3.1-3.1-8.2 0-11.3l28.3-28.3-28.3-28.2c-3.1-3.1-3.1-8.2 0-11.3l11.3-11.3c3.1-3.1 8.2-3.1 11.3 0l28.3 28.3 22.6-22.6-28.3-28.3c-3.1-3.1-3.1-8.2 0-11.3l11.3-11.3c3.1-3.1 8.2-3.1 11.3 0l28.3 28.3 22.6-22.6-28.3-28.3c-3.1-3.1-3.1-8.2 0-11.3l11.3-11.3c3.1-3.1 8.2-3.1 11.3 0l28.3 28.3 28.3-28.5z"},"child":[]}]})(props);
+}function FaTableTennis (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M496.2 296.5C527.7 218.7 512 126.2 449 63.1 365.1-21 229-21 145.1 63.1l-56 56.1 211.5 211.5c46.1-62.1 131.5-77.4 195.6-34.2zm-217.9 79.7L57.9 155.9c-27.3 45.3-21.7 105 17.3 144.1l34.5 34.6L6.7 424c-8.6 7.5-9.1 20.7-1 28.8l53.4 53.5c8 8.1 21.2 7.6 28.7-1L177.1 402l35.7 35.7c19.7 19.7 44.6 30.5 70.3 33.3-7.1-17-11-35.6-11-55.1-.1-13.8 2.5-27 6.2-39.7zM416 320c-53 0-96 43-96 96s43 96 96 96 96-43 96-96-43-96-96-96z"},"child":[]}]})(props);
+}function FaVolleyballBall (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"d":"M231.39 243.48a285.56 285.56 0 0 0-22.7-105.7c-90.8 42.4-157.5 122.4-180.3 216.8a249 249 0 0 0 56.9 81.1 333.87 333.87 0 0 1 146.1-192.2zm-36.9-134.4a284.23 284.23 0 0 0-57.4-70.7c-91 49.8-144.8 152.9-125 262.2 33.4-83.1 98.4-152 182.4-191.5zm187.6 165.1c8.6-99.8-27.3-197.5-97.5-264.4-14.7-1.7-51.6-5.5-98.9 8.5A333.87 333.87 0 0 1 279.19 241a285 285 0 0 0 102.9 33.18zm-124.7 9.5a286.33 286.33 0 0 0-80.2 72.6c82 57.3 184.5 75.1 277.5 47.8a247.15 247.15 0 0 0 42.2-89.9 336.1 336.1 0 0 1-80.9 10.4c-54.6-.1-108.9-14.1-158.6-40.9zm-98.3 99.7c-15.2 26-25.7 54.4-32.1 84.2a247.07 247.07 0 0 0 289-22.1c-112.9 16.1-203.3-24.8-256.9-62.1zm180.3-360.6c55.3 70.4 82.5 161.2 74.6 253.6a286.59 286.59 0 0 0 89.7-14.2c0-2 .3-4 .3-6 0-107.8-68.7-199.1-164.6-233.4z"},"child":[]}]})(props);
+}
+
+// THIS FILE IS AUTO GENERATED
+function RiBilliardsLine (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 24 24","fill":"currentColor"},"child":[{"tag":"path","attr":{"d":"M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2ZM12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4ZM12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6ZM12 7.75C10.6193 7.75 9.5 8.86929 9.5 10.25C9.5 10.8815 9.73416 11.4584 10.1209 11.8966C9.5553 12.354 9.2 13.0149 9.2 13.75C9.2 15.1307 10.4536 16.25 12 16.25C13.5464 16.25 14.8 15.1307 14.8 13.75C14.8 13.0149 14.4447 12.354 13.8796 11.8984C14.2658 11.4584 14.5 10.8815 14.5 10.25C14.5 8.86929 13.3807 7.75 12 7.75ZM12 12.75C12.7535 12.75 13.3 13.238 13.3 13.75C13.3 14.262 12.7535 14.75 12 14.75C11.2465 14.75 10.7 14.262 10.7 13.75C10.7 13.238 11.2465 12.75 12 12.75ZM12 9.25C12.5523 9.25 13 9.69772 13 10.25C13 10.8023 12.5523 11.25 12 11.25C11.4477 11.25 11 10.8023 11 10.25C11 9.69772 11.4477 9.25 12 9.25Z"},"child":[]}]})(props);
+}
+
+const SPORTS = [
+  { key: "soccer", icon: IoMdFootball, color: "text-chart-5 bg-chart-5", sportNames: ["Soccer"] },
+  { key: "cricket", icon: MdSportsCricket, color: "text-chart-1 bg-chart-1", sportNames: ["Cricket"] },
+  { key: "basketball", icon: CiBasketball, color: "text-chart-2 bg-chart-2", sportNames: ["Basketball"] },
+  { key: "baseball", icon: GiBaseballBat, color: "text-chart-6 bg-chart-6", sportNames: ["Baseball"] },
+  { key: "tennis", icon: FaTableTennis, color: "text-chart-3 bg-chart-3", sportNames: ["Tennis"] },
+  { key: "american_football", icon: FaFootballBall, color: "text-chart-4 bg-chart-4", sportNames: ["American Football"] },
+  { key: "volleyball", icon: FaVolleyballBall, color: "text-chart-7 bg-chart-7", sportNames: ["Volleyball"] },
+  { key: "table_tennis", icon: GiPingPongBat, color: "text-chart-8 bg-chart-8", sportNames: ["Table Tennis"] },
+  { key: "mma", icon: GiBoxingGlove, color: "text-chart-9 bg-chart-9", sportNames: ["MMA"] },
+  { key: "kabaddi", icon: GiRunningNinja, color: "text-chart-10 bg-chart-10", sportNames: ["Kabaddi"] },
+  { key: "ice_hockey", icon: GiHockey, color: "text-chart-11 bg-chart-11", sportNames: ["Ice Hockey"] },
+  { key: "badminton", icon: GiShuttlecock, color: "text-chart-12 bg-chart-12", sportNames: ["Badminton"] },
+  { key: "rugby", icon: GiRugbyConversion, color: "text-chart-13 bg-chart-13", sportNames: ["Rugby"] },
+  { key: "darts", icon: GiDart, color: "text-chart-14 bg-chart-14", sportNames: ["Darts"] },
+  { key: "snooker", icon: RiBilliardsLine, color: "text-chart-15 bg-chart-15", sportNames: ["Snooker"] },
+  { key: "futsal", icon: GiSoccerField, color: "text-chart-16 bg-chart-16", sportNames: ["Futsal"] },
+];
+
+const SPORT_ID_BY_KEY = {
+  basketball: "sr:sport:2",
+  table_tennis: "sr:sport:20",
+  soccer: "sr:sport:1",
+  baseball: "sr:sport:3",
+  mma: "sr:sport:117",
+  kabaddi: "sr:sport:138",
+  ice_hockey: "sr:sport:4",
+  tennis: "sr:sport:5",
+  cricket: "sr:sport:21",
+  badminton: "sr:sport:31",
+  american_football: "sr:sport:16",
+  rugby: "sr:sport:12",
+  darts: "sr:sport:22",
+  volleyball: "sr:sport:23",
+  snooker: "sr:sport:19",
+  futsal: "sr:sport:29",
+};
 
 await importShared('react');
 
@@ -7104,7 +9932,7 @@ function GameCard({
   );
 }
 
-const React$1e = await importShared('react');
+const React$1d = await importShared('react');
 
 const SkeletonLoader = ({ type = "row", count = 1, className = "" }) => {
   const renderSkeleton = () => {
@@ -7174,7 +10002,7 @@ const SkeletonLoader = ({ type = "row", count = 1, className = "" }) => {
         return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `bg-gray-700 rounded animate-pulse ${className}` });
     }
   };
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: Array.from({ length: count }).map((_, index) => /* @__PURE__ */ jsxRuntimeExports.jsx(React$1e.Fragment, { children: renderSkeleton() }, index)) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: Array.from({ length: count }).map((_, index) => /* @__PURE__ */ jsxRuntimeExports.jsx(React$1d.Fragment, { children: renderSkeleton() }, index)) });
 };
 
 // Use the proxy endpoint to avoid CORS issues
@@ -7253,9 +10081,7 @@ async function fetchSportsEvents(sportId, liveMatches = true) {
     };
   } catch (error) {
     // Don't log aborted requests as errors
-    if (error.name !== 'AbortError') {
-      console.error(`API request failed for sport_id=${sportId}:`, error.message);
-    }
+    if (error.name !== 'AbortError') ;
     // Even if the endpoint fails, we should return a valid structure to prevent app crashes
     return {
       sports: [],
@@ -7318,8 +10144,37 @@ async function fetchMarketsData(eventId, sportId) {
   }
 }
 
-const React$1d = await importShared('react');
-const {useEffect: useEffect$d,useState: useState$i,useRef: useRef$9} = React$1d;
+// Fetch user bets actions
+const fetchUserBets = (userId, eventId) => {
+  return {
+    type: FETCH_USER_BETS,
+    payload: { userId, eventId },
+  };
+};
+
+const fetchUserBetsSuccess = (bets) => {
+  return {
+    type: FETCH_USER_BETS_SUCCESS,
+    payload: bets,
+  };
+};
+
+const fetchUserBetsFailure = (error) => {
+  return {
+    type: FETCH_USER_BETS_FAILURE,
+    payload: error,
+  };
+};
+
+// Action to skip the next automatic fetch
+const skipNextUserBetsFetch = () => {
+  return {
+    type: SKIP_NEXT_USER_BETS_FETCH,
+  };
+};
+
+const React$1c = await importShared('react');
+const {useEffect: useEffect$e,useState: useState$i,useRef: useRef$8} = React$1c;
 function normalize(str = "") {
   return str.trim().toLowerCase();
 }
@@ -7393,6 +10248,7 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
 }, setSelectedSport = () => {
 }, selectedMatch, onSelectedMatchOddsUpdate = () => {
 } }) {
+  useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const [search, setSearch] = useState$i("");
@@ -7405,10 +10261,10 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
   const [highlightedOdds, setHighlightedOdds] = useState$i({});
   const [pendingSelection, setPendingSelection] = useState$i(null);
   const [placeholderIndex, setPlaceholderIndex] = useState$i(0);
-  const oddsPrevRef = useRef$9({});
-  const placeholderIntervalRef = useRef$9(null);
+  const oddsPrevRef = useRef$8({});
+  const placeholderIntervalRef = useRef$8(null);
   const placeholderTexts = ["competition", "team", "date"];
-  useEffect$d(() => {
+  useEffect$e(() => {
     placeholderIntervalRef.current = setInterval(() => {
       setPlaceholderIndex((prev) => (prev + 1) % placeholderTexts.length);
     }, 1e3);
@@ -7418,16 +10274,16 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
       }
     };
   }, []);
-  useEffect$d(() => {
+  useEffect$e(() => {
     const { viewType } = location.state || {};
     if (viewType === "prematch") {
       setSelectedType("prematch");
     }
   }, [location.state]);
-  useEffect$d(() => {
+  useEffect$e(() => {
     if (location.state) ;
   }, []);
-  useEffect$d(() => {
+  useEffect$e(() => {
     const abortController = new AbortController();
     SPORTS.forEach((sport) => {
       const sportId = SPORT_ID_BY_KEY[sport.key];
@@ -7477,7 +10333,7 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
       abortController.abort();
     };
   }, [selectedType, location.key]);
-  useEffect$d(() => {
+  useEffect$e(() => {
     let intervalId;
     let abortController = new AbortController();
     function pollOdds() {
@@ -7491,7 +10347,6 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
             return;
           }
           if (!json || !Array.isArray(json.sports)) {
-            console.warn(`Invalid data received for sport ${sportKey}, skipping update`);
             return;
           }
           const list = json.sports;
@@ -7538,7 +10393,6 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
           if (error.name === "AbortError") {
             return;
           }
-          console.error(`Error polling odds for sport ${sportKey}:`, error);
         });
       });
     }
@@ -7547,11 +10401,9 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
         try {
           pollOdds();
         } catch (error) {
-          console.error("Error in pollOdds interval:", error);
         }
       }, 1e3);
     } catch (error) {
-      console.error("Error setting up polling interval:", error);
     }
     return () => {
       if (intervalId) {
@@ -7576,7 +10428,7 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
       }
     });
   };
-  useEffect$d(() => {
+  useEffect$e(() => {
     const { selectedGameId, selectedSportKey } = location.state || {};
     if (selectedGameId && selectedSportKey) {
       setExpanded((prev) => ({ ...prev, [selectedSportKey]: true }));
@@ -7633,7 +10485,7 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
       }
     }
   }, [matchesBySport, location.state, location.key, selectedMatch, setSelectedMatch, setSelectedSport]);
-  useEffect$d(() => {
+  useEffect$e(() => {
     if (pendingSelection) {
       const { selectedGameId, selectedSportKey } = pendingSelection;
       const matches = matchesBySport[selectedSportKey] || [];
@@ -7785,8 +10637,8 @@ function IoChevronDown (props) {
   return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"fill":"none","strokeMiterlimit":"10","strokeWidth":"32","d":"M221.09 64a157.09 157.09 0 1 0 157.09 157.09A157.1 157.1 0 0 0 221.09 64z"},"child":[]},{"tag":"path","attr":{"fill":"none","strokeLinecap":"round","strokeMiterlimit":"10","strokeWidth":"32","d":"M338.29 338.29 448 448"},"child":[]}]})(props);
 }
 
-const React$1c = await importShared('react');
-const {useEffect: useEffect$c,useMemo: useMemo$3,useRef: useRef$8,useState: useState$h} = React$1c;
+const React$1b = await importShared('react');
+const {useEffect: useEffect$d,useMemo: useMemo$2,useRef: useRef$7,useState: useState$h} = React$1b;
 const sportImageMap = {
   soccer: "/assets/img1.jpg",
   football: "/assets/img2.jpg",
@@ -7871,15 +10723,6 @@ function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary text-lg font-medium", children: team2 })
             ] })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-live-primary text-lg font-bold", children: [
-            homeScore,
-            "-",
-            awayScore,
-            " ",
-            match.status === "IN_PLAY" ? match.halfTimeScore ? `(${match.halfTimeScore})` : "" : "",
-            " ",
-            match.status === "IN_PLAY" ? match.currentTime ? `${match.currentTime}'` : "" : ""
-          ] }) }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-right space-y-3", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-primary text-2xl font-bold", children: homeScore }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-primary text-2xl font-bold", children: awayScore })
@@ -7892,14 +10735,6 @@ function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
         ] }) })
       ] })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      SleekNavbar,
-      {
-        onSearchChange: handleSearchChange,
-        searchValue: searchTerm,
-        onSearchClear: handleSearchClear
-      }
-    ),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-grow overflow-hidden flex flex-col", children: matchIsSuspended ? (
       // Show suspended message instead of markets for suspended matches
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-grow flex items-center justify-center bg-live-tertiary rounded p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
@@ -7911,15 +10746,17 @@ function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
       {
         selectedMatch: match,
         onRunnerSelect,
-        searchTerm
+        searchTerm,
+        onSearchChange: handleSearchChange,
+        onSearchClear: handleSearchClear
       }
     ) })
   ] });
 }
 function MarketItem({ market, isOpen, onToggle, highlightedOdds = {}, onRunnerSelect, selectedMatch }) {
-  const contentRef = useRef$8(null);
+  const contentRef = useRef$7(null);
   const [measuredHeight, setMeasuredHeight] = useState$h(0);
-  useEffect$c(() => {
+  useEffect$d(() => {
     if (contentRef.current) {
       setMeasuredHeight(contentRef.current.scrollHeight);
     }
@@ -7937,7 +10774,7 @@ function MarketItem({ market, isOpen, onToggle, highlightedOdds = {}, onRunnerSe
     if (!selectedMatch || !selectedMatch.selectedRunner || !runner) return false;
     return selectedMatch.selectedRunner.runnerId === runner.runnerId;
   };
-  useEffect$c(() => {
+  useEffect$d(() => {
     if (selectedMatch && selectedMatch.selectedRunner && selectedMatch.selectedMarket && market) {
       const runner = market.runners?.find((r) => r && r.runnerId === selectedMatch.selectedRunner.runnerId);
       const isSelected = isSelectedRunner(runner);
@@ -8026,18 +10863,20 @@ function MarketItem({ market, isOpen, onToggle, highlightedOdds = {}, onRunnerSe
     )
   ] });
 }
-function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "" }) {
+function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "", onSearchChange, onSearchClear }) {
   const [markets, setMarkets] = useState$h([]);
   const [loading, setLoading] = useState$h(false);
   const [expandedById, setExpandedById] = useState$h({});
   const [allMarketsExpanded, setAllMarketsExpanded] = useState$h(false);
-  const prevMarketsRef = useRef$8([]);
-  const intervalRef = useRef$8(null);
-  const highlightedOddsRef = useRef$8({});
-  const selectedRunnerRef = useRef$8(null);
-  const prevSelectedMatchRef = useRef$8(null);
-  const currentFetchControllerRef = useRef$8(null);
-  useEffect$c(() => {
+  const [filteredMarkets, setFilteredMarkets] = useState$h([]);
+  const [selectedMarketFilter, setSelectedMarketFilter] = useState$h("All");
+  const prevMarketsRef = useRef$7([]);
+  const intervalRef = useRef$7(null);
+  const highlightedOddsRef = useRef$7({});
+  const selectedRunnerRef = useRef$7(null);
+  const prevSelectedMatchRef = useRef$7(null);
+  const currentFetchControllerRef = useRef$7(null);
+  useEffect$d(() => {
     if (selectedMatch && selectedMatch.selectedRunner) {
       selectedRunnerRef.current = {
         marketId: selectedMatch.selectedMarket?.marketId,
@@ -8046,7 +10885,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "" }) {
       };
     }
   }, [selectedMatch]);
-  useEffect$c(() => {
+  useEffect$d(() => {
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -8056,23 +10895,31 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "" }) {
       }
     };
   }, []);
-  const filteredMarkets = useMemo$3(() => {
-    if (!searchTerm) return markets;
-    const term = searchTerm.toLowerCase().trim();
-    return markets.filter(
-      (market) => market.marketName?.toLowerCase().includes(term) || market.runners?.some(
-        (runner) => runner.runnerName?.toLowerCase().includes(term)
-      )
-    );
-  }, [markets, searchTerm]);
-  useEffect$c(() => {
+  useEffect$d(() => {
+    let result = markets;
+    if (selectedMarketFilter !== "All") {
+      result = result.filter((market) => market.marketName === selectedMarketFilter);
+    }
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase().trim();
+      result = result.filter(
+        (market) => market.marketName?.toLowerCase().includes(term) || market.runners?.some(
+          (runner) => runner.runnerName?.toLowerCase().includes(term)
+        )
+      );
+    }
+    setFilteredMarkets(result);
+  }, [markets, searchTerm, selectedMarketFilter]);
+  useEffect$d(() => {
     const isNewMatch = !prevSelectedMatchRef.current || selectedMatch && prevSelectedMatchRef.current.eventId !== selectedMatch.eventId;
     if (isNewMatch && selectedMatch) {
       setLoading(true);
       setMarkets([]);
+      setFilteredMarkets([]);
       prevMarketsRef.current = [];
       setExpandedById({});
       setAllMarketsExpanded(false);
+      setSelectedMarketFilter("All");
       if (currentFetchControllerRef.current) {
         currentFetchControllerRef.current.abort();
       }
@@ -8080,6 +10927,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "" }) {
     prevSelectedMatchRef.current = selectedMatch;
     if (!selectedMatch || !selectedMatch.eventId) {
       setMarkets([]);
+      setFilteredMarkets([]);
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
@@ -8090,6 +10938,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "" }) {
     const sportKey = selectedMatch.sportKey || selectedMatch.sport?.key || selectedMatch.sport?.name;
     if (!sportKey) {
       setMarkets([]);
+      setFilteredMarkets([]);
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
@@ -8104,6 +10953,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "" }) {
         const sportId = SPORT_ID_BY_KEY[sportKey];
         if (!sportId) {
           setMarkets([]);
+          setFilteredMarkets([]);
           setLoading(false);
           return;
         }
@@ -8148,10 +10998,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "" }) {
         if (error.name === "AbortError") {
           return;
         }
-        console.error("Error fetching markets data:", error);
-        if (prevMarketsRef.current.length > 0) {
-          console.warn("Keeping existing markets data due to network error");
-        }
+        if (prevMarketsRef.current.length > 0) ;
         setLoading(false);
       }
     };
@@ -8164,11 +11011,9 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "" }) {
         try {
           fetchMarkets();
         } catch (error) {
-          console.error("Error in markets polling interval:", error);
         }
       }, 1e3);
     } catch (error) {
-      console.error("Error setting up markets polling interval:", error);
     }
     return () => {
       if (intervalRef.current) {
@@ -8195,6 +11040,9 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "" }) {
     setExpandedById(newExpandedState);
     setAllMarketsExpanded(!allMarketsExpanded);
   };
+  const handleMarketFilter = (filter) => {
+    setSelectedMarketFilter(filter);
+  };
   const leftColumn = [];
   const rightColumn = [];
   filteredMarkets.forEach((market, idx) => {
@@ -8205,6 +11053,14 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "" }) {
       rightColumn.push({ ...market, id: marketId });
     }
   });
+  const marketNameCounts = markets.reduce((acc, market) => {
+    const name = market.marketName;
+    if (name) {
+      acc[name] = (acc[name] || 0) + 1;
+    }
+    return acc;
+  }, {});
+  const marketNames = Object.entries(marketNameCounts).filter(([name, count]) => count > 2).map(([name, count]) => name);
   if (loading) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-primary p-4 flex items-center justify-center h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center animate-pulse-scale", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-12 h-12", children: [
@@ -8214,34 +11070,43 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "" }) {
       /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-4 text-live-primary text-sm font-medium", children: "Loading markets..." })
     ] }) });
   }
-  if (markets.length === 0) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-primary p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center py-4", children: "No markets available for this event" }) });
+  if (filteredMarkets.length === 0) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-primary p-4 flex items-center justify-center h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-lg font-bold mb-2", children: "No Markets Available" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm text-live-muted", children: "There are currently no markets for this event" })
+    ] }) });
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-live-primary flex flex-col h-full", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-2 pb-2 pt-3 cursor-pointer", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "button",
       {
-        type: "button",
         onClick: toggleAllMarkets,
-        className: "w-full flex items-center justify-between px-3 py-2 hover:opacity-90 transition-opacity bg-gradient-to-r from-live-primary to-live-secondary shadow-md flex-shrink-0",
+        className: "w-full text-left px-3 py-2 text-xs bg-live-primary hover:bg-live-hover cursor-pointer rounded transition-colors flex items-center justify-between shadow-[0_2px_12px_var(--live-accent-primary)]",
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-bold tracking-wide text-live-accent", children: "Market" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs opacity-80 text-live-accent", children: [
-              filteredMarkets.length,
-              " panels"
-            ] }),
-            allMarketsExpanded ? /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronUp, { className: "w-5 h-5 text-live-accent" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronDown, { className: "w-5 h-5 text-live-accent" })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary font-medium", children: "All Markets" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-live-accent text-xs", children: [
+            filteredMarkets.length,
+            " markets"
           ] })
         ]
       }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-grow overflow-y-auto custom-scrollbar", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-2 p-2 bg-gradient-to-br from-live-tertiary to-live-secondary rounded-b-md", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: leftColumn.map((market) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+    ) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-2 pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      SleekNavbar,
+      {
+        onSearchChange,
+        searchValue: searchTerm,
+        onSearchClear,
+        marketNames,
+        onMarketFilter: handleMarketFilter
+      }
+    ) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-grow overflow-y-auto px-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3 h-full", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 space-y-2", children: leftColumn.map((market) => /* @__PURE__ */ jsxRuntimeExports.jsx(
         MarketItem,
         {
           market,
-          isOpen: !!expandedById[market.id],
+          isOpen: expandedById[market.id] ?? false,
           onToggle: () => toggleMarket(market.id),
           highlightedOdds: highlightedOddsRef.current,
           onRunnerSelect,
@@ -8249,11 +11114,11 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "" }) {
         },
         market.id
       )) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: rightColumn.map((market) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 space-y-2", children: rightColumn.map((market) => /* @__PURE__ */ jsxRuntimeExports.jsx(
         MarketItem,
         {
           market,
-          isOpen: !!expandedById[market.id],
+          isOpen: expandedById[market.id] ?? false,
           onToggle: () => toggleMarket(market.id),
           highlightedOdds: highlightedOddsRef.current,
           onRunnerSelect,
@@ -8264,465 +11129,80 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "" }) {
     ] }) })
   ] });
 }
-function SleekNavbar({ onSearchChange, searchValue, onSearchClear }) {
-  const [searchActive, setSearchActive] = useState$h(false);
+function SleekNavbar({ onSearchChange, searchValue, onSearchClear, marketNames = [], onMarketFilter }) {
+  const [isSearchOpen, setIsSearchOpen] = useState$h(false);
   const [activeTab, setActiveTab] = useState$h("All");
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "div",
-    {
-      className: `sleek-navbar shadow-md p-2 flex items-center gap-4 transition-all duration-300 bg-live-hover ${searchActive ? "navbar-search-active" : ""}`,
-      children: !searchActive ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            className: "search-icon-btn flex items-center justify-center w-9 h-9 hover:bg-live-primary transition-colors",
-            onClick: () => setSearchActive(true),
-            "aria-label": "Search",
-            children: /* @__PURE__ */ jsxRuntimeExports.jsx(IoSearchOutline, { className: "h-5 w-5 text-live-primary " })
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-6", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "button",
-            {
-              className: `py-2 px-1 text-sm font-semibold transition-all duration-200 relative cursor-pointer ${activeTab === "All" ? "text-live-accent border-b-2 border-yellow-500 pb-1" : "text-live-secondary hover:text-live-primary"}`,
-              onClick: () => setActiveTab("All"),
-              children: [
-                "All",
-                activeTab === "All" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-0 left-0 right-0 h-0.5 bg-live-accent" })
-              ]
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "button",
-            {
-              className: `py-2 px-1 text-sm font-semibold transition-all duration-200 relative cursor-pointer ${activeTab === "Match" ? "text-live-accent border-b-2 border-yellow-500 pb-1" : "text-live-secondary hover:text-live-primary"}`,
-              onClick: () => setActiveTab("Match"),
-              children: [
-                "Match",
-                activeTab === "Match" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-0 left-0 right-0 h-0.5 bg-live-accent" })
-              ]
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "button",
-            {
-              className: `py-2 px-1 text-sm font-semibold transition-all duration-200 relative cursor-pointer ${activeTab === "Totals" ? "text-live-accent border-b-2 border-yellow-500 pb-1" : "text-live-secondary hover:text-live-primary"}`,
-              onClick: () => setActiveTab("Totals"),
-              children: [
-                "Totals",
-                activeTab === "Totals" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-0 left-0 right-0 h-0.5 bg-live-accent" })
-              ]
-            }
-          )
-        ] })
-      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            className: "search-icon-btn flex items-center justify-center w-9 h-9 hover:bg-live-primary transition-colors",
-            onClick: () => {
-              setSearchActive(false);
-              onSearchClear();
-            },
-            "aria-label": "Close search",
-            children: /* @__PURE__ */ jsxRuntimeExports.jsx(IoCloseOutline, { className: "h-5 w-5 text-live-primary" })
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative flex-1 w-full", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
-            {
-              type: "text",
-              autoFocus: true,
-              value: searchValue,
-              onChange: (e) => onSearchChange(e.target.value),
-              placeholder: "Search markets...",
-              className: "w-full p-2 pl-10 pr-4 border border-live-accent focus:outline-none focus:ring-1 focus:ring-live-accent focus:border-live-accent bg-live-tertiary text-live-primary transition-all duration-300"
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "absolute left-3 top-2.5 text-live-muted", children: /* @__PURE__ */ jsxRuntimeExports.jsx(IoSearchOutline, { className: "h-5 w-5" }) })
-        ] })
-      ] })
-    }
-  );
-}
-
-var withSelector = {exports: {}};
-
-var useSyncExternalStoreWithSelector_production = {};
-
-/**
- * @license React
- * use-sync-external-store-with-selector.production.js
- *
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-var React$1b = reactExports;
-function is(x, y) {
-  return (x === y && (0 !== x || 1 / x === 1 / y)) || (x !== x && y !== y);
-}
-var objectIs = "function" === typeof Object.is ? Object.is : is,
-  useSyncExternalStore = React$1b.useSyncExternalStore,
-  useRef$7 = React$1b.useRef,
-  useEffect$b = React$1b.useEffect,
-  useMemo$2 = React$1b.useMemo,
-  useDebugValue = React$1b.useDebugValue;
-useSyncExternalStoreWithSelector_production.useSyncExternalStoreWithSelector = function (
-  subscribe,
-  getSnapshot,
-  getServerSnapshot,
-  selector,
-  isEqual
-) {
-  var instRef = useRef$7(null);
-  if (null === instRef.current) {
-    var inst = { hasValue: false, value: null };
-    instRef.current = inst;
-  } else inst = instRef.current;
-  instRef = useMemo$2(
-    function () {
-      function memoizedSelector(nextSnapshot) {
-        if (!hasMemo) {
-          hasMemo = true;
-          memoizedSnapshot = nextSnapshot;
-          nextSnapshot = selector(nextSnapshot);
-          if (void 0 !== isEqual && inst.hasValue) {
-            var currentSelection = inst.value;
-            if (isEqual(currentSelection, nextSnapshot))
-              return (memoizedSelection = currentSelection);
-          }
-          return (memoizedSelection = nextSnapshot);
-        }
-        currentSelection = memoizedSelection;
-        if (objectIs(memoizedSnapshot, nextSnapshot)) return currentSelection;
-        var nextSelection = selector(nextSnapshot);
-        if (void 0 !== isEqual && isEqual(currentSelection, nextSelection))
-          return (memoizedSnapshot = nextSnapshot), currentSelection;
-        memoizedSnapshot = nextSnapshot;
-        return (memoizedSelection = nextSelection);
-      }
-      var hasMemo = false,
-        memoizedSnapshot,
-        memoizedSelection,
-        maybeGetServerSnapshot =
-          void 0 === getServerSnapshot ? null : getServerSnapshot;
-      return [
-        function () {
-          return memoizedSelector(getSnapshot());
-        },
-        null === maybeGetServerSnapshot
-          ? void 0
-          : function () {
-              return memoizedSelector(maybeGetServerSnapshot());
-            }
-      ];
-    },
-    [getSnapshot, getServerSnapshot, selector, isEqual]
-  );
-  var value = useSyncExternalStore(subscribe, instRef[0], instRef[1]);
-  useEffect$b(
-    function () {
-      inst.hasValue = true;
-      inst.value = value;
-    },
-    [value]
-  );
-  useDebugValue(value);
-  return value;
-};
-
-{
-  withSelector.exports = useSyncExternalStoreWithSelector_production;
-}
-
-var withSelectorExports = withSelector.exports;
-
-const React$1a = await importShared('react');
-function defaultNoopBatch(callback) {
-  callback();
-}
-function createListenerCollection() {
-  let first = null;
-  let last = null;
-  return {
-    clear() {
-      first = null;
-      last = null;
-    },
-    notify() {
-      defaultNoopBatch(() => {
-        let listener = first;
-        while (listener) {
-          listener.callback();
-          listener = listener.next;
-        }
-      });
-    },
-    get() {
-      const listeners = [];
-      let listener = first;
-      while (listener) {
-        listeners.push(listener);
-        listener = listener.next;
-      }
-      return listeners;
-    },
-    subscribe(callback) {
-      let isSubscribed = true;
-      const listener = last = {
-        callback,
-        next: null,
-        prev: last
-      };
-      if (listener.prev) {
-        listener.prev.next = listener;
-      } else {
-        first = listener;
-      }
-      return function unsubscribe() {
-        if (!isSubscribed || first === null) return;
-        isSubscribed = false;
-        if (listener.next) {
-          listener.next.prev = listener.prev;
-        } else {
-          last = listener.prev;
-        }
-        if (listener.prev) {
-          listener.prev.next = listener.next;
-        } else {
-          first = listener.next;
-        }
-      };
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen);
+    if (isSearchOpen) {
+      onSearchClear();
     }
   };
-}
-var nullListeners = {
-  notify() {
-  },
-  get: () => []
-};
-function createSubscription(store, parentSub) {
-  let unsubscribe;
-  let listeners = nullListeners;
-  let subscriptionsAmount = 0;
-  let selfSubscribed = false;
-  function addNestedSub(listener) {
-    trySubscribe();
-    const cleanupListener = listeners.subscribe(listener);
-    let removed = false;
-    return () => {
-      if (!removed) {
-        removed = true;
-        cleanupListener();
-        tryUnsubscribe();
-      }
-    };
-  }
-  function notifyNestedSubs() {
-    listeners.notify();
-  }
-  function handleChangeWrapper() {
-    if (subscription.onStateChange) {
-      subscription.onStateChange();
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    if (onMarketFilter) {
+      onMarketFilter(tab);
     }
-  }
-  function isSubscribed() {
-    return selfSubscribed;
-  }
-  function trySubscribe() {
-    subscriptionsAmount++;
-    if (!unsubscribe) {
-      unsubscribe = store.subscribe(handleChangeWrapper);
-      listeners = createListenerCollection();
-    }
-  }
-  function tryUnsubscribe() {
-    subscriptionsAmount--;
-    if (unsubscribe && subscriptionsAmount === 0) {
-      unsubscribe();
-      unsubscribe = void 0;
-      listeners.clear();
-      listeners = nullListeners;
-    }
-  }
-  function trySubscribeSelf() {
-    if (!selfSubscribed) {
-      selfSubscribed = true;
-      trySubscribe();
-    }
-  }
-  function tryUnsubscribeSelf() {
-    if (selfSubscribed) {
-      selfSubscribed = false;
-      tryUnsubscribe();
-    }
-  }
-  const subscription = {
-    addNestedSub,
-    notifyNestedSubs,
-    handleChangeWrapper,
-    isSubscribed,
-    trySubscribe: trySubscribeSelf,
-    tryUnsubscribe: tryUnsubscribeSelf,
-    getListeners: () => listeners
   };
-  return subscription;
-}
-var canUseDOM = () => !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
-var isDOM = /* @__PURE__ */ canUseDOM();
-var isRunningInReactNative = () => typeof navigator !== "undefined" && navigator.product === "ReactNative";
-var isReactNative = /* @__PURE__ */ isRunningInReactNative();
-var getUseIsomorphicLayoutEffect = () => isDOM || isReactNative ? React$1a.useLayoutEffect : React$1a.useEffect;
-var useIsomorphicLayoutEffect$2 = /* @__PURE__ */ getUseIsomorphicLayoutEffect();
-var ContextKey = /* @__PURE__ */ Symbol.for(`react-redux-context`);
-var gT = typeof globalThis !== "undefined" ? globalThis : (
-  /* fall back to a per-module scope (pre-8.1 behaviour) if `globalThis` is not available */
-  {}
-);
-function getContext() {
-  if (!React$1a.createContext) return {};
-  const contextMap = gT[ContextKey] ??= /* @__PURE__ */ new Map();
-  let realContext = contextMap.get(React$1a.createContext);
-  if (!realContext) {
-    realContext = React$1a.createContext(
-      null
-    );
-    contextMap.set(React$1a.createContext, realContext);
-  }
-  return realContext;
-}
-var ReactReduxContext = /* @__PURE__ */ getContext();
-function Provider(providerProps) {
-  const { children, context, serverState, store } = providerProps;
-  const contextValue = React$1a.useMemo(() => {
-    const subscription = createSubscription(store);
-    const baseContextValue = {
-      store,
-      subscription,
-      getServerState: serverState ? () => serverState : void 0
-    };
-    {
-      return baseContextValue;
-    }
-  }, [store, serverState]);
-  const previousState = React$1a.useMemo(() => store.getState(), [store]);
-  useIsomorphicLayoutEffect$2(() => {
-    const { subscription } = contextValue;
-    subscription.onStateChange = subscription.notifyNestedSubs;
-    subscription.trySubscribe();
-    if (previousState !== store.getState()) {
-      subscription.notifyNestedSubs();
-    }
-    return () => {
-      subscription.tryUnsubscribe();
-      subscription.onStateChange = void 0;
-    };
-  }, [contextValue, previousState]);
-  const Context = context || ReactReduxContext;
-  return /* @__PURE__ */ React$1a.createElement(Context.Provider, { value: contextValue }, children);
-}
-var Provider_default = Provider;
-function createReduxContextHook(context = ReactReduxContext) {
-  return function useReduxContext2() {
-    const contextValue = React$1a.useContext(context);
-    return contextValue;
-  };
-}
-var useReduxContext = /* @__PURE__ */ createReduxContextHook();
-function createStoreHook(context = ReactReduxContext) {
-  const useReduxContext2 = context === ReactReduxContext ? useReduxContext : (
-    // @ts-ignore
-    createReduxContextHook(context)
-  );
-  const useStore2 = () => {
-    const { store } = useReduxContext2();
-    return store;
-  };
-  Object.assign(useStore2, {
-    withTypes: () => useStore2
-  });
-  return useStore2;
-}
-var useStore = /* @__PURE__ */ createStoreHook();
-function createDispatchHook(context = ReactReduxContext) {
-  const useStore2 = context === ReactReduxContext ? useStore : createStoreHook(context);
-  const useDispatch2 = () => {
-    const store = useStore2();
-    return store.dispatch;
-  };
-  Object.assign(useDispatch2, {
-    withTypes: () => useDispatch2
-  });
-  return useDispatch2;
-}
-var useDispatch = /* @__PURE__ */ createDispatchHook();
-var refEquality = (a, b) => a === b;
-function createSelectorHook(context = ReactReduxContext) {
-  const useReduxContext2 = context === ReactReduxContext ? useReduxContext : createReduxContextHook(context);
-  const useSelector2 = (selector, equalityFnOrOptions = {}) => {
-    const { equalityFn = refEquality } = typeof equalityFnOrOptions === "function" ? { equalityFn: equalityFnOrOptions } : equalityFnOrOptions;
-    const reduxContext = useReduxContext2();
-    const { store, subscription, getServerState } = reduxContext;
-    React$1a.useRef(true);
-    const wrappedSelector = React$1a.useCallback(
+  const uniqueMarketNames = [...new Set(marketNames)];
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-live-tertiary rounded-md px-3 py-2 flex items-center gap-2", children: isSearchOpen ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
       {
-        [selector.name](state) {
-          const selected = selector(state);
-          return selected;
+        onClick: toggleSearch,
+        className: "text-live-primary hover:text-live-accent flex-shrink-0 mr-3",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(IoCloseOutline, { size: 18 })
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-6 w-px bg-live-primary mx-2" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "input",
+      {
+        type: "text",
+        placeholder: "Search markets or runners...",
+        className: "flex-grow bg-transparent text-sm text-live-primary placeholder:text-live-muted focus:outline-none",
+        value: searchValue,
+        onChange: (e) => onSearchChange(e.target.value),
+        autoFocus: true
+      }
+    )
+  ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center w-full overflow-x-auto", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        onClick: toggleSearch,
+        className: "text-live-primary hover:text-live-accent flex-shrink-0 mr-3",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(IoSearchOutline, { size: 18 })
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-6 w-px bg-live-primary mx-2" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex space-x-6 min-w-max", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          className: `text-sm font-medium relative py-1 px-1 whitespace-nowrap cursor-pointer ${activeTab === "All" ? "text-live-accent" : "text-live-primary hover:text-live-accent"}`,
+          onClick: () => handleTabClick("All"),
+          children: [
+            "All",
+            activeTab === "All" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-0 left-0 right-0 h-0.5 bg-live-accent" })
+          ]
         }
-      }[selector.name],
-      [selector]
-    );
-    const selectedState = withSelectorExports.useSyncExternalStoreWithSelector(
-      subscription.addNestedSub,
-      store.getState,
-      getServerState || store.getState,
-      wrappedSelector,
-      equalityFn
-    );
-    React$1a.useDebugValue(selectedState);
-    return selectedState;
-  };
-  Object.assign(useSelector2, {
-    withTypes: () => useSelector2
-  });
-  return useSelector2;
+      ),
+      uniqueMarketNames.map((marketName, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          className: `text-sm font-medium relative py-1 px-1 whitespace-nowrap cursor-pointer ${activeTab === marketName ? "text-live-accent" : "text-live-primary hover:text-live-accent"}`,
+          onClick: () => handleTabClick(marketName),
+          children: [
+            marketName,
+            activeTab === marketName && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-0 left-0 right-0 h-0.5 bg-live-accent" })
+          ]
+        },
+        index
+      ))
+    ] })
+  ] }) });
 }
-var useSelector = /* @__PURE__ */ createSelectorHook();
-
-//  Auth - Signup
-const SIGNUP = "SIGNUP";
-const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
-const SIGNUP_FAILURE = "SIGNUP_FAILURE";
-
-//  Auth - Login
-const LOGIN = "LOGIN";
-const LOGIN_SUCCESS = "LOGIN_SUCCESS";
-const LOGIN_FAILURE = "LOGIN_FAILURE";
-
-// Auth - Logout
-const LOGOUT = "LOGOUT";
-const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
-const LOGOUT_FAILURE = "LOGOUT_FAILURE";
-
-// Auth - Verify Email
-const VERIFY_EMAIL = "VERIFY_EMAIL";
-const VERIFY_EMAIL_SUCCESS = "VERIFY_EMAIL_SUCCESS";
-const VERIFY_EMAIL_FAILURE = "VERIFY_EMAIL_FAILURE";
-
-// Auth - Get User Data
-const GET_USER_DATA = "GET_USER_DATA";
-const GET_USER_DATA_SUCCESS = "GET_USER_DATA_SUCCESS";
-const GET_USER_DATA_FAILURE = "GET_USER_DATA_FAILURE";
-
-// Auth - Update User Balance and Exposure
-const UPDATE_USER_BALANCE_EXPOSURE = "UPDATE_USER_BALANCE_EXPOSURE";
-const UPDATE_USER_BALANCE_EXPOSURE_SUCCESS = "UPDATE_USER_BALANCE_EXPOSURE_SUCCESS";
-const UPDATE_USER_BALANCE_EXPOSURE_FAILURE = "UPDATE_USER_BALANCE_EXPOSURE_FAILURE";
 
 const updateUserBalanceExposure = (payload) => ({
   type: UPDATE_USER_BALANCE_EXPOSURE,
@@ -8756,6 +11236,7 @@ const notifyPromise = (promise, options) => {
   return notifier.notifyPromise(promise, options);
 };
 const notifyError$1 = (message, title, duration) => notifier?.error(message, title, duration);
+const notifyInfo = (message, title, duration) => notifier?.info(message, title, duration);
 
 function bind(fn, thisArg) {
   return function wrap() {
@@ -12797,7 +15278,53 @@ function handleUnauthorized(message) {
   window.location.href = "/";
 }
 
-const {useState: useState$g,useEffect: useEffect$a,useRef: useRef$6} = await importShared('react');
+const React$1a = await importShared('react');
+const {useEffect: useEffect$c} = React$1a;
+const UserBetsSection = ({ userId, eventId }) => {
+  const dispatch = useDispatch();
+  const { bets, loading, error, skipNextFetch } = useSelector((state) => state.UserBets);
+  useEffect$c(() => {
+    if (userId && eventId) {
+      dispatch(fetchUserBets(userId, eventId));
+    }
+  }, [dispatch, userId, eventId]);
+  if (loading) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-center h-24", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "animate-spin rounded-full h-6 w-6 border-b-2 border-live-accent" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "ml-2 text-live-primary", children: "Loading bets..." })
+    ] });
+  }
+  if (error) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-live-tertiary p-3 rounded border border-live-accent", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-live-error text-center", children: [
+      "Error loading bets: ",
+      error
+    ] }) });
+  }
+  if (!bets || bets.length === 0) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-live-tertiary p-3 rounded border border-live-accent", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-muted text-center", children: "No bets placed for this event" }) });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-live-tertiary rounded border border-live-accent", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-b border-live-accent px-3 py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-bold text-live-accent", children: "My Bets" }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-2", style: { maxHeight: "160px", overflowY: "auto" }, children: bets.map((bet, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center py-2 border-b border-live-hover last:border-b-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-medium text-live-primary", children: bet.selection }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-live-muted", children: bet.marketName })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-end", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs font-bold text-live-accent", children: [
+          bet.stake,
+          " €"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[10px] text-live-muted", children: [
+          "Odds: ",
+          bet.odds
+        ] })
+      ] })
+    ] }, index)) })
+  ] });
+};
+
+const {useState: useState$g,useEffect: useEffect$b,useRef: useRef$6} = await importShared('react');
 const formatDateTime$1 = (timestamp) => {
   if (!timestamp) return "N/A";
   const date = new Date(parseInt(timestamp));
@@ -12936,26 +15463,22 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
     return "Match Odds";
   };
   const marketName = getMarketName();
-  useEffect$a(() => {
+  useEffect$b(() => {
     if (isAuthenticated && userData?._id) {
       const newSocket = new WebSocket("ws://localhost:3001");
       newSocket.onopen = () => {
-        console.log("WebSocket connection established in RightEventInfoSection");
         setIsSocketConnected(true);
       };
       newSocket.onmessage = function(event) {
         const data = JSON.parse(event.data);
         if (data.type === "exposureUpdate" && data.userId === userData._id) {
-          console.log(`User ${data.userId} exposure updated to ${data.exposure} in RightEventInfoSection`);
           setSocketExposure(parseFloat(data.exposure) || 0);
         }
       };
       newSocket.onclose = () => {
-        console.log("WebSocket connection closed in RightEventInfoSection");
         setIsSocketConnected(false);
       };
       newSocket.onerror = (error) => {
-        console.error("WebSocket error in RightEventInfoSection:", error);
         setIsSocketConnected(false);
       };
       return () => {
@@ -12977,12 +15500,12 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
   const [highlightedOdds, setHighlightedOdds] = useState$g({ w1: false, x: false, w2: false });
   const editInputRef = useRef$6(null);
   const containerRef = useRef$6(null);
-  useEffect$a(() => {
+  useEffect$b(() => {
     if (userData) {
       calculateActiveExposure(userData.exposures);
     }
   }, [userData]);
-  useEffect$a(() => {
+  useEffect$b(() => {
     const handleClickOutside = (event) => {
       if (containerRef.current && !containerRef.current.contains(event.target)) {
         setIsEditingMode(false);
@@ -12997,7 +15520,7 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isEditingMode]);
-  useEffect$a(() => {
+  useEffect$b(() => {
     if (editableIndex !== null && editInputRef.current) {
       editInputRef.current.focus();
     }
@@ -13052,7 +15575,15 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
     setStakeValue("");
   };
   const handlePlaceBet = async () => {
-    if (!isAuthenticated || !selectedTeam && !isMarketRunnerSelection) {
+    if (matchIsSuspended) {
+      return;
+    }
+    if (!selectedTeam && !isMarketRunnerSelection) {
+      return;
+    }
+    if (!isAuthenticated) {
+      notifyInfo("Please Login/signup to place bet");
+      onLogin();
       return;
     }
     const stake = parseFloat(stakeValue);
@@ -13101,11 +15632,17 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
           runners: market?.runners?.map((runner) => runner.runnerName) || []
         }));
       }
+      if (userData?._id && selectedGame?.eventId) {
+        dispatch(skipNextUserBetsFetch());
+        setTimeout(() => {
+          dispatch(fetchUserBets(userData._id, selectedGame.eventId));
+        }, 1e3);
+      }
     } catch (err) {
       notifyError$1(err.message || "Failed to place bet");
     }
   };
-  useEffect$a(() => {
+  useEffect$b(() => {
     if (!exposureLoading && !exposureError) {
       setSelectedTeam(null);
       setSelectedOdd(null);
@@ -13122,7 +15659,7 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
     const possibleWin = (odd - 1) * stake;
     return possibleWin.toFixed(2);
   };
-  useEffect$a(() => {
+  useEffect$b(() => {
     if (selectedGame) {
       if (selectedGame.selectedMarket && selectedGame.selectedRunner) {
         const market = selectedGame.selectedMarket;
@@ -13194,13 +15731,7 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
   }
   if (isCompact) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-2.5 m-1.5 bg-live-primary rounded-lg border border-live-accent shadow-live flex flex-col gap-2 text-live-primary", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xs font-bold text-live-primary", children: "MY TEAMS" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "w-full flex items-center gap-1.5 bg-live-primary hover:bg-live-hover px-2 py-1.5 rounded text-xs", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent", children: "★" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Add Your Favorites" })
-        ] })
-      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(UserBetsSection, { userId: userData?._id, eventId: selectedGame?.eventId }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-live-secondary rounded p-3 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-muted text-[10px]", children: "Empty content area" }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-live-tertiary px-2 py-1 rounded border border-live-accent text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-bold text-live-accent", children: "BetSlip" }) }),
@@ -13359,16 +15890,21 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
               children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { xmlns: "http://www.w3.org/2000/svg", className: `h-2.5 w-2.5 mx-auto ${isEditingMode ? "text-live-dark" : "text-live-primary"}`, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" }) })
             }
           )
-        ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            className: `w-full px-2 py-1 rounded text-[10px] font-bold transition-colors cursor-pointer transition-all duration-200 mt-1 ${!matchIsSuspended && (selectedTeam || isMarketRunnerSelection) ? "bg-live-accent hover:bg-live-warning border border-live-accent text-live-accent hover:text-live-dark hover:scale-[1.02] hover:shadow-[0_0_8px_var(--live-accent-primary)]" : "bg-live-tertiary border border-live text-live-accent cursor-not-allowed opacity-50"}`,
+            onClick: handlePlaceBet,
+            children: matchIsSuspended ? "MATCH SUSPENDED" : "BET"
+          }
+        )
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-live-secondary rounded p-3 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-muted text-[10px]", children: "Empty content area" }) })
     ] });
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-4 m-2 bg-live-primary rounded-lg shadow-lg shadow-black/50 flex flex-col gap-4 text-live-primary", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 border-b border-live-accent pb-3 mb-1", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-lg font-bold text-live-accent", children: "MY TEAMS" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-0.5 w-8 bg-live-accent rounded-full" })
-    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(UserBetsSection, { userId: userData?._id, eventId: selectedGame?.eventId }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3 pb-4 border-b border-live-accent", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-2 p-3 bg-live-tertiary rounded-lg border border-live shadow-live", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-live-hover p-2 rounded-full border border-live-accent", children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "w-5 h-5 text-live-accent", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" }) }) }),
@@ -13543,8 +16079,7 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "button",
         {
-          className: `w-full px-2.5 py-1.5 rounded text-sm font-bold transition-colors cursor-pointer color-yellowborder-solid transition-all duration-200 ${!matchIsSuspended && isAuthenticated && (selectedTeam || isMarketRunnerSelection) ? "bg-live-accent hover:bg-live-warning border border-live-accent text-live-accent hover:text-live-dark hover:scale-[1.02] hover:shadow-[0_0_8px_var(--live-accent-primary)]" : "bg-live-tertiary border border-live text-live-accent cursor-not-allowed opacity-50"}`,
-          disabled: matchIsSuspended || !isAuthenticated || !selectedTeam && !isMarketRunnerSelection,
+          className: `w-full px-2.5 py-1.5 rounded text-sm font-bold transition-colors cursor-pointer color-yellowborder-solid transition-all duration-200 ${!matchIsSuspended && (selectedTeam || isMarketRunnerSelection) ? "bg-live-accent hover:bg-live-warning border border-live-accent text-live-accent hover:text-live-dark hover:scale-[1.02] hover:shadow-[0_0_8px_var(--live-accent-primary)]" : "bg-live-tertiary border border-live text-live-accent cursor-not-allowed opacity-50"}`,
           onClick: handlePlaceBet,
           children: matchIsSuspended ? "MATCH SUSPENDED" : "BET"
         }
@@ -18233,7 +20768,7 @@ const verifyEmailFailure = (error) => ({
   payload: error,
 });
 
-const {useEffect: useEffect$9,useState: useState$e} = await importShared('react');
+const {useEffect: useEffect$a,useState: useState$e} = await importShared('react');
 function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
   const {
     register,
@@ -18252,7 +20787,7 @@ function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
   const dispatch = useDispatch();
   const emailOrUsername = watch("emailOrUsername");
   watch("password");
-  useEffect$9(() => {
+  useEffect$a(() => {
     if (isOpen) {
       reset({
         emailOrUsername: "",
@@ -24861,7 +27396,7 @@ function useControlledValue(defaultValue, controlledValue) {
     return [value, setValue];
 }
 
-const {useEffect: useEffect$8} = await importShared('react');
+const {useEffect: useEffect$9} = await importShared('react');
 /**
  * Provides the calendar object to work with the calendar in custom components.
  *
@@ -24878,7 +27413,7 @@ function useCalendar(props, dateLib) {
     const [firstMonth, setFirstMonth] = useControlledValue(initialMonth, 
     // initialMonth is always computed from props.month if provided
     props.month ? initialMonth : undefined);
-    useEffect$8(() => {
+    useEffect$9(() => {
         const newInitialMonth = getInitialMonth(props, navStart, navEnd, dateLib);
         setFirstMonth(newInitialMonth);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -30070,7 +32605,7 @@ const signupFailure = () => ({
 
 const {useState: useState$b} = await importShared('react');
 
-const {useEffect: useEffect$7} = await importShared('react');
+const {useEffect: useEffect$8} = await importShared('react');
 function RegisterModal({ isOpen, onClose, onCloseAll }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30078,6 +32613,7 @@ function RegisterModal({ isOpen, onClose, onCloseAll }) {
   const [shouldReopenRegister, setShouldReopenRegister] = useState$b(false);
   const [date, setDate] = useState$b(null);
   const [isCalendarOpen, setIsCalendarOpen] = useState$b(false);
+  const [isConsentChecked, setIsConsentChecked] = useState$b(false);
   const [formData, setFormData] = useState$b({
     username: "",
     name: "",
@@ -30088,12 +32624,12 @@ function RegisterModal({ isOpen, onClose, onCloseAll }) {
     confirmPassword: ""
   });
   const [errors, setErrors] = useState$b({});
-  useEffect$7(() => {
+  useEffect$8(() => {
     if (shouldReopenRegister && !isLoginModalOpen) {
       setShouldReopenRegister(false);
     }
   }, [shouldReopenRegister, isLoginModalOpen]);
-  useEffect$7(() => {
+  useEffect$8(() => {
     if (isOpen) {
       setErrors({});
       setFormData({
@@ -30106,6 +32642,7 @@ function RegisterModal({ isOpen, onClose, onCloseAll }) {
         confirmPassword: ""
       });
       setDate(null);
+      setIsConsentChecked(false);
     }
   }, [isOpen]);
   const handleInputChange = (field, value) => {
@@ -30124,6 +32661,7 @@ function RegisterModal({ isOpen, onClose, onCloseAll }) {
       confirmPassword: ""
     });
     setDate(null);
+    setIsConsentChecked(false);
     setIsLoginModalOpen(false);
     if (onCloseAll) {
       onCloseAll();
@@ -30142,6 +32680,7 @@ function RegisterModal({ isOpen, onClose, onCloseAll }) {
       newErrors.password = "Password must be at least 6 characters";
     if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = "Passwords do not match";
+    if (!isConsentChecked) newErrors.consent = "You must agree to the terms and conditions";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -30301,19 +32840,35 @@ function RegisterModal({ isOpen, onClose, onCloseAll }) {
               ] })
             ] })
           ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pt-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Checkbox,
+                {
+                  id: "consent",
+                  checked: isConsentChecked,
+                  onCheckedChange: setIsConsentChecked,
+                  className: "mt-1 border-gray-400 data-[state=checked]:bg-yellow-500 data-[state=checked]:border-yellow-500"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { htmlFor: "consent", className: "ml-2 text-sm text-gray-300", children: "By signing up, I confirm that I am at least 18 years old and understand that betting involves real money and carries a risk of financial loss. I acknowledge that gambling can become addictive and agree to participate responsibly. I accept that the platform is not responsible for any losses incurred and that I am solely responsible for my betting activities." })
+            ] }),
+            errors.consent && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "input-error mt-1 text-sm", children: errors.consent })
+          ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "pt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
             Button$1,
             {
               type: "submit",
-              className: "w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-12 text-base",
+              className: "w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-12 text-base cursor-pointer",
+              disabled: !isConsentChecked,
               children: "REGISTER"
             }
-          ) })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center mt-6 pt-4 border-t border-gray-600", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Button$1, { variant: "ghost", className: "text-gray-400 hover:text-white text-sm hover:bg-[#404040]", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(User, { className: "w-4 h-4 mr-2" }),
-          "Contact support"
-        ] }) })
+          ) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center mt-6 pt-4 border-t border-gray-600", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Button$1, { variant: "ghost", className: "text-gray-400 hover:text-white text-sm hover:bg-[#404040]", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(User, { className: "w-4 h-4 mr-2" }),
+            "Contact support"
+          ] }) })
+        ] })
       ] })
     ] }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -30330,7 +32885,7 @@ function RegisterModal({ isOpen, onClose, onCloseAll }) {
   ] });
 }
 
-const {useState: useState$a,useEffect: useEffect$6,useRef: useRef$3} = await importShared('react');
+const {useState: useState$a,useEffect: useEffect$7,useRef: useRef$3} = await importShared('react');
 function MainLiveSection() {
   const [selectedMatch, setSelectedMatch] = useState$a(null);
   const [selectedSport, setSelectedSport] = useState$a(null);
@@ -30367,7 +32922,7 @@ function MainLiveSection() {
       return prevMatch;
     });
   };
-  useEffect$6(() => {
+  useEffect$7(() => {
     if (selectedMatch) {
       if (selectedRunnerRef.current && selectedRunnerRef.current.eventId !== selectedMatch.eventId) {
         selectedRunnerRef.current = null;
@@ -30439,7 +32994,7 @@ function MainLiveSection() {
 }
 
 const React$a = await importShared('react');
-const {useEffect: useEffect$5,useState: useState$9,useRef: useRef$2} = React$a;
+const {useEffect: useEffect$6,useState: useState$9,useRef: useRef$2} = React$a;
 function extractOddsW1W2(markets) {
   const mo = markets?.matchOdds?.[0];
   const r0 = mo?.runners?.[0];
@@ -30507,7 +33062,7 @@ const LiveCalender = () => {
   const handleWinnerDropdownClick = (e) => {
     e.stopPropagation();
   };
-  useEffect$5(() => {
+  useEffect$6(() => {
     const handleClickOutside = (event) => {
       if (sportDropdownRef.current && !sportDropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
@@ -30521,7 +33076,7 @@ const LiveCalender = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
-  useEffect$5(() => {
+  useEffect$6(() => {
     if (selectedSportKeys.length === 0) return;
     setLoading(true);
     const fetchPromises = selectedSportKeys.map((sportKey) => {
@@ -30544,8 +33099,48 @@ const LiveCalender = () => {
         };
       });
       setMatches(allMatches);
+      if (allMatches.length > 0 && !selectedMatch) {
+        setSelectedMatch(allMatches[0]);
+      }
     }).finally(() => setLoading(false));
   }, [selectedSportKeys]);
+  useEffect$6(() => {
+    let intervalId;
+    function pollOdds() {
+      if (selectedMatch) {
+        const sportId = SPORT_ID_BY_KEY[selectedMatch.sportKey];
+        if (!sportId) return;
+        fetchSportsEvents(sportId, false).then((json) => {
+          const list = json?.sports ?? [];
+          const updatedMatch = list.find((m) => m.eventId === selectedMatch.eventId);
+          if (updatedMatch) {
+            extractOddsW1W2(updatedMatch.markets);
+            setSelectedMatch((prevMatch) => {
+              if (prevMatch && prevMatch.eventId === updatedMatch.eventId) {
+                return {
+                  ...updatedMatch,
+                  sportKey: prevMatch.sportKey,
+                  // Preserve sportKey
+                  // Preserve any market runner selection if it exists
+                  selectedMarket: prevMatch.selectedMarket,
+                  selectedRunner: prevMatch.selectedRunner,
+                  selectedOdd: prevMatch.selectedOdd
+                };
+              }
+              return prevMatch;
+            });
+          }
+        }).catch(() => {
+        });
+      }
+    }
+    intervalId = setInterval(pollOdds, 1e3);
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [selectedMatch]);
   const handleMatchClick = (match) => {
     setSelectedMatch(match);
   };
@@ -30570,87 +33165,83 @@ const LiveCalender = () => {
   const handleRegister = () => {
     setIsRegisterModalOpen(true);
   };
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full mt-4", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 bg-live-tertiary text-live-primary px-2 py-2 rounded", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative  ml-2", ref: sportDropdownRef, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "button",
-          {
-            className: "flex items-center gap-2 bg-live-primary hover:bg-live-hover px-6 py-3 rounded text-sm min-w-[200px]",
-            onClick: (e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              console.log("Button clicked");
-              toggleDropdown();
-            },
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "opacity-70", children: "Sport" }),
-              (() => {
-                if (selectedSportKeys.length === 0) {
-                  return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold", children: "Select Sports" });
-                } else if (selectedSportKeys.length === 1) {
-                  const selectedSport = SPORTS.find((s) => s.key === selectedSportKeys[0]);
-                  const Icon = selectedSport?.icon;
-                  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-                    Icon && /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { className: `w-4 h-4 ${selectedSport.color.replace("bg-", "")}` }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold", children: selectedSport?.sportNames?.[0] || "Sport" })
-                  ] });
-                } else {
-                  return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-semibold", children: [
-                    selectedSportKeys.length,
-                    " Sports"
-                  ] });
-                }
-              })(),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "opacity-70", children: isDropdownOpen ? "▴" : "▾" })
-            ]
-          }
-        ),
-        isDropdownOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute z-20 mt-1 w-[40vw] max-h-72 overflow-y-auto bg-live-tertiary border border-live rounded shadow-lg", onClick: handleDropdownClick, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("ul", { className: "py-1", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("li", { className: "border-b border-live", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between px-3 py-2 hover:bg-live-primary", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium", children: "All Sports" }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  onClick: handleSelectAll,
-                  className: "text-xs px-2 py-1 bg-live-hover hover:bg-live-primary rounded",
-                  children: "Select All"
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  onClick: handleDeselectAll,
-                  className: "text-xs px-2 py-1 bg-live-hover hover:bg-live-primary rounded",
-                  children: "Clear"
-                }
-              )
-            ] })
-          ] }) }),
-          SPORTS.map((sport) => {
-            const Icon = sport.icon;
-            const isSelected = selectedSportKeys.includes(sport.key);
-            return /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "w-full flex items-center gap-2 px-3 py-2 text-left text-sm hover:bg-live-primary cursor-pointer", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "checkbox",
-                  checked: isSelected,
-                  onChange: () => handleSportToggle(sport.key),
-                  className: "w-4 h-4 accent-live-success"
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { className: `w-4 h-4 ${sport.color.replace("bg-", "")}` }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate flex-1", children: sport.sportNames[0] })
-            ] }) }, sport.key);
-          })
-        ] }) })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-2 overflow-x-auto no-scrollbar", children: ["22.08 FRI", "23.08 SAT", "24.08 SUN", "25.08 MON", "26.08 TUE", "27.08 WED", "28.08 THU"].map((d, i) => /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: `px-3 py-1.5 rounded text-xs border border-live ${i === 0 ? "bg-live-primary" : "bg-transparent"}`, children: d }, d)) })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-4 mt-2", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 bg-live-tertiary text-live-primary rounded overflow-hidden", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full mt-4 flex flex-col h-[calc(100vh-80px)]", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-3 bg-live-tertiary text-live-primary px-2 py-2 rounded", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative  ml-2", ref: sportDropdownRef, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          className: "flex items-center gap-2 bg-live-primary hover:bg-live-hover px-6 py-3 rounded text-sm min-w-[200px]",
+          onClick: (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleDropdown();
+          },
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "opacity-70", children: "Sport" }),
+            (() => {
+              if (selectedSportKeys.length === 0) {
+                return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold", children: "Select Sports" });
+              } else if (selectedSportKeys.length === 1) {
+                const selectedSport = SPORTS.find((s) => s.key === selectedSportKeys[0]);
+                const Icon = selectedSport?.icon;
+                return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                  Icon && /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { className: `w-4 h-4 ${selectedSport.color.replace("bg-", "")}` }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold", children: selectedSport?.sportNames?.[0] || "Sport" })
+                ] });
+              } else {
+                return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-semibold", children: [
+                  selectedSportKeys.length,
+                  " Sports"
+                ] });
+              }
+            })(),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "opacity-70", children: isDropdownOpen ? "▴" : "▾" })
+          ]
+        }
+      ),
+      isDropdownOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute z-20 mt-1 w-[40vw] max-h-72 overflow-y-auto bg-live-tertiary border border-live rounded shadow-lg", onClick: handleDropdownClick, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("ul", { className: "py-1", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("li", { className: "border-b border-live", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between px-3 py-2 hover:bg-live-primary", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium", children: "All Sports" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                onClick: handleSelectAll,
+                className: "text-xs px-2 py-1 bg-live-hover hover:bg-live-primary rounded",
+                children: "Select All"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                onClick: handleDeselectAll,
+                className: "text-xs px-2 py-1 bg-live-hover hover:bg-live-primary rounded",
+                children: "Clear"
+              }
+            )
+          ] })
+        ] }) }),
+        SPORTS.map((sport) => {
+          const Icon = sport.icon;
+          const isSelected = selectedSportKeys.includes(sport.key);
+          return /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "w-full flex items-center gap-2 px-3 py-2 text-left text-sm hover:bg-live-primary cursor-pointer", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "checkbox",
+                checked: isSelected,
+                onChange: () => handleSportToggle(sport.key),
+                className: "w-4 h-4 accent-live-success"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { className: `w-4 h-4 ${sport.color.replace("bg-", "")}` }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate flex-1", children: sport.sportNames[0] })
+          ] }) }, sport.key);
+        })
+      ] }) })
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-4 mt-2 flex-1 overflow-hidden", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 bg-live-tertiary text-live-primary rounded overflow-hidden flex flex-col", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center text-xs uppercase tracking-wide bg-live-primary", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-40 px-3 py-2 border-r border-live relative", ref: winnerDropdownRef, children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -30701,7 +33292,7 @@ const LiveCalender = () => {
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-28 px-3 py-2 text-center border-l border-live", children: "-" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-28 px-3 py-2 text-center border-l border-live", children: "W2" })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-3 py-4 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center animate-pulse-scale", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 overflow-y-auto", children: loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-3 py-4 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center animate-pulse-scale", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-8 h-8", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute w-full h-full rounded-full border-4 border-live-accent border-t-transparent animate-spin" }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute w-5 h-5 top-1.5 left-1.5 rounded-full border-4 border-live-primary border-b-transparent animate-spin-reverse" })
@@ -30715,33 +33306,34 @@ const LiveCalender = () => {
           return /* @__PURE__ */ jsxRuntimeExports.jsxs(
             "div",
             {
-              className: `flex items-stretch border-t border-live-primary hover:bg-live-tertiary cursor-pointer ${isSelected ? "bg-live-tertiary" : ""}`,
+              className: `flex items-stretch border-b border-live-primary hover:bg-live-hover transition-colors duration-150 cursor-pointer ${isSelected ? "bg-live-tertiary border-l-4 border-l-live-accent" : ""}`,
               onClick: () => handleMatchClick(m),
               children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-40 flex items-center gap-2 px-3 py-3 text-xs text-live-secondary", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "inline-flex items-center gap-1", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-3 h-3 rounded-full bg-live-success" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-2 h-2 rounded-full bg-live-success" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: formatDateTime(m.openDate) })
                 ] }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 px-3 py-2", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm text-live-primary", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 px-3 py-3 flex flex-col justify-center", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm text-live-primary font-medium", children: [
                     SportIcon && /* @__PURE__ */ jsxRuntimeExports.jsx(SportIcon, { className: `w-4 h-4 ${sport.color.replace("bg-", "")}` }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: m.eventName || "" })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate", children: m.eventName || "" })
                   ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[11px] text-live-muted", children: m.competitionName || "" })
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[11px] text-live-muted truncate", children: m.competitionName || "" })
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-28 px-3 py-3 text-center text-sm text-live-primary", children: odds.w1 }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-28 px-3 py-3 text-center text-sm text-live-primary", children: "-" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-28 px-3 py-3 text-center text-sm text-live-primary", children: odds.w2 })
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-24 flex items-center justify-center px-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-live-odds rounded px-2 py-1 text-center min-w-[50px]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-bold text-live-accent", children: odds.w1 }) }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-12 flex items-center justify-center px-1 text-live-muted", children: "-" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-24 flex items-center justify-center px-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-live-odds rounded px-2 py-1 text-center min-w-[50px]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-bold text-live-accent", children: odds.w2 }) }) })
               ]
             },
             m.eventId || idx
           );
         }) })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-80", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-80 flex flex-col", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
         RightEventInfoSection,
         {
           selectedGame: selectedMatch ? {
+            ...selectedMatch,
             team1: selectedMatch.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || "",
             team2: selectedMatch.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || "",
             timeLabel: formatDateTime(selectedMatch.openDate),
@@ -30999,7 +33591,7 @@ const OTPInput = React$8.forwardRef(({
 OTPInput.displayName = "OTPInput";
 
 const React$7 = await importShared('react');
-const {useState: useState$7,useEffect: useEffect$4,useRef: useRef$1} = React$7;
+const {useState: useState$7,useEffect: useEffect$5,useRef: useRef$1} = React$7;
 function VerifyEmail() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -31068,7 +33660,7 @@ function VerifyEmail() {
       })
     );
   };
-  useEffect$4(() => {
+  useEffect$5(() => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
@@ -31095,7 +33687,7 @@ function VerifyEmail() {
       }
     };
   }, [isTimerOn]);
-  useEffect$4(() => {
+  useEffect$5(() => {
     if (verifyEmailState?.loading) ; else if (verifyEmailState?.success) {
       if (!verifyEmailState?.data?.hasOwnProperty("otp")) ; else if (verifyEmailState?.data?.hasOwnProperty("otp")) {
         setIsLoading(false);
@@ -31190,7 +33782,7 @@ function VerifyEmail() {
 }
 
 const React$6 = await importShared('react');
-const {useState: useState$6,useEffect: useEffect$3} = React$6;
+const {useState: useState$6,useEffect: useEffect$4} = React$6;
 function ResetPassword() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -31198,7 +33790,7 @@ function ResetPassword() {
   const [confirmPassword, setConfirmPassword] = useState$6("");
   const [isLoading, setIsLoading] = useState$6(false);
   const [token, setToken] = useState$6("");
-  useEffect$3(() => {
+  useEffect$4(() => {
     const searchParams = new URLSearchParams(location.search);
     const tokenParam = searchParams.get("token");
     if (tokenParam) {
@@ -31305,88 +33897,67 @@ function FiSearch (props) {
   return GenIcon({"attr":{"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":"2","strokeLinecap":"round","strokeLinejoin":"round"},"child":[{"tag":"circle","attr":{"cx":"11","cy":"11","r":"8"},"child":[]},{"tag":"line","attr":{"x1":"21","y1":"21","x2":"16.65","y2":"16.65"},"child":[]}]})(props);
 }
 
-// THIS FILE IS AUTO GENERATED
-function CgCardSpades (props) {
-  return GenIcon({"attr":{"viewBox":"0 0 24 24","fill":"none"},"child":[{"tag":"path","attr":{"d":"M9.14648 11.7071C8.36544 12.4882 8.36544 13.7545 9.14648 14.5356C9.92753 15.3166 11.1939 15.3166 11.9749 14.5356L12 14.5104L12.0251 14.5355C12.8061 15.3166 14.0725 15.3166 14.8535 14.5355C15.6346 13.7545 15.6346 12.4881 14.8535 11.7071L12.0251 8.87865L12 8.90377L11.9749 8.87871L9.14648 11.7071Z","fill":"currentColor"},"child":[]},{"tag":"path","attr":{"fillRule":"evenodd","clipRule":"evenodd","d":"M3 20C3 21.6569 4.34315 23 6 23H18C19.6569 23 21 21.6569 21 20V4C21 2.34315 19.6569 1 18 1H6C4.34315 1 3 2.34315 3 4V20ZM6 21H18C18.5523 21 19 20.5523 19 20V4C19 3.44772 18.5523 3 18 3H6C5.44772 3 5 3.44772 5 4V20C5 20.5523 5.44772 21 6 21Z","fill":"currentColor"},"child":[]}]})(props);
-}
-
-// THIS FILE IS AUTO GENERATED
-function BsGrid3X3 (props) {
-  return GenIcon({"attr":{"fill":"currentColor","viewBox":"0 0 16 16"},"child":[{"tag":"path","attr":{"d":"M0 1.5A1.5 1.5 0 0 1 1.5 0h13A1.5 1.5 0 0 1 16 1.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5zM1.5 1a.5.5 0 0 0-.5.5V5h4V1zM5 6H1v4h4zm1 4h4V6H6zm-1 1H1v3.5a.5.5 0 0 0 .5.5H5zm1 0v4h4v-4zm5 0v4h3.5a.5.5 0 0 0 .5-.5V11zm0-1h4V6h-4zm0-5h4V1.5a.5.5 0 0 0-.5-.5H11zm-1 0V1H6v4z"},"child":[]}]})(props);
-}
-
-var build = {exports: {}};
-
-(()=>{var e={296:(e,t,r)=>{var o=/^\s+|\s+$/g,n=/^[-+]0x[0-9a-f]+$/i,i=/^0b[01]+$/i,c=/^0o[0-7]+$/i,u=parseInt,s="object"==typeof r.g&&r.g&&r.g.Object===Object&&r.g,l="object"==typeof self&&self&&self.Object===Object&&self,a=s||l||Function("return this")(),f=Object.prototype.toString,p=Math.max,y=Math.min,b=function(){return a.Date.now()};function d(e){var t=typeof e;return !!e&&("object"==t||"function"==t)}function h(e){if("number"==typeof e)return e;if(function(e){return "symbol"==typeof e||function(e){return !!e&&"object"==typeof e}(e)&&"[object Symbol]"==f.call(e)}(e))return NaN;if(d(e)){var t="function"==typeof e.valueOf?e.valueOf():e;e=d(t)?t+"":t;}if("string"!=typeof e)return 0===e?e:+e;e=e.replace(o,"");var r=i.test(e);return r||c.test(e)?u(e.slice(2),r?2:8):n.test(e)?NaN:+e}e.exports=function(e,t,r){var o,n,i,c,u,s,l=0,a=false,f=false,v=true;if("function"!=typeof e)throw new TypeError("Expected a function");function m(t){var r=o,i=n;return o=n=void 0,l=t,c=e.apply(i,r)}function O(e){var r=e-s;return void 0===s||r>=t||r<0||f&&e-l>=i}function w(){var e=b();if(O(e))return g(e);u=setTimeout(w,function(e){var r=t-(e-s);return f?y(r,i-(e-l)):r}(e));}function g(e){return u=void 0,v&&o?m(e):(o=n=void 0,c)}function P(){var e=b(),r=O(e);if(o=arguments,n=this,s=e,r){if(void 0===u)return function(e){return l=e,u=setTimeout(w,t),a?m(e):c}(s);if(f)return u=setTimeout(w,t),m(s)}return void 0===u&&(u=setTimeout(w,t)),c}return t=h(t)||0,d(r)&&(a=!!r.leading,i=(f="maxWait"in r)?p(h(r.maxWait)||0,t):i,v="trailing"in r?!!r.trailing:v),P.cancel=function(){ void 0!==u&&clearTimeout(u),l=0,o=s=n=u=void 0;},P.flush=function(){return void 0===u?c:g(b())},P};},96:(e,t,r)=>{var o="Expected a function",n=NaN,i="[object Symbol]",c=/^\s+|\s+$/g,u=/^[-+]0x[0-9a-f]+$/i,s=/^0b[01]+$/i,l=/^0o[0-7]+$/i,a=parseInt,f="object"==typeof r.g&&r.g&&r.g.Object===Object&&r.g,p="object"==typeof self&&self&&self.Object===Object&&self,y=f||p||Function("return this")(),b=Object.prototype.toString,d=Math.max,h=Math.min,v=function(){return y.Date.now()};function m(e){var t=typeof e;return !!e&&("object"==t||"function"==t)}function O(e){if("number"==typeof e)return e;if(function(e){return "symbol"==typeof e||function(e){return !!e&&"object"==typeof e}(e)&&b.call(e)==i}(e))return n;if(m(e)){var t="function"==typeof e.valueOf?e.valueOf():e;e=m(t)?t+"":t;}if("string"!=typeof e)return 0===e?e:+e;e=e.replace(c,"");var r=s.test(e);return r||l.test(e)?a(e.slice(2),r?2:8):u.test(e)?n:+e}e.exports=function(e,t,r){var n=true,i=true;if("function"!=typeof e)throw new TypeError(o);return m(r)&&(n="leading"in r?!!r.leading:n,i="trailing"in r?!!r.trailing:i),function(e,t,r){var n,i,c,u,s,l,a=0,f=false,p=false,y=true;if("function"!=typeof e)throw new TypeError(o);function b(t){var r=n,o=i;return n=i=void 0,a=t,u=e.apply(o,r)}function w(e){var r=e-l;return void 0===l||r>=t||r<0||p&&e-a>=c}function g(){var e=v();if(w(e))return P(e);s=setTimeout(g,function(e){var r=t-(e-l);return p?h(r,c-(e-a)):r}(e));}function P(e){return s=void 0,y&&n?b(e):(n=i=void 0,u)}function j(){var e=v(),r=w(e);if(n=arguments,i=this,l=e,r){if(void 0===s)return function(e){return a=e,s=setTimeout(g,t),f?b(e):u}(l);if(p)return s=setTimeout(g,t),b(l)}return void 0===s&&(s=setTimeout(g,t)),u}return t=O(t)||0,m(r)&&(f=!!r.leading,c=(p="maxWait"in r)?d(O(r.maxWait)||0,t):c,y="trailing"in r?!!r.trailing:y),j.cancel=function(){ void 0!==s&&clearTimeout(s),a=0,n=l=i=s=void 0;},j.flush=function(){return void 0===s?u:P(v())},j}(e,t,{leading:n,maxWait:t,trailing:i})};},703:(e,t,r)=>{var o=r(414);function n(){}function i(){}i.resetWarningCache=n,e.exports=function(){function e(e,t,r,n,i,c){if(c!==o){var u=new Error("Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types");throw u.name="Invariant Violation",u}}function t(){return e}e.isRequired=e;var r={array:e,bigint:e,bool:e,func:e,number:e,object:e,string:e,symbol:e,any:e,arrayOf:t,element:e,elementType:e,instanceOf:t,node:e,objectOf:t,oneOf:t,oneOfType:t,shape:t,exact:t,checkPropTypes:i,resetWarningCache:n};return r.PropTypes=r,r};},697:(e,t,r)=>{e.exports=r(703)();},414:e=>{e.exports="SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";}},t={};function r(o){var n=t[o];if(void 0!==n)return n.exports;var i=t[o]={exports:{}};return e[o](i,i.exports,r),i.exports}r.n=e=>{var t=e&&e.__esModule?()=>e.default:()=>e;return r.d(t,{a:t}),t},r.d=(e,t)=>{for(var o in t)r.o(t,o)&&!r.o(e,o)&&Object.defineProperty(e,o,{enumerable:true,get:t[o]});},r.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(e){if("object"==typeof window)return window}}(),r.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t),r.r=e=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:true});};var o={};(()=>{r.r(o),r.d(o,{LazyLoadComponent:()=>Y,LazyLoadImage:()=>ne,trackWindowScroll:()=>D});const e=reactExports;var t=r.n(e),n=r(697);function i(){return "undefined"!=typeof window&&"IntersectionObserver"in window&&"isIntersecting"in window.IntersectionObserverEntry.prototype}function c(e){return c="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},c(e)}function u(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var o=Object.getOwnPropertySymbols(e);t&&(o=o.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,o);}return r}function s(e,t,r){return (t=a(t))in e?Object.defineProperty(e,t,{value:r,enumerable:true,configurable:true,writable:true}):e[t]=r,e}function l(e,t){for(var r=0;r<t.length;r++){var o=t[r];o.enumerable=o.enumerable||false,o.configurable=true,"value"in o&&(o.writable=true),Object.defineProperty(e,a(o.key),o);}}function a(e){var t=function(e,t){if("object"!==c(e)||null===e)return e;var r=e[Symbol.toPrimitive];if(void 0!==r){var o=r.call(e,"string");if("object"!==c(o))return o;throw new TypeError("@@toPrimitive must return a primitive value.")}return String(e)}(e);return "symbol"===c(t)?t:String(t)}function f(e,t){return f=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(e,t){return e.__proto__=t,e},f(e,t)}function p(e){return p=Object.setPrototypeOf?Object.getPrototypeOf.bind():function(e){return e.__proto__||Object.getPrototypeOf(e)},p(e)}var y=function(e){e.forEach((function(e){e.isIntersecting&&e.target.onVisible();}));},b={},d=function(e){!function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:true,configurable:true}}),Object.defineProperty(e,"prototype",{writable:false}),t&&f(e,t);}(h,e);var r,o,n,a,d=(n=h,a=function(){if("undefined"==typeof Reflect||!Reflect.construct)return  false;if(Reflect.construct.sham)return  false;if("function"==typeof Proxy)return  true;try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return  false}}(),function(){var e,t=p(n);if(a){var r=p(this).constructor;e=Reflect.construct(t,arguments,r);}else e=t.apply(this,arguments);return function(e,t){if(t&&("object"===c(t)||"function"==typeof t))return t;if(void 0!==t)throw new TypeError("Derived constructors may only return object or undefined");return function(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}(e)}(this,e)});function h(e){var t;if(function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,h),(t=d.call(this,e)).supportsObserver=!e.scrollPosition&&e.useIntersectionObserver&&i(),t.supportsObserver){var r=e.threshold;t.observer=function(e){return b[e]=b[e]||new IntersectionObserver(y,{rootMargin:e+"px"}),b[e]}(r);}return t}return r=h,o=[{key:"componentDidMount",value:function(){this.placeholder&&this.observer&&(this.placeholder.onVisible=this.props.onVisible,this.observer.observe(this.placeholder)),this.supportsObserver||this.updateVisibility();}},{key:"componentWillUnmount",value:function(){this.observer&&this.placeholder&&this.observer.unobserve(this.placeholder);}},{key:"componentDidUpdate",value:function(){this.supportsObserver||this.updateVisibility();}},{key:"getPlaceholderBoundingBox",value:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:this.props.scrollPosition,t=this.placeholder.getBoundingClientRect(),r=this.placeholder.style,o=parseInt(r.getPropertyValue("margin-left"),10)||0,n=parseInt(r.getPropertyValue("margin-top"),10)||0;return {bottom:e.y+t.bottom+n,left:e.x+t.left+o,right:e.x+t.right+o,top:e.y+t.top+n}}},{key:"isPlaceholderInViewport",value:function(){if("undefined"==typeof window||!this.placeholder)return  false;var e=this.props,t=e.scrollPosition,r=e.threshold,o=this.getPlaceholderBoundingBox(t),n=t.y+window.innerHeight,i=t.x,c=t.x+window.innerWidth,u=t.y;return Boolean(u-r<=o.bottom&&n+r>=o.top&&i-r<=o.right&&c+r>=o.left)}},{key:"updateVisibility",value:function(){this.isPlaceholderInViewport()&&this.props.onVisible();}},{key:"render",value:function(){var e=this,r=this.props,o=r.className,n=r.height,i=r.placeholder,c=r.style,l=r.width;if(i&&"function"!=typeof i.type)return t().cloneElement(i,{ref:function(t){return e.placeholder=t}});var a=function(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?u(Object(r),true).forEach((function(t){s(e,t,r[t]);})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):u(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t));}));}return e}({display:"inline-block"},c);return void 0!==l&&(a.width=l),void 0!==n&&(a.height=n),t().createElement("span",{className:o,ref:function(t){return e.placeholder=t},style:a},i)}}],o&&l(r.prototype,o),Object.defineProperty(r,"prototype",{writable:false}),h}(t().Component);d.propTypes={onVisible:n.PropTypes.func.isRequired,className:n.PropTypes.string,height:n.PropTypes.oneOfType([n.PropTypes.number,n.PropTypes.string]),placeholder:n.PropTypes.element,threshold:n.PropTypes.number,useIntersectionObserver:n.PropTypes.bool,scrollPosition:n.PropTypes.shape({x:n.PropTypes.number.isRequired,y:n.PropTypes.number.isRequired}),width:n.PropTypes.oneOfType([n.PropTypes.number,n.PropTypes.string])},d.defaultProps={className:"",placeholder:null,threshold:100,useIntersectionObserver:true};const h=d;var v=r(296),m=r.n(v),O=r(96),w=r.n(O),g=function(e){var t=getComputedStyle(e,null);return t.getPropertyValue("overflow")+t.getPropertyValue("overflow-y")+t.getPropertyValue("overflow-x")};const P=function(e){if(!(e instanceof HTMLElement))return window;for(var t=e;t&&t instanceof HTMLElement;){if(/(scroll|auto)/.test(g(t)))return t;t=t.parentNode;}return window};function j(e){return j="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},j(e)}var T=["delayMethod","delayTime"];function S(){return S=Object.assign?Object.assign.bind():function(e){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var o in r)Object.prototype.hasOwnProperty.call(r,o)&&(e[o]=r[o]);}return e},S.apply(this,arguments)}function E(e,t){for(var r=0;r<t.length;r++){var o=t[r];o.enumerable=o.enumerable||false,o.configurable=true,"value"in o&&(o.writable=true),Object.defineProperty(e,(n=function(e,t){if("object"!==j(e)||null===e)return e;var r=e[Symbol.toPrimitive];if(void 0!==r){var o=r.call(e,"string");if("object"!==j(o))return o;throw new TypeError("@@toPrimitive must return a primitive value.")}return String(e)}(o.key),"symbol"===j(n)?n:String(n)),o);}var n;}function L(e,t){return L=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(e,t){return e.__proto__=t,e},L(e,t)}function _(e,t){if(t&&("object"===j(t)||"function"==typeof t))return t;if(void 0!==t)throw new TypeError("Derived constructors may only return object or undefined");return I(e)}function I(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function x(e){return x=Object.setPrototypeOf?Object.getPrototypeOf.bind():function(e){return e.__proto__||Object.getPrototypeOf(e)},x(e)}var R=function(){return "undefined"==typeof window?0:window.scrollX||window.pageXOffset},k=function(){return "undefined"==typeof window?0:window.scrollY||window.pageYOffset};const D=function(e){var r=function(r){!function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:true,configurable:true}}),Object.defineProperty(e,"prototype",{writable:false}),t&&L(e,t);}(l,r);var o,n,c,u,s=(c=l,u=function(){if("undefined"==typeof Reflect||!Reflect.construct)return  false;if(Reflect.construct.sham)return  false;if("function"==typeof Proxy)return  true;try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return  false}}(),function(){var e,t=x(c);if(u){var r=x(this).constructor;e=Reflect.construct(t,arguments,r);}else e=t.apply(this,arguments);return _(this,e)});function l(e){var r;if(function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,l),(r=s.call(this,e)).useIntersectionObserver=e.useIntersectionObserver&&i(),r.useIntersectionObserver)return _(r);var o=r.onChangeScroll.bind(I(r));return "debounce"===e.delayMethod?r.delayedScroll=m()(o,e.delayTime):"throttle"===e.delayMethod&&(r.delayedScroll=w()(o,e.delayTime)),r.state={scrollPosition:{x:R(),y:k()}},r.baseComponentRef=t().createRef(),r}return o=l,(n=[{key:"componentDidMount",value:function(){this.addListeners();}},{key:"componentWillUnmount",value:function(){this.removeListeners();}},{key:"componentDidUpdate",value:function(){"undefined"==typeof window||this.useIntersectionObserver||P(this.baseComponentRef.current)!==this.scrollElement&&(this.removeListeners(),this.addListeners());}},{key:"addListeners",value:function(){"undefined"==typeof window||this.useIntersectionObserver||(this.scrollElement=P(this.baseComponentRef.current),this.scrollElement.addEventListener("scroll",this.delayedScroll,{passive:true}),window.addEventListener("resize",this.delayedScroll,{passive:true}),this.scrollElement!==window&&window.addEventListener("scroll",this.delayedScroll,{passive:true}));}},{key:"removeListeners",value:function(){"undefined"==typeof window||this.useIntersectionObserver||(this.scrollElement.removeEventListener("scroll",this.delayedScroll),window.removeEventListener("resize",this.delayedScroll),this.scrollElement!==window&&window.removeEventListener("scroll",this.delayedScroll));}},{key:"onChangeScroll",value:function(){this.useIntersectionObserver||this.setState({scrollPosition:{x:R(),y:k()}});}},{key:"render",value:function(){var r=this.props,o=(r.delayMethod,r.delayTime,function(e,t){if(null==e)return {};var r,o,n=function(e,t){if(null==e)return {};var r,o,n={},i=Object.keys(e);for(o=0;o<i.length;o++)r=i[o],t.indexOf(r)>=0||(n[r]=e[r]);return n}(e,t);if(Object.getOwnPropertySymbols){var i=Object.getOwnPropertySymbols(e);for(o=0;o<i.length;o++)r=i[o],t.indexOf(r)>=0||Object.prototype.propertyIsEnumerable.call(e,r)&&(n[r]=e[r]);}return n}(r,T)),n=this.useIntersectionObserver?null:this.state.scrollPosition;return t().createElement(e,S({forwardRef:this.baseComponentRef,scrollPosition:n},o))}}])&&E(o.prototype,n),Object.defineProperty(o,"prototype",{writable:false}),l}(t().Component);return r.propTypes={delayMethod:n.PropTypes.oneOf(["debounce","throttle"]),delayTime:n.PropTypes.number,useIntersectionObserver:n.PropTypes.bool},r.defaultProps={delayMethod:"throttle",delayTime:300,useIntersectionObserver:true},r};function C(e){return C="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},C(e)}function B(e,t){for(var r=0;r<t.length;r++){var o=t[r];o.enumerable=o.enumerable||false,o.configurable=true,"value"in o&&(o.writable=true),Object.defineProperty(e,(n=function(e,t){if("object"!==C(e)||null===e)return e;var r=e[Symbol.toPrimitive];if(void 0!==r){var o=r.call(e,"string");if("object"!==C(o))return o;throw new TypeError("@@toPrimitive must return a primitive value.")}return String(e)}(o.key),"symbol"===C(n)?n:String(n)),o);}var n;}function M(e,t){return M=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(e,t){return e.__proto__=t,e},M(e,t)}function N(e){return N=Object.setPrototypeOf?Object.getPrototypeOf.bind():function(e){return e.__proto__||Object.getPrototypeOf(e)},N(e)}var V=function(e){!function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:true,configurable:true}}),Object.defineProperty(e,"prototype",{writable:false}),t&&M(e,t);}(u,e);var r,o,n,i,c=(n=u,i=function(){if("undefined"==typeof Reflect||!Reflect.construct)return  false;if(Reflect.construct.sham)return  false;if("function"==typeof Proxy)return  true;try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return  false}}(),function(){var e,t=N(n);if(i){var r=N(this).constructor;e=Reflect.construct(t,arguments,r);}else e=t.apply(this,arguments);return function(e,t){if(t&&("object"===C(t)||"function"==typeof t))return t;if(void 0!==t)throw new TypeError("Derived constructors may only return object or undefined");return function(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}(e)}(this,e)});function u(e){return function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,u),c.call(this,e)}return r=u,(o=[{key:"render",value:function(){return t().createElement(h,this.props)}}])&&B(r.prototype,o),Object.defineProperty(r,"prototype",{writable:false}),u}(t().Component);const W=D(V);function z(e){return z="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},z(e)}function $(e,t){for(var r=0;r<t.length;r++){var o=t[r];o.enumerable=o.enumerable||false,o.configurable=true,"value"in o&&(o.writable=true),Object.defineProperty(e,(n=function(e,t){if("object"!==z(e)||null===e)return e;var r=e[Symbol.toPrimitive];if(void 0!==r){var o=r.call(e,"string");if("object"!==z(o))return o;throw new TypeError("@@toPrimitive must return a primitive value.")}return String(e)}(o.key),"symbol"===z(n)?n:String(n)),o);}var n;}function U(e,t){return U=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(e,t){return e.__proto__=t,e},U(e,t)}function F(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function q(e){return q=Object.setPrototypeOf?Object.getPrototypeOf.bind():function(e){return e.__proto__||Object.getPrototypeOf(e)},q(e)}var H=function(e){!function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:true,configurable:true}}),Object.defineProperty(e,"prototype",{writable:false}),t&&U(e,t);}(s,e);var r,o,n,c,u=(n=s,c=function(){if("undefined"==typeof Reflect||!Reflect.construct)return  false;if(Reflect.construct.sham)return  false;if("function"==typeof Proxy)return  true;try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return  false}}(),function(){var e,t=q(n);if(c){var r=q(this).constructor;e=Reflect.construct(t,arguments,r);}else e=t.apply(this,arguments);return function(e,t){if(t&&("object"===z(t)||"function"==typeof t))return t;if(void 0!==t)throw new TypeError("Derived constructors may only return object or undefined");return F(e)}(this,e)});function s(e){var t;!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,s),t=u.call(this,e);var r=e.afterLoad,o=e.beforeLoad,n=e.scrollPosition,i=e.visibleByDefault;return t.state={visible:i},i&&(o(),r()),t.onVisible=t.onVisible.bind(F(t)),t.isScrollTracked=Boolean(n&&Number.isFinite(n.x)&&n.x>=0&&Number.isFinite(n.y)&&n.y>=0),t}return r=s,(o=[{key:"componentDidUpdate",value:function(e,t){t.visible!==this.state.visible&&this.props.afterLoad();}},{key:"onVisible",value:function(){this.props.beforeLoad(),this.setState({visible:true});}},{key:"render",value:function(){if(this.state.visible)return this.props.children;var e=this.props,r=e.className,o=e.delayMethod,n=e.delayTime,c=e.height,u=e.placeholder,s=e.scrollPosition,l=e.style,a=e.threshold,f=e.useIntersectionObserver,p=e.width;return this.isScrollTracked||f&&i()?t().createElement(h,{className:r,height:c,onVisible:this.onVisible,placeholder:u,scrollPosition:s,style:l,threshold:a,useIntersectionObserver:f,width:p}):t().createElement(W,{className:r,delayMethod:o,delayTime:n,height:c,onVisible:this.onVisible,placeholder:u,style:l,threshold:a,width:p})}}])&&$(r.prototype,o),Object.defineProperty(r,"prototype",{writable:false}),s}(t().Component);H.propTypes={afterLoad:n.PropTypes.func,beforeLoad:n.PropTypes.func,useIntersectionObserver:n.PropTypes.bool,visibleByDefault:n.PropTypes.bool},H.defaultProps={afterLoad:function(){return {}},beforeLoad:function(){return {}},useIntersectionObserver:true,visibleByDefault:false};const Y=H;function X(e){return X="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},X(e)}var A=["afterLoad","beforeLoad","delayMethod","delayTime","effect","placeholder","placeholderSrc","scrollPosition","threshold","useIntersectionObserver","visibleByDefault","wrapperClassName","wrapperProps"];function G(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var o=Object.getOwnPropertySymbols(e);t&&(o=o.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,o);}return r}function J(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?G(Object(r),true).forEach((function(t){K(e,t,r[t]);})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):G(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t));}));}return e}function K(e,t,r){return (t=ee(t))in e?Object.defineProperty(e,t,{value:r,enumerable:true,configurable:true,writable:true}):e[t]=r,e}function Q(){return Q=Object.assign?Object.assign.bind():function(e){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var o in r)Object.prototype.hasOwnProperty.call(r,o)&&(e[o]=r[o]);}return e},Q.apply(this,arguments)}function Z(e,t){for(var r=0;r<t.length;r++){var o=t[r];o.enumerable=o.enumerable||false,o.configurable=true,"value"in o&&(o.writable=true),Object.defineProperty(e,ee(o.key),o);}}function ee(e){var t=function(e,t){if("object"!==X(e)||null===e)return e;var r=e[Symbol.toPrimitive];if(void 0!==r){var o=r.call(e,"string");if("object"!==X(o))return o;throw new TypeError("@@toPrimitive must return a primitive value.")}return String(e)}(e);return "symbol"===X(t)?t:String(t)}function te(e,t){return te=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(e,t){return e.__proto__=t,e},te(e,t)}function re(e){return re=Object.setPrototypeOf?Object.getPrototypeOf.bind():function(e){return e.__proto__||Object.getPrototypeOf(e)},re(e)}var oe=function(e){!function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:true,configurable:true}}),Object.defineProperty(e,"prototype",{writable:false}),t&&te(e,t);}(u,e);var r,o,n,i,c=(n=u,i=function(){if("undefined"==typeof Reflect||!Reflect.construct)return  false;if(Reflect.construct.sham)return  false;if("function"==typeof Proxy)return  true;try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return  false}}(),function(){var e,t=re(n);if(i){var r=re(this).constructor;e=Reflect.construct(t,arguments,r);}else e=t.apply(this,arguments);return function(e,t){if(t&&("object"===X(t)||"function"==typeof t))return t;if(void 0!==t)throw new TypeError("Derived constructors may only return object or undefined");return function(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}(e)}(this,e)});function u(e){var t;return function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,u),(t=c.call(this,e)).state={loaded:false},t}return r=u,(o=[{key:"onImageLoad",value:function(){var e=this;return this.state.loaded?null:function(t){e.props.onLoad(t),e.props.afterLoad(),e.setState({loaded:true});}}},{key:"getImg",value:function(){var e=this.props,r=(e.afterLoad,e.beforeLoad,e.delayMethod,e.delayTime,e.effect,e.placeholder,e.placeholderSrc,e.scrollPosition,e.threshold,e.useIntersectionObserver,e.visibleByDefault,e.wrapperClassName,e.wrapperProps,function(e,t){if(null==e)return {};var r,o,n=function(e,t){if(null==e)return {};var r,o,n={},i=Object.keys(e);for(o=0;o<i.length;o++)r=i[o],t.indexOf(r)>=0||(n[r]=e[r]);return n}(e,t);if(Object.getOwnPropertySymbols){var i=Object.getOwnPropertySymbols(e);for(o=0;o<i.length;o++)r=i[o],t.indexOf(r)>=0||Object.prototype.propertyIsEnumerable.call(e,r)&&(n[r]=e[r]);}return n}(e,A));return t().createElement("img",Q({},r,{onLoad:this.onImageLoad()}))}},{key:"getLazyLoadImage",value:function(){var e=this.props,r=e.beforeLoad,o=e.className,n=e.delayMethod,i=e.delayTime,c=e.height,u=e.placeholder,s=e.scrollPosition,l=e.style,a=e.threshold,f=e.useIntersectionObserver,p=e.visibleByDefault,y=e.width;return t().createElement(Y,{beforeLoad:r,className:o,delayMethod:n,delayTime:i,height:c,placeholder:u,scrollPosition:s,style:l,threshold:a,useIntersectionObserver:f,visibleByDefault:p,width:y},this.getImg())}},{key:"getWrappedLazyLoadImage",value:function(e){var r=this.props,o=r.effect,n=r.height,i=r.placeholderSrc,c=r.width,u=r.wrapperClassName,s=r.wrapperProps,l=this.state.loaded,a=l?" lazy-load-image-loaded":"",f=l||!i?{}:{backgroundImage:"url(".concat(i,")"),backgroundSize:"100% 100%"};return t().createElement("span",Q({className:u+" lazy-load-image-background "+o+a,style:J(J({},f),{},{color:"transparent",display:"inline-block",height:n,width:c})},s),e)}},{key:"render",value:function(){var e=this.props,t=e.effect,r=e.placeholderSrc,o=e.visibleByDefault,n=e.wrapperClassName,i=e.wrapperProps,c=this.getLazyLoadImage();return (t||r)&&!o||n||i?this.getWrappedLazyLoadImage(c):c}}])&&Z(r.prototype,o),Object.defineProperty(r,"prototype",{writable:false}),u}(t().Component);oe.propTypes={onLoad:n.PropTypes.func,afterLoad:n.PropTypes.func,beforeLoad:n.PropTypes.func,delayMethod:n.PropTypes.string,delayTime:n.PropTypes.number,effect:n.PropTypes.string,placeholderSrc:n.PropTypes.string,threshold:n.PropTypes.number,useIntersectionObserver:n.PropTypes.bool,visibleByDefault:n.PropTypes.bool,wrapperClassName:n.PropTypes.string,wrapperProps:n.PropTypes.object},oe.defaultProps={onLoad:function(){},afterLoad:function(){return {}},beforeLoad:function(){return {}},delayMethod:"throttle",delayTime:300,effect:"",placeholderSrc:null,threshold:100,useIntersectionObserver:true,visibleByDefault:false,wrapperClassName:""};const ne=oe;})(),build.exports=o;})();
-
-var buildExports = build.exports;
-
 const React$5 = await importShared('react');
-const {useState: useState$5} = React$5;
-const gameCategories = [
-  { id: "all", label: "ALL", icon: FaGripHorizontal },
-  { id: "monti", label: "MONTI", icon: GiDiamonds },
-  { id: "bighilo", label: "BIG HILO", icon: CgCardSpades },
-  { id: "fishing", label: "FISHING", icon: GiFishing },
-  { id: "dice", label: "DICE", icon: FaDice },
-  { id: "keno", label: "KENO", icon: BsGrid3X3 }
-];
-const gameData = [
-  {
-    id: "monti",
-    title: "MONTI",
-    image: "https://cmsbetconstruct.com/content/images/casino/icon3/32d6eb4b162c68987775404fd41f3b72_casinoGameIcon3.webp",
-    category: "monti"
-  },
-  {
-    id: "bighilo",
-    title: "BIG HILO",
-    image: "https://cmsbetconstruct.com/content/images/casino/icon3/32d6eb4b162c68987775404fd41f3b72_casinoGameIcon3.webp",
-    category: "bighilo"
-  },
-  {
-    id: "fishing",
-    title: "FISHING",
-    image: "https://cmsbetconstruct.com/content/images/casino/icon3/32d6eb4b162c68987775404fd41f3b72_casinoGameIcon3.webp",
-    category: "fishing"
-  },
-  {
-    id: "dice",
-    title: "DICE",
-    image: "https://cmsbetconstruct.com/content/images/casino/icon3/32d6eb4b162c68987775404fd41f3b72_casinoGameIcon3.webp",
-    category: "dice"
-  },
-  {
-    id: "keno",
-    title: "KENO",
-    image: "https://cmsbetconstruct.com/content/images/casino/icon3/32d6eb4b162c68987775404fd41f3b72_casinoGameIcon3.webp",
-    category: "keno"
-  }
-];
+const {useState: useState$5,useEffect: useEffect$3} = React$5;
 const Games = () => {
-  const [activeCategory, setActiveCategory] = useState$5("all");
+  const dispatch = useDispatch();
+  const { gamesByProvider, loadingGames, gamesError } = useSelector((state) => state.CasinoGames);
   const [searchTerm, setSearchTerm] = useState$5("");
-  const filteredGames = gameData.filter((game) => {
-    const matchesCategory = activeCategory === "all" || game.category === activeCategory;
-    const matchesSearch = game.title.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesCategory && matchesSearch;
+  useEffect$3(() => {
+    dispatch(fetchCasinoGames({
+      batchNumber: 0,
+      batchSize: 100,
+      providerName: "SPRIBE",
+      search: ""
+    }));
+  }, [dispatch]);
+  const allGames = gamesByProvider.flatMap((provider) => provider.games || []);
+  const filteredGames = allGames.filter((game) => {
+    return game.name?.toLowerCase().includes(searchTerm.toLowerCase());
   });
+  const handlePlayGame = (game) => {
+  };
+  if (loadingGames && allGames.length === 0) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "games-container", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "games-search-container", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "games-search-wrapper", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(FiSearch, { className: "games-search-icon", size: 18 }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "text",
+            className: "games-search-input",
+            placeholder: "Search Games",
+            value: searchTerm,
+            onChange: (e) => setSearchTerm(e.target.value)
+          }
+        )
+      ] }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "games-grid", style: { gap: "0.5rem" }, children: [...Array(5)].map((_, index) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-game-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-game-card-img-loading", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-game-card-img-shimmer" }) }) }, index)) })
+    ] });
+  }
+  if (gamesError) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "games-container", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "games-search-container", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "games-search-wrapper", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(FiSearch, { className: "games-search-icon", size: 18 }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "text",
+            className: "games-search-input",
+            placeholder: "Search Games",
+            value: searchTerm,
+            onChange: (e) => setSearchTerm(e.target.value)
+          }
+        )
+      ] }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "games-error", children: [
+        "Error loading games: ",
+        gamesError,
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => window.location.reload(), className: "games-retry-button", children: "Retry" })
+      ] })
+    ] });
+  }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "games-container", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "games-filter-bar", children: gameCategories.map((category) => {
-      const IconComponent = category.icon;
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "button",
-        {
-          className: `games-filter-button ${activeCategory === category.id ? "active" : ""}`,
-          onClick: () => setActiveCategory(category.id),
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(IconComponent, { size: 16 }),
-            category.label
-          ]
-        },
-        category.id
-      );
-    }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "games-search-container", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "games-search-wrapper", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(FiSearch, { className: "games-search-icon", size: 18 }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -31394,27 +33965,20 @@ const Games = () => {
         {
           type: "text",
           className: "games-search-input",
-          placeholder: "GAMES",
+          placeholder: "Search Games",
           value: searchTerm,
           onChange: (e) => setSearchTerm(e.target.value)
         }
       )
     ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "games-grid", children: filteredGames.map((game) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "games-card", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        buildExports.LazyLoadImage,
-        {
-          src: game.image,
-          alt: game.title,
-          className: "games-card-image",
-          effect: "blur"
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "games-card-title", children: game.title }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "games-card-overlay", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "games-card-play-button", children: "PLAY" }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "games-card-logo" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "games-card-star", children: /* @__PURE__ */ jsxRuntimeExports.jsx(FaStar, { size: 20 }) })
-    ] }, game.id)) })
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "games-grid", style: { gap: "0.5rem" }, children: filteredGames.map((game) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      CasinoGameCard,
+      {
+        game,
+        onPlay: handlePlayGame
+      },
+      game.gameId || game.id
+    )) })
   ] });
 };
 
@@ -31982,4 +34546,4 @@ function LayoutApp() {
   ] }) }) });
 }
 
-export { SIGNUP_FAILURE as $, Anchor as A, Button$1 as B, Content$1 as C, DismissableLayer as D, Eye as E, FocusScope as F, GET_USER_DATA as G, Arrow as H, Input as I, composeRefs as J, useNavigate as K, LOGOUT as L, useLocation as M, ChevronDown as N, Overlay as O, Portal$1 as P, useDispatch as Q, Root$2 as R, useSelector as S, Link as T, User as U, RegisterModal as V, LoginModal as W, X, Toaster as Y, NavLink as Z, Outlet as _, LOGOUT_SUCCESS as a, SIGNUP_SUCCESS as a0, SIGNUP as a1, UPDATE_USER_BALANCE_EXPOSURE_SUCCESS as a2, UPDATE_USER_BALANCE_EXPOSURE as a3, LOGIN_FAILURE as a4, LOGIN_SUCCESS as a5, LOGIN as a6, VERIFY_EMAIL_FAILURE as a7, VERIFY_EMAIL_SUCCESS as a8, VERIFY_EMAIL as a9, FaStar as aA, buildExports as aB, useNotification as aC, UPDATE_USER_BALANCE_EXPOSURE_FAILURE as aa, notifyPromise as ab, api as ac, setLocalStorageItem as ad, signupSuccess as ae, loginSuccess as af, signupFailure as ag, loginFailure as ah, verifyEmailSuccess as ai, verifyEmailFailure as aj, removeLocalStorageItem as ak, updateUserBalanceExposureFailure as al, updateUserBalanceExposureSuccess as am, Provider_default as an, ArrowLeft as ao, useLayoutEffect2 as ap, usePrevious as aq, Check as ar, ChevronUp as as, SPORTS as at, ChevronRight as au, SkeletonLoader as av, SPORT_ID_BY_KEY as aw, fetchSportsEvents as ax, GenIcon as ay, FaInfoCircle as az, LOGOUT_FAILURE as b, GET_USER_DATA_SUCCESS as c, GET_USER_DATA_FAILURE as d, LayoutApp as default, createLucideIcon as e, createContextScope as f, createSlot as g, cn$1 as h, Close as i, jsxRuntimeExports as j, getLocalStorageItem as k, useId as l, Primitive as m, composeEventHandlers$1 as n, useControllableState as o, useCallbackRef$1 as p, createPopperScope as q, Root2$1 as r, Presence$1 as s, Portal$2 as t, useComposedRefs as u, hideOthers as v, dispatchDiscreteCustomEvent as w, ReactRemoveScroll as x, useFocusGuards as y, Content as z };
+export { Outlet as $, ArrowRight as A, Button$1 as B, Content$1 as C, DismissableLayer as D, Eye as E, FocusScope as F, GET_USER_DATA as G, Content as H, Input as I, Arrow as J, composeRefs as K, LOGOUT as L, useNavigate as M, useLocation as N, Overlay as O, Portal$1 as P, ChevronDown as Q, Root$2 as R, useDispatch as S, useSelector as T, User as U, Link as V, RegisterModal as W, X, LoginModal as Y, Toaster as Z, NavLink as _, LOGOUT_SUCCESS as a, fetchCasinoGameUrlSuccess as a$, SIGNUP_FAILURE as a0, SIGNUP_SUCCESS as a1, SIGNUP as a2, UPDATE_USER_BALANCE_EXPOSURE_SUCCESS as a3, UPDATE_USER_BALANCE_EXPOSURE as a4, LOGIN_FAILURE as a5, LOGIN_SUCCESS as a6, LOGIN as a7, VERIFY_EMAIL_FAILURE as a8, VERIFY_EMAIL_SUCCESS as a9, FETCH_USER_BETS_SUCCESS as aA, FETCH_USER_BETS as aB, notifyPromise as aC, api as aD, setLocalStorageItem as aE, signupSuccess as aF, loginSuccess as aG, signupFailure as aH, loginFailure as aI, verifyEmailSuccess as aJ, verifyEmailFailure as aK, removeLocalStorageItem as aL, updateUserBalanceExposureFailure as aM, updateUserBalanceExposureSuccess as aN, axios as aO, notifyError as aP, fetchCasinoProvidersSuccess as aQ, fetchCasinoProvidersFailure as aR, fetchMoreCasinoProvidersSuccess as aS, fetchCasinoGamesSuccess as aT, fetchCasinoGamesFailure as aU, fetchMoreCasinoGamesSuccess as aV, fetchMoreCasinoGamesFailure as aW, fetchHomepageCasinoGamesSuccess as aX, fetchHomepageCasinoGamesFailure as aY, fetchHomepageLiveGamesSuccess as aZ, fetchHomepageLiveGamesFailure as a_, VERIFY_EMAIL as aa, UPDATE_USER_BALANCE_EXPOSURE_FAILURE as ab, FETCH_CASINO_GAME_URL_FAILURE as ac, FETCH_CASINO_GAME_URL_SUCCESS as ad, FETCH_CASINO_GAME_URL as ae, FETCH_MORE_CASINO_PROVIDERS_FAILURE as af, FETCH_MORE_CASINO_PROVIDERS_SUCCESS as ag, FETCH_MORE_CASINO_PROVIDERS as ah, FETCH_CASINO_PROVIDERS_FAILURE as ai, FETCH_CASINO_PROVIDERS_SUCCESS as aj, FETCH_CASINO_PROVIDERS as ak, FETCH_HOMEPAGE_LIVE_GAMES_FAILURE as al, FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS as am, FETCH_HOMEPAGE_LIVE_GAMES as an, FETCH_HOMEPAGE_CASINO_GAMES_FAILURE as ao, FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS as ap, FETCH_HOMEPAGE_CASINO_GAMES as aq, RESET_CASINO_GAMES as ar, FETCH_MORE_CASINO_GAMES_FAILURE as as, FETCH_MORE_CASINO_GAMES_SUCCESS as at, FETCH_MORE_CASINO_GAMES as au, FETCH_CASINO_GAMES_FAILURE as av, FETCH_CASINO_GAMES_SUCCESS as aw, FETCH_CASINO_GAMES as ax, SKIP_NEXT_USER_BETS_FETCH as ay, FETCH_USER_BETS_FAILURE as az, LOGOUT_FAILURE as b, fetchCasinoGameUrlFailure as b0, fetchUserBetsSuccess as b1, fetchUserBetsFailure as b2, Provider_default as b3, useLayoutEffect2 as b4, usePrevious as b5, Check as b6, ChevronUp as b7, SPORTS as b8, ChevronRight as b9, SkeletonLoader as ba, SPORT_ID_BY_KEY as bb, fetchSportsEvents as bc, fetchHomepageCasinoGames as bd, fetchHomepageLiveGames as be, Carousel as bf, CarouselContent as bg, CarouselItem as bh, CarouselPrevious as bi, CarouselNext as bj, CasinoGameCard as bk, useNotification as bl, GET_USER_DATA_SUCCESS as c, GET_USER_DATA_FAILURE as d, LayoutApp as default, createLucideIcon as e, createContextScope as f, createSlot as g, cn$1 as h, Close as i, jsxRuntimeExports as j, getLocalStorageItem as k, useId as l, Primitive as m, composeEventHandlers$1 as n, useControllableState as o, useCallbackRef$1 as p, createPopperScope as q, Root2$1 as r, Anchor as s, Presence$1 as t, useComposedRefs as u, Portal$2 as v, hideOthers as w, dispatchDiscreteCustomEvent as x, ReactRemoveScroll as y, useFocusGuards as z };
