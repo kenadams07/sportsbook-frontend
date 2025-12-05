@@ -11,7 +11,7 @@ async function bootstrap() {
   
   // Enable CORS for your frontend
   router.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:9000'); // For development
+    res.header('Access-Control-Allow-Origin', '*'); // Allow all origins for flexibility
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
@@ -24,6 +24,8 @@ async function bootstrap() {
       const queryParams = new URLSearchParams(req.query as any).toString();
       const baseUrl = process.env.MATCH_ODDS_API || 'http://89.116.20.218:2700';
       const url = `${baseUrl}/events${queryParams ? `?${queryParams}` : ''}`;
+      
+      console.log(`Proxying request to: ${url}`);
       
       const response = await axios.default.get(url, {
         headers: {
@@ -49,7 +51,8 @@ async function bootstrap() {
       const queryParams = new URLSearchParams(req.query as any).toString();
       const baseUrl = process.env.MATCH_ODDS_API || 'http://89.116.20.218:2700';
       const url = `${baseUrl}/markets${queryParams ? `?${queryParams}` : ''}`;
-    
+      
+      console.log(`Proxying request to: ${url}`);
       
       const response = await axios.default.get(url, {
         headers: {
