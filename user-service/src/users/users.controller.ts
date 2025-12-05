@@ -33,12 +33,24 @@ export class UsersController {
   }
 
   @Post('signup')
-  async create(@Body(new ValidationPipe()) signupDto: SignupDto, @Res() res) {
+  async create(@Body(new ValidationPipe()) signupDto: SignupDto, @Req() req, @Res() res) {
     try {
       // Set CORS headers manually since we're using @Res()
-      res.header('Access-Control-Allow-Origin', '*');
+      // Dynamically set the origin based on the request's Origin header
+      const origin = req.get('Origin');
+      const allowedOrigins = [
+        'https://user-api.xfair91.com',
+        'http://user-api.xfair91.com',
+        'http://localhost:3001'
+      ];
+      
+      if (origin && allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+      }
+      
       res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
       res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+      res.header('Access-Control-Allow-Credentials', 'true');
       
       const payload: Partial<Users> = { 
         username: signupDto.username,
@@ -124,9 +136,20 @@ export class UsersController {
 
     } catch (error) {
       // Set CORS headers for error responses as well
-      res.header('Access-Control-Allow-Origin', '*');
+      const origin = req.get('Origin');
+      const allowedOrigins = [
+        'https://user-api.xfair91.com',
+        'http://user-api.xfair91.com',
+        'http://localhost:3001'
+      ];
+      
+      if (origin && allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+      }
+      
       res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
       res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+      res.header('Access-Control-Allow-Credentials', 'true');
       
       return res.status(error.status || 500).json(
         errorResponse(
@@ -138,12 +161,24 @@ export class UsersController {
   }
 
   @Post('login')
-  async login(@Body(new ValidationPipe()) loginDto: LoginDto, @Res() res) {
+  async login(@Body(new ValidationPipe()) loginDto: LoginDto, @Req() req, @Res() res) {
     try {
       // Set CORS headers manually since we're using @Res()
-      res.header('Access-Control-Allow-Origin', '*');
+      // Dynamically set the origin based on the request's Origin header
+      const origin = req.get('Origin');
+      const allowedOrigins = [
+        'https://user-api.xfair91.com',
+        'http://user-api.xfair91.com',
+        'http://localhost:3001'
+      ];
+      
+      if (origin && allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+      }
+      
       res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
       res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+      res.header('Access-Control-Allow-Credentials', 'true');
       
       const { emailOrUsername, password, rememberMe } = loginDto;
       
@@ -213,9 +248,20 @@ export class UsersController {
       
     } catch (error) {
       // Set CORS headers for error responses as well
-      res.header('Access-Control-Allow-Origin', '*');
+      const origin = req.get('Origin');
+      const allowedOrigins = [
+        'https://user-api.xfair91.com',
+        'http://user-api.xfair91.com',
+        'http://localhost:3001'
+      ];
+      
+      if (origin && allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+      }
+      
       res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
       res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+      res.header('Access-Control-Allow-Credentials', 'true');
       
       return res.status(error.status || 500).json(
         errorResponse(
@@ -312,9 +358,21 @@ export class UsersController {
   async getProfile(@Req() req, @Headers('authorization') authHeader: string, @Res() res) {
     try {
       // Set CORS headers manually since we're using @Res()
-      res.header('Access-Control-Allow-Origin', '*');
+      // Dynamically set the origin based on the request's Origin header
+      const origin = req.get('Origin');
+      const allowedOrigins = [
+        'https://user-api.xfair91.com',
+        'http://user-api.xfair91.com',
+        'http://localhost:3001'
+      ];
+      
+      if (origin && allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+      }
+      
       res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
       res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+      res.header('Access-Control-Allow-Credentials', 'true');
       
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json(errorResponse('Authorization token is required', 401));
@@ -376,9 +434,20 @@ export class UsersController {
       });
     } catch (error) {
       // Set CORS headers for error responses as well
-      res.header('Access-Control-Allow-Origin', '*');
+      const origin = req.get('Origin');
+      const allowedOrigins = [
+        'https://user-api.xfair91.com',
+        'http://user-api.xfair91.com',
+        'http://localhost:3001'
+      ];
+      
+      if (origin && allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+      }
+      
       res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
       res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+      res.header('Access-Control-Allow-Credentials', 'true');
       
       return res.status(error.status || 500).json(
         errorResponse(
