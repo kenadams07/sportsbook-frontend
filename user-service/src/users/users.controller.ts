@@ -41,6 +41,7 @@ export class UsersController {
       const allowedOrigins = [
         'https://user-api.xfair91.com',
         'http://user-api.xfair91.com',
+        'https://xfair91.com',
         'http://localhost:3001'
       ];
       
@@ -140,6 +141,7 @@ export class UsersController {
       const allowedOrigins = [
         'https://user-api.xfair91.com',
         'http://user-api.xfair91.com',
+        'https://xfair91.com',
         'http://localhost:3001'
       ];
       
@@ -169,6 +171,7 @@ export class UsersController {
       const allowedOrigins = [
         'https://user-api.xfair91.com',
         'http://user-api.xfair91.com',
+        'https://xfair91.com',
         'http://localhost:3001'
       ];
       
@@ -252,6 +255,7 @@ export class UsersController {
       const allowedOrigins = [
         'https://user-api.xfair91.com',
         'http://user-api.xfair91.com',
+        'https://xfair91.com',
         'http://localhost:3001'
       ];
       
@@ -363,6 +367,7 @@ export class UsersController {
       const allowedOrigins = [
         'https://user-api.xfair91.com',
         'http://user-api.xfair91.com',
+        'https://xfair91.com',
         'http://localhost:3001'
       ];
       
@@ -438,6 +443,7 @@ export class UsersController {
       const allowedOrigins = [
         'https://user-api.xfair91.com',
         'http://user-api.xfair91.com',
+        'https://xfair91.com',
         'http://localhost:3001'
       ];
       

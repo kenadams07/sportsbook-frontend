@@ -20,6 +20,7 @@ async function bootstrap() {
     origin: [
       'https://user-api.xfair91.com',
       'http://user-api.xfair91.com',
+      'https://xfair91.com',
       'http://localhost:3001'
     ],
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
