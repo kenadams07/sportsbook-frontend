@@ -1,5 +1,7 @@
-// Use the proxy endpoint to avoid CORS issues
+// Use the proxy endpoint in development to avoid CORS issues, and direct endpoint in production
+const IS_DEVELOPMENT = import.meta.env.MODE === 'development';
 const EVENTS_API_PROXY = "/api/events";
+const EVENTS_API_BASE_URL = import.meta.env.VITE_EVENTS_API_URL || "http://89.116.20.218:2700";
 
 /**
  * Utility function to implement retry logic with exponential backoff
@@ -36,8 +38,10 @@ async function retryWithBackoff(fn, retries = 3, delay = 1000) {
  */
 export async function fetchSportsEvents(sportId, liveMatches = true) {
   try {
-    // Use the proxy endpoint to avoid CORS issues
-    const url = `${EVENTS_API_PROXY}?sport_id=${sportId}&live_matches=${liveMatches}`;
+    // Use the proxy endpoint in development and direct endpoint in production
+    const baseUrl = IS_DEVELOPMENT ? EVENTS_API_PROXY : EVENTS_API_BASE_URL;
+    const path = IS_DEVELOPMENT ? "" : "/events";
+    const url = `${baseUrl}${path}?sport_id=${sportId}&live_matches=${liveMatches}`;
     
     // Wrap the fetch call with retry logic and timeout
     const response = await retryWithBackoff(async () => {
@@ -98,8 +102,10 @@ export async function fetchSportsEvents(sportId, liveMatches = true) {
  */
 export async function fetchMarketsData(eventId, sportId) {
   try {
-    // Use the markets proxy endpoint to avoid CORS issues
-    const url = `/api/markets?event_id=${eventId}&sport_id=${sportId}`;
+    // Use the proxy endpoint in development and direct endpoint in production
+    const baseUrl = IS_DEVELOPMENT ? "/api/markets" : (import.meta.env.VITE_MARKETS_API_URL || "http://89.116.20.218:2700");
+    const path = IS_DEVELOPMENT ? "" : "/markets";
+    const url = `${baseUrl}${path}?event_id=${eventId}&sport_id=${sportId}`;
     
     // Wrap the fetch call with retry logic and timeout
     const response = await retryWithBackoff(async (signal) => {

@@ -8,11 +8,19 @@ const ServerStatusChecker = () => {
   // Function to check server connectivity
   const checkServerStatus = async () => {
     try {
+      // Use the proxy endpoint in development and direct endpoint in production
+      const isDevelopment = import.meta.env.MODE === 'development';
+      const baseUrl = isDevelopment 
+        ? '/api/events' 
+        : (import.meta.env.VITE_EVENTS_API_URL || 'http://89.116.20.218:2700');
+      const path = isDevelopment ? '' : '/events';
+      const url = `${baseUrl}${path}?sport_id=sr:sport:1&live_matches=true`;
+
       // Try to ping the server with a simple request
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
       
-      const response = await fetch('/api/events?sport_id=sr:sport:1&live_matches=true', {
+      const response = await fetch(url, {
         method: 'GET',
         signal: controller.signal
       });
