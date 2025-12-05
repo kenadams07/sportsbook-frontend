@@ -11,9 +11,10 @@ async function bootstrap() {
   
   // Enable CORS for your frontend and handle preflight requests
   router.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*'); // Allow all origins for flexibility
+    res.header('Access-Control-Allow-Origin', 'https://user-api.xfair91.com');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+    res.header('Access-Control-Allow-Credentials', 'true');
     // Handle preflight requests
     if (req.method === 'OPTIONS') {
       res.header('Access-Control-Max-Age', '86400'); // Cache preflight for 24 hours
@@ -30,7 +31,7 @@ async function bootstrap() {
       const baseUrl = process.env.MATCH_ODDS_API || 'http://89.116.20.218:2700';
       const url = `${baseUrl}/events${queryParams ? `?${queryParams}` : ''}`;
       
- 
+      console.log(`Proxying request to: ${url}`);
       
       const response = await axios.default.get(url, {
         headers: {
@@ -57,7 +58,7 @@ async function bootstrap() {
       const baseUrl = process.env.MATCH_ODDS_API || 'http://89.116.20.218:2700';
       const url = `${baseUrl}/markets${queryParams ? `?${queryParams}` : ''}`;
       
-      
+      console.log(`Proxying request to: ${url}`);
       
       const response = await axios.default.get(url, {
         headers: {
