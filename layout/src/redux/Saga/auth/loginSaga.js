@@ -24,6 +24,21 @@ function* loginRequest(action) {
           return null; // null prevents success notification if not successful
         },
         getErrorMessage: (err) => {
+          // Handle timeout errors specifically
+          if (err?.code === 'ECONNABORTED') {
+            return 'Request timeout. The server is taking too long to respond. Please try again or contact support.';
+          }
+          
+          // Handle 504 Gateway Timeout specifically
+          if (err?.response?.status === 504) {
+            return 'Server is temporarily unavailable. Please try again in a few minutes.';
+          }
+          
+          // Handle 502/503 errors
+          if (err?.response?.status === 502 || err?.response?.status === 503) {
+            return 'Service temporarily unavailable. Please try again later.';
+          }
+          
           return err?.response?.data?.message || err?.message || "Login failed";
         },
         successDuration: 4000,

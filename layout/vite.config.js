@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     server: {
-      port: 9000,
+      port: 9001, // Changed port to avoid conflict
       strictPort: true,
       cors: true,
       fs: {
@@ -77,6 +77,7 @@ export default defineConfig(({ mode }) => {
             // Removed proxyRes logging to stop console spam
           }
         },
+        // Proxy for user API to avoid CORS issues in development
         '/users': {
           target: USERS_API_URL,
           changeOrigin: true,
@@ -121,8 +122,8 @@ export default defineConfig(({ mode }) => {
               proxyReq.setTimeout(15000);
             });
             proxy.on('proxyRes', (proxyRes, req, res) => {
-              // Log successful proxy responses for debugging
-              console.log(`Proxy response for ${req.url}: ${proxyRes.statusCode}`);
+       
+             
             });
           }
         },
