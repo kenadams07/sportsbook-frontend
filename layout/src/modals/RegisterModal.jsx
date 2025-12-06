@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import { User, Calendar as CalendarIcon } from "lucide-react";
+import { User, Calendar as CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Calendar } from "../components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover";
 import { format } from "date-fns";
-import { Checkbox } from "../components/ui/checkbox"; // Added Checkbox import
+import { Checkbox } from "../components/ui/checkbox";
 
 import {
   Dialog,
@@ -255,6 +255,9 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
                             disabled={(date) => date > new Date()} // Only restrict future dates, removed the 18-year restriction
                             initialFocus
                             className="bg-[#2a2a2a] text-white"
+                            captionLayout="dropdown" // Using dropdown for manual selection
+                            fromYear={1900}
+                            toYear={new Date().getFullYear()}
                             classNames={{
                               day_selected: "bg-yellow-500 text-black hover:bg-yellow-600 hover:text-black",
                               day_today: "border border-yellow-500",
@@ -263,6 +266,39 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
                               head_cell: "text-gray-400",
                               button: "hover:bg-[#404040]",
                               nav_button: "border-gray-600 hover:bg-[#404040]",
+                              caption_label: "hidden", // Hide the duplicate label
+                              caption_dropdowns: "flex gap-3 items-center", // Gap between dropdowns
+                              dropdown: "bg-[#404040] text-white border border-gray-600 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500",
+                              dropdown_month: "bg-[#404040] text-white border border-gray-600 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500",
+                              dropdown_year: "bg-[#404040] text-white border border-gray-600 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500",
+                            }}
+                            components={{
+                              Caption: (props) => {
+                                const { goToPrevious, goToNext, previousMonth, nextMonth } = props;
+                                return (
+                                  <div className="flex items-center justify-between py-2 mb-0 bg-[#2a2a2a] px-2">
+                                    <button
+                                      type="button"
+                                      onClick={goToPrevious}
+                                      className="border-gray-600 hover:bg-[#404040] p-1 rounded disabled:opacity-50"
+                                      disabled={!previousMonth}
+                                    >
+                                      <ChevronLeftIcon className="size-4" />
+                                    </button>
+                                    <div className="flex gap-3 items-center">
+                                      {props.children}
+                                    </div>
+                                    <button
+                                      type="button"
+                                      onClick={goToNext}
+                                      className="border-gray-600 hover:bg-[#404040] p-1 rounded disabled:opacity-50"
+                                      disabled={!nextMonth}
+                                    >
+                                      <ChevronRightIcon className="size-4" />
+                                    </button>
+                                  </div>
+                                );
+                              }
                             }}
                           />
 
