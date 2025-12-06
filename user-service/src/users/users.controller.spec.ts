@@ -3,6 +3,7 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { Repository } from 'typeorm';
 import { Currency } from '../currency/currency.entity';
+import { Users } from './users.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { SignupDto } from './dto/signup.dto';
 
@@ -50,8 +51,7 @@ describe('UsersController', () => {
   });
 
   describe('create', () => {
-    it('should create a user with the new signup structure', async () => {
-      // Mock the request and response objects
+    it('should create a user successfully', async () => {
       const signupDto: SignupDto = {
         username: 'ashish_123',
         name: 'Ashish',
@@ -64,29 +64,30 @@ describe('UsersController', () => {
 
       const mockUser = {
         id: '1',
-        username: 'ashish_123',
-        name: 'Ashish',
         email: 'quelea61824@aminating.com',
-        birthdate: '2025-09-01',
+        name: 'Ashish',
         currency: { id: 1, name: 'British Pound', code: 'GBP' },
-      };
-
-      const mockCurrency = { id: 1, name: 'British Pound', code: 'GBP' };
+      } as unknown as Users;
 
       // Mock service methods
-      mockCurrencyRepo.findOne.mockResolvedValue(mockCurrency);
-      mockUsersService.create.mockResolvedValue(mockUser);
-      mockUsersService.generateJwtToken.mockReturnValue('mock-jwt-token');
-      mockUsersService.updateToken.mockResolvedValue(undefined);
+      currencyRepo.findOne = jest.fn().mockResolvedValue({ id: 1, name: 'British Pound', code: 'GBP' });
+      usersService.create = jest.fn().mockResolvedValue(mockUser);
+      usersService.generateJwtToken = jest.fn().mockReturnValue('mock-jwt-token');
+      usersService.updateToken = jest.fn().mockResolvedValue(undefined);
       mockUsersService.sendVerificationEmail.mockResolvedValue(true);
 
-      // Mock response object
+      // Mock request and response objects
+      const mockReq = {
+        get: jest.fn().mockReturnValue('https://xfair91.com')
+      };
+      
       const mockRes = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn().mockReturnThis(),
+        header: jest.fn().mockReturnThis()
       };
 
-      await controller.create(signupDto, mockRes as any);
+      await controller.create(signupDto, mockReq as any, mockRes as any);
 
       // Verify that the service methods were called with correct parameters
       expect(currencyRepo.findOne).toHaveBeenCalledWith({
@@ -111,12 +112,18 @@ describe('UsersController', () => {
         confirmPassword: 'DifferentPassword',
       };
 
+      // Mock request and response objects
+      const mockReq = {
+        get: jest.fn().mockReturnValue('https://xfair91.com')
+      };
+      
       const mockRes = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn().mockReturnThis(),
+        header: jest.fn().mockReturnThis()
       };
 
-      await controller.create(signupDto, mockRes as any);
+      await controller.create(signupDto, mockReq as any, mockRes as any);
 
       expect(mockRes.status).toHaveBeenCalledWith(400);
       expect(mockRes.json).toHaveBeenCalled();

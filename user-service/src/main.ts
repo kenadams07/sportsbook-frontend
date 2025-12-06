@@ -21,7 +21,9 @@ async function bootstrap() {
       'https://user-api.xfair91.com',
       'http://user-api.xfair91.com',
       'https://xfair91.com',
-      'http://localhost:3001'
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://localhost:5002'
     ],
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
@@ -30,7 +32,8 @@ async function bootstrap() {
     preflightContinue: false
   });
 
-  await app.listen(process.env.PORT ?? 3001);
-  console.log(`🚀 User service running on: http://localhost:${process.env.PORT ?? 3001}`);
+  const port = process.env.PORT ?? 3001;
+  await app.listen(port);
+  console.log(`🚀 User service running on port ${port}`);
 }
 bootstrap();
