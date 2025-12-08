@@ -44,6 +44,69 @@ export class SportBetsService {
     });
   }
 
+  // New method to get unique eventId and sportId combinations for a user
+  async findUniqueEventAndSportIdsByUserId(userId: string): Promise<{ eventId: string; sportId: string }[]> {
+    const bets = await this.sportBetsRepository.find({
+      where: {
+        user: { id: userId }
+      },
+      select: ['eventId', 'sportId'],
+      order: {
+        createdAt: 'DESC'
+      }
+    });
+
+    // Create a Set to store unique combinations
+    const uniqueCombinations = new Set<string>();
+    const result: { eventId: string; sportId: string }[] = [];
+
+    // Iterate through bets and add unique combinations
+    for (const bet of bets) {
+      const combination = `${bet.eventId}-${bet.sportId}`;
+      if (!uniqueCombinations.has(combination)) {
+        uniqueCombinations.add(combination);
+        result.push({
+          eventId: bet.eventId,
+          sportId: bet.sportId
+        });
+      }
+    }
+
+    return result;
+  }
+
+  // New method to get unique eventId, sportId, and marketId combinations for a user
+  async findUniqueEventSportAndMarketIdsByUserId(userId: string): Promise<{ eventId: string; sportId: string; marketId: string }[]> {
+    const bets = await this.sportBetsRepository.find({
+      where: {
+        user: { id: userId }
+      },
+      select: ['eventId', 'sportId', 'marketId'],
+      order: {
+        createdAt: 'DESC'
+      }
+    });
+
+    // Create a Set to store unique combinations
+    const uniqueCombinations = new Set<string>();
+    const result: { eventId: string; sportId: string; marketId: string }[] = [];
+
+    // Iterate through bets and add unique combinations
+    for (const bet of bets) {
+      const combination = `${bet.eventId}-${bet.sportId}-${bet.marketId}`;
+      if (!uniqueCombinations.has(combination)) {
+        uniqueCombinations.add(combination);
+        result.push({
+          eventId: bet.eventId,
+          sportId: bet.sportId,
+          marketId: bet.marketId
+        });
+      }
+    }
+
+    return result;
+  }
+
   findByUserIdAndEventId(userId: string, eventId: string): Promise<SportBets[]> {
     return this.sportBetsRepository.find({
       where: {
@@ -325,6 +388,62 @@ export class SportBetsService {
       };
     } catch (error) {
       throw new BadRequestException(`Error fetching user bets with results: ${error.message}`);
+    }
+  }
+
+  // New method to fetch match results directly from the API
+  async getMatchResults(sportsId: string, eventId: string, marketId?: string): Promise<any> {
+    try {
+      // Call the result API with sports_id and event_id as parameters
+      const resultApiUrl = `${this.resultApiUrl}?event_id=${eventId}&sport_id=${sportsId}`;
+      const resultResponse = await axios.get(resultApiUrl);
+      const rawData: any = resultResponse.data;
+    
+      // ALWAYS filter if marketId is provided
+      if (marketId) {
+        // Create empty markets object
+        const filteredMarkets: any = {};
+      
+        // Only process if we have the expected structure
+        if (rawData && rawData.event && rawData.event.markets) {
+          const markets = rawData.event.markets;
+        
+          // Process each market type
+          for (const marketType in markets) {
+            if (Array.isArray(markets[marketType])) {
+              // Filter to only include markets matching our marketId
+              const matches = markets[marketType].filter((market: any) => {
+                return market.marketId === marketId;
+              });
+            
+              // Only include this market type if we found matches
+              if (matches.length > 0) {
+                filteredMarkets[marketType] = matches;
+              }
+            }
+          }
+        }
+      
+        // Return response with filtered markets
+        return {
+          success: true,
+          data: {
+            ...rawData,
+            event: {
+              ...(rawData.event || {}),
+              markets: filteredMarkets
+            }
+          }
+        };
+      }
+    
+      // No filtering needed
+      return {
+        success: true,
+        data: rawData
+      };
+    } catch (error) {
+      throw new BadRequestException(`Error fetching match results: ${error.message}`);
     }
   }
 }

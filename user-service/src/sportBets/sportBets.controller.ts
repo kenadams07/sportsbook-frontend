@@ -24,7 +24,8 @@ export class SportBetsController {
       return this.sportBetsService.findByUserIdAndEventId(userId, eventId);
     }
 
-    return this.sportBetsService.findByUserId(userId);
+    // When eventId is null or not provided, return only unique eventId, sportId, and marketId combinations
+    return this.sportBetsService.findUniqueEventSportAndMarketIdsByUserId(userId);
   }
 
   @Post()
@@ -37,17 +38,17 @@ export class SportBetsController {
     return this.sportBetsService.placeBet(betData);
   }
 
-  // New endpoint to get user bets with filtered results
-  @Get('user-bets-with-results')
-  async getUserBetsWithResults(
+  // Endpoint to get match results
+  @Get('match-results')
+  async getMatchResults(
     @Query('sports_id') sportsId: string,
     @Query('event_id') eventId: string,
-    @Query('user_id') userId: string
+    @Query('market_id') marketId?: string
   ) {
-    if (!sportsId || !eventId || !userId) {
-      throw new Error('sports_id, event_id, and user_id are required');
+    if (!sportsId || !eventId) {
+      throw new Error('sports_id and event_id are required');
     }
 
-    return this.sportBetsService.getUserBetsWithResults(sportsId, eventId, userId);
+    return this.sportBetsService.getMatchResults(sportsId, eventId, marketId);
   }
 }
