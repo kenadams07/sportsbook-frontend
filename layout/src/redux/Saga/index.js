@@ -7,6 +7,7 @@ import GetUserData from "./auth/getUserDataSaga";
 import UpdateUserBalanceExposure from "./auth/updateUserBalanceExposureSaga";
 import CasinoGames from "./casinoSaga";
 import UserBets from "./userBetsSaga";
+import MatchResults from "./matchResultsSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -18,5 +19,6 @@ export default function* rootSaga() {
     UpdateUserBalanceExposure(),
     CasinoGames(),
     UserBets(),
+    MatchResults(),
   ]);
 }

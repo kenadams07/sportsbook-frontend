@@ -127,6 +127,31 @@ export default defineConfig(({ mode }) => {
             });
           }
         },
+        // Proxy for sportBets API to avoid CORS issues
+        '/sportBets': {
+          target: USERS_API_URL,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/sportBets/, '/sportBets'),
+          configure: (proxy, options) => {
+            proxy.on('error', (err, req, res) => {
+              console.error('Proxy error for /sportBets:', err);
+              // Add safety check for res object
+              if (res && typeof res.writeHead === 'function') {
+                res.writeHead(503, {
+                  'Content-Type': 'application/json',
+                });
+                res.end(JSON.stringify({
+                  error: 'Service Unavailable',
+                  message: 'Unable to connect to sportBets server'
+                }));
+              }
+            });
+            proxy.on('proxyReq', (proxyReq, req, res) => {
+              // Add timeout to proxy requests
+              proxyReq.setTimeout(15000);
+            });
+          }
+        },
       },
     },
     preview: {

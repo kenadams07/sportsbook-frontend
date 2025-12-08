@@ -1,35 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUserBets } from '../../redux/Action/userBetsActions';
+import { fetchMatchResults } from '../../redux/Action/matchResultsActions';
 
 const Results = () => {
+  const dispatch = useDispatch();
+  const { userData } = useSelector(state => state.GetUserData);
+  const userBetsState = useSelector(state => state.UserBets);
+  const matchResultsState = useSelector(state => state.MatchResults);
+
   const [activeTab, setActiveTab] = useState('Live');
   const [startDate, setStartDate] = useState('22.08.2025');
   const [endDate, setEndDate] = useState('22.08.2025');
   const [selectedSport, setSelectedSport] = useState('Football');
   const [selectedCompetition, setSelectedCompetition] = useState('All');
-  const [expandedLeagues, setExpandedLeagues] = useState({});
+  const [expandedEvents, setExpandedEvents] = useState({});
 
-  const leagues = [
-    { id: 1, name: 'Calcutta Premier Division (India)', icon: '⚽', country: 'IN' },
-    { id: 2, name: 'Club Friendlies (World)', icon: '⚽', country: 'WW' },
-    { id: 3, name: 'Copa Libertadores (South America)', icon: '⚽', country: 'SA' },
-    { id: 4, name: 'Copa Sudamericana (South America)', icon: '⚽', country: 'SA' },
-    { id: 5, name: 'J1 League (Japan)', icon: '⚽', country: 'JP' },
-    { id: 6, name: 'LFP - Women (Colombia)', icon: '⚽', country: 'CO' },
-    { id: 7, name: 'Liga Pro (Russia)', icon: '⚽', country: 'RU' },
-    { id: 8, name: 'Liga Prom (Panama)', icon: '⚽', country: 'PA' },
-    { id: 9, name: 'Mizoram Premier League (India)', icon: '⚽', country: 'IN' },
-    { id: 10, name: 'MLS Next Pro (USA)', icon: '⚽', country: 'US' },
-    { id: 11, name: 'MNL 1 (Myanmar)', icon: '⚽', country: 'MM' },
-    { id: 12, name: 'NB I - Women (Hungary)', icon: '⚽', country: 'HU' },
-    { id: 13, name: 'NCAA (North America)', icon: '⚽', country: 'NA' },
-    { id: 14, name: 'Northern Territory Premier League (Australia)', icon: '⚽', country: 'AU' },
-    { id: 15, name: 'NPL NSW (Australia)', icon: '⚽', country: 'AU' }
-  ];
+  // Fetch user bets when component mounts and userData is available
+  useEffect(() => {
+    if (userData?._id) {
+      // Fetch all user bets using the user ID from Redux state (which comes from localStorage)
+      // Not passing eventId to fetch all bets for the user
+      dispatch(fetchUserBets(userData._id));
+    }
+  }, [dispatch, userData]);
 
-  const toggleLeague = (leagueId) => {
-    setExpandedLeagues(prev => ({
+  // Fetch match results when user bets are loaded
+  useEffect(() => {
+    if (userBetsState.bets.length > 0 && !userBetsState.loading) {
+      // Extract eventIds, sportIds, and marketIds from user bets and fetch match results for each
+      const uniqueBets = {};
+      userBetsState.bets.forEach(bet => {
+        if (bet.eventId && bet.sportId && bet.marketId) {
+          // Create a unique key for each bet combination
+          const key = `${bet.eventId}-${bet.sportId}-${bet.marketId}`;
+          if (!uniqueBets[key]) {
+            uniqueBets[key] = bet;
+            dispatch(fetchMatchResults(bet.eventId, bet.sportId, bet.marketId));
+          }
+        }
+      });
+    }
+  }, [dispatch, userBetsState]);
+
+  const toggleEvent = (eventId) => {
+    setExpandedEvents(prev => ({
       ...prev,
-      [leagueId]: !prev[leagueId]
+      [eventId]: !prev[eventId]
     }));
   };
 
@@ -39,6 +56,55 @@ const Results = () => {
     setSelectedSport('Football');
     setSelectedCompetition('All');
   };
+
+  // Helper function to extract event data from match results
+  const getEventData = () => {
+    if (!matchResultsState.results || matchResultsState.results.length === 0) {
+      return [];
+    }
+
+    // Transform match results into event data, merging markets for the same event
+    const eventMap = {};
+    matchResultsState.results.forEach(result => {
+      // Handle the API response structure
+      if (result?.data?.event) {
+        const event = result.data.event;
+        if (eventMap[event.eventId]) {
+          // Merge markets if event already exists
+          if (event.markets && event.markets.matchOdds) {
+            eventMap[event.eventId].markets.matchOdds = [
+              ...eventMap[event.eventId].markets.matchOdds,
+              ...event.markets.matchOdds
+            ];
+          }
+        } else {
+          // Add new event
+          eventMap[event.eventId] = { ...event };
+        }
+      }
+      // Handle direct event data
+      else if (result?.event) {
+        const event = result.event;
+        if (eventMap[event.eventId]) {
+          // Merge markets if event already exists
+          if (event.markets && event.markets.matchOdds) {
+            eventMap[event.eventId].markets.matchOdds = [
+              ...eventMap[event.eventId].markets.matchOdds,
+              ...event.markets.matchOdds
+            ];
+          }
+        } else {
+          // Add new event
+          eventMap[event.eventId] = { ...event };
+        }
+      }
+    });
+
+    // Convert map to array
+    return Object.values(eventMap);
+  };
+
+  const eventData = getEventData();
 
   return (
     <div className="results-container bg-live-tertiary text-live-primary min-h-screen">
@@ -125,27 +191,66 @@ const Results = () => {
       {/* Results Content */}
       <div className="results-content flex min-h-screen bg-live-tertiary">
         <div className="leagues-list w-1/2 bg-live-tertiary border-r border-live overflow-y-auto">
-          {leagues.map((league) => (
-            <div key={league.id} className="league-item border-b border-live">
-              <div 
-                className="league-header flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-live-primary transition-colors"
-                onClick={() => toggleLeague(league.id)}
-              >
-                <div className="league-info flex items-center gap-2">
-                  <span className="league-icon text-live-accent">{league.icon}</span>
-                  <span className="league-name text-live-primary text-sm font-medium">{league.name}</span>
+          {eventData.length > 0 ? (
+            eventData.map((event) => (
+              <div key={event.eventId} className="league-item border-b border-live">
+                <div 
+                  className="league-header flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-live-primary transition-colors"
+                  onClick={() => toggleEvent(event.eventId)}
+                >
+                  <div className="league-info flex items-center gap-2">
+                    <span className="league-icon text-live-accent">⚽</span>
+                    <span className="league-name text-live-primary text-sm font-medium">{event.eventName}</span>
+                  </div>
+                  <span className={`expand-arrow text-live-secondary text-xs transition-transform duration-300 ${expandedEvents[event.eventId] ? 'expanded rotate-180' : ''}`}>
+                    ▼
+                  </span>
                 </div>
-                <span className={`expand-arrow text-live-secondary text-xs transition-transform duration-300 ${expandedLeagues[league.id] ? 'expanded rotate-180' : ''}`}>
-                  ▼
-                </span>
+                {expandedEvents[event.eventId] && (
+                  <div className="league-content bg-live-primary p-4 border-t border-live">
+                    {event.markets && event.markets.matchOdds && event.markets.matchOdds.length > 0 ? (
+                      event.markets.matchOdds.map((market, index) => (
+                        <div key={`${event.eventId}-${market.marketId}`} className="mb-3">
+                          <div className="font-medium text-live-primary mb-2">{market.marketName}</div>
+                          <div className="grid grid-cols-2 gap-2">
+                            {market.runners && market.runners.map((runner, runnerIndex) => (
+                              <div 
+                                key={`${event.eventId}-${market.marketId}-${runner.runnerId}`} 
+                                className={`p-2 rounded text-center text-sm ${
+                                  runner.result === 'won' 
+                                    ? 'bg-green-100 text-green-800 border border-green-300' 
+                                    : runner.result === 'lost'
+                                    ? 'bg-red-100 text-red-800 border border-red-300'
+                                    : 'bg-gray-100 text-gray-800 border border-gray-300'
+                                }`}
+                              >
+                                <div className="font-medium">{runner.runnerName}</div>
+                                <div className="text-xs capitalize">
+                                  {runner.result ? runner.result : 'Pending'}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="no-matches text-live-muted text-sm text-center py-2">No market data available</div>
+                    )}
+                  </div>
+                )}
               </div>
-              {expandedLeagues[league.id] && (
-                <div className="league-content bg-live-primary p-4 border-t border-live">
-                  <div className="no-matches text-live-muted text-sm text-center py-2">No matches available</div>
-                </div>
+            ))
+          ) : (
+            <div className="no-results-placeholder p-4 text-center text-live-muted">
+              {matchResultsState.loading ? (
+                <div>Loading match results...</div>
+              ) : matchResultsState.error ? (
+                <div>Error loading match results: {matchResultsState.error}</div>
+              ) : (
+                <div>No match results found</div>
               )}
             </div>
-          ))}
+          )}
         </div>
         
         <div className="results-display flex-1 bg-live-tertiary flex items-center justify-center">

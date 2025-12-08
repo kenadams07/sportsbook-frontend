@@ -6,7 +6,7 @@ import {
 } from "./actionTypes";
 
 // Fetch user bets actions
-export const fetchUserBets = (userId, eventId) => {
+export const fetchUserBets = (userId, eventId = null) => {
   return {
     type: FETCH_USER_BETS,
     payload: { userId, eventId },

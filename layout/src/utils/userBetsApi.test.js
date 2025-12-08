@@ -14,13 +14,16 @@ describe('userBetsApi', () => {
   });
 
   describe('fetchUserBets', () => {
-    it('should fetch user bets successfully', async () => {
+    it('should fetch user bets successfully with eventId', async () => {
       // Arrange
       const mockResponse = {
         data: {
           status: 'success',
           data: [
             {
+              eventId: "sr:match:66280446",
+              sportId: "sr:sport:1",
+              marketId: "11",
               runnerName: 'Team A',
               marketName: 'Match Odds',
               stake: 100,
@@ -37,6 +40,35 @@ describe('userBetsApi', () => {
       
       // Assert
       expect(api.get).toHaveBeenCalledWith('/sportBets/my-bets?userId=user123&eventId=event456');
+      expect(result).toEqual(mockResponse.data);
+    });
+
+    it('should fetch all user bets successfully without eventId', async () => {
+      // Arrange
+      const mockResponse = {
+        data: {
+          status: 'success',
+          data: [
+            {
+              eventId: "sr:match:66280446",
+              sportId: "sr:sport:1",
+              marketId: "11",
+              runnerName: 'Team A',
+              marketName: 'Match Odds',
+              stake: 100,
+              odds: 1.85
+            }
+          ]
+        }
+      };
+      
+      api.get.mockResolvedValue(mockResponse);
+      
+      // Act
+      const result = await fetchUserBets('user123');
+      
+      // Assert
+      expect(api.get).toHaveBeenCalledWith('/sportBets/my-bets?userId=user123');
       expect(result).toEqual(mockResponse.data);
     });
 
