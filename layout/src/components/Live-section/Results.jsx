@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserBets } from '../../redux/Action/userBetsActions';
 import { fetchMatchResults } from '../../redux/Action/matchResultsActions';
+import { Calendar } from '../../components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger, PopoverAnchor } from '../../components/ui/popover';
+import { Button } from '../../components/ui/button';
 
 const Results = () => {
   const dispatch = useDispatch();
@@ -10,10 +13,8 @@ const Results = () => {
   const matchResultsState = useSelector(state => state.MatchResults);
 
   const [activeTab, setActiveTab] = useState('Live');
-  const [startDate, setStartDate] = useState('22.08.2025');
-  const [endDate, setEndDate] = useState('22.08.2025');
-  const [selectedSport, setSelectedSport] = useState('Football');
-  const [selectedCompetition, setSelectedCompetition] = useState('All');
+  const [startDate, setStartDate] = useState(new Date(2025, 7, 22)); // August is month 7 (0-indexed)
+  const [endDate, setEndDate] = useState(new Date(2025, 7, 22));
   const [expandedEvents, setExpandedEvents] = useState({});
 
   // Fetch user bets when component mounts and userData is available
@@ -36,7 +37,7 @@ const Results = () => {
           const key = `${bet.eventId}-${bet.sportId}-${bet.marketId}`;
           if (!uniqueBets[key]) {
             uniqueBets[key] = bet;
-            dispatch(fetchMatchResults(bet.eventId, bet.sportId, bet.marketId));
+            dispatch(fetchMatchResults(bet.eventId, bet.sportId, bet.marketId, userData._id));
           }
         }
       });
@@ -51,10 +52,8 @@ const Results = () => {
   };
 
   const resetFilters = () => {
-    setStartDate('22.08.2025');
-    setEndDate('22.08.2025');
-    setSelectedSport('Football');
-    setSelectedCompetition('All');
+    setStartDate(new Date(2025, 7, 22));
+    setEndDate(new Date(2025, 7, 22));
   };
 
   // Helper function to extract event data from match results
@@ -66,36 +65,65 @@ const Results = () => {
     // Transform match results into event data, merging markets for the same event
     const eventMap = {};
     matchResultsState.results.forEach(result => {
+      let event = null;
+      
       // Handle the API response structure
       if (result?.data?.event) {
-        const event = result.data.event;
-        if (eventMap[event.eventId]) {
-          // Merge markets if event already exists
-          if (event.markets && event.markets.matchOdds) {
-            eventMap[event.eventId].markets.matchOdds = [
-              ...eventMap[event.eventId].markets.matchOdds,
-              ...event.markets.matchOdds
-            ];
-          }
-        } else {
-          // Add new event
-          eventMap[event.eventId] = { ...event };
+        event = { ...result.data.event };
+        // Deep copy markets to avoid mutation
+        if (event.markets) {
+          event.markets = { ...event.markets };
+          Object.keys(event.markets).forEach(marketType => {
+            if (Array.isArray(event.markets[marketType])) {
+              event.markets[marketType] = event.markets[marketType].map(market => ({ ...market, runners: Array.isArray(market.runners) ? market.runners.map(runner => ({ ...runner })) : market.runners }));
+            }
+          });
         }
       }
       // Handle direct event data
       else if (result?.event) {
-        const event = result.event;
+        event = { ...result.event };
+        // Deep copy markets to avoid mutation
+        if (event.markets) {
+          event.markets = { ...event.markets };
+          Object.keys(event.markets).forEach(marketType => {
+            if (Array.isArray(event.markets[marketType])) {
+              event.markets[marketType] = event.markets[marketType].map(market => ({ ...market, runners: Array.isArray(market.runners) ? market.runners.map(runner => ({ ...runner })) : market.runners }));
+            }
+          });
+        }
+      }
+      
+      if (event) {
         if (eventMap[event.eventId]) {
+          // Create a new event object to avoid mutation
+          const updatedEvent = { ...eventMap[event.eventId] };
+          // Deep copy markets to avoid mutation
+          updatedEvent.markets = { ...updatedEvent.markets };
+          
           // Merge markets if event already exists
-          if (event.markets && event.markets.matchOdds) {
-            eventMap[event.eventId].markets.matchOdds = [
-              ...eventMap[event.eventId].markets.matchOdds,
-              ...event.markets.matchOdds
-            ];
+          if (event.markets) {
+            // Iterate through all market types in the new result
+            Object.keys(event.markets).forEach(marketType => {
+              if (!updatedEvent.markets[marketType]) {
+                // If this market type doesn't exist yet, add it
+                updatedEvent.markets[marketType] = [];
+              }
+              // Add the new markets to the existing market type
+              updatedEvent.markets[marketType] = [
+                ...updatedEvent.markets[marketType],
+                ...event.markets[marketType]
+              ];
+            });
           }
+          eventMap[event.eventId] = updatedEvent;
         } else {
           // Add new event
-          eventMap[event.eventId] = { ...event };
+          eventMap[event.eventId] = event;
+          // Ensure markets is properly initialized
+          if (!eventMap[event.eventId].markets) {
+            eventMap[event.eventId].markets = {};
+          }
         }
       }
     });
@@ -131,49 +159,50 @@ const Results = () => {
             <div className="date-field">
               <label>Start Date</label>
               <div className="date-input-wrapper">
-                <input 
-                  type="text" 
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                />
-                <span className="calendar-icon text-live-secondary">📅</span>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={`w-full justify-start text-left font-normal ${!startDate ? "text-muted-foreground" : "text-live-primary"}`}
+                    >
+                      {startDate ? startDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Select date'}
+                      <span className="calendar-icon text-live-secondary ml-2">📅</span>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={startDate}
+                      onSelect={setStartDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
             <div className="date-field">
               <label>End Date</label>
               <div className="date-input-wrapper">
-                <input 
-                  type="text" 
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                />
-                <span className="calendar-icon text-live-secondary">📅</span>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={`w-full justify-start text-left font-normal ${!endDate ? "text-muted-foreground" : "text-live-primary"}`}
+                    >
+                      {endDate ? endDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Select date'}
+                      <span className="calendar-icon text-live-secondary ml-2">📅</span>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={endDate}
+                      onSelect={setEndDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
-            </div>
-          </div>
-          
-          <div className="dropdown-group">
-            <div className="dropdown-field">
-              <label>Sport</label>
-              <select 
-                value={selectedSport}
-                onChange={(e) => setSelectedSport(e.target.value)}
-              >
-                <option value="Football">Football</option>
-                <option value="Basketball">Basketball</option>
-                <option value="Tennis">Tennis</option>
-              </select>
-            </div>
-            <div className="dropdown-field">
-              <label>Competition</label>
-              <select 
-                value={selectedCompetition}
-                onChange={(e) => setSelectedCompetition(e.target.value)}
-              >
-                <option value="All">All</option>
-                <option value="Premier League">Premier League</option>
-                <option value="Champions League">Champions League</option>
-              </select>
             </div>
           </div>
           
@@ -208,31 +237,35 @@ const Results = () => {
                 </div>
                 {expandedEvents[event.eventId] && (
                   <div className="league-content bg-live-primary p-4 border-t border-live">
-                    {event.markets && event.markets.matchOdds && event.markets.matchOdds.length > 0 ? (
-                      event.markets.matchOdds.map((market, index) => (
-                        <div key={`${event.eventId}-${market.marketId}`} className="mb-3">
-                          <div className="font-medium text-live-primary mb-2">{market.marketName}</div>
-                          <div className="grid grid-cols-2 gap-2">
-                            {market.runners && market.runners.map((runner, runnerIndex) => (
-                              <div 
-                                key={`${event.eventId}-${market.marketId}-${runner.runnerId}`} 
-                                className={`p-2 rounded text-center text-sm ${
-                                  runner.result === 'won' 
-                                    ? 'bg-green-100 text-green-800 border border-green-300' 
-                                    : runner.result === 'lost'
-                                    ? 'bg-red-100 text-red-800 border border-red-300'
-                                    : 'bg-gray-100 text-gray-800 border border-gray-300'
-                                }`}
-                              >
-                                <div className="font-medium">{runner.runnerName}</div>
-                                <div className="text-xs capitalize">
-                                  {runner.result ? runner.result : 'Pending'}
-                                </div>
+                    {event.markets && Object.keys(event.markets).some(marketType => event.markets[marketType] && event.markets[marketType].length > 0) ? (
+                      Object.entries(event.markets).map(([marketType, marketList]) => 
+                        marketList && marketList.length > 0 ? (
+                          marketList.map((market, index) => (
+                            <div key={`${event.eventId}-${market.marketId}`} className="mb-3">
+                              <div className="font-medium text-live-primary mb-2">{market.marketName}</div>
+                              <div className="grid grid-cols-2 gap-2">
+                                {market.runners && market.runners.map((runner, runnerIndex) => (
+                                  <div 
+                                    key={`${event.eventId}-${market.marketId}-${runner.runnerId}`} 
+                                    className={`p-2 rounded text-center text-sm ${
+                                      runner.result === 'won' 
+                                        ? 'bg-green-100 text-green-800 border border-green-300' 
+                                        : runner.result === 'lost'
+                                        ? 'bg-red-100 text-red-800 border border-red-300'
+                                        : 'bg-gray-100 text-gray-800 border border-gray-300'
+                                    }`}
+                                  >
+                                    <div className="font-medium">{runner.runnerName}</div>
+                                    <div className="text-xs capitalize">
+                                      {runner.result ? runner.result : 'Pending'}
+                                    </div>
+                                  </div>
+                                ))}
                               </div>
-                            ))}
-                          </div>
-                        </div>
-                      ))
+                            </div>
+                          ))
+                        ) : null
+                      )
                     ) : (
                       <div className="no-matches text-live-muted text-sm text-center py-2">No market data available</div>
                     )}

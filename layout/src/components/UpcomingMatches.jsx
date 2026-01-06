@@ -481,11 +481,11 @@ export default function UpcomingMatches() {
                   </div>
                 </div>
 
-                <div className="h-8 w-px bg-gradient-to-b from-transparent via-muted-foreground to-transparent opacity-30" />
+                <div className="h-8 w-px bg-gradient-to-b from-transparent via-muted-foreground to-transparent opacity-30 hidden sm:block" />
 
                 {/* Center: teams + IN PLAY + competition name + LIVE */}
-                <div className="flex-1 min-w-0 flex items-center justify-between">
-                  <div className="flex flex-col min-w-0">
+                <div className="flex-1 min-w-0 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0">
+                  <div className="flex flex-col min-w-0 flex-1">
                     <div className="font-medium truncate text-[13px] sm:text-sm">
                       {match.team1}
                     </div>
@@ -493,14 +493,14 @@ export default function UpcomingMatches() {
                       {match.team2}
                     </div>
                     {match.status === "IN_PLAY" && (
-                      <div className="text-[9px] font-bold bg-red-600 text-white px-1 py-0.5 rounded w-fit mt-1">
+                      <div className="text-[9px] font-bold bg-red-600 text-white px-1 py-0.5 rounded w-fit mt-1 sm:mt-0">
                         IN PLAY
                       </div>
                     )}
                   </div>
                   
                   {/* Competition name and LIVE in a single line */}
-                  <div className="flex items-center gap-2 mx-2">
+                  <div className="flex items-center gap-2 mx-2 hidden md:block">
                     {match.competitionName && (
                       <div className="text-[11px] text-white truncate"> {/* Changed to text-white for better visibility */}
                         {match.competitionName}
@@ -514,7 +514,7 @@ export default function UpcomingMatches() {
                   </div>
                 </div>
 
-                <div className="text-muted-foreground text-[11px] self-start sm:self-center truncate ml-2 hidden md:block">
+                <div className="text-muted-foreground text-[11px] self-start sm:self-center truncate ml-2 hidden lg:block">
                   {match.additionalMarkets}
                 </div>
 
@@ -523,7 +523,7 @@ export default function UpcomingMatches() {
                   <Button
                     variant={isSelected ? "default" : "outline"}
                     size="sm"
-                    className={`w-10 sm:w-16 h-8 px-0 text-[11px] font-semibold ${
+                    className={`w-8 sm:w-10 lg:w-16 h-8 px-0 text-[11px] font-semibold ${
                       isSelected 
                         ? "bg-white text-black hover:bg-gray-100 border-white shadow-sm" 
                         : "bg-gray-700 text-white border-gray-500 hover:bg-gray-600"
@@ -535,7 +535,7 @@ export default function UpcomingMatches() {
                   <Button
                     variant={isSelected ? "default" : "outline"}
                     size="sm"
-                    className={`w-10 sm:w-16 h-8 px-0 text-[11px] font-semibold ${
+                    className={`w-8 sm:w-10 lg:w-16 h-8 px-0 text-[11px] font-semibold ${
                       isSelected 
                         ? "bg-white text-black hover:bg-gray-100 border-white shadow-sm" 
                         : "bg-gray-700 text-white border-gray-500 hover:bg-gray-600"

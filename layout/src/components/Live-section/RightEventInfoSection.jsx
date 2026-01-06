@@ -540,7 +540,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
     // Remove duplicate declarations since they're already declared above
 
     return (
-      <div className="p-2.5 m-1.5 bg-live-primary rounded-lg border border-live-accent shadow-live flex flex-col gap-2 text-live-primary">
+      <div className="p-2 m-1 bg-live-primary rounded-lg border border-live-accent shadow-live flex flex-col gap-1.5 sm:gap-2 text-live-primary">
         <UserBetsSection userId={userData?._id} eventId={selectedGame?.eventId} />
 
         <div className="bg-live-secondary rounded p-3 flex items-center justify-center">
@@ -767,10 +767,10 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
   }
 
   return (
-    <div className="p-4 m-2 bg-live-primary rounded-lg shadow-lg shadow-black/50 flex flex-col gap-4 text-live-primary">
+    <div className="p-3 sm:p-4 m-1 sm:m-2 bg-live-primary rounded-lg shadow-lg shadow-black/50 flex flex-col gap-3 sm:gap-4 text-live-primary">
       <UserBetsSection userId={userData?._id} eventId={selectedGame?.eventId} />
 
-      <div className="grid grid-cols-2 gap-3 pb-4 border-b border-live-accent">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 pb-3 sm:pb-4 border-b border-live-accent">
         <div className="flex flex-col items-center gap-2 p-3 bg-live-tertiary rounded-lg border border-live shadow-live">
           <div className="bg-live-hover p-2 rounded-full border border-live-accent">
             <svg className="w-5 h-5 text-live-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -790,10 +790,10 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 py-1">
-        <div className="flex items-center gap-2 py-1">
+      <div className="flex flex-col gap-1 sm:gap-2 py-1">
+        <div className="flex items-center gap-1 sm:gap-2 py-1">
           <div className="h-px flex-1 bg-live-accent opacity-30"></div>
-          <span className="text-sm font-bold text-live-accent px-2 py-0.5 bg-live-tertiary rounded-full border border-live-accent">
+          <span className="text-xs sm:text-sm font-bold text-live-accent px-2 py-0.5 bg-live-tertiary rounded-full border border-live-accent">
             BetSlip
           </span>
           <div className="h-px flex-1 bg-live-accent opacity-30"></div>
@@ -806,41 +806,41 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
         )}
       </div>
 
-      <div className="space-y-1.5">
-        <div className="bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
+      <div className="space-y-1 sm:space-y-1.5">
+        <div className="bg-live-tertiary px-2 py-1 sm:px-2.5 sm:py-1.5 rounded border border-live">
           <div className="text-xs mb-1 font-bold text-live-primary">{selectedGame?.competitionName}</div>
           
           {/* Display market name for both left section and middle section selections */}
-          <div className="text-[9px] mb-1 font-medium text-live-accent opacity-80">
+          <div className="text-[9px] sm:text-[9px] mb-1 font-medium text-live-accent opacity-80">
             {marketName}
           </div>
 
           {/* Display runners based on selection type */}
           {matchIsSuspended ? (
             // Show suspended message instead of runners for suspended matches
-            <div className="flex flex-col gap-2 my-2 p-4 bg-live-odds rounded text-center">
-              <span className="text-lg font-bold text-live-primary">Match Suspended</span>
-              <span className="text-sm text-live-muted">Betting is not available for this match</span>
+            <div className="flex flex-col gap-1 sm:gap-2 my-1 sm:my-2 p-3 sm:p-4 bg-live-odds rounded text-center">
+              <span className="text-base sm:text-lg font-bold text-live-primary">Match Suspended</span>
+              <span className="text-xs sm:text-sm text-live-muted">Betting is not available for this match</span>
             </div>
           ) : isMarketRunnerSelection ? (
             // Market runner selection view
-            <div className="flex flex-col gap-2 my-2">
+            <div className="flex flex-col gap-1 sm:gap-2 my-1 sm:my-2">
               <div
-                className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]`}
+                className={`flex items-center justify-between p-1.5 sm:p-2 rounded border cursor-pointer transition-all bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]`}
               >
                 <span className="font-medium text-xs truncate text-white">
                   {selectedGame.selectedRunner.runnerName}
                 </span>
-                <div className="min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs bg-live-dark text-live-accent border border-live-accent">
+                <div className="min-w-[40px] sm:min-w-[44px] h-[24px] sm:h-[28px] flex items-center justify-center rounded font-bold text-xs bg-live-dark text-live-accent border border-live-accent">
                   {selectedGame.selectedOdd}
                 </div>
               </div>
             </div>
           ) : (
             // Default match odds view
-            <div className="flex flex-col gap-2 my-2">
+            <div className="flex flex-col gap-1 sm:gap-2 my-1 sm:my-2">
               <div
-                className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team1
+                className={`flex items-center justify-between p-1.5 sm:p-2 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team1
                     ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]'
                     : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
                   }`}
@@ -855,7 +855,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
                   {selectedGame?.team1}
                 </span>
                 <div
-                  className={`min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === selectedGame?.team1
+                  className={`min-w-[40px] sm:min-w-[44px] h-[24px] sm:h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === selectedGame?.team1
                       ? 'bg-live-dark text-live-accent border border-live-accent'
                       : 'bg-live-odds text-live-accent border border-live'
                     } ${highlightedOdds.w1 ? 'odds-highlight' : ''
@@ -867,7 +867,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
 
               {extractXOdds(selectedGame?.markets, selectedGame?.odds) !== '-' && (
                 <div
-                  className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${selectedTeam === 'Draw'
+                  className={`flex items-center justify-between p-1.5 sm:p-2 rounded border cursor-pointer transition-all ${selectedTeam === 'Draw'
                       ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]'
                       : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
                     }`}
@@ -882,7 +882,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
                     Draw
                   </span>
                   <div
-                    className={`min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === 'Draw'
+                    className={`min-w-[40px] sm:min-w-[44px] h-[24px] sm:h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === 'Draw'
                         ? 'bg-live-dark text-live-accent border border-live-accent'
                         : 'bg-live-odds text-live-accent border border-live'
                       } ${highlightedOdds.x ? 'odds-highlight' : ''
@@ -894,7 +894,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
               )}
 
               <div
-                className={`flex items-center justify-between p-2 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team2
+                className={`flex items-center justify-between p-1.5 sm:p-2 rounded border cursor-pointer transition-all ${selectedTeam === selectedGame?.team2
                     ? 'bg-live-accent border-live-accent shadow-[0_0_8px_var(--live-accent-primary)] scale-[1.02]'
                     : 'bg-live-hover border-live hover:shadow-[0_0_4px_var(--live-accent-primary)]'
                   }`}
@@ -909,7 +909,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
                   {selectedGame?.team2}
                 </span>
                 <div
-                  className={`min-w-[44px] h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === selectedGame?.team2
+                  className={`min-w-[40px] sm:min-w-[44px] h-[24px] sm:h-[28px] flex items-center justify-center rounded font-bold text-xs ${selectedTeam === selectedGame?.team2
                       ? 'bg-live-dark text-live-accent border border-live-accent'
                       : 'bg-live-odds text-live-accent border border-live'
                     } ${highlightedOdds.w2 ? 'odds-highlight' : ''
@@ -932,17 +932,17 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
         {/* Only show betting controls if match is not suspended */}
         {!matchIsSuspended && (selectedTeam || isMarketRunnerSelection) && (
           <>
-            <div className="bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
+            <div className="bg-live-tertiary px-2 py-1 sm:px-2.5 sm:py-1.5 rounded border border-live">
               <input
                 type="number"
                 placeholder="Enter stake"
                 value={stakeValue}
                 onChange={handleStakeChange}
-                className="w-full h-7 bg-live-hover border-0 rounded px-2.5 py-1 text-xs text-live-primary placeholder-live-secondary"
+                className="w-full h-6 sm:h-7 bg-live-hover border-0 rounded px-2 py-1 sm:px-2.5 sm:py-1 text-xs text-live-primary placeholder-live-secondary"
               />
             </div>
 
-            <div className="flex justify-between items-center bg-live-tertiary px-2.5 py-1.5 rounded border border-live">
+            <div className="flex justify-between items-center bg-live-tertiary px-2 py-1 sm:px-2.5 sm:py-1.5 rounded border border-live">
               <span className="text-xs text-live-primary">Possible win:</span>
               <span className="text-xs text-live-accent font-bold">{calculatePossibleWin()}</span>
             </div>
@@ -951,7 +951,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
 
         {/* Only show betting chips if match is not suspended */}
         {!matchIsSuspended && (selectedTeam || isMarketRunnerSelection) && (
-          <div className="flex gap-1.5" ref={containerRef}>
+          <div className="flex gap-1 sm:gap-1.5" ref={containerRef}>
             {betAmounts.map((amount, index) => (
               <div key={index} className="flex-1">
                 {editableIndex === index ? (
@@ -962,11 +962,11 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
                     onChange={(e) => setEditValue(e.target.value)}
                     onBlur={() => handleEditSubmit(index)}
                     onKeyPress={(e) => handleEditKeyPress(e, index)}
-                    className="w-full bg-live-hover border border-live rounded px-1.5 py-1 text-xs text-live-primary placeholder-live-secondary [-webkit-appearance:none] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="w-full bg-live-hover border border-live rounded px-1 py-1 text-xs text-live-primary placeholder-live-secondary [-webkit-appearance:none] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 ) : (
                   <button
-                    className="w-full bg-live-tertiary hover:bg-live-hover border border-live px-1.5 py-1 rounded text-xs font-medium text-live-primary transition-colors"
+                    className="w-full bg-live-tertiary hover:bg-live-hover border border-live px-1 py-1 rounded text-xs font-medium text-live-primary transition-colors"
                     onClick={() => {
                       if (isEditingMode) {
                         setEditableIndex(index);
@@ -982,13 +982,13 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
               </div>
             ))}
             <button
-              className={`border px-1.5 py-1 rounded text-xs font-medium transition-colors flex items-center justify-center ${isEditingMode
+              className={`border px-1 py-1 rounded text-xs font-medium transition-colors flex items-center justify-center ${isEditingMode
                   ? 'bg-live-accent border-live-accent text-live-dark'
                   : 'bg-live-tertiary hover:bg-live-hover border-live text-live-primary'
                 }`}
               onClick={toggleEditMode}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 mx-auto ${isEditingMode ? 'text-live-dark' : 'text-live-primary'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className={`h-2.5 w-2.5 mx-auto ${isEditingMode ? 'text-live-dark' : 'text-live-primary'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
               </svg>
             </button>
@@ -997,7 +997,7 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
 
         {/* Only show BET button if match is not suspended */}
         <button
-          className={`w-full px-2.5 py-1.5 rounded text-sm font-bold transition-colors cursor-pointer color-yellowborder-solid transition-all duration-200 ${
+          className={`w-full px-2 py-1 sm:px-2.5 sm:py-1.5 rounded text-xs sm:text-sm font-bold transition-colors cursor-pointer color-yellowborder-solid transition-all duration-200 ${
             !matchIsSuspended && (selectedTeam || isMarketRunnerSelection)
               ? 'bg-live-accent hover:bg-live-warning border border-live-accent text-live-accent hover:text-live-dark hover:scale-[1.02] hover:shadow-[0_0_8px_var(--live-accent-primary)]'
               : 'bg-live-tertiary border border-live text-live-accent cursor-not-allowed opacity-50'
@@ -1008,14 +1008,14 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
         </button>
       </div>
 
-      <div className="bg-live-tertiary p-4 rounded-lg border border-live-accent shadow-live flex items-center justify-center text-center h-24">
+      <div className="bg-live-tertiary p-3 sm:p-4 rounded-lg border border-live-accent shadow-live flex items-center justify-center text-center h-20 sm:h-24">
         <div className="space-y-1">
-          <div className="w-10 h-10 bg-live-hover rounded-full flex items-center justify-center mx-auto border border-live-accent">
-            <span className="text-live-accent text-lg">📊</span>
+          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-live-hover rounded-full flex items-center justify-center mx-auto border border-live-accent">
+            <span className="text-live-accent text-base sm:text-lg">📊</span>
           </div>
           <div>
             <span className="block text-xs font-medium text-live-primary">Advanced Match Analytics</span>
-            <span className="block text-[10px] text-live-muted">Team Stats + Predictions</span>
+            <span className="block text-[10px] sm:text-[10px] text-live-muted">Team Stats + Predictions</span>
           </div>
         </div>
       </div>

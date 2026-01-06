@@ -5,10 +5,10 @@ import {
 } from "./actionTypes";
 
 // Fetch match results actions
-export const fetchMatchResults = (eventId, sportId, marketId) => {
+export const fetchMatchResults = (eventId, sportId, marketId, userId) => {
   return {
     type: FETCH_MATCH_RESULTS,
-    payload: { eventId, sportId, marketId },
+    payload: { eventId, sportId, marketId, userId },
   };
 };
 

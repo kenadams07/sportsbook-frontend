@@ -128,8 +128,10 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
   const [highlightedOdds, setHighlightedOdds] = useState({});
   const [pendingSelection, setPendingSelection] = useState(null); // Track pending game selection
   const [placeholderIndex, setPlaceholderIndex] = useState(0); // For animated placeholder
+  const [hasProcessedInitialSelection, setHasProcessedInitialSelection] = useState(false); // Track if initial selection has been processed
   const oddsPrevRef = useRef({});
   const placeholderIntervalRef = useRef(null);
+  const hasProcessedLocationState = useRef(false); // To track if location state has been processed
 
   // Animated placeholder texts
   const placeholderTexts = ["competition", "team", "date"];
@@ -209,22 +211,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
         });
     });
     
-    // Check if there's navigation state to pre-select a game
-    const { selectedGameId, selectedSportKey } = location.state || {};
-    if (selectedGameId && selectedSportKey) {
-      // Set the sport as expanded
-      setExpanded(prev => ({ ...prev, [selectedSportKey]: true }));
-      // Set the selected sport
-      const sport = SPORTS.find(s => s.key === selectedSportKey);
-      if (sport) {
-        setSelectedSport(sport);
-      }
-      // Clear the location state to prevent issues with subsequent navigation
-      if (location.state) {
-        // Use navigate with replace to properly clear the location state
-        navigate(location.pathname, { replace: true, state: {} });
-      }
-    }
+    // Do not process location state here - let the other useEffect handle it after data is loaded
     
     // Cleanup function to abort any ongoing requests
     return () => {
@@ -356,52 +343,74 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
     // Check if there's navigation state to pre-select a game
     const { selectedGameId, selectedSportKey } = location.state || {};
     
-    // Only process location state if it exists
-    if (selectedGameId && selectedSportKey) {
-      // Set the sport as expanded
-      setExpanded(prev => ({ ...prev, [selectedSportKey]: true }));
+    // Only process location state if it exists and hasn't been processed yet
+    if (selectedGameId && !hasProcessedLocationState.current) {
+      hasProcessedLocationState.current = true; // Mark as processed
       
-      // Set the selected sport
-      const sport = SPORTS.find(s => s.key === selectedSportKey);
-      if (sport) {
-        setSelectedSport(sport);
+      let foundSportKey = selectedSportKey;
+      
+      // If sport key is not provided, find the sport by searching all matches
+      if (!selectedSportKey) {
+        for (const sport of SPORTS) {
+          const matches = matchesBySport[sport.key] || [];
+          const match = matches.find(m => m.eventId === selectedGameId);
+          if (match) {
+            foundSportKey = sport.key;
+            break;
+          }
+        }
       }
       
-      // Check if matches data is available for this sport
-      const matches = matchesBySport[selectedSportKey] || [];
-      if (matches.length > 0) {
-        // If matches are loaded, try to find and select the game
-        const selectedGame = matches.find(match => match.eventId === selectedGameId);
-        if (selectedGame) {
-          const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
-          const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
-          const selectedMatchData = {
-            ...selectedGame,
-            team1,
-            team2,
-            // Ensure sportKey is included for markets API call
-            sportKey: selectedSportKey
-          };
-          setSelectedMatch(selectedMatchData);
+      if (foundSportKey) {
+        // Set the sport as expanded
+        setExpanded(prev => ({ ...prev, [foundSportKey]: true }));
+        
+        // Set the selected sport
+        const sport = SPORTS.find(s => s.key === foundSportKey);
+        if (sport) {
+          setSelectedSport(sport);
         }
         
-        // Clear the location state to prevent issues with subsequent navigation
-        navigate(location.pathname, { replace: true, state: {} });
+        // Check if matches data is available for this sport
+        const matches = matchesBySport[foundSportKey] || [];
+        if (matches.length > 0) {
+          // If matches are loaded, try to find and select the game
+          const selectedGame = matches.find(match => match.eventId === selectedGameId);
+          if (selectedGame) {
+            const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
+            const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
+            const selectedMatchData = {
+              ...selectedGame,
+              team1,
+              team2,
+              // Ensure sportKey is included for markets API call
+              sportKey: foundSportKey
+            };
+            setSelectedMatch(selectedMatchData);
+            
+            // Mark that initial selection has been processed
+            setHasProcessedInitialSelection(true);
+          }
+        } else {
+          // If matches aren't loaded yet, store the selection for later
+          setPendingSelection({ selectedGameId, selectedSportKey: foundSportKey });
+        }
       } else {
-        // If matches aren't loaded yet, store the selection for later
-        setPendingSelection({ selectedGameId, selectedSportKey });
+        // If we couldn't find the sport, still store the selection for later
+        setPendingSelection({ selectedGameId, selectedSportKey: null });
       }
     }
     // Default behavior - only expand the first sport with matches
-    else if (!selectedGameId && !selectedSportKey) {
+    else if (!selectedGameId && !selectedSportKey && !selectedMatch && !hasProcessedInitialSelection) {
       // Only expand the first sport with matches, not all sports
+      // Only run this if no specific event has been selected and no initial selection has been processed
       for (const sport of SPORTS) {
         const matches = matchesBySport[sport.key] || [];
         if (matches.length > 0) {
           setExpanded((prev) => {
             // Check if any sport is already expanded
             const isAnySportExpanded = Object.keys(prev).length > 0 && Object.values(prev).some(val => val);
-            // If no sport is expanded yet, expand the first one with matches
+            // If no sport is already expanded yet, expand the first one with matches
             if (!isAnySportExpanded && !prev.hasOwnProperty(sport.key)) {
               return { [sport.key]: true };
             }
@@ -427,46 +436,92 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
         }
       }
     }
-  }, [matchesBySport, location.state, location.key, selectedMatch, setSelectedMatch, setSelectedSport]);
+  }, [matchesBySport, selectedMatch, setSelectedMatch, setSelectedSport]);
 
   // Handle pending selection when matches data is loaded
   useEffect(() => {
     if (pendingSelection) {
       const { selectedGameId, selectedSportKey } = pendingSelection;
-      const matches = matchesBySport[selectedSportKey] || [];
       
-      if (matches.length > 0) {
-        // Try to find and select the game
-        const selectedGame = matches.find(match => match.eventId === selectedGameId);
-        if (selectedGame) {
-          const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
-          const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
-          const selectedMatchData = {
-            ...selectedGame,
-            team1,
-            team2,
-            // Ensure sportKey is included for markets API call
-            sportKey: selectedSportKey
-          };
-          setSelectedMatch(selectedMatchData);
+      // If we have a specific sport key, use it
+      if (selectedSportKey) {
+        const matches = matchesBySport[selectedSportKey] || [];
+        
+        if (matches.length > 0) {
+          // Try to find and select the game
+          const selectedGame = matches.find(match => match.eventId === selectedGameId);
+          if (selectedGame) {
+            const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
+            const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
+            const selectedMatchData = {
+              ...selectedGame,
+              team1,
+              team2,
+              // Ensure sportKey is included for markets API call
+              sportKey: selectedSportKey
+            };
+            setSelectedMatch(selectedMatchData);
+            
+            // Set the sport as expanded
+            setExpanded(prev => ({ ...prev, [selectedSportKey]: true }));
+            
+            // Set the selected sport
+            const sport = SPORTS.find(s => s.key === selectedSportKey);
+            if (sport) {
+              setSelectedSport(sport);
+            }
+          }
         }
-        
-        // Clear pending selection
-        setPendingSelection(null);
-        
-        // Clear the location state to prevent issues with subsequent navigation
-        navigate(location.pathname, { replace: true, state: {} });
+      } else {
+        // If no sport key provided, search all sports
+        for (const sport of SPORTS) {
+          const matches = matchesBySport[sport.key] || [];
+          const selectedGame = matches.find(match => match.eventId === selectedGameId);
+          if (selectedGame) {
+            const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
+            const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
+            const selectedMatchData = {
+              ...selectedGame,
+              team1,
+              team2,
+              // Ensure sportKey is included for markets API call
+              sportKey: sport.key
+            };
+            setSelectedMatch(selectedMatchData);
+            
+            // Set the sport as expanded
+            setExpanded(prev => ({ ...prev, [sport.key]: true }));
+            
+            // Set the selected sport
+            setSelectedSport(sport);
+            break; // Stop after finding the first match
+          }
+        }
       }
+      
+      // Clear pending selection
+      setPendingSelection(null);
+      
+      // Mark that initial selection has been processed
+      setHasProcessedInitialSelection(true);
     }
   }, [matchesBySport, pendingSelection, setSelectedMatch, location.pathname]);
+
+  // Effect to clear location state after initial selection has been processed
+  useEffect(() => {
+    if (hasProcessedInitialSelection && location.state) {
+      // Clear the location state to prevent issues with subsequent navigation
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  }, [hasProcessedInitialSelection, location.state, navigate]);
 
   // Filter sports and matches based on search term
   const filteredSports = filterSports(SPORTS, matchesBySport, search);
 
   return (
-    <aside className="flex-1 bg-live-secondary h-full flex flex-col p-2 min-w-0">
+    <aside className="flex-1 bg-live-secondary h-full flex flex-col p-2 min-w-0 sm:p-2 md:p-2 lg:p-2 xl:p-2">
       {/* Toggle Buttons */}
-      <div className="flex gap-2 mb-3">
+      <div className="flex gap-1 sm:gap-2 mb-2 sm:mb-3">
         <Button
           variant={selectedType === "live" ? "default" : "outline"}
           size="sm"
@@ -493,7 +548,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
         </Button>
       </div>
       {/* Search Bar with Animated Placeholder */}
-      <div className="mb-3 flex items-center bg-live-tertiary rounded px-2 py-1 relative">
+      <div className="mb-2 sm:mb-3 flex items-center bg-live-tertiary rounded px-2 py-1 relative">
         <Search className="w-5 h-5 text-live-muted flex-shrink-0 mr-2" />
         <div className="relative flex-1">
           <input
@@ -516,7 +571,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
         </div>
       </div>
       {/* Icon Buttons */}
-      <div className="flex gap-2 mb-3 px-1">
+      <div className="flex gap-1 sm:gap-2 mb-2 sm:mb-3 px-1">
         <button className="bg-live-primary p-2 rounded flex items-center justify-center hover:bg-live-hover">
           <Monitor className="w-5 h-5 text-live-primary" />
         </button>
@@ -536,14 +591,14 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
           return (
             <div key={sport.key} className="mb-2 bg-live-tertiary rounded">
               <div
-                className="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-live-primary rounded"
+                className="flex items-center justify-between px-2 sm:px-3 py-1.5 sm:py-2 cursor-pointer hover:bg-live-primary rounded"
                 onClick={() => toggleExpand(sport.key)}
               >
                 <div className="flex items-center gap-2 flex-1 min-w-0">
                   <Icon className={`w-5 h-5 ${sport.color.replace('bg-', '')}`} />
                   <span className="text-live-primary text-sm font-medium truncate">{sport.sportNames[0]}</span>
                 </div>
-                <span className="text-xs bg-live-hover text-live-primary rounded px-2 py-0.5 ml-2 min-w-[32px] text-center">{matchCount}</span>
+                <span className="text-xs bg-live-hover text-live-primary rounded px-1.5 sm:px-2 py-0.5 ml-2 min-w-[28px] sm:min-w-[32px] text-center">{matchCount}</span>
                 <div>
                   {expanded[sport.key] ? (
                     <ChevronUp className="w-4 h-4 text-live-primary" />
@@ -553,11 +608,11 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
                 </div>
               </div>
               {expanded[sport.key] && (
-                <div className="pl-2 pb-2">
+                <div className="pl-1 sm:pl-2 pb-1 sm:pb-2">
                   {loadingBySport[sport.key] ? (
                       <SkeletonLoader type="game-card" count={3} />
                     ) : matchCount === 0 ? (
-                      <div className="text-xs text-live-muted px-2 py-2">No matches</div>
+                      <div className="text-xs text-live-muted px-2 py-1 sm:py-2">No matches</div>
                     ) : (
                       filteredMatches.map((match, idx) => {
                         // Robustly extract team names

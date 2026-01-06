@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { useSearchParams } from "react-router-dom"
 import LeftSidebarEventView from "./LeftSidebarEventView"
 import MiddleGameDisplay from "./MiddleGameDisplay"
 import RightEventInfoSection from "./RightEventInfoSection"
@@ -8,11 +9,15 @@ import LoginModal from "../../modals/LoginModal"
 import RegisterModal from "../../modals/RegisterModal"
 
 export default function MainLiveSection() {
+  const [searchParams] = useSearchParams();
   const [selectedMatch, setSelectedMatch] = useState(null)
   const [selectedSport, setSelectedSport] = useState(null)
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false)
   const selectedRunnerRef = useRef(null);
+  
+  // Get the eventId from URL parameters
+  const eventIdFromUrl = searchParams.get('eventId');
 
   // Function to update the selected match with new odds
   const updateSelectedMatchOdds = (updatedMatch) => {
@@ -53,6 +58,8 @@ export default function MainLiveSection() {
     });
   };
 
+
+
   // Reset market runner selection when a new match is selected
   useEffect(() => {
     if (selectedMatch) {
@@ -85,9 +92,9 @@ export default function MainLiveSection() {
       : null);
      
   return (
-    <div className="flex w-full h-[calc(100vh-60px)] bg-live-primary text-live-primary gap-3">
+    <div className="flex w-full h-[calc(100vh-60px)] bg-live-primary text-live-primary gap-3 flex-col md:flex-row">
       {/* Left section: sidebar */}
-      <div className="w-[18%] min-w-[230px] max-w-[360px] overflow-y-auto">
+      <div className="w-full md:w-[18%] min-w-[200px] max-w-[360px] overflow-y-auto">
         <LeftSidebarEventView
           setSelectedMatch={setSelectedMatch}
           setSelectedSport={setSelectedSport}
@@ -106,7 +113,7 @@ export default function MainLiveSection() {
       </div>
 
       {/* Right section: extra info */}
-      <div className="w-[25%] min-w-[220px] max-w-[320px] overflow-y-auto">
+      <div className="w-full md:w-[25%] min-w-[200px] max-w-[320px] overflow-y-auto">
         <RightEventInfoSection 
           selectedGame={rightEventInfo} 
           onLogin={() => setIsLoginModalOpen(true)}

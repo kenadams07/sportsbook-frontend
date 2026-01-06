@@ -1,6 +1,6 @@
 import { all, call, put, takeEvery } from "redux-saga/effects";
 import API from "../../../utils/api";
-import { setLocalStorageItem } from "../../../utils/Helper";
+import { setLocalStorageItem, getIPAddresses } from "../../../utils/Helper";
 import { signupSuccess, signupFailure } from "../../Action/auth/signupAction";
 import { LOGIN_SUCCESS } from "../../Action/actionTypes"; // Import LOGIN_SUCCESS
 import { SIGNUP } from "../../Action/actionTypes";
@@ -9,9 +9,20 @@ import { notifyPromise } from "../../../utils/notificationService";
 function* signupRequest(action) {
   try {
     // Extract the actual payload from the action
-    const  payload  = action.payload || action;
-    // Removed console.log("action.payload in signup saga", payload);
+    const  originalPayload  = action.payload || action;
+    // Removed console.log("action.payload in signup saga", originalPayload);
     
+    // Get IP addresses
+    const ipAddresses = yield call(getIPAddresses);
+    
+    // Add IP addresses to the payload
+    const payload = {
+      ...originalPayload,
+      system_ip: ipAddresses.systemIP,
+      browser_ip: ipAddresses.browserIP
+    };
+    console.log("payload",payload)
+  
     const data = yield call(() =>
       notifyPromise(() => API.post("/users/signup", payload), {
         loadingText: "Creating your account...",

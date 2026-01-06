@@ -20,29 +20,64 @@ const matchResultsReducer = (state = INIT_STATE, action) => {
       };
       
     case FETCH_MATCH_RESULTS_SUCCESS:
-      // Add the new result to the existing results array, avoiding duplicates
+      // Add the new result to the existing results array
+      // Don't check for duplicates by event ID since we want all market results for an event
       const existingResults = Array.isArray(state.results) ? state.results : [];
       
-      // Check if this result already exists based on event ID
-      const eventExists = existingResults.some(result => {
-        const existingEventId = result?.data?.event?.eventId || result?.event?.eventId;
-        const newEventId = action.payload?.data?.event?.eventId || action.payload?.event?.eventId;
-        return existingEventId === newEventId;
-      });
+      // Get the first market ID from the new result to check for duplicates
+      const newEventId = action.payload?.data?.event?.eventId || action.payload?.event?.eventId;
+      
+      // Extract all market IDs from the new result
+      const newMarketIds = [];
+      const newMarkets = action.payload?.data?.event?.markets || action.payload?.event?.markets;
+      if (newMarkets) {
+        Object.keys(newMarkets).forEach(marketType => {
+          const marketList = newMarkets[marketType];
+          if (Array.isArray(marketList)) {
+            marketList.forEach(market => {
+              if (market.marketId) {
+                newMarketIds.push(market.marketId);
+              }
+            });
+          }
+        });
+      }
+      
+      // Check if any of the market IDs in the new result already exist in existing results
+      let existingIndex = -1;
+      if (newMarketIds.length > 0) {
+        existingIndex = existingResults.findIndex(result => {
+          const existingEventId = result?.data?.event?.eventId || result?.event?.eventId;
+          
+          // Extract market IDs from existing result
+          const existingMarketIds = [];
+          const existingMarkets = result?.data?.event?.markets || result?.event?.markets;
+          if (existingMarkets) {
+            Object.keys(existingMarkets).forEach(marketType => {
+              const marketList = existingMarkets[marketType];
+              if (Array.isArray(marketList)) {
+                marketList.forEach(market => {
+                  if (market.marketId) {
+                    existingMarketIds.push(market.marketId);
+                  }
+                });
+              }
+            });
+          }
+          
+          // Check if event IDs match and any market IDs match
+          return existingEventId === newEventId && 
+                 existingMarketIds.some(id => newMarketIds.includes(id));
+        });
+      }
       
       let newResults;
-      if (eventExists) {
-        // Update existing result
-        newResults = existingResults.map(result => {
-          const existingEventId = result?.data?.event?.eventId || result?.event?.eventId;
-          const newEventId = action.payload?.data?.event?.eventId || action.payload?.event?.eventId;
-          if (existingEventId === newEventId) {
-            return action.payload;
-          }
-          return result;
-        });
+      if (existingIndex !== -1) {
+        // Update the existing result with the same event ID and market ID
+        newResults = [...existingResults];
+        newResults[existingIndex] = action.payload;
       } else {
-        // Add new result
+        // Add new result for a different market of the same event
         newResults = [...existingResults, action.payload];
       }
       

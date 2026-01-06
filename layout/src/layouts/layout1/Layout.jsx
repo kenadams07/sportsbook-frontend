@@ -11,23 +11,23 @@ const Layout = () => {
   const showLiveNavbar = location.pathname === '/live_events' || location.pathname.startsWith('/live_events/');
 
   return (
-    <div className="w-full">
+    <div className="w-full min-h-screen flex flex-col">
       {/* Fixed Top Navbar */}
       <MainNavbar />
       {/* Secondary Live Navbar */}
       {showLiveNavbar && <SecondaryLiveNavbar />}
       {/* Main Content Area */}
-      <div className="min-h-screen">
+      <div className="flex-grow min-h-screen pb-20 lg:pb-0">
         <Outlet />
       </div>
       {/* Toast Notifications */}
       <Toaster />
       {/* Fixed Bottom Mobile Navbar (Visible only on small screens) */}
-      <div className="mx-auto px-6 lg:hidden">
+      <div className="fixed bottom-0 left-0 right-0 mx-auto px-4 sm:px-6 lg:hidden bg-background w-full z-50">
         <MobileNavbar />
       </div>
       {/* Spacer to prevent content being hidden behind MobileNavbar */}
-      <div className="h-20 lg:hidden" />
+      <div className="h-16 sm:h-20 lg:hidden" />
     </div>
   );
 };

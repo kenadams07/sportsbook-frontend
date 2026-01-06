@@ -262,9 +262,9 @@ export default function MainNavbar() {
                                     <img
                                         src="/appLogo/LOGOICON.png"
                                         alt="Logo"
-                                        className="w-16 h-16 object-contain"
+                                        className="w-12 h-12 sm:w-16 sm:h-16 object-contain"
                                     />
-                                    <p className="text-muted-card text-brand cursor-pointer hover:text-chart-5">
+                                    <p className="text-muted-card text-brand cursor-pointer hover:text-chart-5 hidden sm:block">
                                         Sportsbook
                                     </p>
                                 </Link>
@@ -310,9 +310,9 @@ export default function MainNavbar() {
                                     <div className="relative user-menu-container">
                                         <button
                                             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                                            className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors"
+                                            className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors"
                                         >
-                                            <User className="w-5 h-5 text-gray-700" />
+                                            <User className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" />
                                         </button>
 
                                         {/* Dropdown Menu */}

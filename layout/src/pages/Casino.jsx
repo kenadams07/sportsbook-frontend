@@ -112,13 +112,13 @@ const Casino = () => {
   return (
     <div className="casino-container" style={{ paddingTop: '7rem' }}>
       {/* Home/Tournaments Navigation - Matching Live section style with NavLink */}
-      <nav className="flex bg-live-secondary border-b border-live px-6 h-12 items-center gap-2 mb-6">
+      <nav className="flex bg-live-secondary border-b border-live px-6 h-12 items-center gap-2 mb-6 flex-wrap">
         {tabs.map((tab) => (
           <NavLink
             key={tab.id}
             to={tab.to}
             className={({ isActive }) =>
-              `h-full flex items-center px-5 text-base font-semibold transition-colors duration-200 border-b-2 ${
+              `h-full flex items-center px-3 sm:px-5 text-sm sm:text-base font-semibold transition-colors duration-200 border-b-2 ${
                 isActive
                   ? "text-live-primary border-live-accent bg-live-secondary"
                   : "text-live-muted border-transparent hover:text-live-primary hover:border-live-accent"
@@ -177,7 +177,7 @@ const Casino = () => {
 
       {/* Game Categories */}
       <div className="casino-categories-container mb-6">
-        <div className="casino-categories-flex">
+        <div className="casino-categories-flex flex-wrap">
           {gameCategories.map(category => (
             <GameCategoryButton
               key={category.id}
@@ -191,7 +191,7 @@ const Casino = () => {
       </div>
 
       {/* Reusable PROVIDERS/GAMES Section - Increased height */}
-      <div className="mb-6" style={{ height: '600px' }}>
+      <div className="mb-6" style={{ height: '400px', minHeight: '400px' }}>
         <CasinoProvidersGamesSection 
           onProviderSearch={handleProviderSearch}
           onGameSearch={handleGameSearch}

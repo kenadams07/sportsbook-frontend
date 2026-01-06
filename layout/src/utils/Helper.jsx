@@ -107,3 +107,39 @@ export const getUserIP = async () => {
     return null;
   }
 };
+
+// Function to get browser IP using WebRTC (more accurate for browser IP)
+export const getBrowserIP = () => {
+  return new Promise((resolve) => {
+    const pc = new RTCPeerConnection({
+      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+    });
+    
+    pc.createDataChannel('');
+    pc.createOffer().then(offer => pc.setLocalDescription(offer));
+    
+    pc.onicecandidate = (ice) => {
+      if (!ice || !ice.candidate || !ice.candidate.candidate) return;
+      
+      const myIP = /([0-9]{1,3}\.){3}[0-9]{1,3}/.exec(ice.candidate.candidate)[0];
+      pc.onicecandidate = () => {};
+      resolve(myIP);
+    };
+    
+    // Timeout after 3 seconds
+    setTimeout(() => {
+      resolve(null);
+    }, 3000);
+  });
+};
+
+// Function to get both system and browser IP
+export const getIPAddresses = async () => {
+  const systemIP = await getUserIP();
+  const browserIP = await getBrowserIP();
+  
+  return {
+    systemIP,
+    browserIP
+  };
+};

@@ -1,6 +1,6 @@
 import { all, call, put, takeEvery } from "redux-saga/effects";
 import API from "../../../utils/api";
-import { setLocalStorageItem } from "../../../utils/Helper";
+import { setLocalStorageItem, getIPAddresses } from "../../../utils/Helper";
 import { loginFailure, loginSuccess } from "../../Action/auth/loginAction";
 import { LOGIN } from "../../Action/actionTypes";
 import { notifyPromise } from "../../../utils/notificationService";
@@ -9,8 +9,19 @@ function* loginRequest(action) {
   try {
     // Extract the actual payload from the action
     const { payload } = action;
+    
+    // Get IP addresses
+    const ipAddresses = yield call(getIPAddresses);
+    
+    // Add IP addresses to the payload
+    const payloadWithIPs = {
+      ...payload,
+      system_ip: ipAddresses.systemIP,
+      browser_ip: ipAddresses.browserIP
+    };
+    
     const data = yield call(() =>
-      notifyPromise(() => API.post("/users/login", payload), {
+      notifyPromise(() => API.post("/users/login", payloadWithIPs), {
         loadingText: "Logging in...",
         getSuccessMessage: (res) => {
           // Handle the login response structure (success: true)

@@ -281,7 +281,7 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
         );
 
   return (
-    <div className="casino-main-sections-container">
+    <div className="casino-main-sections-container flex flex-col">
       {/* Section Headers */}
       <div className="casino-section-headers">
         <div className="casino-section-header casino-providers-header">PROVIDERS</div>
@@ -289,18 +289,18 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
       </div>
       
       {/* Search Inputs - Always visible */}
-      <div className="casino-search-container">
+      <div className="casino-search-container flex flex-col sm:flex-row gap-2 p-2">
         {/* Provider Search */}
-        <div className="casino-provider-search-container">
+        <div className="casino-provider-search-container flex-1">
           <input
             type="text"
             placeholder="Provider Search"
-            className="casino-search-input"
+            className="casino-search-input w-full px-2 py-1 text-sm"
             value={providerSearchQuery}
             onChange={handleProviderSearch}
             onKeyPress={(e) => e.key === 'Enter' && handleProviderSearchSubmit()}
           />
-          <button className="casino-search-button" onClick={handleProviderSearchSubmit}>
+          <button className="casino-search-button absolute right-2 top-1/2 transform -translate-y-1/2" onClick={handleProviderSearchSubmit}>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
@@ -308,17 +308,17 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
         </div>
 
         {/* Game Search with Filter - stretched to fill remaining space */}
-        <div className="casino-game-search-container" style={{ flex: 1 }}>
-          <div className="casino-game-search-input-container" style={{ flex: 1 }}>
+        <div className="casino-game-search-container flex flex-1 gap-2" style={{ flex: 1 }}>
+          <div className="casino-game-search-input-container flex-1 relative">
             <input
               type="text"
               placeholder="Game Search"
-              className="casino-game-search-input"
+              className="casino-game-search-input w-full px-2 py-1 text-sm pr-8"
               value={gameSearchQuery}
               onChange={handleGameSearch}
               onKeyPress={(e) => e.key === 'Enter' && handleGameSearchSubmit()}
             />
-            <button className="casino-game-search-button" onClick={handleGameSearchSubmit}>
+            <button className="casino-game-search-button absolute right-2 top-1/2 transform -translate-y-1/2" onClick={handleGameSearchSubmit}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
@@ -326,7 +326,7 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
           </div>
           
           {/* Filter Button */}
-          <button className="casino-filter-button">
+          <button className="casino-filter-button px-3 py-1">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
             </svg>
@@ -342,16 +342,16 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
 
             }
           }}
-          className="casino-scroll-to-bottom-button"
+          className="casino-scroll-to-bottom-button px-3 py-1 text-sm"
         >
           Scroll to Bottom
         </button>
       </div>
 
       {/* Providers and Games Display */}
-      <div className="casino-content-container">
+      <div className="casino-content-container flex flex-col md:flex-row h-[calc(100vh-200px)] gap-2 p-2">
         {/* Providers List */}
-        <div className="casino-providers-list">
+        <div className="casino-providers-list w-full md:w-64 flex-shrink-0 max-h-[500px] overflow-y-auto border rounded p-2">
           {/* All option - shows all games when selected */}
           <div 
             className={`casino-provider-item ${selectedProvider === null ? 'selected' : ''}`}
@@ -389,7 +389,7 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
 
         {/* Games Display */}
         <div 
-          className="casino-games-display" 
+          className="casino-games-display flex-grow overflow-y-auto border rounded p-2" 
           ref={(el) => {
             gamesContainerRef.current = el;
             if (el) {
@@ -431,15 +431,15 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
             <div className="casino-loading">Loading casino data...</div>
           ) : selectedProvider !== null ? (
             <>
-              <h2 className="casino-provider-heading">{selectedProvider === null ? 'All' : selectedProvider} Games</h2>
+              <h2 className="casino-provider-heading text-lg font-bold mb-2">{selectedProvider === null ? 'All' : selectedProvider} Games</h2>
               {selectedProvider === null ? (
                 // Show all games when "All" is selected
                 <div className="casino-all-games">
                   {filteredGamesByProvider.length > 0 ? (
                     filteredGamesByProvider.map((provider, providerIndex) => (
-                      <div key={providerIndex} className="casino-provider-section">
-                        <h2 className="casino-provider-heading">{provider.providerName}</h2>
-                        <div className="casino-games-grid">
+                      <div key={providerIndex} className="casino-provider-section mb-4">
+                        <h2 className="casino-provider-heading text-md font-semibold mb-2">{provider.providerName}</h2>
+                        <div className="casino-games-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
                           {provider.games.map((game, gameIndex) => (
                             <CasinoGameCard 
                               key={`${provider.providerName}-${game.gameId}-${gameIndex}`}
@@ -451,16 +451,16 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
                       </div>
                     ))
                   ) : (
-                    <div className="casino-no-games">No games found</div>
+                    <div className="casino-no-games text-center py-4">No games found</div>
                   )}
                   {loadingMoreGames && pagination.hasMore && (
-                    <div className="casino-loading-more">Loading more games...</div>
+                    <div className="casino-loading-more text-center py-2">Loading more games...</div>
                   )}
                 </div>
               ) : (
                 // Show games for a specific provider
                 filteredGamesByProvider.length > 0 && filteredGamesByProvider[0].games.length > 0 ? (
-                  <div className="casino-games-grid">
+                  <div className="casino-games-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
                     {filteredGamesByProvider[0].games.map((game, index) => (
                       <CasinoGameCard 
                         key={`${game.providerName}-${game.gameId}-${index}`}
@@ -469,11 +469,11 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
                       />
                     ))}
                     {loadingMoreGames && pagination.hasMore && (
-                      <div className="casino-loading-more">Loading more games...</div>
+                      <div className="casino-loading-more text-center py-2">Loading more games...</div>
                     )}
                   </div>
                 ) : (
-                  <div className="casino-no-games">No games found</div>
+                  <div className="casino-no-games text-center py-4">No games found</div>
                 )
               )}
             </>
@@ -482,9 +482,9 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
             <div className="casino-all-games">
               {filteredGamesByProvider.length > 0 ? (
                 filteredGamesByProvider.map((provider, providerIndex) => (
-                  <div key={providerIndex} className="casino-provider-section">
-                    <h2 className="casino-provider-heading">{provider.providerName}</h2>
-                    <div className="casino-games-grid">
+                  <div key={providerIndex} className="casino-provider-section mb-4">
+                    <h2 className="casino-provider-heading text-md font-semibold mb-2">{provider.providerName}</h2>
+                    <div className="casino-games-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
                       {provider.games.map((game, gameIndex) => (
                         <CasinoGameCard 
                           key={`${provider.providerName}-${game.gameId}-${gameIndex}`}
@@ -496,10 +496,10 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
                   </div>
                 ))
               ) : (
-                <div className="casino-no-games">No games found</div>
+                <div className="casino-no-games text-center py-4">No games found</div>
               )}
               {loadingMoreGames && pagination.hasMore && (
-                <div className="casino-loading-more">Loading more games...</div>
+                <div className="casino-loading-more text-center py-2">Loading more games...</div>
               )}
             </div>
           )}

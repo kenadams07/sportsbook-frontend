@@ -8,6 +8,7 @@ import UpdateUserBalanceExposure from "./auth/updateUserBalanceExposureSaga";
 import CasinoGames from "./casinoSaga";
 import UserBets from "./userBetsSaga";
 import MatchResults from "./matchResultsSaga";
+import MarketReport from "./marketReportSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -20,5 +21,6 @@ export default function* rootSaga() {
     CasinoGames(),
     UserBets(),
     MatchResults(),
+    MarketReport(),
   ]);
 }

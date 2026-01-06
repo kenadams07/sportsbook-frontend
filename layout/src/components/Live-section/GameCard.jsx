@@ -48,24 +48,26 @@ export default function GameCard({
     >
       {/* League and status vertically */}
       <div className="flex flex-col items-start mb-1 gap-1">
-        <span className="text-xs text-live-secondary font-semibold truncate">{league}</span>
-        <span className="text-xs text-live-muted">{matchStatus}</span>
-        <span className="text-xs text-live-accent">{displayTime}</span>
+        <span className="text-xs sm:text-sm text-live-secondary font-semibold truncate">{league}</span>
+        <span className="text-xs sm:text-sm text-live-muted">{matchStatus}</span>
+        <span className="text-xs sm:text-sm text-live-accent">{displayTime}</span>
       </div>
       {/* Teams and scores */}
-      <div className="flex items-center justify-between mb-1">
-        <div className="flex flex-col flex-1">
-          <span className="text-sm text-live-primary font-bold truncate">{team1Display}</span>
-          <span className="text-xs text-live-muted font-bold">vs.</span>
-          <span className="text-sm text-live-primary font-bold truncate">{team2Display}</span>
+      <div className="flex flex-col sm:flex-row items-center justify-between mb-1 gap-1 sm:gap-0">
+        <div className="flex flex-col flex-1 min-w-0">
+          <span className="text-sm sm:text-base text-live-primary font-bold truncate">{team1Display}</span>
+          <span className="text-xs sm:text-sm text-live-muted font-bold">vs.</span>
+          <span className="text-sm sm:text-base text-live-primary font-bold truncate">{team2Display}</span>
         </div>
-        <div className="flex flex-col items-end ml-2">
-          <span className="text-lg text-live-accent font-bold">{score1}</span>
-          <span className="text-lg text-live-accent font-bold">{score2}</span>
+        <div className="flex flex-col items-center sm:items-end sm:flex-row gap-1 sm:gap-2 ml-2">
+          <div className="flex flex-col items-end">
+            <span className="text-base sm:text-lg text-live-accent font-bold">{score1}</span>
+            <span className="text-base sm:text-lg text-live-accent font-bold">{score2}</span>
+          </div>
         </div>
       </div>
       {/* Odds */}
-      <div className="flex gap-2 mt-2">
+      <div className="flex flex-wrap sm:flex-nowrap gap-1 sm:gap-2 mt-2">
         {isSuspended ? (
           // Display full suspended box
           <div className="w-full flex items-center justify-center bg-live-odds rounded p-2">
@@ -75,20 +77,20 @@ export default function GameCard({
           // Display regular odds
           <>
             <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105">
-              <span className="text-xs text-live-muted">W1</span>
-              <span className={`text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${
+              <span className="text-xs sm:text-sm text-live-muted">W1</span>
+              <span className={`text-sm sm:text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${
                 oddsHighlight?.w1 
                   ? 'odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110' 
                   : 'hover:shadow-md'
               }`}>{odds.w1}</span>
             </div>
             <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105">
-              <span className="text-xs text-live-muted">X</span>
-              <span className="text-base text-live-accent font-bold transition-all duration-300 hover:shadow-md">{odds.x}</span>
+              <span className="text-xs sm:text-sm text-live-muted">X</span>
+              <span className="text-sm sm:text-base text-live-accent font-bold transition-all duration-300 hover:shadow-md">{odds.x}</span>
             </div>
             <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105">
-              <span className="text-xs text-live-muted">W2</span>
-              <span className={`text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${
+              <span className="text-xs sm:text-sm text-live-muted">W2</span>
+              <span className={`text-sm sm:text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${
                 oddsHighlight?.w2 
                   ? 'odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110' 
                   : 'hover:shadow-md'

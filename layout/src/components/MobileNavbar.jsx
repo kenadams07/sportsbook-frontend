@@ -47,11 +47,11 @@ const MobileNavbar = () => {
   return (
     <>
       <div className='max-h-[3.5rem] px-2 pb-5 fixed inset-x-0 bottom-0 rounded-t-md z-[100] bg-[#f13636]'>
-        <div className='flex justify-around items-center gap-2'>
+        <div className='flex justify-around items-center gap-1 sm:gap-2'>
           {navLinks.map((link) => (
             <p 
               key={link.label} 
-              className='block py-2 text-white hover:text-yellow-500 cursor-pointer'
+              className='block py-2 text-white hover:text-yellow-500 cursor-pointer text-xs sm:text-sm text-center min-w-[60px] flex-1 truncate px-1'
               onClick={link.onClick}
             >
               {link.label}

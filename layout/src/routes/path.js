@@ -7,6 +7,7 @@ export const Paths = {
     liveCalendar: '/live_events/live-calendar',
     results: '/live_events/results',
     statistics: '/live_events/statistics',
+    myBets: '/live_events/my-bets',
     verifyEmail: '/verify-email',
     resetPassword: '/reset-password',
     games: '/games',
@@ -16,4 +17,5 @@ export const Paths = {
     esportsResults: '/esports/results',
     esportsStatistics: '/esports/statistics',
     virtualSports: '/virtual-sports',
+    marketReport: '/live_events/market-report',
 }

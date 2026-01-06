@@ -19,3 +19,18 @@ export async function fetchUserBets(userId, eventId = null) {
     throw error;
   }
 }
+
+/**
+ * Fetch all user bets from the API
+ * @param {string} userId - The user ID
+ * @returns {Promise<Object>} - The response data containing all user bets
+ */
+export async function fetchAllUserBets(userId) {
+  try {
+    const response = await api.get(`/sportBets/all-bets?userId=${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all user bets:", error);
+    throw error;
+  }
+}

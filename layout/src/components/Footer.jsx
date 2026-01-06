@@ -86,7 +86,7 @@ export default function Footer() {
             </div>
 
             {/* Footer Content */}
-            <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 text-center sm:text-left">
+            <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 text-center sm:text-left">
                 {footerData.map((section, index) => (
                     <div key={index}>
                         <h4 className="text-xs font-semibold mb-2 text-primary-foreground">
@@ -97,7 +97,7 @@ export default function Footer() {
                                 <li key={idx}>
                                     <Link
                                         to={link.to}
-                                        className="transition-colors duration-200 hover:text-primary-foreground"
+                                        className="transition-colors duration-200 hover:text-primary-foreground block py-1"
                                     >
                                         {link.name}
                                     </Link>
@@ -111,7 +111,7 @@ export default function Footer() {
           
 
             {/* REGULATIONS & PARTNERS SECTION - New addition */}
-            <div className="mt-12 max-w-6xl mx-auto">
+            <div className="mt-8 max-w-6xl mx-auto">
                 {/* Partners Heading */}
                 <div className="text-center mb-6">
                     <h3 className="text-xs uppercase tracking-wider text-gray-400 mb-1">REGULATIONS & PARTNERS</h3>
@@ -119,7 +119,7 @@ export default function Footer() {
                 </div>
                 
                 {/* Partners Grid with uniform logo sizes */}
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 justify-items-center mb-10">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 justify-items-center mb-10">
                     {partners.map((partner, index) => (
                         <div key={index} className="flex flex-col items-center">
                             <p className="text-[8px] text-center text-gray-500 mb-1 h-8 flex items-center">
@@ -128,13 +128,13 @@ export default function Footer() {
                             <img 
                                 src={partner.image} 
                                 alt={partner.title} 
-                                className="h-12 w-12 object-contain" 
+                                className="h-8 w-8 sm:h-12 sm:w-12 object-contain" 
                             />
                         </div>
                     ))}
                 </div>
                   {/* Responsible Gambling Message */}
-            <div className="m   -8 flex flex-col sm:flex-row items-center justify-center gap-3 text-muted-foreground text-lg">
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 text-muted-foreground text-lg">
                 <div className="flex items-center justify-center w-8 h-8 rounded-full border border-pink-500 text-pink-500 text-xs font-bold">
                     18+
                 </div>
@@ -145,19 +145,19 @@ export default function Footer() {
              
                 
                 {/* Regulatory Logos with uniform sizes */}
-                <div className="flex flex-wrap justify-center gap-6 mb-10">
+                <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-6 mb-10">
                     {regulatoryLogos.map((logo, index) => (
                         <img 
                             key={index} 
                             src={logo.image} 
                             alt={logo.name} 
-                            className="h-15 w-25 object-contain opacity-80 hover:opacity-100 transition-opacity" 
+                            className="h-8 w-8 sm:h-12 sm:w-12 object-contain opacity-80 hover:opacity-100 transition-opacity" 
                         />
                     ))}
                 </div>
                 
                 {/* Regulatory Text */}
-                <p className="text-[10px] text-gray-500 text-center mb-10 max-w-4xl mx-auto leading-relaxed">
+                <p className="text-[10px] sm:text-[11px] text-gray-500 text-center mb-10 max-w-4xl mx-auto leading-relaxed">
                     Sportsbook.co.uk is operated by SGCG Limited, a company registered in Malta with registration number 045929 and having its registered address at Luxe Pavilion, 
                     2nd level, Diamonds International Building, Portomaso, St Julian's STJ 4010, Malta. SGCG Limited is licensed and regulated by the UK Gambling 
                     Commission for provision of services to the United Kingdom (UKGC Account number xxxx). Under 18s are strictly forbidden from gambling on this website. 
@@ -174,7 +174,7 @@ export default function Footer() {
                                 key={index} 
                                 src={method.image} 
                                 alt={method.name} 
-                                className="h-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
+                                className="h-8 sm:h-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
                             />
                         ))}
                     </div>

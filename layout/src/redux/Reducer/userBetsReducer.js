@@ -2,7 +2,10 @@ import {
   FETCH_USER_BETS,
   FETCH_USER_BETS_SUCCESS,
   FETCH_USER_BETS_FAILURE,
-  SKIP_NEXT_USER_BETS_FETCH
+  SKIP_NEXT_USER_BETS_FETCH,
+  FETCH_ALL_USER_BETS,
+  FETCH_ALL_USER_BETS_SUCCESS,
+  FETCH_ALL_USER_BETS_FAILURE
 } from "../Action/actionTypes";
 
 const INIT_STATE = {
@@ -49,6 +52,29 @@ const userBetsReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         skipNextFetch: true,
+      };
+      
+    case FETCH_ALL_USER_BETS:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+      
+    case FETCH_ALL_USER_BETS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        bets: action.payload,
+        error: null,
+      };
+      
+    case FETCH_ALL_USER_BETS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        bets: [],
+        error: action.payload,
       };
       
     default:

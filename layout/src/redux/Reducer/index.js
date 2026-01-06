@@ -7,6 +7,7 @@ import UpdateUserBalanceExposure from "./auth/updateUserBalanceExposureReducer";
 import CasinoGames from "./casinoReducer";
 import UserBets from "./userBetsReducer";
 import MatchResults from "./matchResultsReducer";
+import MarketReport from "./marketReportReducer";
 
 const appReducer = combineReducers({
   Signup,
@@ -17,6 +18,7 @@ const appReducer = combineReducers({
   CasinoGames,
   UserBets,
   MatchResults,
+  MarketReport,
 });
 
 const reducers = (state, action) => {

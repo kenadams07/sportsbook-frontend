@@ -6,10 +6,10 @@ import { fetchMatchResults as fetchMatchResultsAPI } from "../../utils/matchResu
 // Worker saga to fetch match results
 function* fetchMatchResultsRequest(action) {
   try {
-    const { eventId, sportId, marketId } = action.payload;
+    const { eventId, sportId, marketId, userId } = action.payload;
     
     // Make API call to fetch match results
-    const response = yield call(fetchMatchResultsAPI, eventId, sportId, marketId);
+    const response = yield call(fetchMatchResultsAPI, eventId, sportId, marketId, userId);
     
     // Check if response is successful
     if (response?.success === true) {

@@ -83,9 +83,9 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
   const matchIsSuspended = isMatchSuspended(match);
 
   return (
-    <div className="p-2 flex flex-col gap-4 h-full min-w-0">
+    <div className="p-2 sm:p-2 md:p-3 flex flex-col gap-3 sm:gap-4 h-full min-w-0">
       {/* Top Section with Background Image - Fixed height, always visible */}
-      <div className="relative w-full h-64 rounded-md overflow-hidden flex-shrink-0">
+      <div className="relative w-full h-48 sm:h-56 md:h-64 rounded-md overflow-hidden flex-shrink-0">
         {/* Background Image */}
          <img
           src={imageSrc}
@@ -119,37 +119,37 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
           <div className="flex-1 flex items-center justify-between px-4">
             <div className="w-full flex items-center justify-between" style={{ background: "rgba(0,0,0,0.4)", padding: "16px", borderRadius: "8px" }}>
               {/* Left side - Teams */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <span className="text-live-danger text-lg">★</span>
-                  <span className="text-live-primary text-lg font-medium">{team1}</span>
+              <div className="space-y-2 sm:space-y-3">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <span className="text-live-danger text-base sm:text-lg">★</span>
+                  <span className="text-live-primary text-base sm:text-lg font-medium truncate">{team1}</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-live-accent text-lg">★</span>
-                  <span className="text-live-primary text-lg font-medium">{team2}</span>
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <span className="text-live-accent text-base sm:text-lg">★</span>
+                  <span className="text-live-primary text-base sm:text-lg font-medium truncate">{team2}</span>
                 </div>
               </div>
 
         
 
               {/* Right side - Current scores */}
-              <div className="text-right space-y-3">
-                <div className="text-live-primary text-2xl font-bold">{homeScore}</div>
-                <div className="text-live-primary text-2xl font-bold">{awayScore}</div>
+              <div className="text-right space-y-2 sm:space-y-3">
+                <div className="text-live-primary text-xl sm:text-2xl font-bold">{homeScore}</div>
+                <div className="text-live-primary text-xl sm:text-2xl font-bold">{awayScore}</div>
               </div>
             </div>
           </div>
 
           {/* Bottom center - Action buttons */}
-          <div className="flex justify-center pb-4">
-            <div className="flex gap-2">
-              <button className="bg-live-tertiary hover:bg-live-hover text-live-primary px-4 py-2 rounded text-sm">
+          <div className="flex justify-center pb-3 sm:pb-4">
+            <div className="flex gap-1 sm:gap-2">
+              <button className="bg-live-tertiary hover:bg-live-hover text-live-primary px-3 py-1.5 sm:px-4 sm:py-2 rounded text-xs sm:text-sm">
                 Stats
               </button>
-              <button className="bg-live-tertiary hover:bg-live-hover text-live-primary p-2 rounded">
+              <button className="bg-live-tertiary hover:bg-live-hover text-live-primary p-1.5 sm:p-2 rounded">
                 ⚡
               </button>
-              <button className="bg-live-tertiary hover:bg-live-hover text-live-primary p-2 rounded">
+              <button className="bg-live-tertiary hover:bg-live-hover text-live-primary p-1.5 sm:p-2 rounded">
                 📊
               </button>
             </div>
@@ -161,10 +161,10 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
       <div className="flex-grow overflow-hidden flex flex-col">
         {matchIsSuspended ? (
           // Show suspended message instead of markets for suspended matches
-          <div className="flex-grow flex items-center justify-center bg-live-tertiary rounded p-4">
+          <div className="flex-grow flex items-center justify-center bg-live-tertiary rounded p-3 sm:p-4">
             <div className="text-center">
-              <div className="text-live-primary text-lg font-bold mb-2">Match Suspended</div>
-              <div className="text-live-muted text-sm">Markets are not available for suspended matches</div>
+              <div className="text-live-primary text-base sm:text-lg font-bold mb-2">Match Suspended</div>
+              <div className="text-live-muted text-xs sm:text-sm">Markets are not available for suspended matches</div>
             </div>
           </div>
         ) : (
@@ -259,7 +259,7 @@ function MarketItem({ market, isOpen, onToggle, highlightedOdds = {}, onRunnerSe
       <button
         type="button"
         onClick={onToggle}
-        className="w-full flex items-center justify-between px-3 py-2.5 text-xs hover:bg-live-hover transition-colors"
+        className="w-full flex items-center justify-between px-2 sm:px-3 py-2 text-xs sm:py-2.5 hover:bg-live-hover transition-colors"
         aria-expanded={isOpen}
       >
         <div className="flex items-center gap-3">
@@ -285,8 +285,8 @@ function MarketItem({ market, isOpen, onToggle, highlightedOdds = {}, onRunnerSe
         }}
       >
         <div ref={contentRef}>
-          <div className="px-3 pb-2.5 pt-1.5">
-            <ul className="text-xs text-live-primary space-y-1.5">
+          <div className="px-2 sm:px-3 pb-2 pt-1 sm:pb-2.5 sm:pt-1.5">
+            <ul className="text-xs text-live-primary space-y-1 sm:space-y-1.5">
               {market.runners && market.runners.length > 0 ? (
                 market.runners.map((runner, idx) => {
                   const oddsValue = getOdds(runner);
@@ -296,7 +296,7 @@ function MarketItem({ market, isOpen, onToggle, highlightedOdds = {}, onRunnerSe
                   return (
                     <li
                       key={`${market.marketId}-${runner.runnerId}`} // Use unique key
-                      className={`flex items-center justify-between py-1.5 px-2 bg-live-hover rounded cursor-pointer hover:bg-live-accent hover:bg-opacity-20 transition-colors ${
+                      className={`flex items-center justify-between py-1 sm:py-1.5 px-2 bg-live-hover rounded cursor-pointer hover:bg-live-accent hover:bg-opacity-20 transition-colors ${
                         runner.status === "SUSPENDED" ? "opacity-50 cursor-not-allowed" : ""
                       } ${isSelected ? "ring-2 ring-live-accent" : ""}`}
                       onClick={() => {
@@ -306,7 +306,7 @@ function MarketItem({ market, isOpen, onToggle, highlightedOdds = {}, onRunnerSe
                       }}
                     >
                       <span className="text-live-primary truncate text-xs">{runner.runnerName}</span>
-                      <span className={`text-xs px-2 py-1 rounded font-medium flex-shrink-0 ${
+                      <span className={`text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded font-medium flex-shrink-0 ${
                         runner.status === "SUSPENDED" 
                           ? "bg-live-danger text-white" 
                           : isHighlighted
@@ -319,7 +319,7 @@ function MarketItem({ market, isOpen, onToggle, highlightedOdds = {}, onRunnerSe
                   );
                 })
               ) : (
-                <li className="px-2 py-1.5 text-live-secondary text-xs">No runners available</li>
+                <li className="px-2 py-1 sm:py-1.5 text-live-secondary text-xs">No runners available</li>
               )}
             </ul>
           </div>
@@ -668,7 +668,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
 
       {/* Two-column layout for markets */}
       <div className="flex-grow overflow-y-auto px-2">
-        <div className="flex gap-3 h-full">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 h-full">
           {/* Left column */}
           <div className="flex-1 space-y-2">
             {leftColumn.map((market) => (
@@ -730,7 +730,7 @@ function SleekNavbar({ onSearchChange, searchValue, onSearchClear, marketNames =
   const uniqueMarketNames = [...new Set(marketNames)];
 
   return (
-    <div className="bg-live-tertiary rounded-md px-3 py-2 flex items-center gap-2">
+    <div className="bg-live-tertiary rounded-md px-2 sm:px-3 py-2 flex items-center gap-2">
       {isSearchOpen ? (
         <>
           <button
@@ -743,7 +743,7 @@ function SleekNavbar({ onSearchChange, searchValue, onSearchClear, marketNames =
           <input
             type="text"
             placeholder="Search markets or runners..."
-            className="flex-grow bg-transparent text-sm text-live-primary placeholder:text-live-muted focus:outline-none"
+            className="flex-grow bg-transparent text-xs sm:text-sm text-live-primary placeholder:text-live-muted focus:outline-none"
             value={searchValue}
             onChange={(e) => onSearchChange(e.target.value)}
             autoFocus
@@ -758,9 +758,9 @@ function SleekNavbar({ onSearchChange, searchValue, onSearchClear, marketNames =
             <IoSearchOutline size={18} />
           </button>
           <div className="h-6 w-px bg-live-primary mx-2"></div>
-          <div className="flex space-x-6 min-w-max">
+          <div className="flex space-x-3 sm:space-x-6 min-w-max">
             <button 
-              className={`text-sm font-medium relative py-1 px-1 whitespace-nowrap cursor-pointer ${
+              className={`text-xs sm:text-sm font-medium relative py-1 px-1 whitespace-nowrap cursor-pointer ${
                 activeTab === 'All' 
                   ? 'text-live-accent' 
                   : 'text-live-primary hover:text-live-accent'
@@ -775,7 +775,7 @@ function SleekNavbar({ onSearchChange, searchValue, onSearchClear, marketNames =
             {uniqueMarketNames.map((marketName, index) => (
               <button 
                 key={index}
-                className={`text-sm font-medium relative py-1 px-1 whitespace-nowrap cursor-pointer ${
+                className={`text-xs sm:text-sm font-medium relative py-1 px-1 whitespace-nowrap cursor-pointer ${
                   activeTab === marketName 
                     ? 'text-live-accent' 
                     : 'text-live-primary hover:text-live-accent'

@@ -209,7 +209,7 @@ const Home = () => {
       </div>
       
       {/* Casino Games Section */}
-      <div className='mx-1'>
+      {/* <div className='mx-1'>
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-white font-semibold">CASINO GAMES</h1>
           <button 
@@ -245,7 +245,7 @@ const Home = () => {
             ))}
           </div>
         )}
-      </div>
+      </div> */}
       
       {/* Live Games Section */}
       {/* <div className='mx-1 mt-8'>

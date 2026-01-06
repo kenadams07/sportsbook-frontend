@@ -171,6 +171,13 @@ export default function VerifyEmail() {
     }
   }, [verifyEmailState, navigate]);
 
+  // Auto-send OTP when component mounts
+  useEffect(() => {
+    if (userData?.email && isInputDisabled) {
+      handleSendOTP();
+    }
+  }, []);
+
   if (isVerified) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#1a1a1a] to-[#2a2a2a] flex items-center justify-center p-4">
@@ -234,24 +241,20 @@ export default function VerifyEmail() {
               <p className="text-xs text-gray-500 mt-4 text-center">
                 {isTimerOn
                   ? "Didn't receive the code? You can resend in: "
-                  : "Click 'Send OTP' to receive verification code"}
+                  : "Verification code has been sent to your email"}
               </p>
-              <div className="flex justify-center mt-4">
-
-                <Button
-                  type="button"
-                  onClick={handleSendOTP}
-                  disabled={isTimerOn}
-                  className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-8 text-sm disabled:opacity-50"
-                >
-                  {isTimerOn ? formatTime(timeLeft) : (
-                    <div className="flex items-center gap-1">
-                      <Send className="w-3 h-3" />
-                      Send OTP
-                    </div>
-                  )}
-                </Button>
-              </div>
+              {isTimerOn && (
+                <div className="flex justify-center mt-4">
+                  <Button
+                    type="button"
+                    onClick={handleSendOTP}
+                    disabled={isTimerOn}
+                    className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-8 text-sm disabled:opacity-50"
+                  >
+                    {formatTime(timeLeft)}
+                  </Button>
+                </div>
+              )}
 
             </div>
 

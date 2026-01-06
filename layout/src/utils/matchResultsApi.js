@@ -7,9 +7,13 @@ import api from "./api";
  * @param {string} marketId - The market ID
  * @returns {Promise<Object>} - The response data containing match results
  */
-export async function fetchMatchResults(eventId, sportId, marketId) {
+export async function fetchMatchResults(eventId, sportId, marketId, userId) {
   try {
-    const response = await api.get(`/sportBets/match-results?event_id=${eventId}&sports_id=${sportId}&market_id=${marketId}`);
+    let url = `/sportBets/match-results?event_id=${eventId}&sports_id=${sportId}&market_id=${marketId}`;
+    if (userId) {
+      url += `&user_id=${userId}`;
+    }
+    const response = await api.get(url);
     return response.data;
   } catch (error) {
     console.error("Error fetching match results:", error);
