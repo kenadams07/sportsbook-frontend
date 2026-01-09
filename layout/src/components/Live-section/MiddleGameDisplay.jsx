@@ -83,9 +83,9 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
   const matchIsSuspended = isMatchSuspended(match);
 
   return (
-    <div className="p-2 sm:p-2 md:p-3 flex flex-col gap-3 sm:gap-4 h-full min-w-0">
-      {/* Top Section with Background Image - Fixed height, always visible */}
-      <div className="relative w-full h-48 sm:h-56 md:h-64 rounded-md overflow-hidden flex-shrink-0">
+    <div className="p-2 sm:p-2 md:p-3 flex flex-col gap-2 sm:gap-3 md:gap-4 h-full min-w-0">
+      {/* Top Section with Background Image - Responsive height */}
+      <div className="relative w-full h-40 sm:h-48 md:h-56 lg:h-64 rounded-md overflow-hidden flex-shrink-0">
         {/* Background Image */}
          <img
           src={imageSrc}
@@ -100,15 +100,15 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
         {/* Overlay */}
         <div className="absolute inset-0 flex flex-col text-white">
           {/* Top section with flag and competition */}
-          <div className="flex justify-between items-center p-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-4 bg-live-info border border-live-primary rounded-sm flex items-center justify-center">
-                <span className="text-live-primary text-xs font-bold">🇬🇧</span>
+          <div className="flex justify-between items-center p-2 sm:p-3 md:p-4">
+            <div className="flex items-center gap-1 sm:gap-2">
+              <div className="w-5 h-3 sm:w-6 sm:h-4 bg-live-info border border-live-primary rounded-sm flex items-center justify-center">
+                <span className="text-live-primary text-[10px] sm:text-xs font-bold">🇬🇧</span>
               </div>
-              <span className="text-live-primary text-sm font-medium">{match.competitionName || 'League'}</span>
+              <span className="text-live-primary text-xs sm:text-sm font-medium truncate">{match.competitionName || 'League'}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className={`text-live-dark text-xs px-2 py-1 bg-live-accent rounded ${match.status === 'IN_PLAY' ? 'animate-pulse-highlight in-play-golden' : ''}`}>
+            <div className="flex items-center gap-1 sm:gap-2">
+              <span className={`text-live-dark text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 bg-live-accent rounded ${match.status === 'IN_PLAY' ? 'animate-pulse-highlight in-play-golden' : ''}`}>
                 {match.status === 'IN_PLAY' ? 'IN PLAY' : (match.status || 'N/A')}
               </span>
            
@@ -116,40 +116,40 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
           </div>
 
           {/* Middle section with teams and scores */}
-          <div className="flex-1 flex items-center justify-between px-4">
-            <div className="w-full flex items-center justify-between" style={{ background: "rgba(0,0,0,0.4)", padding: "16px", borderRadius: "8px" }}>
+          <div className="flex-1 flex items-center justify-between px-2 sm:px-3 md:px-4">
+            <div className="w-full flex items-center justify-between" style={{ background: "rgba(0,0,0,0.4)", padding: "8px 12px", borderRadius: "8px" }}>
               {/* Left side - Teams */}
-              <div className="space-y-2 sm:space-y-3">
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <span className="text-live-danger text-base sm:text-lg">★</span>
-                  <span className="text-live-primary text-base sm:text-lg font-medium truncate">{team1}</span>
+              <div className="space-y-1 sm:space-y-2 md:space-y-3 flex-1 min-w-0">
+                <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
+                  <span className="text-live-danger text-sm sm:text-base md:text-lg">★</span>
+                  <span className="text-live-primary text-sm sm:text-base md:text-lg font-medium truncate">{team1}</span>
                 </div>
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <span className="text-live-accent text-base sm:text-lg">★</span>
-                  <span className="text-live-primary text-base sm:text-lg font-medium truncate">{team2}</span>
+                <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
+                  <span className="text-live-accent text-sm sm:text-base md:text-lg">★</span>
+                  <span className="text-live-primary text-sm sm:text-base md:text-lg font-medium truncate">{team2}</span>
                 </div>
               </div>
 
         
 
               {/* Right side - Current scores */}
-              <div className="text-right space-y-2 sm:space-y-3">
-                <div className="text-live-primary text-xl sm:text-2xl font-bold">{homeScore}</div>
-                <div className="text-live-primary text-xl sm:text-2xl font-bold">{awayScore}</div>
+              <div className="text-right space-y-1 sm:space-y-2 md:space-y-3 flex-shrink-0 ml-2">
+                <div className="text-live-primary text-lg sm:text-xl md:text-2xl font-bold">{homeScore}</div>
+                <div className="text-live-primary text-lg sm:text-xl md:text-2xl font-bold">{awayScore}</div>
               </div>
             </div>
           </div>
 
           {/* Bottom center - Action buttons */}
-          <div className="flex justify-center pb-3 sm:pb-4">
+          <div className="flex justify-center pb-2 sm:pb-3 md:pb-4">
             <div className="flex gap-1 sm:gap-2">
-              <button className="bg-live-tertiary hover:bg-live-hover text-live-primary px-3 py-1.5 sm:px-4 sm:py-2 rounded text-xs sm:text-sm">
+              <button className="bg-live-tertiary hover:bg-live-hover text-live-primary px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 rounded text-[10px] sm:text-xs md:text-sm">
                 Stats
               </button>
-              <button className="bg-live-tertiary hover:bg-live-hover text-live-primary p-1.5 sm:p-2 rounded">
+              <button className="bg-live-tertiary hover:bg-live-hover text-live-primary p-1 sm:p-1.5 md:p-2 rounded text-xs sm:text-sm">
                 ⚡
               </button>
-              <button className="bg-live-tertiary hover:bg-live-hover text-live-primary p-1.5 sm:p-2 rounded">
+              <button className="bg-live-tertiary hover:bg-live-hover text-live-primary p-1 sm:p-1.5 md:p-2 rounded text-xs sm:text-sm">
                 📊
               </button>
             </div>
@@ -158,13 +158,13 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
       </div>
 
       {/* Market Section - Scrollable area */}
-      <div className="flex-grow overflow-hidden flex flex-col">
+      <div className="flex-grow overflow-hidden flex flex-col min-h-0">
         {matchIsSuspended ? (
           // Show suspended message instead of markets for suspended matches
-          <div className="flex-grow flex items-center justify-center bg-live-tertiary rounded p-3 sm:p-4">
+          <div className="flex-grow flex items-center justify-center bg-live-tertiary rounded p-2 sm:p-3 md:p-4">
             <div className="text-center">
-              <div className="text-live-primary text-base sm:text-lg font-bold mb-2">Match Suspended</div>
-              <div className="text-live-muted text-xs sm:text-sm">Markets are not available for suspended matches</div>
+              <div className="text-live-primary text-sm sm:text-base md:text-lg font-bold mb-1 sm:mb-2">Match Suspended</div>
+              <div className="text-live-muted text-[10px] sm:text-xs md:text-sm">Markets are not available for suspended matches</div>
             </div>
           </div>
         ) : (

@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchHomepageCasinoGames, fetchHomepageLiveGames } from '../../redux/Action/casinoActions'
 import CasinoGameCard from '../../components/CasinoGameCard'
+import { ChevronUp } from 'lucide-react'
 
 // Updated slider images from the 1029x290 folder
 const sliderImages = [
@@ -27,6 +28,7 @@ const sliderImages = [
 const Home = () => {
   const [showWelcome, setShowWelcome] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const intervalRef = useRef(null);
   const apiRef = useRef(null);
   const navigate = useNavigate();
@@ -47,7 +49,6 @@ const Home = () => {
     const shouldShowWelcome = getLocalStorageItem('showWelcomeModal');
     if (shouldShowWelcome === 'true') {
       setShowWelcome(true);
-      // Remove the flag so it doesn't show again
       setLocalStorageItem('showWelcomeModal', 'false');
     }
     
@@ -66,6 +67,18 @@ const Home = () => {
       providerName: 'SPRIBE', 
       search: '' 
     }));
+
+    // Scroll event listener for scroll-to-top button
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [dispatch]);
 
   // Set up carousel API reference and start autoplay
@@ -113,6 +126,13 @@ const Home = () => {
     setShowWelcome(false);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   // Function to check if banner has register text and open register modal
   const handleBannerClick = (item) => {
     // Check if the banner contains register text (banner1.png is the one with register text)
@@ -139,7 +159,7 @@ const Home = () => {
     : [];
 
   return (
-    <div className='w-full mx-auto px-2 py-2'>
+    <div className='w-full mx-auto px-2 py-2 md:px-4 md:py-4'>
       {/* Welcome Modal */}
       {showWelcome && <WelcomeComponent onClose={handleCloseWelcome} showDepositButton={true} />}
 
@@ -152,10 +172,21 @@ const Home = () => {
         }}
       />
 
-      {/* Carousel Container */}
-      <div className='w-full h-full rounded-lg overflow-hidden shadow-lg'>
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 left-4 z-50 bg-gray-800/70 hover:bg-gray-700/90 text-white p-2.5 rounded-full shadow-lg transition-all duration-300 md:hidden"
+          aria-label="Scroll to top"
+        >
+          <ChevronUp className="w-5 h-5" />
+        </button>
+      )}
+
+      {/* Carousel Container - Mobile Optimized - Full display without cropping */}
+      <div className='w-full rounded-lg overflow-hidden shadow-lg mb-3 md:mb-4'>
         <Carousel 
-          className='w-full h-full' 
+          className='w-full' 
           opts={{ loop: true }}
           setApi={setApi}
           onMouseEnter={() => {
@@ -165,14 +196,14 @@ const Home = () => {
           }}
           onMouseLeave={handleUserInteraction}
         >
-          <CarouselContent className='h-full custom-scrollbar'>
+          <CarouselContent className='custom-scrollbar'>
             {sliderImages.map((item) => (
-              <CarouselItem key={item.id} className='h-full'>
-                <div className='relative w-full h-full'>
+              <CarouselItem key={item.id}>
+                <div className='relative w-full aspect-[3/1] md:aspect-[16/6]'>
                   <LazyLoadImage
                     src={item.src}
                     alt={item.alt}
-                    className='w-full h-full object-contain rounded-sm cursor-pointer'
+                    className='w-full h-full object-contain md:object-cover rounded-sm cursor-pointer bg-gray-900'
                     effect='opacity'
                     width='100%'
                     height='100%'
@@ -183,20 +214,20 @@ const Home = () => {
             ))}
           </CarouselContent>
           <CarouselPrevious 
-            className='left-4 bg-[white] w-[40px] h-[40px] rounded-full flex items-center justify-center'
+            className='left-2 md:left-4 bg-[white] w-[32px] h-[32px] md:w-[40px] md:h-[40px] rounded-full flex items-center justify-center opacity-80 hover:opacity-100'
             onClick={() => {
               if (apiRef.current) {
                 apiRef.current.scrollPrev();
-                handleUserInteraction(); // Reset autoplay timer
+                handleUserInteraction();
               }
             }}
           />
           <CarouselNext 
-            className='right-4 bg-[white] w-[40px] h-[40px] rounded-full flex items-center justify-center'
+            className='right-2 md:right-4 bg-[white] w-[32px] h-[32px] md:w-[40px] md:h-[40px] rounded-full flex items-center justify-center opacity-80 hover:opacity-100'
             onClick={() => {
               if (apiRef.current) {
                 apiRef.current.scrollNext();
-                handleUserInteraction(); // Reset autoplay timer
+                handleUserInteraction();
               }
             }}
           />
@@ -204,7 +235,7 @@ const Home = () => {
       </div>
 
       {/* upcoming matches */}
-      <div className='mx-1'>
+      <div className='mx-0 md:mx-1'>
         <UpcomingMatches />
       </div>
       

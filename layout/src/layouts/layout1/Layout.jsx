@@ -1,7 +1,7 @@
 import React from 'react';
 import MainNavbar from '../../components/MainNavbar';
 import { Outlet, useLocation } from 'react-router-dom';
-import MobileNavbar from '../../components/MobileNavbar';
+import MobileBottomNav from '../../components/MobileBottomNav';
 import { Toaster } from '../../components/ui/sonner';
 import SecondaryLiveNavbar from '../../components/Live-section/SecondaryLiveNavbar';
 
@@ -23,11 +23,9 @@ const Layout = () => {
       {/* Toast Notifications */}
       <Toaster />
       {/* Fixed Bottom Mobile Navbar (Visible only on small screens) */}
-      <div className="fixed bottom-0 left-0 right-0 mx-auto px-4 sm:px-6 lg:hidden bg-background w-full z-50">
-        <MobileNavbar />
+      <div className="lg:hidden">
+        <MobileBottomNav />
       </div>
-      {/* Spacer to prevent content being hidden behind MobileNavbar */}
-      <div className="h-16 sm:h-20 lg:hidden" />
     </div>
   );
 };

@@ -133,37 +133,38 @@ const Results = () => {
   };
 
   const eventData = getEventData();
-
+ 
   return (
     <div className="results-container bg-live-tertiary text-live-primary min-h-screen">
-      {/* Tab Navigation */}
-      <div className="results-tabs bg-live-tertiary border-b border-live">
+      {/* Tab Navigation - Mobile Optimized */}
+      <div className="results-tabs bg-live-tertiary border-b border-live flex">
         <button 
-          className={`tab bg-live-tertiary text-live-secondary border-b-2 hover:bg-live-primary ${activeTab === 'Live' ? 'active bg-live-hover text-live-primary border-live-primary' : 'border-transparent'}`}
+          className={`tab flex-1 bg-live-tertiary text-live-secondary border-b-2 hover:bg-live-primary text-xs sm:text-sm py-2 sm:py-3 ${activeTab === 'Live' ? 'active bg-live-hover text-live-primary border-live-primary' : 'border-transparent'}`}
           onClick={() => setActiveTab('Live')}
         >
           Live
         </button>
         <button 
-          className={`tab bg-live-tertiary text-live-secondary border-b-2 hover:bg-live-primary ${activeTab === 'Finished' ? 'active bg-live-hover text-live-primary border-live-primary' : 'border-transparent'}`}
+          className={`tab flex-1 bg-live-tertiary text-live-secondary border-b-2 hover:bg-live-primary text-xs sm:text-sm py-2 sm:py-3 ${activeTab === 'Finished' ? 'active bg-live-hover text-live-primary border-live-primary' : 'border-transparent'}`}
           onClick={() => setActiveTab('Finished')}
         >
           Finished
         </button>
       </div>
 
-      {/* Filters Section */}
-      <div className="results-filters bg-live-primary p-4 border-b border-live">
-        <div className="filter-row">
-          <div className="date-group">
-            <div className="date-field">
-              <label>Start Date</label>
+      {/* Filters Section - Mobile Responsive */}
+      <div className="results-filters bg-live-primary p-2 sm:p-4 border-b border-live">
+        <div className="filter-row flex flex-col gap-3">
+          {/* Date filters - Stack on mobile */}
+          <div className="date-group flex flex-col sm:flex-row gap-2 sm:gap-3">
+            <div className="date-field flex-1">
+              <label className="text-xs sm:text-sm mb-1 block">Start Date</label>
               <div className="date-input-wrapper">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className={`w-full justify-start text-left font-normal ${!startDate ? "text-muted-foreground" : "text-live-primary"}`}
+                      className={`w-full justify-start text-left font-normal text-xs sm:text-sm ${!startDate ? "text-muted-foreground" : "text-live-primary"}`}
                     >
                       {startDate ? startDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Select date'}
                       <span className="calendar-icon text-live-secondary ml-2">📅</span>
@@ -180,14 +181,14 @@ const Results = () => {
                 </Popover>
               </div>
             </div>
-            <div className="date-field">
-              <label>End Date</label>
+            <div className="date-field flex-1">
+              <label className="text-xs sm:text-sm mb-1 block">End Date</label>
               <div className="date-input-wrapper">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className={`w-full justify-start text-left font-normal ${!endDate ? "text-muted-foreground" : "text-live-primary"}`}
+                      className={`w-full justify-start text-left font-normal text-xs sm:text-sm ${!endDate ? "text-muted-foreground" : "text-live-primary"}`}
                     >
                       {endDate ? endDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Select date'}
                       <span className="calendar-icon text-live-secondary ml-2">📅</span>
@@ -206,48 +207,50 @@ const Results = () => {
             </div>
           </div>
           
-          <div className="action-buttons">
-            <button className="reset-btn bg-live-tertiary border border-live text-live-primary hover:bg-live-hover" onClick={resetFilters}>
+          {/* Action buttons - Stack on mobile */}
+          <div className="action-buttons flex gap-2">
+            <button className="reset-btn flex-1 sm:flex-none bg-live-tertiary border border-live text-live-primary hover:bg-live-hover text-xs sm:text-sm px-3 sm:px-4 py-2 rounded" onClick={resetFilters}>
               RESET
             </button>
-            <button className="show-btn bg-live-accent border border-live-accent text-live-dark hover:bg-live-secondary font-semibold">
+            <button className="show-btn flex-1 sm:flex-none bg-live-accent border border-live-accent text-live-dark hover:bg-live-secondary font-semibold text-xs sm:text-sm px-3 sm:px-4 py-2 rounded">
               SHOW
             </button>
           </div>
         </div>
       </div>
 
-      {/* Results Content */}
-      <div className="results-content flex min-h-screen bg-live-tertiary">
-        <div className="leagues-list w-1/2 bg-live-tertiary border-r border-live overflow-y-auto">
+      {/* Results Content - Mobile Optimized */}
+      <div className="results-content flex flex-col md:flex-row min-h-screen bg-live-tertiary">
+        {/* Leagues list - Full width on mobile, half on desktop */}
+        <div className="leagues-list w-full md:w-1/2 bg-live-tertiary border-b md:border-r md:border-b-0 border-live overflow-y-auto">
           {eventData.length > 0 ? (
             eventData.map((event) => (
               <div key={event.eventId} className="league-item border-b border-live">
                 <div 
-                  className="league-header flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-live-primary transition-colors"
+                  className="league-header flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 cursor-pointer hover:bg-live-primary transition-colors"
                   onClick={() => toggleEvent(event.eventId)}
                 >
-                  <div className="league-info flex items-center gap-2">
-                    <span className="league-icon text-live-accent">⚽</span>
-                    <span className="league-name text-live-primary text-sm font-medium">{event.eventName}</span>
+                  <div className="league-info flex items-center gap-2 flex-1 min-w-0">
+                    <span className="league-icon text-live-accent text-sm sm:text-base">⚽</span>
+                    <span className="league-name text-live-primary text-xs sm:text-sm font-medium truncate">{event.eventName}</span>
                   </div>
-                  <span className={`expand-arrow text-live-secondary text-xs transition-transform duration-300 ${expandedEvents[event.eventId] ? 'expanded rotate-180' : ''}`}>
+                  <span className={`expand-arrow text-live-secondary text-xs transition-transform duration-300 flex-shrink-0 ml-2 ${expandedEvents[event.eventId] ? 'expanded rotate-180' : ''}`}>
                     ▼
                   </span>
                 </div>
                 {expandedEvents[event.eventId] && (
-                  <div className="league-content bg-live-primary p-4 border-t border-live">
+                  <div className="league-content bg-live-primary p-2 sm:p-4 border-t border-live">
                     {event.markets && Object.keys(event.markets).some(marketType => event.markets[marketType] && event.markets[marketType].length > 0) ? (
                       Object.entries(event.markets).map(([marketType, marketList]) => 
                         marketList && marketList.length > 0 ? (
                           marketList.map((market, index) => (
                             <div key={`${event.eventId}-${market.marketId}`} className="mb-3">
-                              <div className="font-medium text-live-primary mb-2">{market.marketName}</div>
-                              <div className="grid grid-cols-2 gap-2">
+                              <div className="font-medium text-live-primary mb-2 text-xs sm:text-sm">{market.marketName}</div>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                 {market.runners && market.runners.map((runner, runnerIndex) => (
                                   <div 
                                     key={`${event.eventId}-${market.marketId}-${runner.runnerId}`} 
-                                    className={`p-2 rounded text-center text-sm ${
+                                    className={`p-2 rounded text-center text-xs sm:text-sm ${
                                       runner.result === 'won' 
                                         ? 'bg-green-100 text-green-800 border border-green-300' 
                                         : runner.result === 'lost'
@@ -255,8 +258,8 @@ const Results = () => {
                                         : 'bg-gray-100 text-gray-800 border border-gray-300'
                                     }`}
                                   >
-                                    <div className="font-medium">{runner.runnerName}</div>
-                                    <div className="text-xs capitalize">
+                                    <div className="font-medium truncate">{runner.runnerName}</div>
+                                    <div className="text-[10px] sm:text-xs capitalize">
                                       {runner.result ? runner.result : 'Pending'}
                                     </div>
                                   </div>
@@ -267,14 +270,14 @@ const Results = () => {
                         ) : null
                       )
                     ) : (
-                      <div className="no-matches text-live-muted text-sm text-center py-2">No market data available</div>
+                      <div className="no-matches text-live-muted text-xs sm:text-sm text-center py-2">No market data available</div>
                     )}
                   </div>
                 )}
               </div>
             ))
           ) : (
-            <div className="no-results-placeholder p-4 text-center text-live-muted">
+            <div className="no-results-placeholder p-4 text-center text-live-muted text-xs sm:text-sm">
               {matchResultsState.loading ? (
                 <div>Loading match results...</div>
               ) : matchResultsState.error ? (
@@ -286,8 +289,9 @@ const Results = () => {
           )}
         </div>
         
-        <div className="results-display flex-1 bg-live-tertiary flex items-center justify-center">
-          <div className="no-results text-live-muted text-lg font-medium">
+        {/* Results display - Hidden on mobile, shown on desktop */}
+        <div className="results-display hidden md:flex flex-1 bg-live-tertiary items-center justify-center">
+          <div className="no-results text-live-muted text-base sm:text-lg font-medium">
             No Results
           </div>
         </div>

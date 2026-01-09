@@ -1,88 +1,114 @@
-import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
 
-const MobileNav = ({ isOpen, toggleOpen, navItems }) => {
+const MobileNav = ({ navItems }) => {
   const [expandedIndex, setExpandedIndex] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const dropdownRef = useRef(null);
 
   const toggleExpand = (index) => {
     setExpandedIndex((prev) => (prev === index ? null : index));
   };
 
-  // Helper to check if a nav item or its subitems are active
-  const isMenuActive = (item) =>
-    item.items && item.items.some((sub) => location.pathname === sub.href);
+  const isMenuActive = (item) => {
+    if (item.href && location.pathname === item.href) return true;
+    return item.items && item.items.some((sub) => location.pathname === sub.href);
+  };
+
+  const handleNavClick = (item, index) => {
+    if (item.items && item.items.length > 0) {
+      toggleExpand(index);
+    } else if (item.href) {
+      navigate(item.href);
+      setExpandedIndex(null);
+    }
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setExpandedIndex(null);
+      }
+    };
+
+    if (expandedIndex !== null) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [expandedIndex]);
 
   return (
-    <div className="md:hidden relative w-full flex items-center justify-start">
-      {/* Moved icon to left side: justify-start */}
-      <button
-        onClick={toggleOpen}
-        className="flex items-center justify-center w-10 h-10 text-navbar-text hover:bg-navbar-dropdown-hover rounded"
-        aria-label={isOpen ? "Close menu" : "Open menu"}
-      >
-        {isOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
+    <>
+      {/* Mobile Horizontal Navbar - Clean minimal design */}
+      <div className="md:hidden w-full overflow-x-auto scrollbar-hide relative">
+        <div className="flex items-center gap-1 min-w-max px-2">
+          {navItems.map((item, index) => (
+            <button
+              key={item.label}
+              onClick={() => handleNavClick(item, index)}
+              className={`
+                px-3 py-1.5 text-xs font-medium whitespace-nowrap
+                transition-all duration-200 flex items-center gap-1
+                ${isMenuActive(item)
+                  ? 'text-yellow-400 border-b-2 border-yellow-400'
+                  : 'text-white border-b-2 border-transparent hover:text-yellow-400'
+                }
+              `}
+              style={{ background: 'transparent' }}
+            >
+              {item.label}
+              {item.items && item.items.length > 0 && (
+                <ChevronDown 
+                  size={12} 
+                  className={`transition-transform duration-200 ${
+                    expandedIndex === index ? 'rotate-180' : ''
+                  }`}
+                />
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
 
-      {isOpen && (
-        <div className="mobile-menu-container absolute left-0 top-10 mt-2 w-56 bg-mobile-menu rounded-md shadow-lg z-50">
-          <div className="py-1">
-            {navItems.map((item, index) => (
-              <div
-                key={item.label}
-                className="border-b border-navbar-border last:border-b-0"
+      {/* Dropdown Panel - positioned directly below navbar with no gap */}
+      {expandedIndex !== null && navItems[expandedIndex]?.items && (
+        <div 
+          ref={dropdownRef}
+          className="md:hidden fixed left-0 right-0 bg-gray-900 border-t border-gray-700 shadow-lg z-50 max-h-[60vh] overflow-y-auto"
+          style={{ top: '112px' }}
+        >
+          <div className="px-4 py-3 grid grid-cols-2 gap-2">
+            {navItems[expandedIndex].items.map((subItem) => (
+              <button
+                key={subItem.label}
+                onClick={() => {
+                  navigate(subItem.href, { state: subItem.state });
+                  setExpandedIndex(null);
+                }}
+                className={`
+                  px-3 py-2.5 text-xs font-medium text-left rounded
+                  transition-colors duration-200
+                  ${location.pathname === subItem.href
+                    ? 'bg-yellow-400 text-black'
+                    : 'bg-gray-800 text-white hover:bg-gray-700'
+                  }
+                `}
               >
-                <div
-                  className={`px-4 py-2 text-navbar-text font-medium cursor-pointer flex justify-between items-center ${isMenuActive(item) ? 'border-b-2 border-yellow-400 text-white font-bold bg-black' : ''}`}
-                  // If item has href but no items, navigate directly when clicked
-                  {...(!item.items && item.href ? { 
-                    onClick: () => {
-                      navigate(item.href);
-                      toggleOpen();
-                    }
-                  } : { 
-                    onClick: () => toggleExpand(index),
-                    role: "button",
-                    tabIndex: 0,
-                    onKeyDown: (e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        toggleExpand(index);
-                      }
-                    }
-                  })}
-                >
-                  <span>{item.label}</span>
-                  {/* Show indicator for expandable items only */}
-                  {item.items && item.items.length > 0 && (
-                    <span className="ml-2 text-sm">{expandedIndex === index ? '-' : '+'}</span>
-                  )}
-                </div>
-
-                {expandedIndex === index && item.items && item.items.length > 0 && (
-                  <div className="bg-navbar-dropdown-hover">
-                    {item.items.map((subItem) => (
-                      <div
-                        key={subItem.label}
-                        onClick={() => {
-                          navigate(subItem.href, { state: subItem.state });
-                          toggleOpen();
-                        }}
-                        className={`block px-8 py-2 text-navbar-text text-sm hover:bg-navbar-dropdown-hover cursor-pointer ${location.pathname === subItem.href ? 'border-l-2 border-yellow-400 text-white font-bold bg-navbar-dropdown-hover' : ''}`}
-                      >
-                        {subItem.label}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+                {subItem.label}
+              </button>
             ))}
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

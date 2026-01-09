@@ -63,14 +63,13 @@ export default function MainNavbar() {
   const { isAuthenticated, userData } = useSelector(state => state.Login);
   const { userData: profileData, loading } = useSelector(state => state.GetUserData);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [forceUpdate, setForceUpdate] = useState(0); // State to force re-render
-  const [exposure, setExposure] = useState(0); // State to hold exposure from WebSocket
-  const [socket, setSocket] = useState(null); // State to hold socket connection
+  const [forceUpdate, setForceUpdate] = useState(0);
+  const [exposure, setExposure] = useState(0);
+  const [socket, setSocket] = useState(null);
 
   // Initialize WebSocket connection
   useEffect(() => {
@@ -176,10 +175,6 @@ export default function MainNavbar() {
   useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 10);
         const handleClickOutside = (e) => {
-            if (isMobileMenuOpen && !e.target.closest('.mobile-menu-container')) {
-                setIsMobileMenuOpen(false);
-            }
-            // Close user menu when clicking outside
             if (isUserMenuOpen && !e.target.closest('.user-menu-container')) {
                 setIsUserMenuOpen(false);
             }
@@ -190,7 +185,7 @@ export default function MainNavbar() {
             window.removeEventListener('scroll', handleScroll);
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [isMobileMenuOpen, isUserMenuOpen]); // Added isUserMenuOpen to dependency array
+    }, [isUserMenuOpen]);
 
     // Check for login parameter in URL to auto-open login modal
     useEffect(() => {
@@ -234,10 +229,6 @@ export default function MainNavbar() {
     useEffect(() => {
       
     }, [forceUpdate]);
-
-    const toggleMobileMenu = useCallback(() => {
-        setIsMobileMenuOpen((prev) => !prev);
-    }, []);
 
     // Loading skeleton component for user data
     const UserDataSkeleton = () => (
@@ -353,11 +344,7 @@ export default function MainNavbar() {
 
                     <div className="h-10 w-[95%] absolute bottom-0 left-1/2 transform -translate-x-1/2 z-20 bg-muted-foreground rounded-t-lg">
                         <div className="container mx-auto h-full flex items-center px-4">
-                            <MobileNav
-                                isOpen={isMobileMenuOpen}
-                                toggleOpen={toggleMobileMenu}
-                                navItems={navItems}
-                            />
+                            <MobileNav navItems={navItems} />
                             <DesktopNav navItems={navItems} />
                         </div>
                     </div>

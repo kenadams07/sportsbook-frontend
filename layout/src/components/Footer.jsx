@@ -37,7 +37,7 @@ const footerData = [
         heading: "Help",
         links: [
             { name: "FAQ", to: "/faq" },
-            { name: "Contact Us", to: "/faq" },
+            { name: "Contact Us", to: "/contact" },
         ],
     },
 ];
@@ -85,27 +85,30 @@ export default function Footer() {
                 <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-r from-transparent via-muted-foreground to-transparent opacity-30" />
             </div>
 
-            {/* Footer Content */}
-            <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 text-center sm:text-left">
-                {footerData.map((section, index) => (
-                    <div key={index}>
-                        <h4 className="text-xs font-semibold mb-2 text-primary-foreground">
-                            {section.heading.toUpperCase()}
-                        </h4>
-                        <ul className="space-y-1">
-                            {section.links.map((link, idx) => (
-                                <li key={idx}>
-                                    <Link
-                                        to={link.to}
-                                        className="transition-colors duration-200 hover:text-primary-foreground block py-1"
-                                    >
-                                        {link.name}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                ))}
+            {/* Footer Content - Mobile Optimized - Compact spacing */}
+            <div className="max-w-5xl mx-auto">
+                {/* Mobile: Stack in 2 columns with minimal gaps, Desktop: 5 columns */}
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
+                    {footerData.map((section, index) => (
+                        <div key={index} className="text-left">
+                            <h4 className="text-[10px] md:text-xs font-semibold mb-1.5 md:mb-3 text-primary-foreground">
+                                {section.heading.toUpperCase()}
+                            </h4>
+                            <ul className="space-y-0.5 md:space-y-2">
+                                {section.links.map((link, idx) => (
+                                    <li key={idx}>
+                                        <Link
+                                            to={link.to}
+                                            className="text-[9px] md:text-[11px] transition-colors duration-200 hover:text-primary-foreground block leading-tight"
+                                        >
+                                            {link.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
             </div>
 
           
@@ -118,40 +121,40 @@ export default function Footer() {
                     <h2 className="text-lg font-semibold text-gray-300">OUR PARTNERS</h2>
                 </div>
                 
-                {/* Partners Grid with uniform logo sizes */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 justify-items-center mb-10">
+                {/* Partners Grid - Mobile: 3 per row, Desktop: 6 per row */}
+                <div className="grid grid-cols-3 md:grid-cols-6 gap-4 md:gap-6 justify-items-center mb-10">
                     {partners.map((partner, index) => (
                         <div key={index} className="flex flex-col items-center">
-                            <p className="text-[8px] text-center text-gray-500 mb-1 h-8 flex items-center">
+                            <p className="text-[8px] md:text-[9px] text-center text-gray-500 mb-2 h-8 md:h-10 flex items-center px-1">
                                 {partner.title}
                             </p>
                             <img 
                                 src={partner.image} 
                                 alt={partner.title} 
-                                className="h-8 w-8 sm:h-12 sm:w-12 object-contain" 
+                                className="h-10 w-10 md:h-12 md:w-12 object-contain" 
                             />
                         </div>
                     ))}
                 </div>
-                  {/* Responsible Gambling Message */}
+                  {/* Responsible Gambling Message - Increased image size */}
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 text-muted-foreground text-lg">
-                <div className="flex items-center justify-center w-8 h-8 rounded-full border border-pink-500 text-pink-500 text-xs font-bold">
+                <div className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-pink-500 text-pink-500 text-base md:text-lg font-bold">
                     18+
                 </div>
-                <span className="text-center sm:text-left">
+                <span className="text-center sm:text-left text-sm md:text-base">
                     Gambling can be addictive, play responsibly
                 </span>
             </div>
              
                 
-                {/* Regulatory Logos with uniform sizes */}
+                {/* Regulatory Logos - Increased size for mobile */}
                 <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-6 mb-10">
                     {regulatoryLogos.map((logo, index) => (
                         <img 
                             key={index} 
                             src={logo.image} 
                             alt={logo.name} 
-                            className="h-8 w-8 sm:h-12 sm:w-12 object-contain opacity-80 hover:opacity-100 transition-opacity" 
+                            className="h-10 w-10 md:h-12 md:w-12 object-contain opacity-80 hover:opacity-100 transition-opacity" 
                         />
                     ))}
                 </div>
@@ -165,16 +168,16 @@ export default function Footer() {
                     the awareness of problem gambling and improving prevention, intervention and treatment. Gambling can be addictive, please play responsibly.
                 </p>
                 
-                {/* Payment Methods with uniform sizes */}
+                {/* Payment Methods - Mobile Optimized */}
                 <div className="mb-8">
                     <h3 className="text-center text-xs uppercase tracking-wider text-gray-400 mb-4">PAYMENTS</h3>
-                    <div className="flex flex-wrap justify-center gap-4">
+                    <div className="flex flex-wrap justify-center gap-4 md:gap-6">
                         {paymentMethods.map((method, index) => (
                             <img 
                                 key={index} 
                                 src={method.image} 
                                 alt={method.name} 
-                                className="h-8 sm:h-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
+                                className="h-10 md:h-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
                             />
                         ))}
                     </div>

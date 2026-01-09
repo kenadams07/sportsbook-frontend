@@ -358,14 +358,13 @@ export default function UpcomingMatches() {
         </div>
       </div>
 
-      {/* Sports Icons bar */}
+      {/* Sports Icons bar - Full names displayed */}
       {/* Mobile: fixed small chips scrollable; sm+: chips expand evenly */}
       <div className="flex w-full gap-2 overflow-x-auto scrollbar-hide px-2 py-2">
         {loading ? (
           SPORTS.map((sport) => {
             const Icon = sport.icon
             const isSelected = selectedSportKey === sport.key
-            // Extract background color class from sport.color
             const colorClass = sport.color.split(' ').find(cls => cls.startsWith('bg-chart-')) || 'bg-gray-600'
             return (
               <div
@@ -376,12 +375,11 @@ export default function UpcomingMatches() {
                   ? `${colorClass} selected border-white` 
                   : "border-gray-600 bg-gray-700 text-white hover:bg-gray-600"
                 }`}
-                // mobile min width to keep chips touch-friendly, but allow grow from sm+
-                style={{ padding: "0.45rem 0.7rem", minWidth: "64px" }}
+                style={{ padding: "0.5rem 0.75rem", minWidth: "80px" }}
                 title={sport.sportNames[0]}
               >
                 <Icon className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 mx-auto" />
-                <span className="text-[11px] sm:text-[13px] truncate max-w-[90%] text-center font-medium">
+                <span className="text-[10px] sm:text-[11px] text-center font-medium leading-tight whitespace-normal max-w-full">
                   {sport.sportNames[0]}
                 </span>
               </div>
@@ -391,7 +389,6 @@ export default function UpcomingMatches() {
           SPORTS.map((sport) => {
             const Icon = sport.icon
             const isSelected = selectedSportKey === sport.key
-            // Extract background color class from sport.color
             const colorClass = sport.color.split(' ').find(cls => cls.startsWith('bg-chart-')) || 'bg-gray-600'
             return (
               <div
@@ -402,12 +399,11 @@ export default function UpcomingMatches() {
                   ? `${colorClass} selected border-white` 
                   : "border-gray-600 bg-gray-700 text-white hover:bg-gray-600"
                 }`}
-                // mobile min width to keep chips touch-friendly, but allow grow from sm+
-                style={{ padding: "0.45rem 0.7rem", minWidth: "64px" }}
+                style={{ padding: "0.5rem 0.75rem", minWidth: "80px" }}
                 title={sport.sportNames[0]}
               >
                 <Icon className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 mx-auto" />
-                <span className="text-[11px] sm:text-[13px] truncate max-w-[90%] text-center font-medium">
+                <span className="text-[10px] sm:text-[11px] text-center font-medium leading-tight whitespace-normal max-w-full">
                   {sport.sportNames[0]}
                 </span>
               </div>
@@ -468,12 +464,12 @@ export default function UpcomingMatches() {
               <div
                 key={match.id}
                 onClick={() => handleGameClick(match.id, match.sportKey)}
-                className={`cursor-pointer flex items-center justify-between gap-3 px-3 py-2 m-1 rounded-md transition-all duration-300 ${
+                className={`cursor-pointer flex items-center justify-between gap-2 px-3 py-2 m-1 rounded-md transition-all duration-300 ${
                   backgroundClass
                 } ${textColor} ${isSelected ? 'shadow-md transform scale-[1.01] border border-white/20' : ''}`}
               >
-                {/* Left: date + time */}
-                <div className="flex flex-col items-start gap-1 text-[11px] text-muted-foreground flex-shrink-0 w-16">
+                {/* Left: date + time - vertically centered */}
+                <div className="flex flex-col items-start justify-center gap-0.5 text-[10px] sm:text-[11px] text-muted-foreground flex-shrink-0 w-14 sm:w-16">
                   <div className="whitespace-nowrap">{match.gameDate}</div>
                   <div className="flex items-center gap-1">
                     <Clock className="w-3 h-3" />
@@ -481,49 +477,40 @@ export default function UpcomingMatches() {
                   </div>
                 </div>
 
-                <div className="h-8 w-px bg-gradient-to-b from-transparent via-muted-foreground to-transparent opacity-30 hidden sm:block" />
+                <div className="h-6 w-px bg-gradient-to-b from-transparent via-muted-foreground to-transparent opacity-30 hidden sm:block" />
 
-                {/* Center: teams + IN PLAY + competition name + LIVE */}
-                <div className="flex-1 min-w-0 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0">
-                  <div className="flex flex-col min-w-0 flex-1">
-                    <div className="font-medium truncate text-[13px] sm:text-sm">
+                {/* Center: teams + competition - vertically centered */}
+                <div className="flex-1 min-w-0 flex items-center justify-center">
+                  <div className="flex flex-col justify-center min-w-0 w-full">
+                    <div className="font-medium truncate text-[12px] sm:text-sm">
                       {match.team1}
                     </div>
-                    <div className="text-[12px] sm:text-sm truncate opacity-90">
+                    <div className="text-[11px] sm:text-sm truncate opacity-90">
                       {match.team2}
                     </div>
                     {match.status === "IN_PLAY" && (
-                      <div className="text-[9px] font-bold bg-red-600 text-white px-1 py-0.5 rounded w-fit mt-1 sm:mt-0">
+                      <div className="text-[9px] font-bold bg-red-600 text-white px-1 py-0.5 rounded w-fit mt-0.5">
                         IN PLAY
                       </div>
                     )}
                   </div>
                   
-                  {/* Competition name and LIVE in a single line */}
-                  <div className="flex items-center gap-2 mx-2 hidden md:block">
-                    {match.competitionName && (
-                      <div className="text-[11px] text-white truncate"> {/* Changed to text-white for better visibility */}
+                  {/* Competition name */}
+                  {match.competitionName && (
+                    <div className="hidden md:flex items-center ml-2">
+                      <div className="text-[10px] text-white truncate max-w-[120px]">
                         {match.competitionName}
                       </div>
-                    )}
-                    {match.catName && (
-                      <div className="text-[10px] bg-blue-700 px-1.5 py-0.5 rounded">
-                        {match.catName}
-                      </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
 
-                <div className="text-muted-foreground text-[11px] self-start sm:self-center truncate ml-2 hidden lg:block">
-                  {match.additionalMarkets}
-                </div>
-
-                {/* Right: odds buttons */}
+                {/* Right: odds buttons - vertically centered */}
                 <div className="flex items-center gap-2">
                   <Button
                     variant={isSelected ? "default" : "outline"}
                     size="sm"
-                    className={`w-8 sm:w-10 lg:w-16 h-8 px-0 text-[11px] font-semibold ${
+                    className={`w-10 sm:w-12 lg:w-16 h-8 px-0 text-[11px] font-semibold ${
                       isSelected 
                         ? "bg-white text-black hover:bg-gray-100 border-white shadow-sm" 
                         : "bg-gray-700 text-white border-gray-500 hover:bg-gray-600"
@@ -535,7 +522,7 @@ export default function UpcomingMatches() {
                   <Button
                     variant={isSelected ? "default" : "outline"}
                     size="sm"
-                    className={`w-8 sm:w-10 lg:w-16 h-8 px-0 text-[11px] font-semibold ${
+                    className={`w-10 sm:w-12 lg:w-16 h-8 px-0 text-[11px] font-semibold ${
                       isSelected 
                         ? "bg-white text-black hover:bg-gray-100 border-white shadow-sm" 
                         : "bg-gray-700 text-white border-gray-500 hover:bg-gray-600"

@@ -221,20 +221,19 @@ const LiveCalender = () => {
   };
 
   return (
-    <div className="w-full mt-4 flex flex-col h-[calc(100vh-80px)]">
-      {/* Top bar akin to screenshot: left sport dropdown + date pills */}
-      <div className="flex items-center gap-3 bg-live-tertiary text-live-primary px-2 py-2 rounded">
-                 {/* Sport dropdown */}
-         <div className="relative  ml-2" ref={sportDropdownRef}>
-                       <button
-              className="flex items-center gap-2 bg-live-primary hover:bg-live-hover px-6 py-3 rounded text-sm min-w-[200px]"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                // Removed console.log('Button clicked');
-                toggleDropdown();
-              }}
-            >
+    <div className="w-full mt-2 md:mt-4 flex flex-col h-[calc(100vh-80px)]">
+      {/* Top bar - Mobile Optimized */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 bg-live-tertiary text-live-primary px-2 py-2 rounded">
+        {/* Sport dropdown */}
+        <div className="relative w-full sm:w-auto sm:ml-2" ref={sportDropdownRef}>
+          <button
+            className="flex items-center justify-between sm:justify-start gap-2 bg-live-primary hover:bg-live-hover px-4 py-2 sm:px-6 sm:py-3 rounded text-sm w-full sm:min-w-[200px]"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleDropdown();
+            }}
+          >
             <span className="opacity-70">Sport</span>
             {(() => {
               if (selectedSportKeys.length === 0) {
@@ -245,18 +244,18 @@ const LiveCalender = () => {
                 return (
                   <>
                     {Icon && <Icon className={`w-4 h-4 ${selectedSport.color.replace('bg-','')}`} />}
-                    <span className="font-semibold">{selectedSport?.sportNames?.[0] || "Sport"}</span>
+                    <span className="font-semibold truncate flex-1">{selectedSport?.sportNames?.[0] || "Sport"}</span>
                   </>
                 );
               } else {
                 return <span className="font-semibold">{selectedSportKeys.length} Sports</span>;
               }
             })()}
-            <span className="opacity-70">{isDropdownOpen ? '▴' : '▾'}</span>
+            <span className="opacity-70 ml-auto">{isDropdownOpen ? '▴' : '▾'}</span>
           </button>
-                                          {isDropdownOpen && (
-             <div className="absolute z-20 mt-1 w-[40vw] max-h-72 overflow-y-auto bg-live-tertiary border border-live rounded shadow-lg" onClick={handleDropdownClick}>
-               <ul className="py-1">
+          {isDropdownOpen && (
+            <div className="absolute z-20 mt-1 w-full sm:w-[40vw] max-h-72 overflow-y-auto bg-live-tertiary border border-live rounded shadow-lg" onClick={handleDropdownClick}>
+              <ul className="py-1">
                 {/* All option */}
                 <li className="border-b border-live">
                   <div className="flex items-center justify-between px-3 py-2 hover:bg-live-primary">
@@ -303,26 +302,28 @@ const LiveCalender = () => {
             </div>
           )}
         </div>
-        {/* Removed static date pills */}
       </div>
 
-      {/* Main content area with matches table and right sidebar */}
-      <div className="flex gap-4 mt-2 flex-1 overflow-hidden">
+      {/* Main content area - Mobile Optimized */}
+      <div className="flex flex-col md:flex-row gap-2 md:gap-4 mt-2 flex-1 overflow-hidden">
         {/* Matches table */}
         <div className="flex-1 bg-live-tertiary text-live-primary rounded overflow-hidden flex flex-col">
+          {/* Table Header - Responsive */}
           <div className="flex items-center text-xs uppercase tracking-wide bg-live-primary">
-            <div className="w-40 px-3 py-2 border-r border-live relative" ref={winnerDropdownRef}>
+            <div className="w-32 sm:w-40 px-2 sm:px-3 py-2 border-r border-live relative" ref={winnerDropdownRef}>
               <button
-                className="flex items-center gap-2 hover:bg-live-hover px-2 py-1 rounded text-xs uppercase tracking-wide"
+                className="flex items-center gap-2 hover:bg-live-hover px-1 sm:px-2 py-1 rounded text-xs uppercase tracking-wide w-full"
                 onClick={(e) => {
                   e.stopPropagation();
                   setIsWinnerDropdownOpen(!isWinnerDropdownOpen);
                 }}
               >
-                {selectedWinnerType === "winner" && "Winner"}
-                {selectedWinnerType === "handicap" && "Handicap"}
-                {selectedWinnerType === "totals" && "Totals"}
-                <span className="opacity-70">{isWinnerDropdownOpen ? '▴' : '▾'}</span>
+                <span className="truncate">
+                  {selectedWinnerType === "winner" && "Winner"}
+                  {selectedWinnerType === "handicap" && "Handicap"}
+                  {selectedWinnerType === "totals" && "Totals"}
+                </span>
+                <span className="opacity-70 ml-auto">{isWinnerDropdownOpen ? '▴' : '▾'}</span>
               </button>
               {isWinnerDropdownOpen && (
                 <div className="absolute top-full left-0 mt-1 w-32 bg-live-tertiary border border-live rounded shadow-lg z-30" onClick={handleWinnerDropdownClick}>
@@ -355,15 +356,16 @@ const LiveCalender = () => {
                 </div>
               )}
             </div>
-            <div className="flex-1 px-3 py-2">&nbsp;</div>
-            <div className="w-28 px-3 py-2 text-center border-l border-live">W1</div>
-            <div className="w-28 px-3 py-2 text-center border-l border-live">-</div>
-            <div className="w-28 px-3 py-2 text-center border-l border-live">W2</div>
+            <div className="flex-1 px-2 sm:px-3 py-2">&nbsp;</div>
+            <div className="w-16 sm:w-20 md:w-28 px-2 sm:px-3 py-2 text-center border-l border-live text-[10px] sm:text-xs">W1</div>
+            <div className="w-8 sm:w-12 md:w-16 px-1 sm:px-3 py-2 text-center border-l border-live text-[10px] sm:text-xs">-</div>
+            <div className="w-16 sm:w-20 md:w-28 px-2 sm:px-3 py-2 text-center border-l border-live text-[10px] sm:text-xs">W2</div>
           </div>
-          {/* Fixed height container with scrollable content */}
+          
+          {/* Scrollable content - Mobile optimized */}
           <div className="flex-1 overflow-y-auto">
             {loading ? (
-              <div className="px-3 py-4 flex items-center justify-center">
+              <div className="px-2 sm:px-3 py-4 flex items-center justify-center">
                 <div className="flex flex-col items-center animate-pulse-scale">
                   <div className="relative w-8 h-8">
                     <div className="absolute w-full h-full rounded-full border-4 border-live-accent border-t-transparent animate-spin"></div>
@@ -373,7 +375,7 @@ const LiveCalender = () => {
                 </div>
               </div>
             ) : matches.length === 0 ? (
-              <div className="px-3 py-4 text-sm text-live-secondary">No matches</div>
+              <div className="px-2 sm:px-3 py-4 text-sm text-live-secondary">No matches</div>
             ) : (
               matches.map((m, idx) => {
                 const odds = extractOddsW1W2(m.markets);
@@ -384,31 +386,32 @@ const LiveCalender = () => {
                 return (
                   <div 
                     key={m.eventId || idx} 
-                    className={`flex items-stretch border-b border-live-primary hover:bg-live-hover transition-colors duration-150 cursor-pointer ${isSelected ? 'bg-live-tertiary border-l-4 border-l-live-accent' : ''}`}
+                    className={`flex items-stretch border-b border-live-primary hover:bg-live-hover transition-colors duration-150 cursor-pointer text-xs sm:text-sm ${isSelected ? 'bg-live-tertiary border-l-4 border-l-live-accent' : ''}`}
                     onClick={() => handleMatchClick(m)}
                   >
-                    <div className="w-40 flex items-center gap-2 px-3 py-3 text-xs text-live-secondary">
+                    <div className="w-32 sm:w-40 flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 sm:py-3 text-[10px] sm:text-xs text-live-secondary">
                       <span className="inline-flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full bg-live-success"></span>
-                        <span>{formatDateTime(m.openDate)}</span>
+                        <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-live-success"></span>
+                        <span className="hidden sm:inline">{formatDateTime(m.openDate)}</span>
+                        <span className="sm:hidden text-[9px]">{formatDateTime(m.openDate).split(',')[0]}</span>
                       </span>
                     </div>
-                    <div className="flex-1 px-3 py-3 flex flex-col justify-center">
-                      <div className="flex items-center gap-2 text-sm text-live-primary font-medium">
-                        {SportIcon && <SportIcon className={`w-4 h-4 ${sport.color.replace('bg-','')}`} />}
+                    <div className="flex-1 px-2 sm:px-3 py-2 sm:py-3 flex flex-col justify-center min-w-0">
+                      <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-live-primary font-medium">
+                        {SportIcon && <SportIcon className={`w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 ${sport.color.replace('bg-','')}`} />}
                         <span className="truncate">{m.eventName || ''}</span>
                       </div>
-                      <div className="text-[11px] text-live-muted truncate">{m.competitionName || ''}</div>
+                      <div className="text-[9px] sm:text-[11px] text-live-muted truncate">{m.competitionName || ''}</div>
                     </div>
-                    <div className="w-24 flex items-center justify-center px-2">
-                      <div className="bg-live-odds rounded px-2 py-1 text-center min-w-[50px]">
-                        <span className="text-xs font-bold text-live-accent">{odds.w1}</span>
+                    <div className="w-16 sm:w-20 md:w-24 flex items-center justify-center px-1 sm:px-2">
+                      <div className="bg-live-odds rounded px-1.5 sm:px-2 py-1 text-center min-w-[40px] sm:min-w-[50px]">
+                        <span className="text-[10px] sm:text-xs font-bold text-live-accent">{odds.w1}</span>
                       </div>
                     </div>
-                    <div className="w-12 flex items-center justify-center px-1 text-live-muted">-</div>
-                    <div className="w-24 flex items-center justify-center px-2">
-                      <div className="bg-live-odds rounded px-2 py-1 text-center min-w-[50px]">
-                        <span className="text-xs font-bold text-live-accent">{odds.w2}</span>
+                    <div className="w-8 sm:w-12 md:w-16 flex items-center justify-center px-1 text-live-muted text-[10px] sm:text-xs">-</div>
+                    <div className="w-16 sm:w-20 md:w-24 flex items-center justify-center px-1 sm:px-2">
+                      <div className="bg-live-odds rounded px-1.5 sm:px-2 py-1 text-center min-w-[40px] sm:min-w-[50px]">
+                        <span className="text-[10px] sm:text-xs font-bold text-live-accent">{odds.w2}</span>
                       </div>
                     </div>
                   </div>
@@ -418,8 +421,8 @@ const LiveCalender = () => {
           </div>
         </div>
 
-        {/* Right sidebar with RightEventInfoSection */}
-        <div className="w-80 flex flex-col">
+        {/* Right sidebar - Hidden on mobile, shown on desktop */}
+        <div className="hidden md:block w-80 flex-shrink-0">
           <RightEventInfoSection 
             selectedGame={selectedMatch ? {
               ...selectedMatch,

@@ -77,40 +77,41 @@ const MarketReport = () => {
 
   return (
     <div className="market-report-container bg-live-tertiary text-live-primary min-h-screen">
-      {/* Tab Navigation */}
-      <div className="market-report-tabs bg-live-tertiary border-b border-live">
+      {/* Tab Navigation - Mobile Optimized */}
+      <div className="market-report-tabs bg-live-tertiary border-b border-live flex overflow-x-auto scrollbar-hide">
         <button 
-          className={`tab bg-live-tertiary text-live-secondary border-b-2 hover:bg-live-primary ${activeTab === 'All' ? 'active bg-live-hover text-live-primary border-live-primary' : 'border-transparent'}`}
+          className={`tab flex-1 min-w-[80px] bg-live-tertiary text-live-secondary border-b-2 hover:bg-live-primary text-xs sm:text-sm py-2 sm:py-3 whitespace-nowrap ${activeTab === 'All' ? 'active bg-live-hover text-live-primary border-live-primary' : 'border-transparent'}`}
           onClick={() => setActiveTab('All')}
         >
           All
         </button>
         <button 
-          className={`tab bg-live-tertiary text-live-secondary border-b-2 hover:bg-live-primary ${activeTab === 'Bets' ? 'active bg-live-hover text-live-primary border-live-primary' : 'border-transparent'}`}
+          className={`tab flex-1 min-w-[80px] bg-live-tertiary text-live-secondary border-b-2 hover:bg-live-primary text-xs sm:text-sm py-2 sm:py-3 whitespace-nowrap ${activeTab === 'Bets' ? 'active bg-live-hover text-live-primary border-live-primary' : 'border-transparent'}`}
           onClick={() => setActiveTab('Bets')}
         >
           Bets
         </button>
         <button 
-          className={`tab bg-live-tertiary text-live-secondary border-b-2 hover:bg-live-primary ${activeTab === 'Results' ? 'active bg-live-hover text-live-primary border-live-primary' : 'border-transparent'}`}
+          className={`tab flex-1 min-w-[80px] bg-live-tertiary text-live-secondary border-b-2 hover:bg-live-primary text-xs sm:text-sm py-2 sm:py-3 whitespace-nowrap ${activeTab === 'Results' ? 'active bg-live-hover text-live-primary border-live-primary' : 'border-transparent'}`}
           onClick={() => setActiveTab('Results')}
         >
           Results
         </button>
       </div>
 
-      {/* Filters Section */}
-      <div className="market-report-filters bg-live-primary p-4 border-b border-live">
-        <div className="filter-row">
-          <div className="date-group">
-            <div className="date-field">
-              <label>Start Date</label>
+      {/* Filters Section - Mobile Responsive */}
+      <div className="market-report-filters bg-live-primary p-2 sm:p-4 border-b border-live">
+        <div className="filter-row flex flex-col gap-3">
+          {/* Date filters - Stack on mobile */}
+          <div className="date-group flex flex-col sm:flex-row gap-2 sm:gap-3">
+            <div className="date-field flex-1">
+              <label className="text-xs sm:text-sm mb-1 block">Start Date</label>
               <div className="date-input-wrapper">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className={`w-full justify-start text-left font-normal ${!startDate ? "text-muted-foreground" : "text-live-primary"}`}
+                      className={`w-full justify-start text-left font-normal text-xs sm:text-sm ${!startDate ? "text-muted-foreground" : "text-live-primary"}`}
                     >
                       {startDate ? startDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Select date'}
                       <span className="calendar-icon text-live-secondary ml-2">📅</span>
@@ -127,14 +128,14 @@ const MarketReport = () => {
                 </Popover>
               </div>
             </div>
-            <div className="date-field">
-              <label>End Date</label>
+            <div className="date-field flex-1">
+              <label className="text-xs sm:text-sm mb-1 block">End Date</label>
               <div className="date-input-wrapper">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className={`w-full justify-start text-left font-normal ${!endDate ? "text-muted-foreground" : "text-live-primary"}`}
+                      className={`w-full justify-start text-left font-normal text-xs sm:text-sm ${!endDate ? "text-muted-foreground" : "text-live-primary"}`}
                     >
                       {endDate ? endDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Select date'}
                       <span className="calendar-icon text-live-secondary ml-2">📅</span>
@@ -153,12 +154,12 @@ const MarketReport = () => {
             </div>
           </div>
           
-          {/* Filter Type and Value */}
-          <div className="filter-group">
-            <div className="filter-type">
-              <label>Filter By</label>
+          {/* Filter Type and Value - Stack on mobile */}
+          <div className="filter-group flex flex-col sm:flex-row gap-2 sm:gap-3">
+            <div className="filter-type flex-1">
+              <label className="text-xs sm:text-sm mb-1 block">Filter By</label>
               <select 
-                className="w-full p-2 border border-live rounded bg-live-tertiary text-live-primary"
+                className="w-full p-2 border border-live rounded bg-live-tertiary text-live-primary text-xs sm:text-sm"
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
               >
@@ -169,11 +170,11 @@ const MarketReport = () => {
             </div>
             
             {(filterType === 'market' || filterType === 'event') && (
-              <div className="filter-value">
-                <label>{filterType === 'market' ? 'Market ID' : 'Event ID'}</label>
+              <div className="filter-value flex-1">
+                <label className="text-xs sm:text-sm mb-1 block">{filterType === 'market' ? 'Market ID' : 'Event ID'}</label>
                 <input
                   type="text"
-                  className="w-full p-2 border border-live rounded bg-live-tertiary text-live-primary"
+                  className="w-full p-2 border border-live rounded bg-live-tertiary text-live-primary text-xs sm:text-sm"
                   placeholder={`Enter ${filterType} ID`}
                   value={filterValue}
                   onChange={(e) => setFilterValue(e.target.value)}
@@ -182,12 +183,13 @@ const MarketReport = () => {
             )}
           </div>
           
-          <div className="action-buttons">
-            <button className="reset-btn bg-live-tertiary border border-live text-live-primary hover:bg-live-hover" onClick={resetFilters}>
+          {/* Action buttons - Stack on mobile */}
+          <div className="action-buttons flex gap-2">
+            <button className="reset-btn flex-1 sm:flex-none bg-live-tertiary border border-live text-live-primary hover:bg-live-hover text-xs sm:text-sm px-3 sm:px-4 py-2 rounded" onClick={resetFilters}>
               RESET
             </button>
             <button 
-              className="show-btn bg-live-accent border border-live-accent text-live-dark hover:bg-live-secondary font-semibold"
+              className="show-btn flex-1 sm:flex-none bg-live-accent border border-live-accent text-live-dark hover:bg-live-secondary font-semibold text-xs sm:text-sm px-3 sm:px-4 py-2 rounded"
               onClick={handleFilterSubmit}
             >
               APPLY
@@ -196,46 +198,46 @@ const MarketReport = () => {
         </div>
       </div>
 
-      {/* Market Report Content */}
+      {/* Market Report Content - Mobile Optimized with Horizontal Scroll */}
       <div className="market-report-content bg-live-tertiary">
         <div className="report-table w-full overflow-x-auto">
           {marketReportState.loading ? (
-            <div className="loading-placeholder p-4 text-center text-live-primary">
+            <div className="loading-placeholder p-4 text-center text-live-primary text-xs sm:text-sm">
               Loading market report...
             </div>
           ) : marketReportState.error ? (
-            <div className="error-placeholder p-4 text-center text-red-500">
+            <div className="error-placeholder p-4 text-center text-red-500 text-xs sm:text-sm">
               Error loading market report: {marketReportState.error}
             </div>
           ) : reportData.length > 0 ? (
             <table className="min-w-full bg-live-tertiary">
-              <thead className="bg-live-primary">
+              <thead className="bg-live-primary sticky top-0 z-10">
                 <tr>
-                  <th className="py-3 px-4 text-left text-sm font-semibold text-live-primary border-b border-live">Bet Details</th>
-                  <th className="py-3 px-4 text-left text-sm font-semibold text-live-primary border-b border-live">Credit</th>
-                  <th className="py-3 px-4 text-left text-sm font-semibold text-live-primary border-b border-live">Debit</th>
-                  <th className="py-3 px-4 text-left text-sm font-semibold text-live-primary border-b border-live">Balance</th>
-                  <th className="py-3 px-4 text-left text-sm font-semibold text-live-primary border-b border-live">Time</th>
-                  <th className="py-3 px-4 text-left text-sm font-semibold text-live-primary border-b border-live">Type</th>
-                  <th className="py-3 px-4 text-left text-sm font-semibold text-live-primary border-b border-live">ID</th>
+                  <th className="py-2 sm:py-3 px-2 sm:px-4 text-left text-[10px] sm:text-xs md:text-sm font-semibold text-live-primary border-b border-live whitespace-nowrap">Bet Details</th>
+                  <th className="py-2 sm:py-3 px-2 sm:px-4 text-left text-[10px] sm:text-xs md:text-sm font-semibold text-live-primary border-b border-live whitespace-nowrap">Credit</th>
+                  <th className="py-2 sm:py-3 px-2 sm:px-4 text-left text-[10px] sm:text-xs md:text-sm font-semibold text-live-primary border-b border-live whitespace-nowrap">Debit</th>
+                  <th className="py-2 sm:py-3 px-2 sm:px-4 text-left text-[10px] sm:text-xs md:text-sm font-semibold text-live-primary border-b border-live whitespace-nowrap">Balance</th>
+                  <th className="py-2 sm:py-3 px-2 sm:px-4 text-left text-[10px] sm:text-xs md:text-sm font-semibold text-live-primary border-b border-live whitespace-nowrap">Time</th>
+                  <th className="py-2 sm:py-3 px-2 sm:px-4 text-left text-[10px] sm:text-xs md:text-sm font-semibold text-live-primary border-b border-live whitespace-nowrap">Type</th>
+                  <th className="py-2 sm:py-3 px-2 sm:px-4 text-left text-[10px] sm:text-xs md:text-sm font-semibold text-live-primary border-b border-live whitespace-nowrap">ID</th>
                 </tr>
               </thead>
               <tbody>
                 {reportData.map((entry, index) => (
                   <tr key={index} className="border-b border-live hover:bg-live-primary">
-                    <td className="py-3 px-4 text-sm text-live-primary">{entry.description || entry.betDetails || '-'}</td>
-                    <td className="py-3 px-4 text-sm text-green-500">{entry.creditAmount ? `+${entry.creditAmount}` : '-'}</td>
-                    <td className="py-3 px-4 text-sm text-red-500">{entry.debitAmount ? `-${entry.debitAmount}` : '-'}</td>
-                    <td className="py-3 px-4 text-sm text-live-primary">{entry.runningBalance || '-'}</td>
-                    <td className="py-3 px-4 text-sm text-live-primary">{formatDateTime(entry.timestamp)}</td>
-                    <td className={`py-3 px-4 text-sm ${getTransactionTypeColor(entry.type)}`}>{entry.type || '-'}</td>
-                    <td className="py-3 px-4 text-sm text-live-primary font-mono">{entry.betId || entry.resultTxId || '-'}</td>
+                    <td className="py-2 sm:py-3 px-2 sm:px-4 text-[10px] sm:text-xs md:text-sm text-live-primary">{entry.description || entry.betDetails || '-'}</td>
+                    <td className="py-2 sm:py-3 px-2 sm:px-4 text-[10px] sm:text-xs md:text-sm text-green-500 whitespace-nowrap">{entry.creditAmount ? `+${entry.creditAmount}` : '-'}</td>
+                    <td className="py-2 sm:py-3 px-2 sm:px-4 text-[10px] sm:text-xs md:text-sm text-red-500 whitespace-nowrap">{entry.debitAmount ? `-${entry.debitAmount}` : '-'}</td>
+                    <td className="py-2 sm:py-3 px-2 sm:px-4 text-[10px] sm:text-xs md:text-sm text-live-primary whitespace-nowrap">{entry.runningBalance || '-'}</td>
+                    <td className="py-2 sm:py-3 px-2 sm:px-4 text-[10px] sm:text-xs md:text-sm text-live-primary whitespace-nowrap">{formatDateTime(entry.timestamp)}</td>
+                    <td className={`py-2 sm:py-3 px-2 sm:px-4 text-[10px] sm:text-xs md:text-sm whitespace-nowrap ${getTransactionTypeColor(entry.type)}`}>{entry.type || '-'}</td>
+                    <td className="py-2 sm:py-3 px-2 sm:px-4 text-[10px] sm:text-xs md:text-sm text-live-primary font-mono whitespace-nowrap">{entry.betId || entry.resultTxId || '-'}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           ) : (
-            <div className="no-report-placeholder p-4 text-center text-live-muted">
+            <div className="no-report-placeholder p-4 text-center text-live-muted text-xs sm:text-sm">
               No market report found
             </div>
           )}
