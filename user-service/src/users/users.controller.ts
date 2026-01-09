@@ -14,6 +14,7 @@ import { LoginDto } from './dto/login.dto';
 import { validate } from 'class-validator';
 import * as jwt from 'jsonwebtoken';
 import { USERS_CONSTANTS } from './users.constants';
+import { LoginHistoryService } from './login-history.service';
 
 @Controller('users')
 export class UsersController {
@@ -25,6 +26,7 @@ export class UsersController {
     private readonly usersRepository: Repository<Users>,
     @InjectRepository(Currency)
     private readonly currencyRepo: Repository<Currency>,
+    private readonly loginHistoryService: LoginHistoryService,
   ) { }
 
   @Get()
@@ -63,7 +65,9 @@ export class UsersController {
         email: signupDto.email,
         birthdate: new Date(signupDto.birthdate),
         password: signupDto.password,
-        passwordText: signupDto.password
+        passwordText: signupDto.password,
+        system_ip: signupDto.system_ip,
+        browser_ip: signupDto.browser_ip
         // Note: parentId is not set during signup as this is for creating a new user without a parent
       };
       
@@ -119,14 +123,7 @@ export class UsersController {
           role: newUser.role,
           emailVerify: newUser.emailVerify,
           username: newUser.username,
-          zipcode: newUser.zipcode,
           name: newUser.name,
-          address: newUser.address,
-          middlename: newUser.middlename,
-          occupation: newUser.occupation,
-          salaryLevel: newUser.salaryLevel,
-          surname: newUser.surname,
-          gender: newUser.gender,
           birthdate: newUser.birthdate,
           clientShare: newUser.clientShare,
           creditReference: newUser.creditReference,
@@ -251,20 +248,34 @@ export class UsersController {
       await this.usersService.updateToken(user.id, token);
       console.log('User token updated');
       
+      // Handle login history
+      const existingLoginHistory = await this.loginHistoryService.findByEmailAndIPs(
+        user.email,
+        loginDto.system_ip,
+        loginDto.browser_ip
+      );
+      
+      if (existingLoginHistory) {
+        // Update only the last_login timestamp for that record
+        await this.loginHistoryService.updateLastLogin(existingLoginHistory.id);
+      } else {
+        // Create a new record in the login_history table
+        await this.loginHistoryService.create({
+          email: user.email,
+          system_ip: loginDto.system_ip || user.system_ip,
+          browser_ip: loginDto.browser_ip || user.browser_ip,
+          created_at: new Date(),
+          last_login: new Date()
+        });
+      }
+      
       const response = {
         _id: user.id,
         email: user.email,
         role: user.role,
         emailVerify: user.emailVerify,
         username: user.username,
-        zipcode: user.zipcode,
         name: user.name,
-        address: user.address,
-        middlename: user.middlename,
-        occupation: user.occupation,
-        salaryLevel: user.salaryLevel,
-        surname: user.surname,
-        gender: user.gender,
         birthdate: user.birthdate,
         clientShare: user.clientShare,
         creditReference: user.creditReference,
@@ -273,6 +284,7 @@ export class UsersController {
         browser_ip: user.browser_ip,
         status: user.status,
         betAllow: user.betAllow,
+        exposure: user.exposure || 0,
         currency: user.currency ? {
           id: user.currency.id,
           name: user.currency.name,
@@ -453,14 +465,7 @@ export class UsersController {
         role: user.role,
         emailVerify: user.emailVerify,
         username: user.username,
-        zipcode: user.zipcode,
         name: user.name,
-        address: user.address,
-        middlename: user.middlename,
-        occupation: user.occupation,
-        salaryLevel: user.salaryLevel,
-        surname: user.surname,
-        gender: user.gender,
         birthdate: user.birthdate,
         clientShare: user.clientShare,
         creditReference: user.creditReference,

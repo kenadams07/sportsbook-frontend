@@ -17,4 +17,16 @@ export class ResultTransationService {
   create(resultTransaction: Partial<ResultTransaction>): Promise<ResultTransaction> {
     return this.resultTransactionRepository.save(resultTransaction);
   }
+
+  async findAllByUserId(userId: string): Promise<ResultTransaction[]> {
+    return this.resultTransactionRepository.find({
+      where: {
+        user: { id: userId }
+      },
+      order: {
+        createdAt: 'ASC'
+      },
+      relations: ['user', 'market']
+    });
+  }
 }

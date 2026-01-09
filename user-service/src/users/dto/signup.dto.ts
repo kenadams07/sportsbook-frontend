@@ -31,4 +31,12 @@ export class SignupDto {
   @IsString()
   @IsNotEmpty()
   confirmPassword: string;
+
+  @IsString()
+  @IsOptional()
+  system_ip: string;
+
+  @IsString()
+  @IsOptional()
+  browser_ip: string;
 }

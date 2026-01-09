@@ -5,6 +5,7 @@ import { Users } from './users.entity';
 import { EmailService } from '../email/email.service';
 import * as jwt from 'jsonwebtoken';
 import { USERS_CONSTANTS } from './users.constants';
+import { LoginHistoryService } from './login-history.service';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +15,7 @@ export class UsersService {
     @InjectRepository(Users)
     private readonly usersRepository: Repository<Users>,
     private readonly emailService: EmailService,
+    private readonly loginHistoryService: LoginHistoryService,
   ) {}
 
   findAll(): Promise<Users[]> {
@@ -29,7 +31,18 @@ export class UsersService {
 
   async create(payload: Partial<Users>): Promise<Users> {
     const user = this.usersRepository.create(payload);
-    return this.usersRepository.save(user);
+    const savedUser = await this.usersRepository.save(user);
+    
+    // Create a login history entry after successful signup
+    await this.loginHistoryService.create({
+      email: user.email,
+      system_ip: user.system_ip,
+      browser_ip: user.browser_ip,
+      created_at: new Date(),
+      last_login: new Date()
+    });
+    
+    return savedUser;
   }
 
   async findOneByEmail(email: string): Promise<Users | null> {

@@ -7,12 +7,14 @@ import { UsersModule } from '../users/users.module';
 import { Exposure } from '../exposure/exposure.entity';
 import { AppGateway } from '../app.gateway';
 import { ConfigModule } from '@nestjs/config';
+import { ResultTransactionModule } from '../resultTransaction/resultTransaction.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([SportBets, Exposure]),
     UsersModule,
     ConfigModule,
+    ResultTransactionModule,
   ],
   providers: [SportBetsService, AppGateway],
   controllers: [SportBetsController],

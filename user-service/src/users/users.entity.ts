@@ -40,28 +40,7 @@ export class Users {
   username: string;
 
   @Column({ nullable: true })
-  zipcode: string;
-
-  @Column({ nullable: true })
   name: string;
-
-  @Column({ nullable: true })
-  address: string;
-
-  @Column({ nullable: true })
-  middlename: string;
-
-  @Column({ nullable: true })
-  occupation: string;
-
-  @Column({ type: 'varchar', nullable: true })
-  salaryLevel: string;
-
-  @Column({ nullable: true })
-  surname: string;
-
-  @Column({ nullable: true })
-  gender: string;
 
   @Column({ type: 'date', nullable: true })
   birthdate: Date;
@@ -124,12 +103,6 @@ export class Users {
 
   @Column({ nullable: true })
   gap_casino_token: string;
-
-  @Column({ nullable: true })
-  county: string;
-
-  @Column({ nullable: true })
-  city: string;
 
   @OneToMany(() => ResultTransaction, (resultTransaction) => resultTransaction.user)
   resultTransaction: ResultTransaction[];
