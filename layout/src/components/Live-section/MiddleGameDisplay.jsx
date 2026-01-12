@@ -83,9 +83,9 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
   const matchIsSuspended = isMatchSuspended(match);
 
   return (
-    <div className="p-2 sm:p-2 md:p-3 flex flex-col gap-2 sm:gap-3 md:gap-4 h-full min-w-0">
+    <div className="flex flex-col gap-2 sm:gap-3 md:gap-4 h-full min-w-0 w-full">
       {/* Top Section with Background Image - Responsive height */}
-      <div className="relative w-full h-40 sm:h-48 md:h-56 lg:h-64 rounded-md overflow-hidden flex-shrink-0">
+      <div className="relative w-full h-40 sm:h-48 md:h-56 lg:h-64 overflow-hidden flex-shrink-0">
         {/* Background Image */}
          <img
           src={imageSrc}

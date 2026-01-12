@@ -1,6 +1,6 @@
 import { importShared } from './__federation_fn_import.js';
-import { e as createLucideIcon, j as jsxRuntimeExports, f as createContextScope, l as useId, m as Primitive, n as composeEventHandlers, u as useComposedRefs, o as useControllableState, p as useCallbackRef, q as createPopperScope, r as Root2, s as Anchor, t as Presence, v as Portal$1, w as hideOthers, x as dispatchDiscreteCustomEvent, y as ReactRemoveScroll, z as useFocusGuards, g as createSlot, F as FocusScope, D as DismissableLayer, H as Content, J as Arrow, K as composeRefs, h as cn, M as useNavigate, N as useLocation, Q as ChevronDown, X, S as useDispatch, T as useSelector, V as Link, U as User, W as RegisterModal, Y as LoginModal, Z as Toaster$1, _ as NavLink, $ as Outlet } from './__federation_expose_LayoutApp.js';
-import { c as createCollection, u as useDirection, D as DepositModal } from './DepositModal.js';
+import { e as createLucideIcon, j as jsxRuntimeExports, f as createContextScope, l as useId, m as Primitive, n as composeEventHandlers, u as useComposedRefs, o as useControllableState, p as useCallbackRef, q as createPopperScope, r as Root2, s as Anchor, t as Presence, v as Portal$1, w as hideOthers, x as dispatchDiscreteCustomEvent, y as ReactRemoveScroll, z as useFocusGuards, g as createSlot, F as FocusScope, D as DismissableLayer, H as Content, J as Arrow, K as composeRefs, h as cn, M as useNavigate, N as useLocation, Q as ChevronDown, S as useDispatch, T as useSelector, V as Link, U as User, W as RegisterModal, Y as LoginModal, X, E as Eye, I as Input, B as Button, Z as useForm, _ as Checkbox, $ as login, a0 as notifyError, a1 as verifyEmail, a2 as signup, k as getLocalStorageItem, a3 as Toaster$1, a4 as NavLink, a5 as Outlet } from './__federation_expose_LayoutApp.js';
+import { c as createCollection, u as useDirection, D as DepositModal, H as History, C as CreditCard, S as Settings } from './DepositModal.js';
 import { g as getUserData, l as logout } from './getUserDataAction.js';
 
 /**
@@ -11,19 +11,158 @@ import { g as getUserData, l as logout } from './getUserDataAction.js';
  */
 
 
-const __iconNode = [
+const __iconNode$8 = [
+  [
+    "path",
+    {
+      d: "M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2",
+      key: "169zse"
+    }
+  ]
+];
+const Activity = createLucideIcon("activity", __iconNode$8);
+
+/**
+ * @license lucide-react v0.525.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$7 = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3", key: "1u773s" }],
+  ["path", { d: "M12 17h.01", key: "p32p05" }]
+];
+const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$7);
+
+/**
+ * @license lucide-react v0.525.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$6 = [
+  ["rect", { width: "12", height: "12", x: "2", y: "10", rx: "2", ry: "2", key: "6agr2n" }],
+  [
+    "path",
+    { d: "m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6", key: "1o487t" }
+  ],
+  ["path", { d: "M6 18h.01", key: "uhywen" }],
+  ["path", { d: "M10 14h.01", key: "ssrbsk" }],
+  ["path", { d: "M15 6h.01", key: "cblpky" }],
+  ["path", { d: "M18 9h.01", key: "2061c0" }]
+];
+const Dices = createLucideIcon("dices", __iconNode$6);
+
+/**
+ * @license lucide-react v0.525.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$5 = [
+  ["path", { d: "M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8", key: "5wwlr5" }],
+  [
+    "path",
+    {
+      d: "M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z",
+      key: "1d0kgt"
+    }
+  ]
+];
+const House = createLucideIcon("house", __iconNode$5);
+
+/**
+ * @license lucide-react v0.525.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$4 = [
+  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+  ["path", { d: "M21 12H9", key: "dn1m92" }],
+  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+];
+const LogOut = createLucideIcon("log-out", __iconNode$4);
+
+/**
+ * @license lucide-react v0.525.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$3 = [
   ["path", { d: "M4 12h16", key: "1lakjw" }],
   ["path", { d: "M4 18h16", key: "19g7jn" }],
   ["path", { d: "M4 6h16", key: "1o0s65" }]
 ];
-const Menu$2 = createLucideIcon("menu", __iconNode);
+const Menu$2 = createLucideIcon("menu", __iconNode$3);
 
-const React$7 = await importShared('react');
-const {useEffect: useEffect$1,useState: useState$3} = React$7;
+/**
+ * @license lucide-react v0.525.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
 
-const Clock = React$7.memo(() => {
-  const [currentTime, setCurrentTime] = useState$3("");
-  useEffect$1(() => {
+
+const __iconNode$2 = [
+  ["path", { d: "M7.9 20A9 9 0 1 0 4 16.1L2 22Z", key: "vv11sd" }]
+];
+const MessageCircle = createLucideIcon("message-circle", __iconNode$2);
+
+/**
+ * @license lucide-react v0.525.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$1 = [
+  [
+    "path",
+    { d: "M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z", key: "q3az6g" }
+  ],
+  ["path", { d: "M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8", key: "1h4pet" }],
+  ["path", { d: "M12 17.5v-11", key: "1jc1ny" }]
+];
+const Receipt = createLucideIcon("receipt", __iconNode$1);
+
+/**
+ * @license lucide-react v0.525.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode = [
+  ["path", { d: "M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978", key: "1n3hpd" }],
+  ["path", { d: "M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978", key: "rfe1zi" }],
+  ["path", { d: "M18 9h1.5a1 1 0 0 0 0-5H18", key: "7xy6bh" }],
+  ["path", { d: "M4 22h16", key: "57wxv0" }],
+  ["path", { d: "M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z", key: "1mhfuq" }],
+  ["path", { d: "M6 9H4.5a1 1 0 0 1 0-5H6", key: "tex48p" }]
+];
+const Trophy = createLucideIcon("trophy", __iconNode);
+
+const React$9 = await importShared('react');
+const {useEffect: useEffect$4,useState: useState$7} = React$9;
+
+const Clock = React$9.memo(() => {
+  const [currentTime, setCurrentTime] = useState$7("");
+  useEffect$4(() => {
     const updateTime = () => {
       const now = /* @__PURE__ */ new Date();
       let hours = now.getHours();
@@ -43,7 +182,7 @@ const Clock = React$7.memo(() => {
 });
 
 // src/roving-focus-group.tsx
-const React$6 = await importShared('react');
+const React$8 = await importShared('react');
 var ENTRY_FOCUS = "rovingFocusGroup.onEntryFocus";
 var EVENT_OPTIONS = { bubbles: false, cancelable: true };
 var GROUP_NAME$2 = "RovingFocusGroup";
@@ -53,13 +192,13 @@ var [createRovingFocusGroupContext, createRovingFocusGroupScope] = createContext
   [createCollectionScope$2]
 );
 var [RovingFocusProvider, useRovingFocusContext] = createRovingFocusGroupContext(GROUP_NAME$2);
-var RovingFocusGroup = React$6.forwardRef(
+var RovingFocusGroup = React$8.forwardRef(
   (props, forwardedRef) => {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Collection$2.Provider, { scope: props.__scopeRovingFocusGroup, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Collection$2.Slot, { scope: props.__scopeRovingFocusGroup, children: /* @__PURE__ */ jsxRuntimeExports.jsx(RovingFocusGroupImpl, { ...props, ref: forwardedRef }) }) });
   }
 );
 RovingFocusGroup.displayName = GROUP_NAME$2;
-var RovingFocusGroupImpl = React$6.forwardRef((props, forwardedRef) => {
+var RovingFocusGroupImpl = React$8.forwardRef((props, forwardedRef) => {
   const {
     __scopeRovingFocusGroup,
     orientation,
@@ -72,7 +211,7 @@ var RovingFocusGroupImpl = React$6.forwardRef((props, forwardedRef) => {
     preventScrollOnEntryFocus = false,
     ...groupProps
   } = props;
-  const ref = React$6.useRef(null);
+  const ref = React$8.useRef(null);
   const composedRefs = useComposedRefs(forwardedRef, ref);
   const direction = useDirection(dir);
   const [currentTabStopId, setCurrentTabStopId] = useControllableState({
@@ -81,12 +220,12 @@ var RovingFocusGroupImpl = React$6.forwardRef((props, forwardedRef) => {
     onChange: onCurrentTabStopIdChange,
     caller: GROUP_NAME$2
   });
-  const [isTabbingBackOut, setIsTabbingBackOut] = React$6.useState(false);
+  const [isTabbingBackOut, setIsTabbingBackOut] = React$8.useState(false);
   const handleEntryFocus = useCallbackRef(onEntryFocus);
   const getItems = useCollection$2(__scopeRovingFocusGroup);
-  const isClickFocusRef = React$6.useRef(false);
-  const [focusableItemsCount, setFocusableItemsCount] = React$6.useState(0);
-  React$6.useEffect(() => {
+  const isClickFocusRef = React$8.useRef(false);
+  const [focusableItemsCount, setFocusableItemsCount] = React$8.useState(0);
+  React$8.useEffect(() => {
     const node = ref.current;
     if (node) {
       node.addEventListener(ENTRY_FOCUS, handleEntryFocus);
@@ -101,16 +240,16 @@ var RovingFocusGroupImpl = React$6.forwardRef((props, forwardedRef) => {
       dir: direction,
       loop,
       currentTabStopId,
-      onItemFocus: React$6.useCallback(
+      onItemFocus: React$8.useCallback(
         (tabStopId) => setCurrentTabStopId(tabStopId),
         [setCurrentTabStopId]
       ),
-      onItemShiftTab: React$6.useCallback(() => setIsTabbingBackOut(true), []),
-      onFocusableItemAdd: React$6.useCallback(
+      onItemShiftTab: React$8.useCallback(() => setIsTabbingBackOut(true), []),
+      onFocusableItemAdd: React$8.useCallback(
         () => setFocusableItemsCount((prevCount) => prevCount + 1),
         []
       ),
-      onFocusableItemRemove: React$6.useCallback(
+      onFocusableItemRemove: React$8.useCallback(
         () => setFocusableItemsCount((prevCount) => prevCount - 1),
         []
       ),
@@ -150,7 +289,7 @@ var RovingFocusGroupImpl = React$6.forwardRef((props, forwardedRef) => {
   );
 });
 var ITEM_NAME$2 = "RovingFocusGroupItem";
-var RovingFocusGroupItem = React$6.forwardRef(
+var RovingFocusGroupItem = React$8.forwardRef(
   (props, forwardedRef) => {
     const {
       __scopeRovingFocusGroup,
@@ -166,7 +305,7 @@ var RovingFocusGroupItem = React$6.forwardRef(
     const isCurrentTabStop = context.currentTabStopId === id;
     const getItems = useCollection$2(__scopeRovingFocusGroup);
     const { onFocusableItemAdd, onFocusableItemRemove, currentTabStopId } = context;
-    React$6.useEffect(() => {
+    React$8.useEffect(() => {
       if (focusable) {
         onFocusableItemAdd();
         return () => onFocusableItemRemove();
@@ -255,7 +394,7 @@ var Root = RovingFocusGroup;
 var Item = RovingFocusGroupItem;
 
 // src/menu.tsx
-const React$5 = await importShared('react');
+const React$7 = await importShared('react');
 var SELECTION_KEYS = ["Enter", " "];
 var FIRST_KEYS = ["ArrowDown", "PageUp", "Home"];
 var LAST_KEYS = ["ArrowUp", "PageDown", "End"];
@@ -282,11 +421,11 @@ var [MenuRootProvider, useMenuRootContext] = createMenuContext(MENU_NAME$1);
 var Menu$1 = (props) => {
   const { __scopeMenu, open = false, children, dir, onOpenChange, modal = true } = props;
   const popperScope = usePopperScope(__scopeMenu);
-  const [content, setContent] = React$5.useState(null);
-  const isUsingKeyboardRef = React$5.useRef(false);
+  const [content, setContent] = React$7.useState(null);
+  const isUsingKeyboardRef = React$7.useRef(false);
   const handleOpenChange = useCallbackRef(onOpenChange);
   const direction = useDirection(dir);
-  React$5.useEffect(() => {
+  React$7.useEffect(() => {
     const handleKeyDown = () => {
       isUsingKeyboardRef.current = true;
       document.addEventListener("pointerdown", handlePointer, { capture: true, once: true });
@@ -312,7 +451,7 @@ var Menu$1 = (props) => {
         MenuRootProvider,
         {
           scope: __scopeMenu,
-          onClose: React$5.useCallback(() => handleOpenChange(false), [handleOpenChange]),
+          onClose: React$7.useCallback(() => handleOpenChange(false), [handleOpenChange]),
           isUsingKeyboardRef,
           dir: direction,
           modal,
@@ -324,7 +463,7 @@ var Menu$1 = (props) => {
 };
 Menu$1.displayName = MENU_NAME$1;
 var ANCHOR_NAME = "MenuAnchor";
-var MenuAnchor = React$5.forwardRef(
+var MenuAnchor = React$7.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, ...anchorProps } = props;
     const popperScope = usePopperScope(__scopeMenu);
@@ -344,7 +483,7 @@ var MenuPortal = (props) => {
 MenuPortal.displayName = PORTAL_NAME$1;
 var CONTENT_NAME$1 = "MenuContent";
 var [MenuContentProvider, useMenuContentContext] = createMenuContext(CONTENT_NAME$1);
-var MenuContent = React$5.forwardRef(
+var MenuContent = React$7.forwardRef(
   (props, forwardedRef) => {
     const portalContext = usePortalContext(CONTENT_NAME$1, props.__scopeMenu);
     const { forceMount = portalContext.forceMount, ...contentProps } = props;
@@ -353,12 +492,12 @@ var MenuContent = React$5.forwardRef(
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Collection$1.Provider, { scope: props.__scopeMenu, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Collection$1.Slot, { scope: props.__scopeMenu, children: rootContext.modal ? /* @__PURE__ */ jsxRuntimeExports.jsx(MenuRootContentModal, { ...contentProps, ref: forwardedRef }) : /* @__PURE__ */ jsxRuntimeExports.jsx(MenuRootContentNonModal, { ...contentProps, ref: forwardedRef }) }) }) });
   }
 );
-var MenuRootContentModal = React$5.forwardRef(
+var MenuRootContentModal = React$7.forwardRef(
   (props, forwardedRef) => {
     const context = useMenuContext(CONTENT_NAME$1, props.__scopeMenu);
-    const ref = React$5.useRef(null);
+    const ref = React$7.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, ref);
-    React$5.useEffect(() => {
+    React$7.useEffect(() => {
       const content = ref.current;
       if (content) return hideOthers(content);
     }, []);
@@ -380,7 +519,7 @@ var MenuRootContentModal = React$5.forwardRef(
     );
   }
 );
-var MenuRootContentNonModal = React$5.forwardRef((props, forwardedRef) => {
+var MenuRootContentNonModal = React$7.forwardRef((props, forwardedRef) => {
   const context = useMenuContext(CONTENT_NAME$1, props.__scopeMenu);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     MenuContentImpl,
@@ -395,7 +534,7 @@ var MenuRootContentNonModal = React$5.forwardRef((props, forwardedRef) => {
   );
 });
 var Slot = createSlot("MenuContent.ScrollLock");
-var MenuContentImpl = React$5.forwardRef(
+var MenuContentImpl = React$7.forwardRef(
   (props, forwardedRef) => {
     const {
       __scopeMenu,
@@ -418,16 +557,16 @@ var MenuContentImpl = React$5.forwardRef(
     const popperScope = usePopperScope(__scopeMenu);
     const rovingFocusGroupScope = useRovingFocusGroupScope$1(__scopeMenu);
     const getItems = useCollection$1(__scopeMenu);
-    const [currentItemId, setCurrentItemId] = React$5.useState(null);
-    const contentRef = React$5.useRef(null);
+    const [currentItemId, setCurrentItemId] = React$7.useState(null);
+    const contentRef = React$7.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, contentRef, context.onContentChange);
-    const timerRef = React$5.useRef(0);
-    const searchRef = React$5.useRef("");
-    const pointerGraceTimerRef = React$5.useRef(0);
-    const pointerGraceIntentRef = React$5.useRef(null);
-    const pointerDirRef = React$5.useRef("right");
-    const lastPointerXRef = React$5.useRef(0);
-    const ScrollLockWrapper = disableOutsideScroll ? ReactRemoveScroll : React$5.Fragment;
+    const timerRef = React$7.useRef(0);
+    const searchRef = React$7.useRef("");
+    const pointerGraceTimerRef = React$7.useRef(0);
+    const pointerGraceIntentRef = React$7.useRef(null);
+    const pointerDirRef = React$7.useRef("right");
+    const lastPointerXRef = React$7.useRef(0);
+    const ScrollLockWrapper = disableOutsideScroll ? ReactRemoveScroll : React$7.Fragment;
     const scrollLockWrapperProps = disableOutsideScroll ? { as: Slot, allowPinchZoom: true } : void 0;
     const handleTypeaheadSearch = (key) => {
       const search = searchRef.current + key;
@@ -446,11 +585,11 @@ var MenuContentImpl = React$5.forwardRef(
         setTimeout(() => newItem.focus());
       }
     };
-    React$5.useEffect(() => {
+    React$7.useEffect(() => {
       return () => window.clearTimeout(timerRef.current);
     }, []);
     useFocusGuards();
-    const isPointerMovingToSubmenu = React$5.useCallback((event) => {
+    const isPointerMovingToSubmenu = React$7.useCallback((event) => {
       const isMovingTowards = pointerDirRef.current === pointerGraceIntentRef.current?.side;
       return isMovingTowards && isPointerInGraceArea(event, pointerGraceIntentRef.current?.area);
     }, []);
@@ -459,13 +598,13 @@ var MenuContentImpl = React$5.forwardRef(
       {
         scope: __scopeMenu,
         searchRef,
-        onItemEnter: React$5.useCallback(
+        onItemEnter: React$7.useCallback(
           (event) => {
             if (isPointerMovingToSubmenu(event)) event.preventDefault();
           },
           [isPointerMovingToSubmenu]
         ),
-        onItemLeave: React$5.useCallback(
+        onItemLeave: React$7.useCallback(
           (event) => {
             if (isPointerMovingToSubmenu(event)) return;
             contentRef.current?.focus();
@@ -473,14 +612,14 @@ var MenuContentImpl = React$5.forwardRef(
           },
           [isPointerMovingToSubmenu]
         ),
-        onTriggerLeave: React$5.useCallback(
+        onTriggerLeave: React$7.useCallback(
           (event) => {
             if (isPointerMovingToSubmenu(event)) event.preventDefault();
           },
           [isPointerMovingToSubmenu]
         ),
         pointerGraceTimerRef,
-        onPointerGraceIntentChange: React$5.useCallback((intent) => {
+        onPointerGraceIntentChange: React$7.useCallback((intent) => {
           pointerGraceIntentRef.current = intent;
         }, []),
         children: /* @__PURE__ */ jsxRuntimeExports.jsx(ScrollLockWrapper, { ...scrollLockWrapperProps, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -579,7 +718,7 @@ var MenuContentImpl = React$5.forwardRef(
 );
 MenuContent.displayName = CONTENT_NAME$1;
 var GROUP_NAME$1 = "MenuGroup";
-var MenuGroup = React$5.forwardRef(
+var MenuGroup = React$7.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, ...groupProps } = props;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { role: "group", ...groupProps, ref: forwardedRef });
@@ -587,7 +726,7 @@ var MenuGroup = React$5.forwardRef(
 );
 MenuGroup.displayName = GROUP_NAME$1;
 var LABEL_NAME$1 = "MenuLabel";
-var MenuLabel = React$5.forwardRef(
+var MenuLabel = React$7.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, ...labelProps } = props;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { ...labelProps, ref: forwardedRef });
@@ -596,14 +735,14 @@ var MenuLabel = React$5.forwardRef(
 MenuLabel.displayName = LABEL_NAME$1;
 var ITEM_NAME$1 = "MenuItem";
 var ITEM_SELECT = "menu.itemSelect";
-var MenuItem = React$5.forwardRef(
+var MenuItem = React$7.forwardRef(
   (props, forwardedRef) => {
     const { disabled = false, onSelect, ...itemProps } = props;
-    const ref = React$5.useRef(null);
+    const ref = React$7.useRef(null);
     const rootContext = useMenuRootContext(ITEM_NAME$1, props.__scopeMenu);
     const contentContext = useMenuContentContext(ITEM_NAME$1, props.__scopeMenu);
     const composedRefs = useComposedRefs(forwardedRef, ref);
-    const isPointerDownRef = React$5.useRef(false);
+    const isPointerDownRef = React$7.useRef(false);
     const handleSelect = () => {
       const menuItem = ref.current;
       if (!disabled && menuItem) {
@@ -644,16 +783,16 @@ var MenuItem = React$5.forwardRef(
   }
 );
 MenuItem.displayName = ITEM_NAME$1;
-var MenuItemImpl = React$5.forwardRef(
+var MenuItemImpl = React$7.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, disabled = false, textValue, ...itemProps } = props;
     const contentContext = useMenuContentContext(ITEM_NAME$1, __scopeMenu);
     const rovingFocusGroupScope = useRovingFocusGroupScope$1(__scopeMenu);
-    const ref = React$5.useRef(null);
+    const ref = React$7.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, ref);
-    const [isFocused, setIsFocused] = React$5.useState(false);
-    const [textContent, setTextContent] = React$5.useState("");
-    React$5.useEffect(() => {
+    const [isFocused, setIsFocused] = React$7.useState(false);
+    const [textContent, setTextContent] = React$7.useState("");
+    React$7.useEffect(() => {
       const menuItem = ref.current;
       if (menuItem) {
         setTextContent((menuItem.textContent ?? "").trim());
@@ -701,7 +840,7 @@ var MenuItemImpl = React$5.forwardRef(
   }
 );
 var CHECKBOX_ITEM_NAME$1 = "MenuCheckboxItem";
-var MenuCheckboxItem = React$5.forwardRef(
+var MenuCheckboxItem = React$7.forwardRef(
   (props, forwardedRef) => {
     const { checked = false, onCheckedChange, ...checkboxItemProps } = props;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(ItemIndicatorProvider, { scope: props.__scopeMenu, checked, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -728,7 +867,7 @@ var [RadioGroupProvider, useRadioGroupContext] = createMenuContext(
   { value: void 0, onValueChange: () => {
   } }
 );
-var MenuRadioGroup = React$5.forwardRef(
+var MenuRadioGroup = React$7.forwardRef(
   (props, forwardedRef) => {
     const { value, onValueChange, ...groupProps } = props;
     const handleValueChange = useCallbackRef(onValueChange);
@@ -737,7 +876,7 @@ var MenuRadioGroup = React$5.forwardRef(
 );
 MenuRadioGroup.displayName = RADIO_GROUP_NAME$1;
 var RADIO_ITEM_NAME$1 = "MenuRadioItem";
-var MenuRadioItem = React$5.forwardRef(
+var MenuRadioItem = React$7.forwardRef(
   (props, forwardedRef) => {
     const { value, ...radioItemProps } = props;
     const context = useRadioGroupContext(RADIO_ITEM_NAME$1, props.__scopeMenu);
@@ -765,7 +904,7 @@ var [ItemIndicatorProvider, useItemIndicatorContext] = createMenuContext(
   ITEM_INDICATOR_NAME,
   { checked: false }
 );
-var MenuItemIndicator = React$5.forwardRef(
+var MenuItemIndicator = React$7.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, forceMount, ...itemIndicatorProps } = props;
     const indicatorContext = useItemIndicatorContext(ITEM_INDICATOR_NAME, __scopeMenu);
@@ -787,7 +926,7 @@ var MenuItemIndicator = React$5.forwardRef(
 );
 MenuItemIndicator.displayName = ITEM_INDICATOR_NAME;
 var SEPARATOR_NAME$1 = "MenuSeparator";
-var MenuSeparator = React$5.forwardRef(
+var MenuSeparator = React$7.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, ...separatorProps } = props;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -803,7 +942,7 @@ var MenuSeparator = React$5.forwardRef(
 );
 MenuSeparator.displayName = SEPARATOR_NAME$1;
 var ARROW_NAME$1 = "MenuArrow";
-var MenuArrow = React$5.forwardRef(
+var MenuArrow = React$7.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenu, ...arrowProps } = props;
     const popperScope = usePopperScope(__scopeMenu);
@@ -814,21 +953,21 @@ MenuArrow.displayName = ARROW_NAME$1;
 var SUB_NAME = "MenuSub";
 var [MenuSubProvider, useMenuSubContext] = createMenuContext(SUB_NAME);
 var SUB_TRIGGER_NAME$1 = "MenuSubTrigger";
-var MenuSubTrigger = React$5.forwardRef(
+var MenuSubTrigger = React$7.forwardRef(
   (props, forwardedRef) => {
     const context = useMenuContext(SUB_TRIGGER_NAME$1, props.__scopeMenu);
     const rootContext = useMenuRootContext(SUB_TRIGGER_NAME$1, props.__scopeMenu);
     const subContext = useMenuSubContext(SUB_TRIGGER_NAME$1, props.__scopeMenu);
     const contentContext = useMenuContentContext(SUB_TRIGGER_NAME$1, props.__scopeMenu);
-    const openTimerRef = React$5.useRef(null);
+    const openTimerRef = React$7.useRef(null);
     const { pointerGraceTimerRef, onPointerGraceIntentChange } = contentContext;
     const scope = { __scopeMenu: props.__scopeMenu };
-    const clearOpenTimer = React$5.useCallback(() => {
+    const clearOpenTimer = React$7.useCallback(() => {
       if (openTimerRef.current) window.clearTimeout(openTimerRef.current);
       openTimerRef.current = null;
     }, []);
-    React$5.useEffect(() => clearOpenTimer, [clearOpenTimer]);
-    React$5.useEffect(() => {
+    React$7.useEffect(() => clearOpenTimer, [clearOpenTimer]);
+    React$7.useEffect(() => {
       const pointerGraceTimer = pointerGraceTimerRef.current;
       return () => {
         window.clearTimeout(pointerGraceTimer);
@@ -915,14 +1054,14 @@ var MenuSubTrigger = React$5.forwardRef(
 );
 MenuSubTrigger.displayName = SUB_TRIGGER_NAME$1;
 var SUB_CONTENT_NAME$1 = "MenuSubContent";
-var MenuSubContent = React$5.forwardRef(
+var MenuSubContent = React$7.forwardRef(
   (props, forwardedRef) => {
     const portalContext = usePortalContext(CONTENT_NAME$1, props.__scopeMenu);
     const { forceMount = portalContext.forceMount, ...subContentProps } = props;
     const context = useMenuContext(CONTENT_NAME$1, props.__scopeMenu);
     const rootContext = useMenuRootContext(CONTENT_NAME$1, props.__scopeMenu);
     const subContext = useMenuSubContext(SUB_CONTENT_NAME$1, props.__scopeMenu);
-    const ref = React$5.useRef(null);
+    const ref = React$7.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, ref);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Collection$1.Provider, { scope: props.__scopeMenu, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Collection$1.Slot, { scope: props.__scopeMenu, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       MenuContentImpl,
@@ -1034,7 +1173,7 @@ var SubTrigger = MenuSubTrigger;
 var SubContent = MenuSubContent;
 
 // src/menubar.tsx
-const React$4 = await importShared('react');
+const React$6 = await importShared('react');
 var MENUBAR_NAME = "Menubar";
 var [Collection, useCollection, createCollectionScope] = createCollection(MENUBAR_NAME);
 var [createMenubarContext, createMenubarScope] = createContextScope(MENUBAR_NAME, [
@@ -1044,7 +1183,7 @@ var [createMenubarContext, createMenubarScope] = createContextScope(MENUBAR_NAME
 var useMenuScope = createMenuScope();
 var useRovingFocusGroupScope = createRovingFocusGroupScope();
 var [MenubarContextProvider, useMenubarContext] = createMenubarContext(MENUBAR_NAME);
-var Menubar$1 = React$4.forwardRef(
+var Menubar$1 = React$6.forwardRef(
   (props, forwardedRef) => {
     const {
       __scopeMenubar,
@@ -1063,21 +1202,21 @@ var Menubar$1 = React$4.forwardRef(
       defaultProp: defaultValue ?? "",
       caller: MENUBAR_NAME
     });
-    const [currentTabStopId, setCurrentTabStopId] = React$4.useState(null);
+    const [currentTabStopId, setCurrentTabStopId] = React$6.useState(null);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       MenubarContextProvider,
       {
         scope: __scopeMenubar,
         value,
-        onMenuOpen: React$4.useCallback(
+        onMenuOpen: React$6.useCallback(
           (value2) => {
             setValue(value2);
             setCurrentTabStopId(value2);
           },
           [setValue]
         ),
-        onMenuClose: React$4.useCallback(() => setValue(""), [setValue]),
-        onMenuToggle: React$4.useCallback(
+        onMenuClose: React$6.useCallback(() => setValue(""), [setValue]),
+        onMenuToggle: React$6.useCallback(
           (value2) => {
             setValue((prevValue) => prevValue ? "" : value2);
             setCurrentTabStopId(value2);
@@ -1112,10 +1251,10 @@ var MenubarMenu$1 = (props) => {
   const value = valueProp || autoValue || "LEGACY_REACT_AUTO_VALUE";
   const context = useMenubarContext(MENU_NAME, __scopeMenubar);
   const menuScope = useMenuScope(__scopeMenubar);
-  const triggerRef = React$4.useRef(null);
-  const wasKeyboardTriggerOpenRef = React$4.useRef(false);
+  const triggerRef = React$6.useRef(null);
+  const wasKeyboardTriggerOpenRef = React$6.useRef(false);
   const open = context.value === value;
-  React$4.useEffect(() => {
+  React$6.useEffect(() => {
     if (!open) wasKeyboardTriggerOpenRef.current = false;
   }, [open]);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -1145,16 +1284,16 @@ var MenubarMenu$1 = (props) => {
 };
 MenubarMenu$1.displayName = MENU_NAME;
 var TRIGGER_NAME = "MenubarTrigger";
-var MenubarTrigger$1 = React$4.forwardRef(
+var MenubarTrigger$1 = React$6.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, disabled = false, ...triggerProps } = props;
     const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeMenubar);
     const menuScope = useMenuScope(__scopeMenubar);
     const context = useMenubarContext(TRIGGER_NAME, __scopeMenubar);
     const menuContext = useMenubarMenuContext(TRIGGER_NAME, __scopeMenubar);
-    const ref = React$4.useRef(null);
+    const ref = React$6.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, ref, menuContext.triggerRef);
-    const [isFocused, setIsFocused] = React$4.useState(false);
+    const [isFocused, setIsFocused] = React$6.useState(false);
     const open = context.value === menuContext.value;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Collection.ItemSlot, { scope: __scopeMenubar, value: menuContext.value, disabled, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       Item,
@@ -1217,14 +1356,14 @@ var MenubarPortal$1 = (props) => {
 };
 MenubarPortal$1.displayName = PORTAL_NAME;
 var CONTENT_NAME = "MenubarContent";
-var MenubarContent$1 = React$4.forwardRef(
+var MenubarContent$1 = React$6.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, align = "start", ...contentProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
     const context = useMenubarContext(CONTENT_NAME, __scopeMenubar);
     const menuContext = useMenubarMenuContext(CONTENT_NAME, __scopeMenubar);
     const getItems = useCollection(__scopeMenubar);
-    const hasInteractedOutsideRef = React$4.useRef(false);
+    const hasInteractedOutsideRef = React$6.useRef(false);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Content2$1,
       {
@@ -1294,7 +1433,7 @@ var MenubarContent$1 = React$4.forwardRef(
 );
 MenubarContent$1.displayName = CONTENT_NAME;
 var GROUP_NAME = "MenubarGroup";
-var MenubarGroup = React$4.forwardRef(
+var MenubarGroup = React$6.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...groupProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1303,7 +1442,7 @@ var MenubarGroup = React$4.forwardRef(
 );
 MenubarGroup.displayName = GROUP_NAME;
 var LABEL_NAME = "MenubarLabel";
-var MenubarLabel = React$4.forwardRef(
+var MenubarLabel = React$6.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...labelProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1312,7 +1451,7 @@ var MenubarLabel = React$4.forwardRef(
 );
 MenubarLabel.displayName = LABEL_NAME;
 var ITEM_NAME = "MenubarItem";
-var MenubarItem$1 = React$4.forwardRef(
+var MenubarItem$1 = React$6.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...itemProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1321,7 +1460,7 @@ var MenubarItem$1 = React$4.forwardRef(
 );
 MenubarItem$1.displayName = ITEM_NAME;
 var CHECKBOX_ITEM_NAME = "MenubarCheckboxItem";
-var MenubarCheckboxItem = React$4.forwardRef(
+var MenubarCheckboxItem = React$6.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...checkboxItemProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1330,7 +1469,7 @@ var MenubarCheckboxItem = React$4.forwardRef(
 );
 MenubarCheckboxItem.displayName = CHECKBOX_ITEM_NAME;
 var RADIO_GROUP_NAME = "MenubarRadioGroup";
-var MenubarRadioGroup = React$4.forwardRef(
+var MenubarRadioGroup = React$6.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...radioGroupProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1339,7 +1478,7 @@ var MenubarRadioGroup = React$4.forwardRef(
 );
 MenubarRadioGroup.displayName = RADIO_GROUP_NAME;
 var RADIO_ITEM_NAME = "MenubarRadioItem";
-var MenubarRadioItem = React$4.forwardRef(
+var MenubarRadioItem = React$6.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...radioItemProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1348,14 +1487,14 @@ var MenubarRadioItem = React$4.forwardRef(
 );
 MenubarRadioItem.displayName = RADIO_ITEM_NAME;
 var INDICATOR_NAME = "MenubarItemIndicator";
-var MenubarItemIndicator = React$4.forwardRef((props, forwardedRef) => {
+var MenubarItemIndicator = React$6.forwardRef((props, forwardedRef) => {
   const { __scopeMenubar, ...itemIndicatorProps } = props;
   const menuScope = useMenuScope(__scopeMenubar);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(ItemIndicator, { ...menuScope, ...itemIndicatorProps, ref: forwardedRef });
 });
 MenubarItemIndicator.displayName = INDICATOR_NAME;
 var SEPARATOR_NAME = "MenubarSeparator";
-var MenubarSeparator = React$4.forwardRef(
+var MenubarSeparator = React$6.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...separatorProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1364,7 +1503,7 @@ var MenubarSeparator = React$4.forwardRef(
 );
 MenubarSeparator.displayName = SEPARATOR_NAME;
 var ARROW_NAME = "MenubarArrow";
-var MenubarArrow = React$4.forwardRef(
+var MenubarArrow = React$6.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...arrowProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1373,7 +1512,7 @@ var MenubarArrow = React$4.forwardRef(
 );
 MenubarArrow.displayName = ARROW_NAME;
 var SUB_TRIGGER_NAME = "MenubarSubTrigger";
-var MenubarSubTrigger = React$4.forwardRef(
+var MenubarSubTrigger = React$6.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...subTriggerProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1390,7 +1529,7 @@ var MenubarSubTrigger = React$4.forwardRef(
 );
 MenubarSubTrigger.displayName = SUB_TRIGGER_NAME;
 var SUB_CONTENT_NAME = "MenubarSubContent";
-var MenubarSubContent = React$4.forwardRef(
+var MenubarSubContent = React$6.forwardRef(
   (props, forwardedRef) => {
     const { __scopeMenubar, ...subContentProps } = props;
     const menuScope = useMenuScope(__scopeMenubar);
@@ -1513,7 +1652,7 @@ function MenubarItem({
   );
 }
 
-const React$3 = await importShared('react');
+const React$5 = await importShared('react');
 const DesktopNav = ({ navItems }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -1552,81 +1691,100 @@ const DesktopNav = ({ navItems }) => {
     )
   ] }, item.label)) }) });
 };
-const DesktopNav$1 = React$3.memo(DesktopNav);
+const DesktopNav$1 = React$5.memo(DesktopNav);
 
-const React$2 = await importShared('react');
-const {useState: useState$2} = React$2;
-const MobileNav = ({ isOpen, toggleOpen, navItems }) => {
-  const [expandedIndex, setExpandedIndex] = useState$2(null);
+const React$4 = await importShared('react');
+const {useState: useState$6,useEffect: useEffect$3,useRef} = React$4;
+const MobileNav = ({ navItems }) => {
+  const [expandedIndex, setExpandedIndex] = useState$6(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const dropdownRef = useRef(null);
+  const navbarRef = useRef(null);
   const toggleExpand = (index) => {
     setExpandedIndex((prev) => prev === index ? null : index);
   };
-  const isMenuActive = (item) => item.items && item.items.some((sub) => location.pathname === sub.href);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "md:hidden relative w-full flex items-center justify-start", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
+  const isMenuActive = (item) => {
+    if (item.href && location.pathname === item.href) return true;
+    return item.items && item.items.some((sub) => location.pathname === sub.href);
+  };
+  const handleNavClick = (item, index) => {
+    if (item.items && item.items.length > 0) {
+      toggleExpand(index);
+    } else if (item.href) {
+      navigate(item.href);
+      setExpandedIndex(null);
+    }
+  };
+  useEffect$3(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setExpandedIndex(null);
+      }
+    };
+    if (expandedIndex !== null) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [expandedIndex]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "md:hidden w-full overflow-x-auto scrollbar-hide relative", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: navbarRef, className: "flex items-center gap-1 min-w-max px-2", children: navItems.map((item, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "button",
       {
-        onClick: toggleOpen,
-        className: "flex items-center justify-center w-10 h-10 text-navbar-text hover:bg-navbar-dropdown-hover rounded",
-        "aria-label": isOpen ? "Close menu" : "Open menu",
-        children: isOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 24 }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Menu$2, { size: 24 })
-      }
-    ),
-    isOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mobile-menu-container absolute left-0 top-10 mt-2 w-56 bg-mobile-menu rounded-md shadow-lg z-50", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "py-1", children: navItems.map((item, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "div",
-      {
-        className: "border-b border-navbar-border last:border-b-0",
+        onClick: () => handleNavClick(item, index),
+        className: `
+                px-3 py-1.5 text-xs font-medium whitespace-nowrap
+                transition-all duration-200 flex items-center gap-1
+                ${isMenuActive(item) ? "text-yellow-400 border-b-2 border-yellow-400" : "text-white border-b-2 border-transparent hover:text-yellow-400"}
+              `,
+        style: { background: "transparent" },
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "div",
+          item.label,
+          item.items && item.items.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+            ChevronDown,
             {
-              className: `px-4 py-2 text-navbar-text font-medium cursor-pointer flex justify-between items-center ${isMenuActive(item) ? "border-b-2 border-yellow-400 text-white font-bold bg-black" : ""}`,
-              ...!item.items && item.href ? {
-                onClick: () => {
-                  navigate(item.href);
-                  toggleOpen();
-                }
-              } : {
-                onClick: () => toggleExpand(index),
-                role: "button",
-                tabIndex: 0,
-                onKeyDown: (e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    toggleExpand(index);
-                  }
-                }
-              },
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label }),
-                item.items && item.items.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "ml-2 text-sm", children: expandedIndex === index ? "-" : "+" })
-              ]
+              size: 12,
+              className: `transition-transform duration-200 ${expandedIndex === index ? "rotate-180" : ""}`
             }
-          ),
-          expandedIndex === index && item.items && item.items.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-navbar-dropdown-hover", children: item.items.map((subItem) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "div",
-            {
-              onClick: () => {
-                navigate(subItem.href, { state: subItem.state });
-                toggleOpen();
-              },
-              className: `block px-8 py-2 text-navbar-text text-sm hover:bg-navbar-dropdown-hover cursor-pointer ${location.pathname === subItem.href ? "border-l-2 border-yellow-400 text-white font-bold bg-navbar-dropdown-hover" : ""}`,
-              children: subItem.label
-            },
-            subItem.label
-          )) })
+          )
         ]
       },
       item.label
-    )) }) })
+    )) }) }),
+    expandedIndex !== null && navItems[expandedIndex]?.items && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        ref: dropdownRef,
+        className: "md:hidden fixed left-0 right-0 bg-gray-900 border-t border-gray-700 shadow-lg z-50 max-h-[60vh] overflow-y-auto",
+        style: { top: navbarRef.current ? `${navbarRef.current.offsetTop + navbarRef.current.offsetHeight}px` : "44px" },
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-4 py-3 grid grid-cols-2 gap-2", children: navItems[expandedIndex].items.map((subItem) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            onClick: () => {
+              navigate(subItem.href, { state: subItem.state });
+              setExpandedIndex(null);
+            },
+            className: `
+                  px-3 py-2.5 text-xs font-medium text-left rounded
+                  transition-colors duration-200
+                  ${location.pathname === subItem.href ? "bg-yellow-400 text-black" : "bg-gray-800 text-white hover:bg-gray-700"}
+                `,
+            children: subItem.label
+          },
+          subItem.label
+        )) })
+      }
+    )
   ] });
 };
-const MobileNav$1 = React$2.memo(MobileNav);
+const MobileNav$1 = React$4.memo(MobileNav);
 
-const React$1 = await importShared('react');
-const {useState: useState$1,useEffect,useCallback,useMemo} = React$1;
+const React$3 = await importShared('react');
+const {useState: useState$5,useEffect: useEffect$2,useCallback,useMemo} = React$3;
 const navItems$1 = [
   {
     label: "Live",
@@ -1675,16 +1833,15 @@ function MainNavbar() {
   const dispatch = useDispatch();
   const { isAuthenticated, userData } = useSelector((state) => state.Login);
   const { userData: profileData, loading } = useSelector((state) => state.GetUserData);
-  const [isScrolled, setIsScrolled] = useState$1(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState$1(false);
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState$1(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState$1(false);
-  const [isDepositModalOpen, setIsDepositModalOpen] = useState$1(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState$1(false);
-  const [forceUpdate, setForceUpdate] = useState$1(0);
-  const [exposure, setExposure] = useState$1(0);
-  const [socket, setSocket] = useState$1(null);
-  useEffect(() => {
+  const [isScrolled, setIsScrolled] = useState$5(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState$5(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState$5(false);
+  const [isDepositModalOpen, setIsDepositModalOpen] = useState$5(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState$5(false);
+  const [forceUpdate, setForceUpdate] = useState$5(0);
+  const [exposure, setExposure] = useState$5(0);
+  const [socket, setSocket] = useState$5(null);
+  useEffect$2(() => {
     if (isAuthenticated && userData?._id) {
       const newSocket = new WebSocket("ws://localhost:3001");
       newSocket.onopen = () => {
@@ -1746,12 +1903,9 @@ function MainNavbar() {
     const activeExposure = getTotalExposure;
     return Math.max(0, balance - activeExposure);
   }, [profileData, userData, getTotalExposure]);
-  useEffect(() => {
+  useEffect$2(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
     const handleClickOutside = (e) => {
-      if (isMobileMenuOpen && !e.target.closest(".mobile-menu-container")) {
-        setIsMobileMenuOpen(false);
-      }
       if (isUserMenuOpen && !e.target.closest(".user-menu-container")) {
         setIsUserMenuOpen(false);
       }
@@ -1762,33 +1916,30 @@ function MainNavbar() {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isMobileMenuOpen, isUserMenuOpen]);
-  useEffect(() => {
+  }, [isUserMenuOpen]);
+  useEffect$2(() => {
     const searchParams = new URLSearchParams(location.search);
     if (searchParams.get("login") === "true") {
       setIsLoginModalOpen(true);
       window.history.replaceState({}, document.title, location.pathname);
     }
   }, [location]);
-  useEffect(() => {
+  useEffect$2(() => {
     if (isAuthenticated) {
       dispatch(getUserData());
     }
   }, [isAuthenticated, dispatch]);
-  useEffect(() => {
+  useEffect$2(() => {
   }, [profileData]);
-  useEffect(() => {
+  useEffect$2(() => {
     const sourceData = userData || profileData || {};
     calculateTotalExposure(sourceData?.exposures) || parseFloat(sourceData?.exposure) || 0;
   }, [userData, getAvailableBalance, getTotalExposure, calculateTotalExposure]);
-  useEffect(() => {
+  useEffect$2(() => {
     setForceUpdate((prev) => prev + 1);
   }, [profileData]);
-  useEffect(() => {
+  useEffect$2(() => {
   }, [forceUpdate]);
-  const toggleMobileMenu = useCallback(() => {
-    setIsMobileMenuOpen((prev) => !prev);
-  }, []);
   const UserDataSkeleton = () => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden md:flex items-center gap-4", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-4 w-20 bg-gray-400 rounded animate-pulse" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-4 w-1 bg-gray-400 rounded" }),
@@ -1807,10 +1958,10 @@ function MainNavbar() {
                 {
                   src: "/appLogo/LOGOICON.png",
                   alt: "Logo",
-                  className: "w-16 h-16 object-contain"
+                  className: "w-12 h-12 sm:w-16 sm:h-16 object-contain"
                 }
               ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-card text-brand cursor-pointer hover:text-chart-5", children: "Sportsbook" })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-card text-brand cursor-pointer hover:text-chart-5 block", children: "Sportsbook" })
             ] }) }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center md:gap-4 gap-2", children: [
               isAuthenticated && loading && /* @__PURE__ */ jsxRuntimeExports.jsx(UserDataSkeleton, {}),
@@ -1854,8 +2005,8 @@ function MainNavbar() {
                   "button",
                   {
                     onClick: () => setIsUserMenuOpen(!isUserMenuOpen),
-                    className: "flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors",
-                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(User, { className: "w-5 h-5 text-gray-700" })
+                    className: "flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors",
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(User, { className: "w-4 h-4 sm:w-5 sm:h-5 text-gray-700" })
                   }
                 ),
                 isUserMenuOpen && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50", children: [
@@ -1894,14 +2045,7 @@ function MainNavbar() {
             ] })
           ] }) }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-10 w-[95%] absolute bottom-0 left-1/2 transform -translate-x-1/2 z-20 bg-muted-foreground rounded-t-lg", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto h-full flex items-center px-4", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              MobileNav$1,
-              {
-                isOpen: isMobileMenuOpen,
-                toggleOpen: toggleMobileMenu,
-                navItems: navItems$1
-              }
-            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(MobileNav$1, { navItems: navItems$1 }),
             /* @__PURE__ */ jsxRuntimeExports.jsx(DesktopNav$1, { navItems: navItems$1 })
           ] }) })
         ] })
@@ -1940,47 +2084,754 @@ function MainNavbar() {
   ] });
 }
 
-const React = await importShared('react');
-const {useState} = React;
-const MobileNavbar = () => {
-  const isAuthenticated = useSelector((state) => state?.Login?.isAuthenticated);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-  const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
-  const navLinks = [];
-  const handleDepositClick = () => {
-    if (isAuthenticated) {
-      setIsDepositModalOpen(true);
+const React$2 = await importShared('react');
+const {useState: useState$4} = React$2;
+const MobileDeposit = ({ isOpen, onClose, onDeposit }) => {
+  const [activePaymentMethod, setActivePaymentMethod] = useState$4("Skrill");
+  const [depositAmount, setDepositAmount] = useState$4("");
+  const [email, setEmail] = useState$4("");
+  const [activeTab, setActiveTab] = useState$4("deposit");
+  const paymentMethods = [
+    {
+      id: "Skrill",
+      name: "Skrill",
+      logo: "/payments/skrill-preview.png",
+      fee: "Free",
+      processTime: "Instant",
+      min: "5 £",
+      max: "2000 £"
+    },
+    {
+      id: "SafeCharge",
+      name: "SafeCharge",
+      logo: "/payments/safecharge-preview.png",
+      fee: "Free",
+      processTime: "Instant",
+      min: "5 £",
+      max: "5000 £"
+    },
+    {
+      id: "MuchBetter",
+      name: "MuchBetter",
+      logo: "/payments/MUHBTR.png",
+      fee: "Free",
+      processTime: "Instant",
+      min: "5 £",
+      max: "5000 £"
+    },
+    {
+      id: "Neteller",
+      name: "Neteller",
+      logo: "/payments/neteller-preview.png",
+      fee: "Free",
+      processTime: "Instant",
+      min: "5 £",
+      max: "5000 £"
+    }
+  ];
+  const handleDeposit = (e) => {
+    e.preventDefault();
+    if (onDeposit) {
+      onDeposit({ email, amount: depositAmount, paymentMethod: activePaymentMethod });
+    }
+    onClose();
+  };
+  if (!isOpen) return null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed inset-0 z-50 overflow-hidden", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        className: "absolute inset-0 bg-black/50 backdrop-blur-sm",
+        onClick: onClose
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-0 left-0 right-0 h-5/6 max-h-[90vh] bg-[#2a2a2a] text-white rounded-t-2xl shadow-xl transform transition-transform duration-300 ease-in-out", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between p-4 border-b border-gray-700", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex space-x-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              onClick: () => setActiveTab("deposit"),
+              className: `pb-2 px-1 font-medium ${activeTab === "deposit" ? "text-white border-b-2 border-yellow-500" : "text-gray-400"}`,
+              children: "Deposit"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              onClick: () => setActiveTab("history"),
+              className: `pb-2 px-1 font-medium ${activeTab === "history" ? "text-white border-b-2 border-yellow-500" : "text-gray-400"}`,
+              children: "History"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            onClick: onClose,
+            className: "p-2 rounded-full hover:bg-gray-700 transition-colors",
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 20 })
+          }
+        )
+      ] }),
+      activeTab === "deposit" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 overflow-y-auto p-4 space-y-6", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-gradient-to-r from-green-600/20 to-green-500/20 rounded-lg p-4 border border-green-500/30", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-gray-300", children: "Main Balance" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xl font-bold", children: "0.00 £" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Eye, { size: 24, className: "text-gray-400" })
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-lg font-semibold mb-3", children: "Select Payment Method" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 gap-3", children: paymentMethods.map((method) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              onClick: () => setActivePaymentMethod(method.id),
+              className: `p-3 rounded-lg border-2 transition-colors ${activePaymentMethod === method.id ? "border-yellow-500 bg-yellow-500/10" : "border-gray-600 bg-gray-700/50 hover:bg-gray-700"}`,
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-8 mb-2 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "img",
+                  {
+                    src: method.logo,
+                    alt: method.name,
+                    className: "max-h-6 w-full object-contain"
+                  }
+                ) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-center text-gray-200", children: method.name })
+              ]
+            },
+            method.id
+          )) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-gray-800/50 rounded-lg p-3", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-2 text-sm", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-gray-400", children: "Fee:" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "ml-2 text-white", children: paymentMethods.find((m) => m.id === activePaymentMethod)?.fee })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-gray-400", children: "Time:" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "ml-2 text-white", children: paymentMethods.find((m) => m.id === activePaymentMethod)?.processTime })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-gray-400", children: "Min:" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "ml-2 text-white", children: paymentMethods.find((m) => m.id === activePaymentMethod)?.min })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-gray-400", children: "Max:" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "ml-2 text-white", children: paymentMethods.find((m) => m.id === activePaymentMethod)?.max })
+          ] })
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleDeposit, className: "space-y-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm font-medium text-gray-300 mb-2", children: "Email" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Input,
+              {
+                type: "email",
+                placeholder: "Enter your email",
+                value: email,
+                onChange: (e) => setEmail(e.target.value),
+                className: "bg-gray-700 text-white border-gray-600 focus:border-yellow-500 h-12"
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm font-medium text-gray-300 mb-2", children: "Amount (£)" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Input,
+              {
+                type: "number",
+                placeholder: "Enter amount",
+                value: depositAmount,
+                onChange: (e) => setDepositAmount(e.target.value),
+                className: "bg-gray-700 text-white border-gray-600 focus:border-yellow-500 h-12"
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Button,
+            {
+              type: "submit",
+              className: "w-full h-12 bg-yellow-500 hover:bg-yellow-600 text-black font-bold text-lg",
+              children: "DEPOSIT NOW"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-gray-800/50 p-3 text-xs text-gray-400 rounded-lg", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+          "Safer Gambling: Set limits on your gambling. For support, contact the National Gambling Helpline on 0808 8020 133 or visit",
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "http://www.begambleaware.org/", className: "text-blue-400 hover:underline", target: "_blank", rel: "noreferrer", children: "begambleaware.org" })
+        ] }) })
+      ] }),
+      activeTab === "history" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 overflow-y-auto p-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-lg font-semibold mb-4", children: "Transaction History" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center py-8 text-gray-400", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(History, { size: 48, className: "mx-auto mb-2 opacity-50" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "No transaction history available" })
+        ] })
+      ] })
+    ] }) })
+  ] });
+};
+
+const {useEffect: useEffect$1,useState: useState$3} = await importShared('react');
+function MobileLoginModal({ isOpen, onClose, onSwitchToRegister }) {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
+    formState: { errors }
+  } = useForm({
+    defaultValues: {
+      emailOrUsername: "",
+      password: "",
+      rememberMe: false
+    }
+  });
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.Login);
+  const emailOrUsername = watch("emailOrUsername");
+  watch("password");
+  useEffect$1(() => {
+    if (isOpen) {
+      reset({
+        emailOrUsername: "",
+        password: "",
+        rememberMe: false
+      });
+    }
+  }, [isOpen, reset]);
+  useEffect$1(() => {
+    if (isAuthenticated && isOpen) {
+      onClose();
+    }
+  }, [isAuthenticated, isOpen, onClose]);
+  const handleClose = () => {
+    reset({
+      emailOrUsername: "",
+      password: "",
+      rememberMe: false
+    });
+    onClose();
+  };
+  const onSubmit = (data) => {
+    dispatch(login(data));
+  };
+  const handleForgotPassword = () => {
+    if (!emailOrUsername) {
+      notifyError("Please enter email");
+      return;
+    }
+    console.log("emailOrUsername", emailOrUsername);
+    dispatch(
+      verifyEmail({
+        payload: { email: emailOrUsername },
+        route: "FP"
+        // Forget Password route
+      })
+    );
+  };
+  if (!isOpen) return null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed inset-0 z-50 overflow-hidden", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        className: "absolute inset-0 bg-black/50 backdrop-blur-sm",
+        onClick: handleClose
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-0 left-0 right-0 h-5/6 max-h-[90vh] bg-[#2a2a2a] text-white rounded-t-2xl shadow-xl transform transition-transform duration-300 ease-in-out", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between p-4 border-b border-gray-700", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-black font-bold text-sm", children: "S" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-lg font-bold", children: "SportsBook" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            onClick: handleClose,
+            className: "p-2 rounded-full hover:bg-gray-700 transition-colors",
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 20 })
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 overflow-y-auto p-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-400 text-sm mb-2", children: "Already have an account?" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-xl font-bold", children: "Sign in, we are waiting for you" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit(onSubmit), className: "space-y-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Input,
+            {
+              type: "text",
+              placeholder: "Email / Username",
+              error: errors.emailOrUsername?.message,
+              ...register("emailOrUsername", {
+                required: "Email or username is required"
+              })
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Input,
+            {
+              type: "password",
+              placeholder: "Password",
+              error: errors.password?.message,
+              ...register("password", {
+                required: "Password is required",
+                minLength: { value: 6, message: "Password must be at least 6 characters" }
+              })
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between py-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Checkbox,
+                {
+                  id: "remember",
+                  className: "border-gray-400 data-[state=checked]:bg-yellow-500 data-[state=checked]:border-yellow-500",
+                  ...register("rememberMe")
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { htmlFor: "remember", className: "text-sm text-gray-300 cursor-pointer", children: "Remember me" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: handleForgotPassword,
+                className: "text-sm text-gray-400 hover:text-yellow-500 cursor-pointer underline",
+                children: "Forgot Password?"
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "pt-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Button,
+            {
+              type: "submit",
+              className: "w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-12 text-base",
+              children: "SIGN IN"
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-6 p-4 bg-[#333333] rounded text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-gray-400 text-sm", children: [
+          "Have no account?",
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: () => {
+                handleClose();
+                onSwitchToRegister();
+              },
+              className: "text-yellow-500 hover:text-yellow-400 underline font-medium",
+              children: "Join us"
+            }
+          )
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 p-3 bg-[#333333] rounded", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-gray-300 leading-relaxed", children: [
+          "Safer Gambling message. Set limits on your gambling. For support, contact the National Gambling Helpline on ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-white font-medium", children: "0808 8020 133" })
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 flex items-center justify-center gap-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-xs text-gray-500", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "GAMBLING" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "COMMISSION" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-gray-500", children: "GambleAware" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-gray-600 px-2 py-1 rounded text-xs text-white", children: "18+" })
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-6 pt-4 border-t border-gray-600 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Button,
+          {
+            variant: "ghost",
+            className: "text-gray-400 hover:text-white text-sm font-medium hover:bg-[#404040] w-full",
+            onClick: handleForgotPassword,
+            children: "FORGOT YOUR PASSWORD?"
+          }
+        ) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Button, { variant: "ghost", className: "text-gray-400 hover:text-white text-sm hover:bg-[#404040]", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(User, { className: "w-4 h-4 mr-2" }),
+          "Contact support"
+        ] }) })
+      ] })
+    ] }) })
+  ] });
+}
+
+const {useState: useState$2} = await importShared('react');
+
+const {useEffect} = await importShared('react');
+function MobileRegisterModal({ isOpen, onClose, onCloseAll, onSwitchToLogin }) {
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.Login);
+  useNavigate();
+  const [isConsentChecked, setIsConsentChecked] = useState$2(false);
+  const [formData, setFormData] = useState$2({
+    username: "",
+    name: "",
+    email: "",
+    birthdate: "",
+    currency: "GBP",
+    password: "",
+    confirmPassword: ""
+  });
+  const [errors, setErrors] = useState$2({});
+  useEffect(() => {
+    if (isOpen) {
+      setErrors({});
+      setFormData({
+        username: "",
+        name: "",
+        email: "",
+        birthdate: "",
+        currency: "GBP",
+        password: "",
+        confirmPassword: ""
+      });
+      setIsConsentChecked(false);
+    }
+  }, [isOpen]);
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+  const handleClose = () => {
+    setErrors({});
+    setFormData({
+      username: "",
+      name: "",
+      email: "",
+      birthdate: "",
+      currency: "GBP",
+      password: "",
+      confirmPassword: ""
+    });
+    setIsConsentChecked(false);
+    if (onCloseAll) {
+      onCloseAll();
     } else {
-      setIsLoginModalOpen(true);
+      onClose();
     }
   };
-  navLinks.push({
-    label: "Deposit",
-    onClick: handleDepositClick
-  });
-  if (!isAuthenticated) {
-    navLinks.push({
-      label: "Login",
-      onClick: () => setIsLoginModalOpen(true)
-    });
-    navLinks.push({
-      label: "Register",
-      onClick: () => setIsRegisterModalOpen(true)
-    });
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-h-[3.5rem] px-2 pb-5 fixed inset-x-0 bottom-0 rounded-t-md z-[100] bg-[#f13636]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-around items-center gap-2", children: navLinks.map((link) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "p",
-      {
-        className: "block py-2 text-white hover:text-yellow-500 cursor-pointer",
-        onClick: link.onClick,
-        children: link.label
-      },
-      link.label
-    )) }) }),
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.username) newErrors.username = "Username is required";
+    if (!formData.name) newErrors.name = "Name is required";
+    if (!formData.email || !/^\S+@\S+\.\S+$/.test(formData.email))
+      newErrors.email = "Valid email is required";
+    if (!formData.birthdate) newErrors.birthdate = "Birth date is required";
+    if (!formData.password || formData.password.length < 6)
+      newErrors.password = "Password must be at least 6 characters";
+    if (formData.password !== formData.confirmPassword)
+      newErrors.confirmPassword = "Passwords do not match";
+    if (!isConsentChecked) newErrors.consent = "You must agree to the terms and conditions";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    dispatch(signup(formData));
+  };
+  useEffect(() => {
+    if (isAuthenticated && isOpen) {
+      handleClose();
+    }
+  }, [isAuthenticated, isOpen]);
+  if (!isOpen) return null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed inset-0 z-50 overflow-hidden", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
-      LoginModal,
+      "div",
+      {
+        className: "absolute inset-0 bg-black/50 backdrop-blur-sm",
+        onClick: handleClose
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-0 left-0 right-0 h-5/6 max-h-[90vh] bg-[#2a2a2a] text-white rounded-t-2xl shadow-xl transform transition-transform duration-300 ease-in-out", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between p-4 border-b border-gray-700", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-black font-bold text-sm", children: "S" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-lg font-bold", children: "SportsBook" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            onClick: handleClose,
+            className: "p-2 rounded-full hover:bg-gray-700 transition-colors",
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 20 })
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 overflow-y-auto p-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-400 text-sm mb-2", children: "New to sportsbook?" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-xl font-bold", children: "Register here, it's easy!" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit, className: "space-y-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Input,
+            {
+              type: "text",
+              placeholder: "Username",
+              value: formData.username,
+              error: errors.username,
+              onChange: (e) => handleInputChange("username", e.target.value)
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Input,
+            {
+              type: "text",
+              placeholder: "Name",
+              value: formData.name,
+              error: errors.name,
+              onChange: (e) => handleInputChange("name", e.target.value)
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Input,
+            {
+              type: "email",
+              placeholder: "E-mail",
+              value: formData.email,
+              error: errors.email,
+              onChange: (e) => handleInputChange("email", e.target.value)
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Input,
+            {
+              type: "password",
+              placeholder: "Password",
+              value: formData.password,
+              error: errors.password,
+              onChange: (e) => handleInputChange("password", e.target.value)
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Input,
+            {
+              type: "password",
+              placeholder: "Confirm password",
+              value: formData.confirmPassword,
+              error: errors.confirmPassword,
+              onChange: (e) => handleInputChange("confirmPassword", e.target.value)
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Input,
+            {
+              type: "date",
+              placeholder: "Birth Date",
+              value: formData.birthdate,
+              error: errors.birthdate,
+              onChange: (e) => handleInputChange("birthdate", e.target.value)
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pt-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Checkbox,
+                {
+                  id: "consent",
+                  checked: isConsentChecked,
+                  onCheckedChange: setIsConsentChecked,
+                  className: "mt-1 border-gray-400 data-[state=checked]:bg-yellow-500 data-[state=checked]:border-yellow-500"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { htmlFor: "consent", className: "ml-2 text-sm text-gray-300", children: "By signing up, I confirm that I am at least 18 years old and understand that betting involves real money and carries a risk of financial loss. I acknowledge that gambling can become addictive and agree to participate responsibly. I accept that the platform is not responsible for any losses incurred and that I am solely responsible for my betting activities." })
+            ] }),
+            errors.consent && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "input-error mt-1 text-sm", children: errors.consent })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "pt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Button,
+            {
+              type: "submit",
+              className: "w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-12 text-base cursor-pointer",
+              disabled: !isConsentChecked,
+              children: "REGISTER"
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-gray-400 text-sm", children: [
+          "Already have an account?",
+          " ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: () => {
+                handleClose();
+                onSwitchToLogin();
+              },
+              className: "text-yellow-500 hover:text-yellow-400 underline font-medium",
+              children: "Sign In"
+            }
+          )
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center mt-6 pt-4 border-t border-gray-600", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Button, { variant: "ghost", className: "text-gray-400 hover:text-white text-sm hover:bg-[#404040]", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(User, { className: "w-4 h-4 mr-2" }),
+          "Contact support"
+        ] }) })
+      ] })
+    ] }) })
+  ] });
+}
+
+const React$1 = await importShared('react');
+const {useState: useState$1} = React$1;
+const MobileDrawer = ({ isOpen, onClose }) => {
+  const { isAuthenticated } = useSelector((state) => state.Login);
+  const userData = getLocalStorageItem("userData") || {};
+  const username = userData.username || "Guest";
+  const userId = userData.userId || "";
+  const [activeSection, setActiveSection] = useState$1("Deposit");
+  const [isDepositOpen, setIsDepositOpen] = useState$1(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState$1(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState$1(false);
+  const menuItems = [
+    {
+      id: "deposit",
+      label: "Deposit",
+      icon: CreditCard,
+      requiresAuth: false
+    },
+    {
+      id: "profile",
+      label: "Profile",
+      icon: User,
+      requiresAuth: true
+    },
+    {
+      id: "history",
+      label: "History",
+      icon: History,
+      requiresAuth: true
+    },
+    {
+      id: "settings",
+      label: "Settings",
+      icon: Settings,
+      requiresAuth: false
+    },
+    {
+      id: "bonuses",
+      label: "Bonuses",
+      icon: Trophy,
+      requiresAuth: false
+    },
+    {
+      id: "support",
+      label: "Support",
+      icon: MessageCircle,
+      requiresAuth: false
+    },
+    {
+      id: "help",
+      label: "Help Center",
+      icon: CircleQuestionMark,
+      requiresAuth: false
+    }
+  ];
+  const handleItemClick = (itemId) => {
+    setActiveSection(itemId);
+    switch (itemId) {
+      case "deposit":
+        if (!isAuthenticated) {
+          alert("Please log in to access deposit functionality");
+          return;
+        }
+        setIsDepositOpen(true);
+        break;
+    }
+  };
+  if (!isOpen) return null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed inset-0 z-50 overflow-hidden", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "div",
+        {
+          className: "absolute inset-0 bg-black/50 backdrop-blur-sm",
+          onClick: onClose
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-0 left-0 h-full w-4/5 max-w-sm bg-[#2a2a2a] text-white shadow-xl transform transition-all duration-500 ease-in-out", style: { transform: isOpen ? "translateX(0%)" : "translateX(-100%)" }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between p-4 border-b border-gray-700", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-lg font-semibold", children: "Menu" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              onClick: onClose,
+              className: "p-2 rounded-full hover:bg-gray-700 transition-colors",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 20 })
+            }
+          )
+        ] }),
+        isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-4 border-b border-gray-700", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center mb-3", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-12 h-12 rounded-full bg-gray-600 flex items-center justify-center text-white mr-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold", children: username.substring(0, 2).toUpperCase() }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-semibold", children: username }),
+              userId && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-gray-400 mt-1", children: [
+                "ID: ",
+                userId
+              ] })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 p-3 bg-gradient-to-r from-green-600/20 to-green-500/20 rounded-md border border-green-500/30", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-gray-300", children: [
+            "Balance: ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-white font-semibold", children: "0.00 £" })
+          ] }) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 overflow-y-auto py-2", children: menuItems.filter((item) => !item.requiresAuth || isAuthenticated).map((item) => {
+          const Icon = item.icon;
+          return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              onClick: () => handleItemClick(item.id),
+              className: `w-full flex items-center px-4 py-3 text-left hover:bg-gray-700/50 transition-colors ${activeSection === item.id ? "bg-gray-700/50 border-l-4 border-yellow-500" : ""}`,
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { size: 20, className: "mr-3 text-gray-300" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-medium", children: item.label })
+              ]
+            },
+            item.id
+          );
+        }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-4 border-t border-gray-700", children: isAuthenticated ? /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "w-full flex items-center px-4 py-3 text-left text-red-400 hover:bg-red-900/20 rounded-md transition-colors", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { size: 20, className: "mr-3" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-medium", children: "Logout" })
+        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              className: "w-full bg-yellow-500 text-black py-3 rounded-md font-semibold hover:bg-yellow-400 transition-colors",
+              onClick: () => setIsLoginModalOpen(true),
+              children: "Login"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              className: "w-full border border-yellow-500 text-yellow-500 py-3 rounded-md font-semibold hover:bg-yellow-500/10 transition-colors mt-2",
+              onClick: () => setIsRegisterModalOpen(true),
+              children: "Register"
+            }
+          )
+        ] }) })
+      ] }) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(MobileDeposit, { isOpen: isDepositOpen, onClose: () => setIsDepositOpen(false) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      MobileLoginModal,
       {
         isOpen: isLoginModalOpen,
         onClose: () => setIsLoginModalOpen(false),
@@ -1991,23 +2842,103 @@ const MobileNavbar = () => {
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
-      RegisterModal,
+      MobileRegisterModal,
       {
         isOpen: isRegisterModalOpen,
         onClose: () => setIsRegisterModalOpen(false),
         onCloseAll: () => {
           setIsRegisterModalOpen(false);
           setIsLoginModalOpen(false);
+        },
+        onSwitchToLogin: () => {
+          setIsRegisterModalOpen(false);
+          setIsLoginModalOpen(true);
         }
       }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      DepositModal,
-      {
-        isOpen: isDepositModalOpen,
-        onClose: () => setIsDepositModalOpen(false)
-      }
     )
+  ] });
+};
+
+const React = await importShared('react');
+const {useState} = React;
+const MobileBottomNav = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const navItems = [
+    {
+      id: "live",
+      label: "Live",
+      icon: Activity,
+      path: "/live_events/event-view",
+      activePaths: ["/live_events"]
+    },
+    {
+      id: "sports",
+      label: "Sports",
+      icon: House,
+      path: "/",
+      activePaths: ["/"]
+    },
+    {
+      id: "betslip",
+      label: "BetSlip",
+      icon: Receipt,
+      path: "/betslip",
+      activePaths: ["/betslip"],
+      badge: 0
+      // Can be dynamic
+    },
+    {
+      id: "casino",
+      label: "Casino",
+      icon: Dices,
+      path: "/casino/slots",
+      activePaths: ["/casino", "/games"]
+    },
+    {
+      id: "menu",
+      label: "Menu",
+      icon: Menu$2,
+      path: "/menu",
+      activePaths: ["/menu"]
+    }
+  ];
+  const isActive = (paths) => {
+    return paths.some((path) => location.pathname.startsWith(path));
+  };
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const handleNavClick = (item) => {
+    if (item.id === "betslip") {
+      return;
+    }
+    if (item.id === "menu") {
+      setIsDrawerOpen(true);
+      return;
+    }
+    navigate(item.path);
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "md:hidden fixed bottom-0 left-0 right-0 z-50 bg-live-tertiary border-t border-live shadow-2xl", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-around h-16 px-2", children: navItems.map((item) => {
+      const Icon = item.icon;
+      const active = isActive(item.activePaths);
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          onClick: () => handleNavClick(item),
+          className: `flex flex-col items-center justify-center flex-1 h-full relative transition-colors duration-200 ${active ? "text-live-accent" : "text-live-muted"}`,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { className: `w-6 h-6 ${active ? "stroke-[2.5]" : "stroke-2"}` }),
+              item.badge !== void 0 && item.badge > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "absolute -top-1 -right-1 bg-live-danger text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center", children: item.badge })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-[10px] mt-1 font-medium ${active ? "font-semibold" : ""}`, children: item.label }),
+            active && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-0 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-live-accent rounded-b-full" })
+          ]
+        },
+        item.id
+      );
+    }) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(MobileDrawer, { isOpen: isDrawerOpen, onClose: () => setIsDrawerOpen(false) })
   ] });
 };
 
@@ -2038,32 +2969,44 @@ const navItems = [
   { label: "Event View", to: "/live_events/event-view" },
   { label: "Live Calendar", to: "/live_events/live-calendar" },
   { label: "Results", to: "/live_events/results" },
-  { label: "Statistics", to: "/live_events/statistics" }
+  { label: "Statistics", to: "/live_events/statistics" },
+  { label: "My Bets", to: "/live_events/my-bets" },
+  { label: "Market Report", to: "/live_events/market-report" }
 ];
 function SecondaryLiveNavbar() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "flex bg-live-secondary border-b border-live px-6 h-12 items-center gap-2", children: navItems.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-    NavLink,
-    {
-      to: item.to,
-      className: ({ isActive }) => `h-full flex items-center px-5 text-base font-semibold transition-colors duration-200 border-b-2 ${isActive ? "text-live-primary border-live-accent bg-live-secondary font-bold" : "text-live-muted border-transparent hover:text-live-primary hover:border-live-accent"}`,
-      end: true,
-      children: item.label
-    },
-    item.to
-  )) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("nav", { className: "bg-live-secondary border-b border-live-accent px-2 sm:px-4 py-3 overflow-x-auto scrollbar-hide", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hidden md:flex items-center gap-1 sm:gap-1 h-12", children: navItems.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      NavLink,
+      {
+        to: item.to,
+        className: ({ isActive }) => `h-full flex items-center justify-center px-4 py-2 text-sm font-medium border-b-3 whitespace-nowrap relative focus:outline-none focus:ring-0 ${isActive ? "text-white bg-[#fbbf24] rounded-t-lg font-bold shadow-sm" : "text-white hover:bg-[#fbbf24]/30"}
+              }`,
+        children: item.label
+      },
+      item.to
+    )) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "md:hidden flex items-center gap-2 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-1 pt-1", children: navItems.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      NavLink,
+      {
+        to: item.to,
+        className: ({ isActive }) => `snap-start flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center whitespace-nowrap focus:outline-none focus:ring-0 ${isActive ? "bg-[#fbbf24] text-white font-bold shadow-md" : "bg-live-secondary text-white hover:bg-[#fbbf24]/30 border border-live"}`,
+        children: item.label
+      },
+      item.to
+    )) })
+  ] });
 }
 
 await importShared('react');
 const Layout = () => {
   const location = useLocation();
   const showLiveNavbar = location.pathname === "/live_events" || location.pathname.startsWith("/live_events/");
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full min-h-screen flex flex-col", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(MainNavbar, {}),
     showLiveNavbar && /* @__PURE__ */ jsxRuntimeExports.jsx(SecondaryLiveNavbar, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {}) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-grow min-h-screen pb-20 lg:pb-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {}) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Toaster, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mx-auto px-6 lg:hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx(MobileNavbar, {}) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-20 lg:hidden" })
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "lg:hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx(MobileBottomNav, {}) })
   ] });
 };
 

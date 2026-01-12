@@ -1,5 +1,5 @@
 import { importShared } from './__federation_fn_import.js';
-import { e as createLucideIcon, j as jsxRuntimeExports, V as Link, m as Primitive, q as createPopperScope, o as useControllableState, r as Root2$1, f as createContextScope, l as useId$1, u as useComposedRefs, b4 as useLayoutEffect2, s as Anchor, n as composeEventHandlers, v as Portal$1, b5 as usePrevious, p as useCallbackRef, w as hideOthers, z as useFocusGuards, y as ReactRemoveScroll, g as createSlot, F as FocusScope, D as DismissableLayer, H as Content, J as Arrow, h as cn, Q as ChevronDown, b6 as Check, b7 as ChevronUp, M as useNavigate, b8 as SPORTS, B as Button, b9 as ChevronRight, ba as SkeletonLoader, bb as SPORT_ID_BY_KEY, bc as fetchSportsEvents, X, S as useDispatch, T as useSelector, k as getLocalStorageItem, aE as setLocalStorageItem, bd as fetchHomepageCasinoGames, be as fetchHomepageLiveGames, W as RegisterModal, bf as Carousel, bg as CarouselContent, bh as CarouselItem, bi as CarouselPrevious, bj as CarouselNext, bk as CasinoGameCard, bl as useNotification } from './__federation_expose_LayoutApp.js';
+import { e as createLucideIcon, j as jsxRuntimeExports, V as Link, m as Primitive, q as createPopperScope, o as useControllableState, r as Root2$1, f as createContextScope, l as useId$1, u as useComposedRefs, bq as useLayoutEffect2, s as Anchor, n as composeEventHandlers, v as Portal$1, br as usePrevious, p as useCallbackRef, w as hideOthers, z as useFocusGuards, y as ReactRemoveScroll, g as createSlot, F as FocusScope, D as DismissableLayer, H as Content, J as Arrow, h as cn, Q as ChevronDown, bs as Check, bt as ChevronUp, M as useNavigate, bu as SPORTS, B as Button, bv as ChevronRight, bw as SkeletonLoader, bx as SPORT_ID_BY_KEY, by as fetchSportsEvents, X, S as useDispatch, T as useSelector, k as getLocalStorageItem, aU as setLocalStorageItem, bz as fetchHomepageCasinoGames, bA as fetchHomepageLiveGames, W as RegisterModal, bB as Carousel, bC as CarouselContent, bD as CarouselItem, bE as CarouselPrevious, bF as CarouselNext, bG as useNotification } from './__federation_expose_LayoutApp.js';
 import { u as useDirection, c as createCollection, D as DepositModal, b as buildExports } from './DepositModal.js';
 
 /**
@@ -53,7 +53,7 @@ const footerData = [
     heading: "Help",
     links: [
       { name: "FAQ", to: "/faq" },
-      { name: "Contact Us", to: "/faq" }
+      { name: "Contact Us", to: "/contact" }
     ]
   }
 ];
@@ -88,55 +88,131 @@ const paymentMethods = [
 function Footer() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("footer", { className: "bg-background text-muted-foreground pt-10 pb-6 px-4 text-xs", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative mb-6 h-px w-full overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute left-0 top-0 h-full w-full bg-gradient-to-r from-transparent via-muted-foreground to-transparent opacity-30" }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 text-center sm:text-left", children: footerData.map((section, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-xs font-semibold mb-2 text-primary-foreground", children: section.heading.toUpperCase() }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "space-y-1", children: section.links.map((link, idx) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        Link,
-        {
-          to: link.to,
-          className: "transition-colors duration-200 hover:text-primary-foreground",
-          children: link.name
-        }
-      ) }, idx)) })
-    ] }, index)) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-12 max-w-6xl mx-auto", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-5xl mx-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3 md:hidden", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-left", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-[10px] font-semibold mb-1 text-primary-foreground", children: footerData[0].heading.toUpperCase() }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap items-center gap-1", children: footerData[0].links.map((link, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[9px]", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Link,
+              {
+                to: link.to,
+                className: "transition-colors duration-200 hover:text-primary-foreground",
+                children: link.name
+              }
+            ),
+            idx < footerData[0].links.length - 1 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mx-1", children: "|" })
+          ] }, idx)) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-left", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-[10px] font-semibold mb-1 text-primary-foreground", children: footerData[2].heading.toUpperCase() }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap items-center gap-1", children: footerData[2].links.map((link, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[9px]", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Link,
+              {
+                to: link.to,
+                className: "transition-colors duration-200 hover:text-primary-foreground",
+                children: link.name
+              }
+            ),
+            idx < footerData[2].links.length - 1 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mx-1", children: "|" })
+          ] }, idx)) })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3 md:hidden mt-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-left", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-[10px] font-semibold mb-1 text-primary-foreground", children: footerData[3].heading.toUpperCase() }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap items-center gap-1", children: footerData[3].links.map((link, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[9px]", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Link,
+              {
+                to: link.to,
+                className: "transition-colors duration-200 hover:text-primary-foreground",
+                children: link.name
+              }
+            ),
+            idx < footerData[3].links.length - 1 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mx-1", children: "|" })
+          ] }, idx)) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-left", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-[10px] font-semibold mb-1 text-primary-foreground", children: footerData[4].heading.toUpperCase() }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap items-center gap-1", children: footerData[4].links.map((link, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[9px]", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Link,
+              {
+                to: link.to,
+                className: "transition-colors duration-200 hover:text-primary-foreground",
+                children: link.name
+              }
+            ),
+            idx < footerData[4].links.length - 1 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mx-1", children: "|" })
+          ] }, idx)) })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "md:hidden mt-3", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-left", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-[10px] font-semibold mb-1.5 text-primary-foreground", children: footerData[1].heading.toUpperCase() }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap items-center gap-1", children: footerData[1].links.map((link, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[9px]", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Link,
+            {
+              to: link.to,
+              className: "transition-colors duration-200 hover:text-primary-foreground",
+              children: link.name
+            }
+          ),
+          idx < footerData[1].links.length - 1 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mx-1", children: "|" })
+        ] }, idx)) })
+      ] }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hidden md:grid md:grid-cols-5 gap-4", children: footerData.map((section, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-left", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-xs font-semibold mb-3 text-primary-foreground", children: section.heading.toUpperCase() }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "space-y-2", children: section.links.map((link, idx) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Link,
+          {
+            to: link.to,
+            className: "text-[11px] transition-colors duration-200 hover:text-primary-foreground block leading-tight",
+            children: link.name
+          }
+        ) }, idx)) })
+      ] }, index)) })
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-8 max-w-6xl mx-auto", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-6", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xs uppercase tracking-wider text-gray-400 mb-1", children: "REGULATIONS & PARTNERS" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-lg font-semibold text-gray-300", children: "OUR PARTNERS" })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 justify-items-center mb-10", children: partners.map((partner, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[8px] text-center text-gray-500 mb-1 h-8 flex items-center", children: partner.title }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-3 md:grid-cols-6 gap-4 md:gap-6 justify-items-center mb-10", children: partners.map((partner, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[8px] md:text-[9px] text-center text-gray-500 mb-2 h-8 md:h-10 flex items-center px-1", children: partner.title }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "img",
           {
             src: partner.image,
             alt: partner.title,
-            className: "h-12 w-12 object-contain"
+            className: "h-10 w-10 md:h-12 md:w-12 object-contain"
           }
         )
       ] }, index)) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "m   -8 flex flex-col sm:flex-row items-center justify-center gap-3 text-muted-foreground text-lg", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center w-8 h-8 rounded-full border border-pink-500 text-pink-500 text-xs font-bold", children: "18+" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-center sm:text-left", children: "Gambling can be addictive, play responsibly" })
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 text-muted-foreground text-lg", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-pink-500 text-pink-500 text-base md:text-lg font-bold", children: "18+" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-center sm:text-left text-sm md:text-base", children: "Gambling can be addictive, play responsibly" })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap justify-center gap-6 mb-10", children: regulatoryLogos.map((logo, index) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap justify-center gap-4 sm:gap-6 mt-6 mb-10", children: regulatoryLogos.map((logo, index) => /* @__PURE__ */ jsxRuntimeExports.jsx(
         "img",
         {
           src: logo.image,
           alt: logo.name,
-          className: "h-15 w-25 object-contain opacity-80 hover:opacity-100 transition-opacity"
+          className: "h-10 w-10 md:h-12 md:w-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
         },
         index
       )) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] text-gray-500 text-center mb-10 max-w-4xl mx-auto leading-relaxed", children: "Sportsbook.co.uk is operated by SGCG Limited, a company registered in Malta with registration number 045929 and having its registered address at Luxe Pavilion, 2nd level, Diamonds International Building, Portomaso, St Julian's STJ 4010, Malta. SGCG Limited is licensed and regulated by the UK Gambling Commission for provision of services to the United Kingdom (UKGC Account number xxxx). Under 18s are strictly forbidden from gambling on this website. Underage gambling is an offence. © Sportsbook.co.uk 2023 | Sportsbook is committed to endorsing safer gambling among its customers as well as promoting the awareness of problem gambling and improving prevention, intervention and treatment. Gambling can be addictive, please play responsibly." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] sm:text-[11px] text-gray-500 text-center mb-10 max-w-4xl mx-auto leading-relaxed", children: "Sportsbook.co.uk is operated by SGCG Limited, a company registered in Malta with registration number 045929 and having its registered address at Luxe Pavilion, 2nd level, Diamonds International Building, Portomaso, St Julian's STJ 4010, Malta. SGCG Limited is licensed and regulated by the UK Gambling Commission for provision of services to the United Kingdom (UKGC Account number xxxx). Under 18s are strictly forbidden from gambling on this website. Underage gambling is an offence. © Sportsbook.co.uk 2023 | Sportsbook is committed to endorsing safer gambling among its customers as well as promoting the awareness of problem gambling and improving prevention, intervention and treatment. Gambling can be addictive, please play responsibly." }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-center text-xs uppercase tracking-wider text-gray-400 mb-4", children: "PAYMENTS" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap justify-center gap-4", children: paymentMethods.map((method, index) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap justify-center gap-4 md:gap-6", children: paymentMethods.map((method, index) => /* @__PURE__ */ jsxRuntimeExports.jsx(
           "img",
           {
             src: method.image,
             alt: method.name,
-            className: "h-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
+            className: "h-10 md:h-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
           },
           index
         )) })
@@ -1659,7 +1735,9 @@ function UpcomingMatches() {
     navigate("/live_events/event-view", {
       state: {
         selectedGameId: id,
-        selectedSportKey: sportKey || selectedSportKey
+        selectedSportKey: sportKey || selectedSportKey,
+        viewType: "prematch",
+        source: "upcoming_matches"
       }
     });
   };
@@ -1709,11 +1787,11 @@ function UpcomingMatches() {
         {
           onClick: () => setSelectedSportKey(sport.key),
           className: `snap-start flex-shrink-0 sm:flex-1 flex flex-col items-center justify-center gap-1 cursor-pointer border rounded-md sport-icon-box ${isSelected ? `${colorClass} selected border-white` : "border-gray-600 bg-gray-700 text-white hover:bg-gray-600"}`,
-          style: { padding: "0.45rem 0.7rem", minWidth: "64px" },
+          style: { padding: "0.5rem 0.75rem", minWidth: "80px" },
           title: sport.sportNames[0],
           children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { className: "w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 mx-auto" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[11px] sm:text-[13px] truncate max-w-[90%] text-center font-medium", children: sport.sportNames[0] })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] sm:text-[11px] text-center font-medium leading-tight whitespace-normal max-w-full", children: sport.sportNames[0] })
           ]
         },
         sport.key
@@ -1727,11 +1805,11 @@ function UpcomingMatches() {
         {
           onClick: () => setSelectedSportKey(sport.key),
           className: `snap-start flex-shrink-0 sm:flex-1 flex flex-col items-center justify-center gap-1 cursor-pointer border rounded-md sport-icon-box ${isSelected ? `${colorClass} selected border-white` : "border-gray-600 bg-gray-700 text-white hover:bg-gray-600"}`,
-          style: { padding: "0.45rem 0.7rem", minWidth: "64px" },
+          style: { padding: "0.5rem 0.75rem", minWidth: "80px" },
           title: sport.sportNames[0],
           children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(Icon, { className: "w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 mx-auto" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[11px] sm:text-[13px] truncate max-w-[90%] text-center font-medium", children: sport.sportNames[0] })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] sm:text-[11px] text-center font-medium leading-tight whitespace-normal max-w-full", children: sport.sportNames[0] })
           ]
         },
         sport.key
@@ -1766,38 +1844,31 @@ function UpcomingMatches() {
         "div",
         {
           onClick: () => handleGameClick(match.id, match.sportKey),
-          className: `cursor-pointer flex items-center justify-between gap-3 px-3 py-2 m-1 rounded-md transition-all duration-300 ${backgroundClass} ${textColor} ${isSelected ? "shadow-md transform scale-[1.01] border border-white/20" : ""}`,
+          className: `cursor-pointer flex items-center justify-between gap-2 px-3 py-2 m-1 rounded-md transition-all duration-300 ${backgroundClass} ${textColor} ${isSelected ? "shadow-md transform scale-[1.01] border border-white/20" : ""}`,
           children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-start gap-1 text-[11px] text-muted-foreground flex-shrink-0 w-16", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-start justify-center gap-0.5 text-[10px] sm:text-[11px] text-muted-foreground flex-shrink-0 w-14 sm:w-16", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "whitespace-nowrap", children: match.gameDate }),
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, { className: "w-3 h-3" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "whitespace-nowrap", children: match.gameTime })
               ] })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-8 w-px bg-gradient-to-b from-transparent via-muted-foreground to-transparent opacity-30" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0 flex items-center justify-between", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col min-w-0", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-medium truncate text-[13px] sm:text-sm", children: match.team1 }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[12px] sm:text-sm truncate opacity-90", children: match.team2 }),
-                match.status === "IN_PLAY" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[9px] font-bold bg-red-600 text-white px-1 py-0.5 rounded w-fit mt-1", children: "IN PLAY" })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-6 w-px bg-gradient-to-b from-transparent via-muted-foreground to-transparent opacity-30 hidden sm:block" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0 flex items-center justify-center", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col justify-center min-w-0 w-full", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-medium truncate text-[12px] sm:text-sm", children: match.team1 }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[11px] sm:text-sm truncate opacity-90", children: match.team2 }),
+                match.status === "IN_PLAY" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[9px] font-bold bg-red-600 text-white px-1 py-0.5 rounded w-fit mt-0.5", children: "IN PLAY" })
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mx-2", children: [
-                match.competitionName && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-[11px] text-white truncate", children: [
-                  " ",
-                  match.competitionName
-                ] }),
-                match.catName && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[10px] bg-blue-700 px-1.5 py-0.5 rounded", children: match.catName })
-              ] })
+              match.competitionName && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hidden md:flex items-center ml-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[10px] text-white truncate max-w-[120px]", children: match.competitionName }) })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-muted-foreground text-[11px] self-start sm:self-center truncate ml-2 hidden md:block", children: match.additionalMarkets }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(
                 Button,
                 {
                   variant: isSelected ? "default" : "outline",
                   size: "sm",
-                  className: `w-10 sm:w-16 h-8 px-0 text-[11px] font-semibold ${isSelected ? "bg-white text-black hover:bg-gray-100 border-white shadow-sm" : "bg-gray-700 text-white border-gray-500 hover:bg-gray-600"} ${match.highlight.w1 ? "odds-highlight" : ""}`,
+                  className: `w-10 sm:w-12 lg:w-16 h-8 px-0 text-[11px] font-semibold ${isSelected ? "bg-white text-black hover:bg-gray-100 border-white shadow-sm" : "bg-gray-700 text-white border-gray-500 hover:bg-gray-600"} ${match.highlight.w1 ? "odds-highlight" : ""}`,
                   children: match.odds.w1
                 }
               ),
@@ -1806,7 +1877,7 @@ function UpcomingMatches() {
                 {
                   variant: isSelected ? "default" : "outline",
                   size: "sm",
-                  className: `w-10 sm:w-16 h-8 px-0 text-[11px] font-semibold ${isSelected ? "bg-white text-black hover:bg-gray-100 border-white shadow-sm" : "bg-gray-700 text-white border-gray-500 hover:bg-gray-600"} ${match.highlight.w2 ? "odds-highlight" : ""}`,
+                  className: `w-10 sm:w-12 lg:w-16 h-8 px-0 text-[11px] font-semibold ${isSelected ? "bg-white text-black hover:bg-gray-100 border-white shadow-sm" : "bg-gray-700 text-white border-gray-500 hover:bg-gray-600"} ${match.highlight.w2 ? "odds-highlight" : ""}`,
                   children: match.odds.w2
                 }
               )
@@ -12206,6 +12277,7 @@ const sliderImages = [
 const Home = () => {
   const [showWelcome, setShowWelcome] = useState$1(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState$1(false);
+  const [showScrollTop, setShowScrollTop] = useState$1(false);
   const intervalRef = useRef(null);
   const apiRef = useRef(null);
   const navigate = useNavigate();
@@ -12236,6 +12308,15 @@ const Home = () => {
       providerName: "SPRIBE",
       search: ""
     }));
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [dispatch]);
   const setApi = (api) => {
     apiRef.current = api;
@@ -12268,6 +12349,12 @@ const Home = () => {
   const handleCloseWelcome = () => {
     setShowWelcome(false);
   };
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
   const handleBannerClick = (item) => {
     if (item.src.includes("banner1")) {
       setIsRegisterModalOpen(true);
@@ -12277,9 +12364,9 @@ const Home = () => {
       navigate("/live_events/event-view", { state: { viewType: "prematch" } });
     }
   };
-  const displayCasinoGames = homepageCasinoGames && homepageCasinoGames.length > 0 ? (homepageCasinoGames[0].games || []).slice(0, 5) : [];
+  homepageCasinoGames && homepageCasinoGames.length > 0 ? (homepageCasinoGames[0].games || []).slice(0, 5) : [];
   homepageLiveGames && homepageLiveGames.length > 0 ? (homepageLiveGames[0].games || []).slice(0, 5) : [];
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full mx-auto px-2 py-2", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full mx-auto px-2 py-2 md:px-4 md:py-4", children: [
     showWelcome && /* @__PURE__ */ jsxRuntimeExports.jsx(WelcomeComponent, { onClose: handleCloseWelcome, showDepositButton: true }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       RegisterModal,
@@ -12291,10 +12378,19 @@ const Home = () => {
         }
       }
     ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full h-full rounded-lg overflow-hidden shadow-lg", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    showScrollTop && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        onClick: scrollToTop,
+        className: "fixed bottom-6 left-4 z-50 bg-gray-800/70 hover:bg-gray-700/90 text-white p-2.5 rounded-full shadow-lg transition-all duration-300 md:hidden",
+        "aria-label": "Scroll to top",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronUp, { className: "w-5 h-5" })
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full rounded-lg overflow-hidden shadow-lg mb-3 md:mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
       Carousel,
       {
-        className: "w-full h-full",
+        className: "w-full",
         opts: { loop: true },
         setApi,
         onMouseEnter: () => {
@@ -12304,12 +12400,12 @@ const Home = () => {
         },
         onMouseLeave: handleUserInteraction,
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(CarouselContent, { className: "h-full custom-scrollbar", children: sliderImages.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(CarouselItem, { className: "h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative w-full h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CarouselContent, { className: "custom-scrollbar", children: sliderImages.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(CarouselItem, { children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative w-full aspect-[3/1] md:aspect-[16/6]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
             buildExports.LazyLoadImage,
             {
               src: item.src,
               alt: item.alt,
-              className: "w-full h-full object-contain rounded-sm cursor-pointer",
+              className: "w-full h-full object-contain md:object-cover rounded-sm cursor-pointer bg-gray-900",
               effect: "opacity",
               width: "100%",
               height: "100%",
@@ -12319,7 +12415,7 @@ const Home = () => {
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             CarouselPrevious,
             {
-              className: "left-4 bg-[white] w-[40px] h-[40px] rounded-full flex items-center justify-center",
+              className: "left-2 md:left-4 bg-[white] w-[32px] h-[32px] md:w-[40px] md:h-[40px] rounded-full flex items-center justify-center opacity-80 hover:opacity-100",
               onClick: () => {
                 if (apiRef.current) {
                   apiRef.current.scrollPrev();
@@ -12331,7 +12427,7 @@ const Home = () => {
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             CarouselNext,
             {
-              className: "right-4 bg-[white] w-[40px] h-[40px] rounded-full flex items-center justify-center",
+              className: "right-2 md:right-4 bg-[white] w-[32px] h-[32px] md:w-[40px] md:h-[40px] rounded-full flex items-center justify-center opacity-80 hover:opacity-100",
               onClick: () => {
                 if (apiRef.current) {
                   apiRef.current.scrollNext();
@@ -12343,31 +12439,7 @@ const Home = () => {
         ]
       }
     ) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mx-1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(UpcomingMatches, {}) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mx-1", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center mb-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-white font-semibold", children: "CASINO GAMES" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            className: "text-button-primary-bg hover:text-button-primary-hover font-semibold",
-            onClick: () => navigate("/casino/slots"),
-            children: "More →"
-          }
-        )
-      ] }),
-      loadingHomepageCasinoGames ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4", children: [...Array(5)].map((_, index) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-game-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-game-card-img-loading", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "casino-game-card-img-shimmer" }) }) }, index)) }) : homepageCasinoGamesError ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-red-500 text-center py-4", children: [
-        "Error loading games: ",
-        homepageCasinoGamesError
-      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4", children: displayCasinoGames.map((game) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-        CasinoGameCard,
-        {
-          game,
-          onPlay: () => console.log("Playing game:", game)
-        },
-        game.gameId || game.id
-      )) })
-    ] })
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mx-0 md:mx-1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(UpcomingMatches, {}) })
   ] });
 };
 

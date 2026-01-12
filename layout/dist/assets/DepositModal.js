@@ -565,4 +565,4 @@ const DepositModal = ({ isOpen, onClose }) => {
   ] }) }) }) });
 };
 
-export { DepositModal as D, buildExports as b, createCollection as c, useDirection as u };
+export { CreditCard as C, DepositModal as D, History as H, Settings as S, buildExports as b, createCollection as c, useDirection as u };

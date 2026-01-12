@@ -114,7 +114,7 @@ function filterSports(sports, matchesBySport, searchTerm) {
   });
 }
 
-export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setSelectedSport = () => {}, selectedMatch, onSelectedMatchOddsUpdate = () => {} }) {
+export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setSelectedSport = () => {}, selectedMatch, onSelectedMatchOddsUpdate = () => {}, selectedSportFilter = null }) {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -156,6 +156,21 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
       setSelectedType('prematch');
     }
   }, [location.state]);
+
+  // Handle selectedSportFilter change (Mobile View)
+  useEffect(() => {
+    if (selectedSportFilter) {
+      setExpanded(prev => ({ ...prev, [selectedSportFilter.key]: true }));
+      setSelectedSport(selectedSportFilter);
+    }
+  }, [selectedSportFilter, setSelectedSport]);
+
+  // Auto-expand sport when selectedMatch changes (Desktop/General)
+  useEffect(() => {
+    if (selectedMatch && selectedMatch.sportKey) {
+      setExpanded(prev => ({ ...prev, [selectedMatch.sportKey]: true }));
+    }
+  }, [selectedMatch]);
 
   // Clear location state on component mount to prevent issues with subsequent navigation
   useEffect(() => {
@@ -342,6 +357,10 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
   useEffect(() => {
     // Check if there's navigation state to pre-select a game
     const { selectedGameId, selectedSportKey } = location.state || {};
+
+    if (selectedSportFilter) {
+      return;
+    }
     
     // Only process location state if it exists and hasn't been processed yet
     if (selectedGameId && !hasProcessedLocationState.current) {
@@ -436,7 +455,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
         }
       }
     }
-  }, [matchesBySport, selectedMatch, setSelectedMatch, setSelectedSport]);
+  }, [matchesBySport, selectedMatch, setSelectedMatch, setSelectedSport, selectedSportFilter, location.state]);
 
   // Handle pending selection when matches data is loaded
   useEffect(() => {
@@ -518,6 +537,11 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
   // Filter sports and matches based on search term
   const filteredSports = filterSports(SPORTS, matchesBySport, search);
 
+  // Apply selectedSportFilter if present (Mobile View)
+  const displaySports = selectedSportFilter 
+    ? filteredSports.filter(s => s.key === selectedSportFilter.key)
+    : filteredSports;
+
   return (
     <aside className="flex-1 bg-live-secondary h-full flex flex-col p-2 min-w-0 sm:p-2 md:p-2 lg:p-2 xl:p-2">
       {/* Toggle Buttons */}
@@ -581,34 +605,40 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
       </div>
       {/* Sports Accordions */}
       <div className="flex-1 overflow-y-auto custom-scrollbar pr-1">
-        {filteredSports.map((sport) => {
+        {displaySports.map((sport) => {
           const Icon = sport.icon;
           // Filter matches based on search term
           const allMatches = matchesBySport[sport.key] || [];
           const filteredMatches = filterMatches(allMatches, search);
           const matchCount = filteredMatches.length;
           
+          // Check if we are in mobile single sport view
+          const isMobileSingleView = !!selectedSportFilter;
+          
           return (
             <div key={sport.key} className="mb-2 bg-live-tertiary rounded">
-              <div
-                className="flex items-center justify-between px-2 sm:px-3 py-1.5 sm:py-2 cursor-pointer hover:bg-live-primary rounded"
-                onClick={() => toggleExpand(sport.key)}
-              >
-                <div className="flex items-center gap-2 flex-1 min-w-0">
-                  <Icon className={`w-5 h-5 ${sport.color.replace('bg-', '')}`} />
-                  <span className="text-live-primary text-sm font-medium truncate">{sport.sportNames[0]}</span>
+              {!isMobileSingleView && (
+                <div
+                  className="flex items-center justify-between px-2 sm:px-3 py-1.5 sm:py-2 cursor-pointer hover:bg-live-primary rounded"
+                  onClick={() => toggleExpand(sport.key)}
+                >
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <Icon className={`w-5 h-5 ${sport.color.replace('bg-', '')}`} />
+                    <span className="text-live-primary text-sm font-medium truncate">{sport.sportNames[0]}</span>
+                  </div>
+                  <span className="text-xs bg-live-hover text-live-primary rounded px-1.5 sm:px-2 py-0.5 ml-2 min-w-[28px] sm:min-w-[32px] text-center">{matchCount}</span>
+                  <div>
+                    {expanded[sport.key] ? (
+                      <ChevronUp className="w-4 h-4 text-live-primary" />
+                    ) : (
+                      <ChevronDown className="w-4 h-4 text-live-primary" />
+                    )}
+                  </div>
                 </div>
-                <span className="text-xs bg-live-hover text-live-primary rounded px-1.5 sm:px-2 py-0.5 ml-2 min-w-[28px] sm:min-w-[32px] text-center">{matchCount}</span>
-                <div>
-                  {expanded[sport.key] ? (
-                    <ChevronUp className="w-4 h-4 text-live-primary" />
-                  ) : (
-                    <ChevronDown className="w-4 h-4 text-live-primary" />
-                  )}
-                </div>
-              </div>
-              {expanded[sport.key] && (
-                <div className="pl-1 sm:pl-2 pb-1 sm:pb-2">
+              )}
+              
+              {(expanded[sport.key] || isMobileSingleView) && (
+                <div className={`pl-1 sm:pl-2 pb-1 sm:pb-2 ${isMobileSingleView ? 'pt-2' : ''}`}>
                   {loadingBySport[sport.key] ? (
                       <SkeletonLoader type="game-card" count={3} />
                     ) : matchCount === 0 ? (
@@ -623,7 +653,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
                           team1 = parts[0]?.trim() || '';
                           team2 = parts[1]?.trim() || '';
                         }
-                        const isSelected = selectedMatch && (selectedMatch.eventId === match.eventId);
+                        const isSelected = selectedMatch && (String(selectedMatch.eventId) === String(match.eventId));
                         const odds = oddsByEventId[match.eventId] || extractOddsW1W2(match.markets);
                         const scores = scoresByEventId[match.eventId] || { homeScore: 0, awayScore: 0 }; // Get scores from state
                   
@@ -646,20 +676,22 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
                             onClick={() => {
                               // Get the latest odds for this match
                               const latestOdds = oddsByEventId[match.eventId] || extractOddsW1W2(match.markets);
-                              const selectedMatchData = {
-                                ...match,
-                                team1,
-                                team2,
-                                odds: latestOdds, // Include the latest odds in the selected match data
-                                sportKey: sport.key // Include sportKey for markets API call
-                              };
-                              setSelectedMatch(selectedMatchData);
-                              setSelectedSport(sport);
-                              
-                              // The UserBetsSection component will automatically fetch bets when userId and eventId change
-                              // So we don't need to dispatch fetchUserBets here
-                            }}
-                          />
+                          const selectedMatchData = {
+                            ...match,
+                            team1,
+                            team2,
+                            odds: latestOdds, // Include the latest odds in the selected match data
+                            sportKey: sport.key // Include sportKey for markets API call
+                          };
+                          setSelectedMatch(selectedMatchData);
+                          if (!selectedSportFilter) {
+                            setSelectedSport(sport);
+                          }
+                          
+                          // The UserBetsSection component will automatically fetch bets when userId and eventId change
+                          // So we don't need to dispatch fetchUserBets here
+                        }}
+                      />
                         );
                       })
                     )

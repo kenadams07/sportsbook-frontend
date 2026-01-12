@@ -159,7 +159,7 @@ const Home = () => {
     : [];
 
   return (
-    <div className='w-full mx-auto px-2 py-2 md:px-4 md:py-4'>
+    <div className='w-full mx-auto'>
       {/* Welcome Modal */}
       {showWelcome && <WelcomeComponent onClose={handleCloseWelcome} showDepositButton={true} />}
 
@@ -184,7 +184,7 @@ const Home = () => {
       )}
 
       {/* Carousel Container - Mobile Optimized - Full display without cropping */}
-      <div className='w-full rounded-lg overflow-hidden shadow-lg mb-3 md:mb-4'>
+      <div className='w-full mb-3 md:mb-4'>
         <Carousel 
           className='w-full' 
           opts={{ loop: true }}
@@ -196,14 +196,14 @@ const Home = () => {
           }}
           onMouseLeave={handleUserInteraction}
         >
-          <CarouselContent className='custom-scrollbar'>
+          <CarouselContent className='custom-scrollbar ml-0'>
             {sliderImages.map((item) => (
-              <CarouselItem key={item.id}>
-                <div className='relative w-full aspect-[3/1] md:aspect-[16/6]'>
+              <CarouselItem key={item.id} className="pl-0">
+                <div className='relative w-full pt-[40%] md:pt-[28.2%]'>
                   <LazyLoadImage
                     src={item.src}
                     alt={item.alt}
-                    className='w-full h-full object-contain md:object-cover rounded-sm cursor-pointer bg-gray-900'
+                    className='absolute inset-0 w-full h-full object-contain md:object-cover cursor-pointer bg-gray-900'
                     effect='opacity'
                     width='100%'
                     height='100%'
@@ -214,7 +214,7 @@ const Home = () => {
             ))}
           </CarouselContent>
           <CarouselPrevious 
-            className='left-2 md:left-4 bg-[white] w-[32px] h-[32px] md:w-[40px] md:h-[40px] rounded-full flex items-center justify-center opacity-80 hover:opacity-100'
+            className='left-2 md:left-4 bg-[white] w-[32px] h-[32px] md:w-[40px] md:h-[40px] rounded-full flex items-center justify-center opacity-80 hover:opacity-100 absolute z-10'
             onClick={() => {
               if (apiRef.current) {
                 apiRef.current.scrollPrev();
@@ -223,7 +223,7 @@ const Home = () => {
             }}
           />
           <CarouselNext 
-            className='right-2 md:right-4 bg-[white] w-[32px] h-[32px] md:w-[40px] md:h-[40px] rounded-full flex items-center justify-center opacity-80 hover:opacity-100'
+            className='right-2 md:right-4 bg-[white] w-[32px] h-[32px] md:w-[40px] md:h-[40px] rounded-full flex items-center justify-center opacity-80 hover:opacity-100 absolute z-10'
             onClick={() => {
               if (apiRef.current) {
                 apiRef.current.scrollNext();
@@ -235,7 +235,7 @@ const Home = () => {
       </div>
 
       {/* upcoming matches */}
-      <div className='mx-0 md:mx-1'>
+      <div className='mx-0 md:mx-1 px-2 md:px-4'>
         <UpcomingMatches />
       </div>
       

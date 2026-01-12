@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { useSearchParams } from "react-router-dom"
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import LeftSidebarEventView from "./LeftSidebarEventView"
 import MiddleGameDisplay from "./MiddleGameDisplay"
 import RightEventInfoSection from "./RightEventInfoSection"
@@ -46,6 +46,8 @@ function extractOddsW1W2(markets) {
 
 export default function MainLiveSection() {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [selectedMatch, setSelectedMatch] = useState(null)
   const [selectedSport, setSelectedSport] = useState(null)
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
@@ -60,9 +62,73 @@ export default function MainLiveSection() {
   const [mobileEvents, setMobileEvents] = useState([])
   const [loadingEvents, setLoadingEvents] = useState(false)
   const [selectedType, setSelectedType] = useState("live")
+  const [entrySource, setEntrySource] = useState(null)
+  const [mobileHeaderSport, setMobileHeaderSport] = useState(null)
   
   // Get the eventId from URL parameters
   const eventIdFromUrl = searchParams.get('eventId');
+
+  useEffect(() => {
+    const navigationState = location.state || {};
+    const selectedGameId = navigationState.selectedGameId || eventIdFromUrl;
+    if (!selectedGameId) return;
+    if (window.innerWidth >= 768) return;
+
+    let cancelled = false;
+    const viewType = navigationState.viewType;
+    const isLive = viewType !== "prematch";
+    const requestedSportKey = navigationState.selectedSportKey;
+
+    setEntrySource(navigationState.source || null);
+
+    async function loadSelectedMatch() {
+      setLoadingEvents(true);
+      try {
+        const searchSportKeys = requestedSportKey
+          ? [requestedSportKey]
+          : SPORTS.map((s) => s.key);
+
+        for (const sportKey of searchSportKeys) {
+          const sportId = SPORT_ID_BY_KEY[sportKey];
+          if (!sportId) continue;
+
+          const json = await fetchSportsEvents(sportId, isLive);
+          if (cancelled) return;
+
+          const list = Array.isArray(json?.sports) ? json.sports : [];
+          const match = list.find((m) => m.eventId === selectedGameId);
+          if (!match) continue;
+
+          const sport = SPORTS.find((s) => s.key === sportKey) || null;
+          if (sport) {
+            setSelectedSport(sport);
+            setMobileHeaderSport(sport);
+          }
+
+          const parts = match.eventName ? match.eventName.split(/\s+vs\.?\s+/i) : [];
+          const team1 = parts[0]?.trim() || "";
+          const team2 = parts[1]?.trim() || "";
+
+          setSelectedMatch({
+            ...match,
+            team1,
+            team2,
+            odds: extractOddsW1W2(match.markets),
+            sportKey
+          });
+          setMobileView("markets");
+          return;
+        }
+      } finally {
+        if (!cancelled) setLoadingEvents(false);
+      }
+    }
+
+    loadSelectedMatch();
+    return () => {
+      cancelled = true;
+    };
+  }, [eventIdFromUrl, location.key]);
 
   // Function to update the selected match with new odds
   const updateSelectedMatchOdds = (updatedMatch) => {
@@ -111,7 +177,9 @@ export default function MainLiveSection() {
   // Handle sport selection on mobile - show filtered events directly
   const handleSportSelect = (sport) => {
     setSelectedSport(sport);
+    setMobileHeaderSport(sport);
     setSelectedMatch(null); // Clear match when changing sport
+    setEntrySource(null);
     if (window.innerWidth < 768) {
       setMobileView('events'); // Show filtered events in premium card UI
     }
@@ -192,14 +260,20 @@ export default function MainLiveSection() {
           <div className="w-full h-full bg-live-secondary flex flex-col">
             <div className="flex items-center gap-3 p-3 border-b border-live bg-live-tertiary">
               <button
-                onClick={() => setMobileView('sports')}
+                onClick={() => {
+                  if (entrySource === 'upcoming_matches') {
+                    navigate(-1);
+                    return;
+                  }
+                  setMobileView('sports');
+                }}
                 className="p-1 hover:bg-live-hover rounded-full transition-colors"
                 aria-label="Back to sports"
               >
                 <ChevronLeft className="w-6 h-6 text-live-primary" />
               </button>
               <h2 className="text-lg font-bold text-live-primary">
-                {selectedSport?.sportNames[0]} Events
+                {mobileHeaderSport?.sportNames?.[0] ? `${mobileHeaderSport.sportNames[0]} Events` : 'Events'}
               </h2>
             </div>
             <div className="flex-1 overflow-y-auto">
@@ -208,7 +282,7 @@ export default function MainLiveSection() {
                 setSelectedSport={setSelectedSport}
                 selectedMatch={selectedMatch}
                 onSelectedMatchOddsUpdate={updateSelectedMatchOdds}
-                selectedSportFilter={selectedSport}
+                selectedSportFilter={mobileHeaderSport}
               />
             </div>
           </div>
@@ -219,14 +293,20 @@ export default function MainLiveSection() {
           <div className="w-full h-full flex flex-col">
             <div className="flex items-center gap-3 p-3 border-b border-live bg-live-tertiary">
               <button
-                onClick={() => setMobileView('events')}
+                onClick={() => {
+                  if (entrySource === 'upcoming_matches') {
+                    navigate(-1);
+                    return;
+                  }
+                  setMobileView('events');
+                }}
                 className="p-1 hover:bg-live-hover rounded-full transition-colors"
                 aria-label="Back to events"
               >
                 <ChevronLeft className="w-6 h-6 text-live-primary" />
               </button>
               <h2 className="text-sm font-bold text-live-primary truncate">
-                {selectedMatch?.eventName || 'Markets'}
+                {selectedSport?.sportNames?.[0] ? `${selectedSport.sportNames[0]} Markets` : (selectedMatch?.eventName || 'Markets')}
               </h2>
             </div>
             <div className="flex-1 overflow-y-auto">
@@ -251,7 +331,7 @@ export default function MainLiveSection() {
       </div>
 
       {/* Desktop Middle section: game display */}
-      <div className="hidden md:flex flex-1 overflow-y-auto">
+      <div className="hidden md:flex flex-1 overflow-y-auto h-full w-full">
         <MiddleGameDisplay 
           match={selectedMatch} 
           sport={selectedSport} 
@@ -301,7 +381,7 @@ export default function MainLiveSection() {
       </div>
 
       {/* Desktop Right Section */}
-      <div className="hidden md:block w-[25%] min-w-[200px] max-w-[320px] overflow-y-auto">
+      <div className="hidden md:block w-[25%] min-w-[200px] max-w-[320px] overflow-y-auto h-full">
         <RightEventInfoSection 
           selectedGame={rightEventInfo} 
           onLogin={() => setIsLoginModalOpen(true)}

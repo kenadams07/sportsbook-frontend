@@ -255,7 +255,7 @@ export default function MainNavbar() {
                                         alt="Logo"
                                         className="w-12 h-12 sm:w-16 sm:h-16 object-contain"
                                     />
-                                    <p className="text-muted-card text-brand cursor-pointer hover:text-chart-5 hidden sm:block">
+                                    <p className="text-muted-card text-brand cursor-pointer hover:text-chart-5 block">
                                         Sportsbook
                                     </p>
                                 </Link>

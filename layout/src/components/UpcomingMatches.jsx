@@ -269,7 +269,9 @@ export default function UpcomingMatches() {
     navigate('/live_events/event-view', {
       state: {
         selectedGameId: id,
-        selectedSportKey: sportKey || selectedSportKey
+        selectedSportKey: sportKey || selectedSportKey,
+        viewType: 'prematch',
+        source: 'upcoming_matches'
       }
     })
   }
@@ -463,7 +465,7 @@ export default function UpcomingMatches() {
             return (
               <div
                 key={match.id}
-                onClick={() => handleGameClick(match.id, match.sportKey)}
+                onClick={() => handleGameClick(match)}
                 className={`cursor-pointer flex items-center justify-between gap-2 px-3 py-2 m-1 rounded-md transition-all duration-300 ${
                   backgroundClass
                 } ${textColor} ${isSelected ? 'shadow-md transform scale-[1.01] border border-white/20' : ''}`}

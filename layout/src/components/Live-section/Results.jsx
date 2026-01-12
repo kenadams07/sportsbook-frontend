@@ -153,66 +153,80 @@ const Results = () => {
       </div>
 
       {/* Filters Section - Mobile Responsive */}
-      <div className="results-filters bg-live-primary p-2 sm:p-4 border-b border-live">
-        <div className="filter-row flex flex-col gap-3">
-          {/* Date filters - Stack on mobile */}
-          <div className="date-group flex flex-col sm:flex-row gap-2 sm:gap-3">
-            <div className="date-field flex-1">
-              <label className="text-xs sm:text-sm mb-1 block">Start Date</label>
-              <div className="date-input-wrapper">
+      <div className="results-filters bg-live-primary p-3 sm:p-4 border-b border-live">
+        <div className="flex flex-col gap-3">
+          {/* Row 1: Dates */}
+          <div className="grid grid-cols-2 gap-3">
+            {/* Start Date */}
+            <div className="date-field w-full">
+              <label className="text-xs font-medium mb-1.5 block text-live-secondary uppercase tracking-wider">Start Date</label>
+              <div className="date-input-wrapper w-full">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className={`w-full justify-start text-left font-normal text-xs sm:text-sm ${!startDate ? "text-muted-foreground" : "text-live-primary"}`}
+                      className={`w-full justify-between text-left font-normal text-xs h-10 bg-live-tertiary border-live hover:bg-live-hover ${!startDate ? "text-muted-foreground" : "text-live-primary"}`}
                     >
-                      {startDate ? startDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Select date'}
-                      <span className="calendar-icon text-live-secondary ml-2">📅</span>
+                      <span className="truncate">
+                        {startDate ? startDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Select'}
+                      </span>
+                      <span className="calendar-icon text-live-secondary opacity-70">📅</span>
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
+                  <PopoverContent className="w-auto p-0 bg-live-primary border-live" align="start">
                     <Calendar
                       mode="single"
                       selected={startDate}
                       onSelect={setStartDate}
                       initialFocus
+                      className="bg-live-primary text-live-primary rounded-md border-live"
                     />
                   </PopoverContent>
                 </Popover>
               </div>
             </div>
-            <div className="date-field flex-1">
-              <label className="text-xs sm:text-sm mb-1 block">End Date</label>
-              <div className="date-input-wrapper">
+            
+            {/* End Date */}
+            <div className="date-field w-full">
+              <label className="text-xs font-medium mb-1.5 block text-live-secondary uppercase tracking-wider">End Date</label>
+              <div className="date-input-wrapper w-full">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className={`w-full justify-start text-left font-normal text-xs sm:text-sm ${!endDate ? "text-muted-foreground" : "text-live-primary"}`}
+                      className={`w-full justify-between text-left font-normal text-xs h-10 bg-live-tertiary border-live hover:bg-live-hover ${!endDate ? "text-muted-foreground" : "text-live-primary"}`}
                     >
-                      {endDate ? endDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Select date'}
-                      <span className="calendar-icon text-live-secondary ml-2">📅</span>
+                       <span className="truncate">
+                        {endDate ? endDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Select'}
+                      </span>
+                      <span className="calendar-icon text-live-secondary opacity-70">📅</span>
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
+                  <PopoverContent className="w-auto p-0 bg-live-primary border-live" align="start">
                     <Calendar
                       mode="single"
                       selected={endDate}
                       onSelect={setEndDate}
                       initialFocus
+                      className="bg-live-primary text-live-primary rounded-md border-live"
                     />
                   </PopoverContent>
                 </Popover>
               </div>
             </div>
           </div>
-          
-          {/* Action buttons - Stack on mobile */}
-          <div className="action-buttons flex gap-2">
-            <button className="reset-btn flex-1 sm:flex-none bg-live-tertiary border border-live text-live-primary hover:bg-live-hover text-xs sm:text-sm px-3 sm:px-4 py-2 rounded" onClick={resetFilters}>
+
+          {/* Row 2: Actions */}
+          <div className="grid grid-cols-2 gap-3">
+            <button 
+              className="reset-btn w-full h-10 bg-live-tertiary border border-live text-live-primary hover:bg-live-hover text-xs font-semibold px-3 rounded transition-all duration-200 active:scale-95 whitespace-nowrap" 
+              onClick={resetFilters}
+            >
               RESET
             </button>
-            <button className="show-btn flex-1 sm:flex-none bg-live-accent border border-live-accent text-live-dark hover:bg-live-secondary font-semibold text-xs sm:text-sm px-3 sm:px-4 py-2 rounded">
+            <button 
+              className="show-btn w-full h-10 bg-live-accent text-live-dark hover:brightness-110 transition-all duration-200 font-bold text-xs px-3 rounded shadow-sm active:scale-95 whitespace-nowrap"
+            >
               SHOW
             </button>
           </div>
@@ -220,62 +234,82 @@ const Results = () => {
       </div>
 
       {/* Results Content - Mobile Optimized */}
-      <div className="results-content flex flex-col md:flex-row min-h-screen bg-live-tertiary">
+      <div className="results-content flex flex-col md:flex-row min-h-[calc(100vh-200px)] bg-live-tertiary">
         {/* Leagues list - Full width on mobile, half on desktop */}
-        <div className="leagues-list w-full md:w-1/2 bg-live-tertiary border-b md:border-r md:border-b-0 border-live overflow-y-auto">
+        <div className="leagues-list w-full md:w-1/2 bg-live-tertiary md:border-r border-live overflow-y-auto p-2 sm:p-0">
           {eventData.length > 0 ? (
-            eventData.map((event) => (
-              <div key={event.eventId} className="league-item border-b border-live">
-                <div 
-                  className="league-header flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 cursor-pointer hover:bg-live-primary transition-colors"
-                  onClick={() => toggleEvent(event.eventId)}
-                >
-                  <div className="league-info flex items-center gap-2 flex-1 min-w-0">
-                    <span className="league-icon text-live-accent text-sm sm:text-base">⚽</span>
-                    <span className="league-name text-live-primary text-xs sm:text-sm font-medium truncate">{event.eventName}</span>
+            <div className="flex flex-col gap-2 sm:gap-0">
+              {eventData.map((event) => (
+                <div key={event.eventId} className="league-item bg-live-primary rounded-lg sm:rounded-none border border-live sm:border-0 sm:border-b last:border-0 overflow-hidden shadow-sm sm:shadow-none transition-all duration-200">
+                  <div 
+                    className={`league-header flex items-center justify-between px-4 py-3 cursor-pointer transition-colors duration-200 ${expandedEvents[event.eventId] ? 'bg-live-secondary/10' : 'hover:bg-live-secondary/5'}`}
+                    onClick={() => toggleEvent(event.eventId)}
+                  >
+                    <div className="league-info flex items-center gap-3 flex-1 min-w-0">
+                      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-live-tertiary border border-live shadow-sm flex-shrink-0 group-hover:scale-105 transition-transform">
+                         <span className="league-icon text-live-accent text-sm">⚽</span>
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="league-name text-live-primary text-sm font-bold truncate leading-tight">{event.eventName}</span>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-[10px] text-live-secondary px-1.5 py-0.5 bg-live-tertiary rounded border border-live/50">
+                             {event.openDate ? new Date(event.openDate).toLocaleDateString() : 'Today'}
+                          </span>
+                          <span className="text-[10px] text-live-secondary truncate">{event.openDate ? new Date(event.openDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Live'}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <span className={`expand-arrow text-live-secondary w-6 h-6 flex items-center justify-center rounded-full bg-live-tertiary border border-live/30 transition-all duration-300 flex-shrink-0 ml-2 ${expandedEvents[event.eventId] ? 'rotate-180 bg-live-accent text-live-dark border-live-accent' : 'group-hover:bg-live-hover'}`}>
+                      ▼
+                    </span>
                   </div>
-                  <span className={`expand-arrow text-live-secondary text-xs transition-transform duration-300 flex-shrink-0 ml-2 ${expandedEvents[event.eventId] ? 'expanded rotate-180' : ''}`}>
-                    ▼
-                  </span>
-                </div>
-                {expandedEvents[event.eventId] && (
-                  <div className="league-content bg-live-primary p-2 sm:p-4 border-t border-live">
-                    {event.markets && Object.keys(event.markets).some(marketType => event.markets[marketType] && event.markets[marketType].length > 0) ? (
-                      Object.entries(event.markets).map(([marketType, marketList]) => 
-                        marketList && marketList.length > 0 ? (
-                          marketList.map((market, index) => (
-                            <div key={`${event.eventId}-${market.marketId}`} className="mb-3">
-                              <div className="font-medium text-live-primary mb-2 text-xs sm:text-sm">{market.marketName}</div>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                {market.runners && market.runners.map((runner, runnerIndex) => (
-                                  <div 
-                                    key={`${event.eventId}-${market.marketId}-${runner.runnerId}`} 
-                                    className={`p-2 rounded text-center text-xs sm:text-sm ${
-                                      runner.result === 'won' 
-                                        ? 'bg-green-100 text-green-800 border border-green-300' 
-                                        : runner.result === 'lost'
-                                        ? 'bg-red-100 text-red-800 border border-red-300'
-                                        : 'bg-gray-100 text-gray-800 border border-gray-300'
-                                    }`}
-                                  >
-                                    <div className="font-medium truncate">{runner.runnerName}</div>
-                                    <div className="text-[10px] sm:text-xs capitalize">
-                                      {runner.result ? runner.result : 'Pending'}
+                  {expandedEvents[event.eventId] && (
+                    <div className="league-content bg-live-tertiary/50 p-3 border-t border-live animate-in slide-in-from-top-2 duration-200">
+                      {event.markets && Object.keys(event.markets).some(marketType => event.markets[marketType] && event.markets[marketType].length > 0) ? (
+                        Object.entries(event.markets).map(([marketType, marketList]) => 
+                          marketList && marketList.length > 0 ? (
+                            marketList.map((market, index) => (
+                              <div key={`${event.eventId}-${market.marketId}`} className="mb-3 last:mb-0 bg-live-primary rounded-lg border border-live p-3 shadow-sm">
+                                <div className="flex items-center gap-2 mb-3 pb-2 border-b border-live/50">
+                                  <div className="w-1 h-3 bg-live-accent rounded-full"></div>
+                                  <div className="font-bold text-live-primary text-xs uppercase tracking-wider">{market.marketName}</div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                  {market.runners && market.runners.map((runner, runnerIndex) => (
+                                    <div 
+                                      key={`${event.eventId}-${market.marketId}-${runner.runnerId}`} 
+                                      className={`relative p-2.5 rounded-md text-center text-xs transition-all duration-200 border ${
+                                        runner.result === 'won' 
+                                          ? 'bg-green-500/10 text-green-500 border-green-500/30' 
+                                          : runner.result === 'lost'
+                                          ? 'bg-red-500/10 text-red-500 border-red-500/30'
+                                          : 'bg-live-tertiary text-live-primary border-live'
+                                      }`}
+                                    >
+                                      <div className="font-bold truncate mb-1.5">{runner.runnerName}</div>
+                                      <div className={`text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full inline-block ${
+                                         runner.result === 'won' ? 'bg-green-500/20' : runner.result === 'lost' ? 'bg-red-500/20' : 'bg-live-secondary/20'
+                                      }`}>
+                                        {runner.result ? runner.result : 'Pending'}
+                                      </div>
                                     </div>
-                                  </div>
-                                ))}
+                                  ))}
+                                </div>
                               </div>
-                            </div>
-                          ))
-                        ) : null
-                      )
-                    ) : (
-                      <div className="no-matches text-live-muted text-xs sm:text-sm text-center py-2">No market data available</div>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))
+                            ))
+                          ) : null
+                        )
+                      ) : (
+                        <div className="no-matches flex flex-col items-center justify-center py-6 text-live-muted">
+                          <span className="text-2xl mb-2 opacity-20">📊</span>
+                          <span className="text-xs font-medium">No market data available</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           ) : (
             <div className="no-results-placeholder p-4 text-center text-live-muted text-xs sm:text-sm">
               {matchResultsState.loading ? (

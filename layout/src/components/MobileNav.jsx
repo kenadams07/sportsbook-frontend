@@ -7,6 +7,7 @@ const MobileNav = ({ navItems }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dropdownRef = useRef(null);
+  const navbarRef = useRef(null);
 
   const toggleExpand = (index) => {
     setExpandedIndex((prev) => (prev === index ? null : index));
@@ -49,7 +50,7 @@ const MobileNav = ({ navItems }) => {
     <>
       {/* Mobile Horizontal Navbar - Clean minimal design */}
       <div className="md:hidden w-full overflow-x-auto scrollbar-hide relative">
-        <div className="flex items-center gap-1 min-w-max px-2">
+        <div ref={navbarRef} className="flex items-center gap-1 min-w-max px-2">
           {navItems.map((item, index) => (
             <button
               key={item.label}
@@ -83,7 +84,7 @@ const MobileNav = ({ navItems }) => {
         <div 
           ref={dropdownRef}
           className="md:hidden fixed left-0 right-0 bg-gray-900 border-t border-gray-700 shadow-lg z-50 max-h-[60vh] overflow-y-auto"
-          style={{ top: '112px' }}
+          style={{ top: navbarRef.current ? `${navbarRef.current.offsetTop + navbarRef.current.offsetHeight}px` : '44px' }}
         >
           <div className="px-4 py-3 grid grid-cols-2 gap-2">
             {navItems[expandedIndex].items.map((subItem) => (

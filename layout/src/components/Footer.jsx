@@ -87,27 +87,136 @@ export default function Footer() {
 
             {/* Footer Content - Mobile Optimized - Compact spacing */}
             <div className="max-w-5xl mx-auto">
-                {/* Mobile: Stack in 2 columns with minimal gaps, Desktop: 5 columns */}
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
-                    {footerData.map((section, index) => (
-                        <div key={index} className="text-left">
-                            <h4 className="text-[10px] md:text-xs font-semibold mb-1.5 md:mb-3 text-primary-foreground">
-                                {section.heading.toUpperCase()}
+                {/* Mobile: Top 2-column layout for Company/Rules and Statistics/Help, Desktop: 5 columns */}
+                <div>
+                    {/* Mobile: 2-column layout - Company and Rules */}
+                    <div className="grid grid-cols-2 gap-3 md:hidden">
+                        {/* Left Column: Company */}
+                        <div className="text-left">
+                            <h4 className="text-[10px] font-semibold mb-1 text-primary-foreground">
+                                {footerData[0].heading.toUpperCase()}
                             </h4>
-                            <ul className="space-y-0.5 md:space-y-2">
-                                {section.links.map((link, idx) => (
-                                    <li key={idx}>
+                            <div className="flex flex-wrap items-center gap-1">
+                                {footerData[0].links.map((link, idx) => (
+                                    <span key={idx} className="text-[9px]">
                                         <Link
                                             to={link.to}
-                                            className="text-[9px] md:text-[11px] transition-colors duration-200 hover:text-primary-foreground block leading-tight"
+                                            className="transition-colors duration-200 hover:text-primary-foreground"
                                         >
                                             {link.name}
                                         </Link>
-                                    </li>
+                                        {idx < footerData[0].links.length - 1 && <span className="mx-1">|</span>}
+                                    </span>
                                 ))}
-                            </ul>
+                            </div>
                         </div>
-                    ))}
+                        {/* Right Column: Rules */}
+                        <div className="text-left">
+                            <h4 className="text-[10px] font-semibold mb-1 text-primary-foreground">
+                                {footerData[2].heading.toUpperCase()}
+                            </h4>
+                            <div className="flex flex-wrap items-center gap-1">
+                                {footerData[2].links.map((link, idx) => (
+                                    <span key={idx} className="text-[9px]">
+                                        <Link
+                                            to={link.to}
+                                            className="transition-colors duration-200 hover:text-primary-foreground"
+                                        >
+                                            {link.name}
+                                        </Link>
+                                        {idx < footerData[2].links.length - 1 && <span className="mx-1">|</span>}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {/* Mobile: Statistics and Help as second row */}
+                    <div className="grid grid-cols-2 gap-3 md:hidden mt-3">
+                        {/* Left Column: Statistics */}
+                        <div className="text-left">
+                            <h4 className="text-[10px] font-semibold mb-1 text-primary-foreground">
+                                {footerData[3].heading.toUpperCase()}
+                            </h4>
+                            <div className="flex flex-wrap items-center gap-1">
+                                {footerData[3].links.map((link, idx) => (
+                                    <span key={idx} className="text-[9px]">
+                                        <Link
+                                            to={link.to}
+                                            className="transition-colors duration-200 hover:text-primary-foreground"
+                                        >
+                                            {link.name}
+                                        </Link>
+                                        {idx < footerData[3].links.length - 1 && <span className="mx-1">|</span>}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                        {/* Right Column: Help */}
+                        <div className="text-left">
+                            <h4 className="text-[10px] font-semibold mb-1 text-primary-foreground">
+                                {footerData[4].heading.toUpperCase()}
+                            </h4>
+                            <div className="flex flex-wrap items-center gap-1">
+                                {footerData[4].links.map((link, idx) => (
+                                    <span key={idx} className="text-[9px]">
+                                        <Link
+                                            to={link.to}
+                                            className="transition-colors duration-200 hover:text-primary-foreground"
+                                        >
+                                            {link.name}
+                                        </Link>
+                                        {idx < footerData[4].links.length - 1 && <span className="mx-1">|</span>}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {/* Mobile: Terms and Policy as separate block with horizontal layout */}
+                    <div className="md:hidden mt-3">
+                        <div className="text-left">
+                            <h4 className="text-[10px] font-semibold mb-1.5 text-primary-foreground">
+                                {footerData[1].heading.toUpperCase()}
+                            </h4>
+                            <div className="flex flex-wrap items-center gap-1">
+                                {footerData[1].links.map((link, idx) => (
+                                    <span key={idx} className="text-[9px]">
+                                        <Link
+                                            to={link.to}
+                                            className="transition-colors duration-200 hover:text-primary-foreground"
+                                        >
+                                            {link.name}
+                                        </Link>
+                                        {idx < footerData[1].links.length - 1 && <span className="mx-1">|</span>}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {/* Desktop: Original 5-column layout */}
+                    <div className="hidden md:grid md:grid-cols-5 gap-4">
+                        {footerData.map((section, index) => (
+                            <div key={index} className="text-left">
+                                <h4 className="text-xs font-semibold mb-3 text-primary-foreground">
+                                    {section.heading.toUpperCase()}
+                                </h4>
+                                <ul className="space-y-2">
+                                    {section.links.map((link, idx) => (
+                                        <li key={idx}>
+                                            <Link
+                                                to={link.to}
+                                                className="text-[11px] transition-colors duration-200 hover:text-primary-foreground block leading-tight"
+                                            >
+                                                {link.name}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
 

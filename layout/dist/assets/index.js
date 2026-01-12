@@ -1,5 +1,5 @@
 import { importShared } from './__federation_fn_import.js';
-import LayoutApp, { k as getLocalStorageItem, a0 as SIGNUP_FAILURE, a1 as SIGNUP_SUCCESS, a2 as SIGNUP, c as GET_USER_DATA_SUCCESS, a3 as UPDATE_USER_BALANCE_EXPOSURE_SUCCESS, a4 as UPDATE_USER_BALANCE_EXPOSURE, a as LOGOUT_SUCCESS, a5 as LOGIN_FAILURE, a6 as LOGIN_SUCCESS, a7 as LOGIN, a8 as VERIFY_EMAIL_FAILURE, a9 as VERIFY_EMAIL_SUCCESS, aa as VERIFY_EMAIL, d as GET_USER_DATA_FAILURE, G as GET_USER_DATA, ab as UPDATE_USER_BALANCE_EXPOSURE_FAILURE, ac as FETCH_CASINO_GAME_URL_FAILURE, ad as FETCH_CASINO_GAME_URL_SUCCESS, ae as FETCH_CASINO_GAME_URL, af as FETCH_MORE_CASINO_PROVIDERS_FAILURE, ag as FETCH_MORE_CASINO_PROVIDERS_SUCCESS, ah as FETCH_MORE_CASINO_PROVIDERS, ai as FETCH_CASINO_PROVIDERS_FAILURE, aj as FETCH_CASINO_PROVIDERS_SUCCESS, ak as FETCH_CASINO_PROVIDERS, al as FETCH_HOMEPAGE_LIVE_GAMES_FAILURE, am as FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS, an as FETCH_HOMEPAGE_LIVE_GAMES, ao as FETCH_HOMEPAGE_CASINO_GAMES_FAILURE, ap as FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS, aq as FETCH_HOMEPAGE_CASINO_GAMES, ar as RESET_CASINO_GAMES, as as FETCH_MORE_CASINO_GAMES_FAILURE, at as FETCH_MORE_CASINO_GAMES_SUCCESS, au as FETCH_MORE_CASINO_GAMES, av as FETCH_CASINO_GAMES_FAILURE, aw as FETCH_CASINO_GAMES_SUCCESS, ax as FETCH_CASINO_GAMES, ay as SKIP_NEXT_USER_BETS_FETCH, az as FETCH_USER_BETS_FAILURE, aA as FETCH_USER_BETS_SUCCESS, aB as FETCH_USER_BETS, aC as notifyPromise, aD as api, aE as setLocalStorageItem, aF as signupSuccess, aG as loginSuccess, aH as signupFailure, aI as loginFailure, aJ as verifyEmailSuccess, aK as verifyEmailFailure, L as LOGOUT, aL as removeLocalStorageItem, aM as updateUserBalanceExposureFailure, aN as updateUserBalanceExposureSuccess, aO as axios, aP as notifyError, aQ as fetchCasinoProvidersSuccess, aR as fetchCasinoProvidersFailure, aS as fetchMoreCasinoProvidersSuccess, aT as fetchCasinoGamesSuccess, aU as fetchCasinoGamesFailure, aV as fetchMoreCasinoGamesSuccess, aW as fetchMoreCasinoGamesFailure, aX as fetchHomepageCasinoGamesSuccess, aY as fetchHomepageCasinoGamesFailure, aZ as fetchHomepageLiveGamesSuccess, a_ as fetchHomepageLiveGamesFailure, a$ as fetchCasinoGameUrlSuccess, b0 as fetchCasinoGameUrlFailure, b1 as fetchUserBetsSuccess, b2 as fetchUserBetsFailure, j as jsxRuntimeExports, b3 as Provider_default } from './__federation_expose_LayoutApp.js';
+import LayoutApp, { k as getLocalStorageItem, a6 as SIGNUP_FAILURE, a7 as SIGNUP_SUCCESS, a8 as SIGNUP, c as GET_USER_DATA_SUCCESS, a9 as UPDATE_USER_BALANCE_EXPOSURE_SUCCESS, aa as UPDATE_USER_BALANCE_EXPOSURE, a as LOGOUT_SUCCESS, ab as LOGIN_FAILURE, ac as LOGIN_SUCCESS, ad as LOGIN, ae as VERIFY_EMAIL_FAILURE, af as VERIFY_EMAIL_SUCCESS, ag as VERIFY_EMAIL, d as GET_USER_DATA_FAILURE, G as GET_USER_DATA, ah as UPDATE_USER_BALANCE_EXPOSURE_FAILURE, ai as FETCH_CASINO_GAME_URL_FAILURE, aj as FETCH_CASINO_GAME_URL_SUCCESS, ak as FETCH_CASINO_GAME_URL, al as FETCH_MORE_CASINO_PROVIDERS_FAILURE, am as FETCH_MORE_CASINO_PROVIDERS_SUCCESS, an as FETCH_MORE_CASINO_PROVIDERS, ao as FETCH_CASINO_PROVIDERS_FAILURE, ap as FETCH_CASINO_PROVIDERS_SUCCESS, aq as FETCH_CASINO_PROVIDERS, ar as FETCH_HOMEPAGE_LIVE_GAMES_FAILURE, as as FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS, at as FETCH_HOMEPAGE_LIVE_GAMES, au as FETCH_HOMEPAGE_CASINO_GAMES_FAILURE, av as FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS, aw as FETCH_HOMEPAGE_CASINO_GAMES, ax as RESET_CASINO_GAMES, ay as FETCH_MORE_CASINO_GAMES_FAILURE, az as FETCH_MORE_CASINO_GAMES_SUCCESS, aA as FETCH_MORE_CASINO_GAMES, aB as FETCH_CASINO_GAMES_FAILURE, aC as FETCH_CASINO_GAMES_SUCCESS, aD as FETCH_CASINO_GAMES, aE as FETCH_ALL_USER_BETS_FAILURE, aF as FETCH_ALL_USER_BETS_SUCCESS, aG as FETCH_ALL_USER_BETS, aH as SKIP_NEXT_USER_BETS_FETCH, aI as FETCH_USER_BETS_FAILURE, aJ as FETCH_USER_BETS_SUCCESS, aK as FETCH_USER_BETS, aL as FETCH_MATCH_RESULTS_FAILURE, aM as FETCH_MATCH_RESULTS_SUCCESS, aN as FETCH_MATCH_RESULTS, aO as FETCH_MARKET_REPORT_FAILURE, aP as FETCH_MARKET_REPORT_SUCCESS, aQ as FETCH_MARKET_REPORT, aR as getIPAddresses, aS as notifyPromise, aT as api, aU as setLocalStorageItem, aV as signupSuccess, aW as signupFailure, aX as loginSuccess, aY as loginFailure, aZ as verifyEmailSuccess, a_ as verifyEmailFailure, L as LOGOUT, a$ as removeLocalStorageItem, b0 as updateUserBalanceExposureFailure, b1 as updateUserBalanceExposureSuccess, b2 as axios, b3 as notifyError, b4 as fetchCasinoProvidersSuccess, b5 as fetchCasinoProvidersFailure, b6 as fetchMoreCasinoProvidersSuccess, b7 as fetchCasinoGamesSuccess, b8 as fetchCasinoGamesFailure, b9 as fetchMoreCasinoGamesSuccess, ba as fetchMoreCasinoGamesFailure, bb as fetchHomepageCasinoGamesSuccess, bc as fetchHomepageCasinoGamesFailure, bd as fetchHomepageLiveGamesSuccess, be as fetchHomepageLiveGamesFailure, bf as fetchCasinoGameUrlSuccess, bg as fetchCasinoGameUrlFailure, bh as fetchUserBetsSuccess, bi as fetchUserBetsFailure, bj as fetchAllUserBetsSuccess, bk as fetchAllUserBetsFailure, bl as fetchMatchResultsSuccess, bm as fetchMatchResultsFailure, bn as fetchMarketReportSuccess, bo as fetchMarketReportFailure, j as jsxRuntimeExports, bp as Provider_default } from './__federation_expose_LayoutApp.js';
 import { r as reactDomExports } from './index3.js';
 import { a as logoutSuccess, b as logoutFailure, c as getUserDataSuccess, d as getUserDataFailure } from './getUserDataAction.js';
 
@@ -1587,12 +1587,12 @@ function applyMiddleware(...middlewares) {
   };
 }
 
-const INIT_STATE$5 = {
+const INIT_STATE$7 = {
   loading: false,
   userData: getLocalStorageItem("userData") || {},
 };
 
-const signupReducer = (state = INIT_STATE$5, action) => {
+const signupReducer = (state = INIT_STATE$7, action) => {
   switch (action.type) {
     case SIGNUP:
       return { ...state, loading: true, isAuthenticated: false };
@@ -1609,13 +1609,13 @@ const signupReducer = (state = INIT_STATE$5, action) => {
   }
 };
 
-const INIT_STATE$4 = {
+const INIT_STATE$6 = {
   loading: false,
   userData: getLocalStorageItem("userData") || {},
   isAuthenticated: !!getLocalStorageItem("token"),
 };
 
-const loginReducer = (state = INIT_STATE$4, action) => {
+const loginReducer = (state = INIT_STATE$6, action) => {
   switch (action.type) {
     case LOGIN:
       return { ...state, loading: true, isAuthenticated: false, error: null };
@@ -1664,14 +1664,14 @@ const loginReducer = (state = INIT_STATE$4, action) => {
   }
 };
 
-const initialState$1 = {
+const initialState$2 = {
   loading: false,
   data: null,
   error: null,
   success: false,
 };
 
-const verifyEmailReducer = (state = initialState$1, action) => {
+const verifyEmailReducer = (state = initialState$2, action) => {
   switch (action.type) {
     case VERIFY_EMAIL:
       return {
@@ -1703,13 +1703,13 @@ const verifyEmailReducer = (state = initialState$1, action) => {
   }
 };
 
-const INIT_STATE$3 = {
+const INIT_STATE$5 = {
   loading: false,
   userData: {},
   error: null,
 };
 
-const getUserDataReducer = (state = INIT_STATE$3, action) => {
+const getUserDataReducer = (state = INIT_STATE$5, action) => {
   switch (action.type) {
     case GET_USER_DATA:
       
@@ -1730,12 +1730,12 @@ const getUserDataReducer = (state = INIT_STATE$3, action) => {
   }
 };
 
-const INIT_STATE$2 = {
+const INIT_STATE$4 = {
   loading: false,
   error: null,
 };
 
-const updateUserBalanceExposureReducer = (state = INIT_STATE$2, action) => {
+const updateUserBalanceExposureReducer = (state = INIT_STATE$4, action) => {
   switch (action.type) {
     case UPDATE_USER_BALANCE_EXPOSURE:
       return { ...state, loading: true, error: null };
@@ -1752,7 +1752,7 @@ const updateUserBalanceExposureReducer = (state = INIT_STATE$2, action) => {
   }
 };
 
-const INIT_STATE$1 = {
+const INIT_STATE$3 = {
   // Games state
   gamesByProvider: [],
   loadingGames: false,
@@ -1785,7 +1785,7 @@ const INIT_STATE$1 = {
   },
 };
 
-const casinoReducer = (state = INIT_STATE$1, action) => {
+const casinoReducer = (state = INIT_STATE$3, action) => {
   console.log('Casino reducer called with action:', action.type);
   console.log('Current state:', state);
   
@@ -2043,14 +2043,14 @@ const casinoReducer = (state = INIT_STATE$1, action) => {
   }
 };
 
-const INIT_STATE = {
+const INIT_STATE$2 = {
   bets: [],
   loading: false,
   error: null,
   skipNextFetch: false,
 };
 
-const userBetsReducer = (state = INIT_STATE, action) => {
+const userBetsReducer = (state = INIT_STATE$2, action) => {
   switch (action.type) {
     case FETCH_USER_BETS:
       // If we're supposed to skip this fetch, just reset the flag and don't do anything
@@ -2089,9 +2089,183 @@ const userBetsReducer = (state = INIT_STATE, action) => {
         skipNextFetch: true,
       };
       
+    case FETCH_ALL_USER_BETS:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+      
+    case FETCH_ALL_USER_BETS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        bets: action.payload,
+        error: null,
+      };
+      
+    case FETCH_ALL_USER_BETS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        bets: [],
+        error: action.payload,
+      };
+      
     default:
       return state;
   }
+};
+
+const INIT_STATE$1 = {
+  results: [],
+  loading: false,
+  error: null,
+};
+
+const matchResultsReducer = (state = INIT_STATE$1, action) => {
+  switch (action.type) {
+    case FETCH_MATCH_RESULTS:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+      
+    case FETCH_MATCH_RESULTS_SUCCESS:
+      // Add the new result to the existing results array
+      // Don't check for duplicates by event ID since we want all market results for an event
+      const existingResults = Array.isArray(state.results) ? state.results : [];
+      
+      // Get the first market ID from the new result to check for duplicates
+      const newEventId = action.payload?.data?.event?.eventId || action.payload?.event?.eventId;
+      
+      // Extract all market IDs from the new result
+      const newMarketIds = [];
+      const newMarkets = action.payload?.data?.event?.markets || action.payload?.event?.markets;
+      if (newMarkets) {
+        Object.keys(newMarkets).forEach(marketType => {
+          const marketList = newMarkets[marketType];
+          if (Array.isArray(marketList)) {
+            marketList.forEach(market => {
+              if (market.marketId) {
+                newMarketIds.push(market.marketId);
+              }
+            });
+          }
+        });
+      }
+      
+      // Check if any of the market IDs in the new result already exist in existing results
+      let existingIndex = -1;
+      if (newMarketIds.length > 0) {
+        existingIndex = existingResults.findIndex(result => {
+          const existingEventId = result?.data?.event?.eventId || result?.event?.eventId;
+          
+          // Extract market IDs from existing result
+          const existingMarketIds = [];
+          const existingMarkets = result?.data?.event?.markets || result?.event?.markets;
+          if (existingMarkets) {
+            Object.keys(existingMarkets).forEach(marketType => {
+              const marketList = existingMarkets[marketType];
+              if (Array.isArray(marketList)) {
+                marketList.forEach(market => {
+                  if (market.marketId) {
+                    existingMarketIds.push(market.marketId);
+                  }
+                });
+              }
+            });
+          }
+          
+          // Check if event IDs match and any market IDs match
+          return existingEventId === newEventId && 
+                 existingMarketIds.some(id => newMarketIds.includes(id));
+        });
+      }
+      
+      let newResults;
+      if (existingIndex !== -1) {
+        // Update the existing result with the same event ID and market ID
+        newResults = [...existingResults];
+        newResults[existingIndex] = action.payload;
+      } else {
+        // Add new result for a different market of the same event
+        newResults = [...existingResults, action.payload];
+      }
+      
+      return {
+        ...state,
+        loading: false,
+        results: newResults,
+        error: null,
+      };
+      
+    case FETCH_MATCH_RESULTS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        results: [],
+        error: action.payload,
+      };
+      
+    default:
+      return state;
+  }
+};
+
+const INIT_STATE = {
+  report: [],
+  loading: false,
+  error: null,
+};
+
+const marketReportReducer = (state = INIT_STATE, action) => {
+  switch (action.type) {
+    case FETCH_MARKET_REPORT:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+      
+    case FETCH_MARKET_REPORT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        report: Array.isArray(action.payload) ? action.payload : action.payload?.data || [],
+        error: null,
+      };
+      
+    case FETCH_MARKET_REPORT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        report: [],
+        error: action.payload,
+      };
+      
+    default:
+      return state;
+  }
+};
+
+const SET_SELECTED_SPORT = 'SET_SELECTED_SPORT';
+
+const initialState$1 = {
+    selectedSport: null
+};
+
+const liveReducer = (state = initialState$1, action) => {
+    switch (action.type) {
+        case SET_SELECTED_SPORT:
+            return {
+                ...state,
+                selectedSport: action.payload
+            };
+        default:
+            return state;
+    }
 };
 
 const appReducer = combineReducers({
@@ -2102,6 +2276,9 @@ const appReducer = combineReducers({
   UpdateUserBalanceExposure: updateUserBalanceExposureReducer,
   CasinoGames: casinoReducer,
   UserBets: userBetsReducer,
+  MatchResults: matchResultsReducer,
+  MarketReport: marketReportReducer,
+  LiveState: liveReducer,
 });
 
 const reducers = (state, action) => {
@@ -2193,21 +2370,43 @@ function takeEvery$1(patternOrChannel, worker) {
 function* signupRequest(action) {
   try {
     // Extract the actual payload from the action
-    const  payload  = action.payload || action;
-    // Removed console.log("action.payload in signup saga", payload);
+    const  originalPayload  = action.payload || action;
+    // Removed console.log("action.payload in signup saga", originalPayload);
     
+    // Get IP addresses
+    const ipAddresses = yield call(getIPAddresses);
+    
+    // Add IP addresses to the payload
+    const payload = {
+      ...originalPayload,
+      system_ip: ipAddresses.systemIP,
+      browser_ip: ipAddresses.browserIP
+    };
+    console.log("payload",payload);
+  
     const data = yield call(() =>
       notifyPromise(() => api.post("/users/signup", payload), {
-        loadingText: "On Boarding...",
+        loadingText: "Creating your account...",
         getSuccessMessage: (res) => {
-          if (res?.data?.success) return res.data.message || "On Boarding...";
+          if (res?.data?.success) return res.data.message || "Account created successfully!";
           return null; // null prevents success notification if success !== true
         },
         getErrorMessage: (err) => {
-          // Handle timeout errors specifically
+          // Handle different types of errors
           if (err?.code === 'ECONNABORTED') {
-            return 'Request timeout. Please check your connection and try again.';
+            return 'Request timeout. The server is taking too long to respond. Please try again or contact support.';
           }
+          
+          // Handle 504 Gateway Timeout specifically
+          if (err?.response?.status === 504) {
+            return 'Server is temporarily unavailable. Please try again in a few minutes.';
+          }
+          
+          // Handle 502/503 errors
+          if (err?.response?.status === 502 || err?.response?.status === 503) {
+            return 'Service temporarily unavailable. Please try again later.';
+          }
+          
           // More detailed error handling
           if (err?.response?.data?.message) {
             return err.response.data.message;
@@ -2215,7 +2414,7 @@ function* signupRequest(action) {
           if (err?.response?.data?.error) {
             return err.response.data.error;
           }
-          return err?.message || "Signup failed";
+          return err?.message || "Signup failed. Please try again.";
         },
         successDuration: 4000,
         onSuccess: (res) => {
@@ -2231,7 +2430,8 @@ function* signupRequest(action) {
       yield call(setLocalStorageItem, "token", data.data.token);
       yield call(setLocalStorageItem, "userData", data.data.data);
       yield put(signupSuccess(data.data.data));
-      yield put(loginSuccess(data.data.data));
+      // Dispatch login success as well to update the state
+      yield put({ type: LOGIN_SUCCESS, payload: data.data.data });
       
       // Execute callback if provided
       if (action.callback && typeof action.callback === 'function') {
@@ -2259,8 +2459,19 @@ function* loginRequest(action) {
   try {
     // Extract the actual payload from the action
     const { payload } = action;
+    
+    // Get IP addresses
+    const ipAddresses = yield call(getIPAddresses);
+    
+    // Add IP addresses to the payload
+    const payloadWithIPs = {
+      ...payload,
+      system_ip: ipAddresses.systemIP,
+      browser_ip: ipAddresses.browserIP
+    };
+    
     const data = yield call(() =>
-      notifyPromise(() => api.post("/users/login", payload), {
+      notifyPromise(() => api.post("/users/login", payloadWithIPs), {
         loadingText: "Logging in...",
         getSuccessMessage: (res) => {
           // Handle the login response structure (success: true)
@@ -2274,6 +2485,21 @@ function* loginRequest(action) {
           return null; // null prevents success notification if not successful
         },
         getErrorMessage: (err) => {
+          // Handle timeout errors specifically
+          if (err?.code === 'ECONNABORTED') {
+            return 'Request timeout. The server is taking too long to respond. Please try again or contact support.';
+          }
+          
+          // Handle 504 Gateway Timeout specifically
+          if (err?.response?.status === 504) {
+            return 'Server is temporarily unavailable. Please try again in a few minutes.';
+          }
+          
+          // Handle 502/503 errors
+          if (err?.response?.status === 502 || err?.response?.status === 503) {
+            return 'Service temporarily unavailable. Please try again later.';
+          }
+          
           return err?.response?.data?.message || err?.message || "Login failed";
         },
         successDuration: 4000,
@@ -3091,15 +3317,34 @@ function* casinoSaga() {
 /**
  * Fetch user bets from the API
  * @param {string} userId - The user ID
- * @param {string} eventId - The event ID
+ * @param {string} [eventId] - The event ID (optional)
  * @returns {Promise<Object>} - The response data containing user bets
  */
-async function fetchUserBets(userId, eventId) {
+async function fetchUserBets(userId, eventId = null) {
   try {
-    const response = await api.get(`/sportBets/my-bets?userId=${userId}&eventId=${eventId}`);
+    let url = `/sportBets/my-bets?userId=${userId}`;
+    if (eventId) {
+      url += `&eventId=${eventId}`;
+    }
+    const response = await api.get(url);
     return response.data;
   } catch (error) {
     console.error("Error fetching user bets:", error);
+    throw error;
+  }
+}
+
+/**
+ * Fetch all user bets from the API
+ * @param {string} userId - The user ID
+ * @returns {Promise<Object>} - The response data containing all user bets
+ */
+async function fetchAllUserBets(userId) {
+  try {
+    const response = await api.get(`/sportBets/all-bets?userId=${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all user bets:", error);
     throw error;
   }
 }
@@ -3131,15 +3376,177 @@ function* fetchUserBetsRequest(action) {
   }
 }
 
+// Worker saga to fetch all user bets
+function* fetchAllUserBetsRequest(action) {
+  try {
+    const { userId } = action.payload;
+    
+    // Make API call to fetch all user bets
+    const response = yield call(fetchAllUserBets, userId);
+    
+    // Check if response is successful
+    if (response?.status === "success") {
+      // Dispatch success action with the bets data
+      yield put(fetchAllUserBetsSuccess(response.data));
+    } else if (Array.isArray(response)) {
+      // Handle case where response is directly an array of bets
+      yield put(fetchAllUserBetsSuccess(response));
+    } else {
+      // Dispatch failure action with error message
+      const errorMessage = response?.message || "Failed to fetch all user bets";
+      yield put(fetchAllUserBetsFailure(errorMessage));
+    }
+  } catch (error) {
+    // Dispatch failure action with error message
+    const errorMessage = error.response?.data?.message || error.message || "Failed to fetch all user bets";
+    yield put(fetchAllUserBetsFailure(errorMessage));
+  }
+}
+
 // Watcher saga to watch for FETCH_USER_BETS action
 function* watchFetchUserBets() {
   yield takeEvery$1(FETCH_USER_BETS, fetchUserBetsRequest);
+}
+
+// Watcher saga to watch for FETCH_ALL_USER_BETS action
+function* watchFetchAllUserBets() {
+  yield takeEvery$1(FETCH_ALL_USER_BETS, fetchAllUserBetsRequest);
 }
 
 // Root saga
 function* userBetsSaga() {
   yield all([
     watchFetchUserBets(),
+    watchFetchAllUserBets(),
+  ]);
+}
+
+/**
+ * Fetch match results from the API
+ * @param {string} eventId - The event ID
+ * @param {string} sportId - The sport ID
+ * @param {string} marketId - The market ID
+ * @returns {Promise<Object>} - The response data containing match results
+ */
+async function fetchMatchResults(eventId, sportId, marketId, userId) {
+  try {
+    let url = `/sportBets/match-results?event_id=${eventId}&sports_id=${sportId}&market_id=${marketId}`;
+    if (userId) {
+      url += `&user_id=${userId}`;
+    }
+    const response = await api.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching match results:", error);
+    throw error;
+  }
+}
+
+// Worker saga to fetch match results
+function* fetchMatchResultsRequest(action) {
+  try {
+    const { eventId, sportId, marketId, userId } = action.payload;
+    
+    // Make API call to fetch match results
+    const response = yield call(fetchMatchResults, eventId, sportId, marketId, userId);
+    
+    // Check if response is successful
+    if (response?.success === true) {
+      // Dispatch success action with the results data
+      yield put(fetchMatchResultsSuccess(response));
+    } else if (response?.status === "success") {
+      // Handle case where response has status property
+      yield put(fetchMatchResultsSuccess(response));
+    } else if (Array.isArray(response)) {
+      // Handle case where response is directly an array of results
+      yield put(fetchMatchResultsSuccess(response));
+    } else {
+      // Dispatch failure action with error message
+      const errorMessage = response?.message || response?.data?.errorDescription || "Failed to fetch match results";
+      yield put(fetchMatchResultsFailure(errorMessage));
+    }
+  } catch (error) {
+    // Dispatch failure action with error message
+    const errorMessage = error.response?.data?.message || error.message || "Failed to fetch match results";
+    yield put(fetchMatchResultsFailure(errorMessage));
+  }
+}
+
+// Watcher saga to watch for FETCH_MATCH_RESULTS action
+function* watchFetchMatchResults() {
+  yield takeEvery$1(FETCH_MATCH_RESULTS, fetchMatchResultsRequest);
+}
+
+// Root saga
+function* matchResultsSaga() {
+  yield all([
+    watchFetchMatchResults(),
+  ]);
+}
+
+/**
+ * Fetch market report from the API
+ * @param {string} userId - The user ID
+ * @param {string} marketId - Optional market ID filter
+ * @param {string} eventId - Optional event ID filter
+ * @returns {Promise<Object>} - The response data containing market report
+ */
+async function fetchMarketReport(userId, marketId = null, eventId = null) {
+  try {
+    let url = `/sportBets/market-report?user_id=${userId}`;
+    if (marketId) {
+      url += `&market_id=${marketId}`;
+    }
+    if (eventId) {
+      url += `&event_id=${eventId}`;
+    }
+    const response = await api.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching market report:", error);
+    throw error;
+  }
+}
+
+// Worker saga to fetch market report
+function* fetchMarketReportRequest(action) {
+  try {
+    const { userId, marketId, eventId } = action.payload;
+    
+    // Make API call to fetch market report
+    const response = yield call(fetchMarketReport, userId, marketId, eventId);
+    
+    // Check if response is successful
+    if (response?.success === true) {
+      // Dispatch success action with the report data
+      yield put(fetchMarketReportSuccess(response));
+    } else if (response?.status === "success") {
+      // Handle case where response has status property
+      yield put(fetchMarketReportSuccess(response));
+    } else if (Array.isArray(response)) {
+      // Handle case where response is directly an array of results
+      yield put(fetchMarketReportSuccess(response));
+    } else {
+      // Dispatch failure action with error message
+      const errorMessage = response?.message || response?.data?.errorDescription || "Failed to fetch market report";
+      yield put(fetchMarketReportFailure(errorMessage));
+    }
+  } catch (error) {
+    // Dispatch failure action with error message
+    const errorMessage = error.response?.data?.message || error.message || "Failed to fetch market report";
+    yield put(fetchMarketReportFailure(errorMessage));
+  }
+}
+
+// Watcher saga to watch for FETCH_MARKET_REPORT action
+function* watchFetchMarketReport() {
+  yield takeEvery$1(FETCH_MARKET_REPORT, fetchMarketReportRequest);
+}
+
+// Root saga
+function* marketReportSaga() {
+  yield all([
+    watchFetchMarketReport(),
   ]);
 }
 
@@ -3153,6 +3560,8 @@ function* rootSaga() {
     rootSaga$1(),
     casinoSaga(),
     userBetsSaga(),
+    matchResultsSaga(),
+    marketReportSaga(),
   ]);
 }
 
