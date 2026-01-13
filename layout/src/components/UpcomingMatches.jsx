@@ -265,13 +265,31 @@ export default function UpcomingMatches() {
     setSelectedGameId(id)
     setSelectedGameSportKey(sportKey || null)
     
+    // Find the full event object to pass detailed data
+    const clickedMatch = matches.find(m => m.id === id);
+    
+    // Determine viewType based on the fact we are fetching live matches (true) 
+    // or based on event status if available.
+    // Since this component calls fetchSportsEvents(..., true), these are likely treated as live/in-play or upcoming-live.
+    // We'll default to 'live' to ensure MainLiveSection finds them in the same list.
+    const viewType = 'live'; 
+
     // Navigate to the Live section with the selected game and sport
     navigate('/live_events/event-view', {
       state: {
         selectedGameId: id,
         selectedSportKey: sportKey || selectedSportKey,
-        viewType: 'prematch',
-        source: 'upcoming_matches'
+        viewType: viewType,
+        source: 'upcoming_matches',
+        // Pass full match details to avoid refetching/delay
+        matchDetails: clickedMatch ? {
+          eventName: clickedMatch.team1 + " vs " + clickedMatch.team2,
+          team1: clickedMatch.team1,
+          team2: clickedMatch.team2,
+          openDate: clickedMatch.openDate,
+          status: clickedMatch.status,
+          sportKey: clickedMatch.sportKey
+        } : null
       }
     })
   }
@@ -465,7 +483,7 @@ export default function UpcomingMatches() {
             return (
               <div
                 key={match.id}
-                onClick={() => handleGameClick(match)}
+                onClick={() => handleGameClick(match.id, match.sportKey)}
                 className={`cursor-pointer flex items-center justify-between gap-2 px-3 py-2 m-1 rounded-md transition-all duration-300 ${
                   backgroundClass
                 } ${textColor} ${isSelected ? 'shadow-md transform scale-[1.01] border border-white/20' : ''}`}

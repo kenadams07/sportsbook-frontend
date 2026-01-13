@@ -143,7 +143,17 @@ export async function fetchMarketsData(eventId, sportId) {
     }
     
     // Return markets data from the nested structure
-    return data?.event?.markets?.matchOdds || [];
+    // We want to return all available markets, not just matchOdds
+    const markets = data?.event?.markets;
+    
+    if (!markets) return [];
+    
+    // If it's an array (unlikely given current API, but good for robustness)
+    if (Array.isArray(markets)) return markets;
+    
+    // If it's an object, flatten all market arrays into a single list
+    // This ensures we get matchOdds, totalGoals, asianHandicap, etc.
+    return Object.values(markets).flatMap(v => Array.isArray(v) ? v : []);
   } catch (error) {
     console.error(`API request failed for event_id=${eventId}, sport_id=${sportId}:`, error.message);
     return [];

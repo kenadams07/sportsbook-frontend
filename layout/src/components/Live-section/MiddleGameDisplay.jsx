@@ -435,9 +435,12 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
     }
 
     // Try to get sportKey from multiple possible sources
+    // Also support getting sportId directly if sportKey resolution fails
     const sportKey = selectedMatch.sportKey || selectedMatch.sport?.key || selectedMatch.sport?.name;
+    const directSportId = selectedMatch.sportId; // Support direct sportId if passed
     
-    if (!sportKey) {
+    // We need either a valid sportKey OR a direct sportId
+    if (!sportKey && !directSportId) {
       setMarkets([]);
       setFilteredMarkets([]);
       if (intervalRef.current) {
@@ -454,7 +457,8 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
         const controller = new AbortController();
         currentFetchControllerRef.current = controller;
         
-        const sportId = SPORT_ID_BY_KEY[sportKey];
+        // Resolve sportId: either use the direct one or look it up from the key
+        const sportId = directSportId || SPORT_ID_BY_KEY[sportKey];
         
         if (!sportId) {
           setMarkets([]);
@@ -470,7 +474,8 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
           return;
         }
         
-        const newMarkets = Array.isArray(marketsData) ? marketsData : [];
+        const newMarketsRaw = Array.isArray(marketsData) ? marketsData : [];
+        const newMarkets = newMarketsRaw.filter(m => m && typeof m === 'object');
         
         // Only update state if data has actually changed to prevent unnecessary re-renders
         const prevMarkets = prevMarketsRef.current;
@@ -600,7 +605,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
 
   // Extract market names that appear more than twice for the navbar
   const marketNameCounts = markets.reduce((acc, market) => {
-    const name = market.marketName;
+    const name = market?.marketName;
     if (name) {
       acc[name] = (acc[name] || 0) + 1;
     }

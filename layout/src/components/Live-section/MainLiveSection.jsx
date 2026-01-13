@@ -55,14 +55,23 @@ export default function MainLiveSection() {
   const selectedRunnerRef = useRef(null);
   
   // Mobile navigation states - Multi-level hierarchy
-  const [mobileView, setMobileView] = useState('sports') // 'sports' | 'events' | 'markets'
+  const [mobileView, setMobileView] = useState(() => {
+    // Initialize view based on navigation source to prevent flash of wrong screen
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      const state = location.state || {};
+      if (state.source === 'upcoming_matches' && state.selectedGameId) {
+        return 'markets';
+      }
+    }
+    return 'sports';
+  }); 
   const [isBetSlipOpen, setIsBetSlipOpen] = useState(false)
   
   // Mobile events data
   const [mobileEvents, setMobileEvents] = useState([])
   const [loadingEvents, setLoadingEvents] = useState(false)
   const [selectedType, setSelectedType] = useState("live")
-  const [entrySource, setEntrySource] = useState(null)
+  const [entrySource, setEntrySource] = useState(location.state?.source || null)
   const [mobileHeaderSport, setMobileHeaderSport] = useState(null)
   
   // Get the eventId from URL parameters
@@ -72,7 +81,8 @@ export default function MainLiveSection() {
     const navigationState = location.state || {};
     const selectedGameId = navigationState.selectedGameId || eventIdFromUrl;
     if (!selectedGameId) return;
-    if (window.innerWidth >= 768) return;
+    // Remove the mobile-only check to allow deep linking/navigation on desktop too
+    // if (window.innerWidth >= 768) return;
 
     let cancelled = false;
     const viewType = navigationState.viewType;
@@ -81,9 +91,49 @@ export default function MainLiveSection() {
 
     setEntrySource(navigationState.source || null);
 
+    // For upcoming matches flow, we rely on the direct setting above.
+    // However, if that condition fails (e.g. missing requestedSportKey), we might fall through.
+    // But critically, we must ensure we are using the navigation state correctly.
+    // The issue is likely that entrySource isn't set yet when we check it inside loadSelectedMatch
+    // because setEntrySource is async/batched React state update.
+    
+    // Instead of using state variable entrySource inside the effect that sets it, 
+    // use the local variable derived from location.state
+    const source = navigationState.source || null;
+    
     async function loadSelectedMatch() {
       setLoadingEvents(true);
       try {
+        // If we have both sportKey and gameId from upcoming matches, 
+        // we can directly set the selected match without fetching the full list first
+        // This is much faster and follows the requested "direct flow"
+        if (source === 'upcoming_matches' && requestedSportKey && selectedGameId) {
+          const sport = SPORTS.find((s) => s.key === requestedSportKey);
+          if (sport) {
+            setSelectedSport(sport);
+            setMobileHeaderSport(sport);
+            
+            // Construct a partial match object with what we know
+            // The MiddleGameDisplay component will fetch the full markets
+            const matchDetails = navigationState.matchDetails || {};
+            
+            setSelectedMatch({
+              eventId: selectedGameId,
+              sportKey: requestedSportKey,
+              sportId: SPORT_ID_BY_KEY[requestedSportKey],
+              // Populate from passed details if available
+              eventName: matchDetails.eventName || "", 
+              team1: matchDetails.team1 || "",
+              team2: matchDetails.team2 || "",
+              openDate: matchDetails.openDate || Date.now(), 
+              status: matchDetails.status || "UPCOMING"
+            });
+            
+            setMobileView("markets");
+            return;
+          }
+        }
+
         const searchSportKeys = requestedSportKey
           ? [requestedSportKey]
           : SPORTS.map((s) => s.key);
@@ -96,7 +146,7 @@ export default function MainLiveSection() {
           if (cancelled) return;
 
           const list = Array.isArray(json?.sports) ? json.sports : [];
-          const match = list.find((m) => m.eventId === selectedGameId);
+          const match = list.find((m) => String(m.eventId) === String(selectedGameId));
           if (!match) continue;
 
           const sport = SPORTS.find((s) => s.key === sportKey) || null;
@@ -116,6 +166,7 @@ export default function MainLiveSection() {
             odds: extractOddsW1W2(match.markets),
             sportKey
           });
+          
           setMobileView("markets");
           return;
         }
@@ -129,6 +180,50 @@ export default function MainLiveSection() {
       cancelled = true;
     };
   }, [eventIdFromUrl, location.key]);
+
+  // When we direct link to markets without full event details, we need to fetch event details 
+  // MiddleGameDisplay will fetch markets, but we need team names etc.
+  useEffect(() => {
+    // Also use the local state check or ensure entrySource is up to date.
+    // Since this is a separate effect, entrySource state should be updated by now,
+    // but relying on the location state is safer for initial load.
+    const source = location.state?.source || entrySource;
+    
+    if (source === 'upcoming_matches' && selectedMatch && (!selectedMatch.team1 || !selectedMatch.eventName)) {
+       const fetchEventDetails = async () => {
+         try {
+           const sportId = selectedMatch.sportId || SPORT_ID_BY_KEY[selectedMatch.sportKey];
+           if (!sportId) return;
+           
+           // Fetch event list to find our specific event and get details
+           // This runs in background while markets are already loading in MiddleGameDisplay
+           const isLive = location.state?.viewType !== "prematch";
+           const json = await fetchSportsEvents(sportId, isLive);
+           
+           const list = Array.isArray(json?.sports) ? json.sports : [];
+           const match = list.find((m) => String(m.eventId) === String(selectedMatch.eventId));
+           
+           if (match) {
+             const parts = match.eventName ? match.eventName.split(/\s+vs\.?\s+/i) : [];
+             const team1 = parts[0]?.trim() || "";
+             const team2 = parts[1]?.trim() || "";
+             
+             setSelectedMatch(prev => ({
+               ...prev,
+               ...match,
+               team1,
+               team2,
+               odds: extractOddsW1W2(match.markets)
+             }));
+           }
+         } catch (e) {
+           console.error("Failed to fetch event details", e);
+         }
+       };
+       
+       fetchEventDetails();
+    }
+  }, [selectedMatch?.eventId, entrySource]);
 
   // Function to update the selected match with new odds
   const updateSelectedMatchOdds = (updatedMatch) => {
@@ -228,9 +323,9 @@ export default function MainLiveSection() {
     <div className="flex w-full h-[calc(100vh-60px)] bg-live-primary text-live-primary relative overflow-hidden">
       {/* Mobile Multi-Level Navigation */}
       <div className="md:hidden w-full h-full">
-        {/* View: Sports Icons - Clean grid layout */}
+        {/* View: Sports List (Default) */}
         {mobileView === 'sports' && (
-          <div className="w-full h-full bg-live-secondary p-4 overflow-y-auto">
+          <div className="w-full h-full bg-live-secondary p-4 overflow-y-auto md:hidden">
             <h2 className="text-lg font-bold text-live-primary mb-4">Select Sport</h2>
             <div className="grid grid-cols-3 gap-3 pb-20">
               {SPORTS.map((sport) => {
@@ -257,7 +352,7 @@ export default function MainLiveSection() {
 
         {/* View: Events List */}
         {mobileView === 'events' && (
-          <div className="w-full h-full bg-live-secondary flex flex-col">
+          <div className="w-full h-full bg-live-secondary flex flex-col md:hidden">
             <div className="flex items-center gap-3 p-3 border-b border-live bg-live-tertiary">
               <button
                 onClick={() => {
@@ -290,7 +385,7 @@ export default function MainLiveSection() {
 
         {/* View: Markets */}
         {mobileView === 'markets' && (
-          <div className="w-full h-full flex flex-col">
+          <div className="w-full h-full flex flex-col md:hidden">
             <div className="flex items-center gap-3 p-3 border-b border-live bg-live-tertiary">
               <button
                 onClick={() => {
