@@ -1,22 +1,16 @@
 // src/common/helpers/response.helper.ts
-export const successResponse = (
-  message: string,
-  data: any = null,
-  code = 200,
-) => {
+export const successResponse = <T>(message: string, data: T, code = 200) => {
   return {
+    status: true,
     code,
     message,
     data,
   };
 };
 
-export const errorResponse = (
-  message: string,
-  code = 400,
-  errors: any = null,
-) => {
+export const errorResponse = <T>(message: string, code = 400, errors?: T) => {
   return {
+    status: false,
     code,
     message,
     errors,

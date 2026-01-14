@@ -29,19 +29,28 @@ import { LeaguesModule } from './leagues/leagues.module';
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('DB_HOST', 'localhost'),
-        port: configService.get<number>('DB_PORT', 5432),
-        username: configService.get('DB_USER', 'postgres'),
-        password: configService.get('DB_PASS', '1478'),
-        database: configService.get('DB_NAME', 'sportsbook'),
-        autoLoadEntities: configService.get<boolean>(
+      useFactory: (configService: ConfigService) => {
+        const autoLoadEntitiesEnv = configService.get<string>(
           'DB_AUTO_LOAD_ENTITIES',
-          true,
-        ),
-        synchronize: configService.get<boolean>('DB_SYNCHRONIZE', true),
-      }),
+          'true',
+        );
+        const synchronizeEnv = configService.get<string>(
+          'DB_SYNCHRONIZE',
+          'false',
+        );
+
+        return {
+          type: 'postgres',
+          host: configService.get('DB_HOST', 'localhost'),
+          port: configService.get<number>('DB_PORT', 5432),
+          username: configService.get('DB_USER', 'postgres'),
+          password: configService.get('DB_PASS', '1478'),
+          database: configService.get('DB_NAME', 'sportsbook'),
+          entities: [__dirname + '/**/*.entity.{js,ts}'],
+          autoLoadEntities: autoLoadEntitiesEnv === 'true',
+          synchronize: synchronizeEnv === 'true',
+        };
+      },
       inject: [ConfigService],
     }),
     RedisModule,
