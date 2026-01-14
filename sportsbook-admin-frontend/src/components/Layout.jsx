@@ -7,6 +7,7 @@ import './Layout.css';
 const Layout = ({ children }) => {
   const { isLoggedIn } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   
   // If not logged in, redirect to login page
   if (!isLoggedIn) {
@@ -20,15 +21,24 @@ const Layout = ({ children }) => {
   const closeSidebar = () => {
     setIsSidebarOpen(false);
   };
+
+  const toggleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
+  };
   
   return (
     <div className="layout">
-      <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
+      <Sidebar 
+        isOpen={isSidebarOpen} 
+        onClose={closeSidebar} 
+        isCollapsed={isCollapsed}
+        toggleCollapse={toggleCollapse}
+      />
       <div 
         className={`sidebar-overlay ${isSidebarOpen ? 'active' : ''}`} 
         onClick={closeSidebar}
       ></div>
-      <main className="layout-main with-sidebar">
+      <main className={`layout-main with-sidebar ${isCollapsed ? 'collapsed' : ''}`}>
         {children}
       </main>
     </div>
