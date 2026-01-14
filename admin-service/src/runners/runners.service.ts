@@ -23,7 +23,10 @@ export class RunnersService {
     return this.runnersRepository.save(runners);
   }
 
-  async update(id: string, runnersData: Partial<Runners>): Promise<Runners | null> {
+  async update(
+    id: string,
+    runnersData: Partial<Runners>,
+  ): Promise<Runners | null> {
     await this.runnersRepository.update(id, runnersData);
     return this.findOne(id);
   }

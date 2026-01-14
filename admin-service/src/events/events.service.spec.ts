@@ -37,7 +37,9 @@ describe('EventsService', () => {
 
     service = module.get<EventsService>(EventsService);
     httpService = module.get<HttpService>(HttpService);
-    eventsRepository = module.get<Repository<Events>>(getRepositoryToken(Events));
+    eventsRepository = module.get<Repository<Events>>(
+      getRepositoryToken(Events),
+    );
   });
 
   it('should be defined', () => {
@@ -69,7 +71,7 @@ describe('EventsService', () => {
       jest.spyOn(httpService, 'get').mockReturnValue(of(mockResponse) as any);
 
       const result = await service.getLiveEvents(sportId);
-      
+
       expect(httpService.get).toHaveBeenCalledWith(
         'http://89.116.20.218:2700/events',
         {
@@ -77,9 +79,9 @@ describe('EventsService', () => {
             live_matches: 'true',
             sport_id: sportId,
           },
-        }
+        },
       );
-      
+
       expect(result).toHaveProperty('sports');
       expect(result.sports).toHaveLength(1);
     });

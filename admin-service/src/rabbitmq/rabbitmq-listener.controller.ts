@@ -1,5 +1,10 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload, Ctx, RmqContext } from '@nestjs/microservices';
+import {
+  MessagePattern,
+  Payload,
+  Ctx,
+  RmqContext,
+} from '@nestjs/microservices';
 
 @Controller()
 export class RabbitMQListenerController {

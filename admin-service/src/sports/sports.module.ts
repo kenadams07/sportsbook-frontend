@@ -5,9 +5,7 @@ import { SportsController } from './sports.controller';
 import { Sports } from './sports.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Sports]),
-  ],
+  imports: [TypeOrmModule.forFeature([Sports])],
   providers: [SportsService],
   controllers: [SportsController],
   exports: [TypeOrmModule],

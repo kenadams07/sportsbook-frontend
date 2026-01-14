@@ -23,7 +23,10 @@ export class SportsService {
     return this.sportsRepository.save(sports);
   }
 
-  async update(id: string, sportsData: Partial<Sports>): Promise<Sports | null> {
+  async update(
+    id: string,
+    sportsData: Partial<Sports>,
+  ): Promise<Sports | null> {
     await this.sportsRepository.update(id, sportsData);
     return this.findOne(id);
   }

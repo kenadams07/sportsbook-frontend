@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { MessagePattern, Payload, Ctx, RmqContext } from '@nestjs/microservices';
+import {
+  MessagePattern,
+  Payload,
+  Ctx,
+  RmqContext,
+} from '@nestjs/microservices';
 
 @Injectable()
 export class RabbitMQListenerService {

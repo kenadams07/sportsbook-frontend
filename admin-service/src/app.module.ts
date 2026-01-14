@@ -36,7 +36,10 @@ import { LeaguesModule } from './leagues/leagues.module';
         username: configService.get('DB_USER', 'postgres'),
         password: configService.get('DB_PASS', '1478'),
         database: configService.get('DB_NAME', 'sportsbook'),
-        autoLoadEntities: configService.get<boolean>('DB_AUTO_LOAD_ENTITIES', true),
+        autoLoadEntities: configService.get<boolean>(
+          'DB_AUTO_LOAD_ENTITIES',
+          true,
+        ),
         synchronize: configService.get<boolean>('DB_SYNCHRONIZE', true),
       }),
       inject: [ConfigService],
@@ -60,4 +63,4 @@ import { LeaguesModule } from './leagues/leagues.module';
   controllers: [AppController, RabbitMQListenerController],
   providers: [AppService, AppGateway, RabbitMQListenerService],
 })
-export class AppModule { }
+export class AppModule {}

@@ -31,7 +31,7 @@ describe('EventsController', () => {
     it('should call service.getLiveEvents with sportId', async () => {
       const sportId = 'sr:sport:21';
       const result = { sports: [] };
-      
+
       jest.spyOn(service, 'getLiveEvents').mockResolvedValue(result);
 
       expect(await controller.getLiveEvents(sportId)).toBe(result);

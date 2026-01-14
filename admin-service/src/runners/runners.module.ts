@@ -5,9 +5,7 @@ import { RunnersController } from './runners.controller';
 import { Runners } from './runners.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Runners]),
-  ],
+  imports: [TypeOrmModule.forFeature([Runners])],
   providers: [RunnersService],
   controllers: [RunnersController],
   exports: [TypeOrmModule],

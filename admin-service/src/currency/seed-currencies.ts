@@ -7,9 +7,9 @@ async function seedCurrencies() {
   const currencyService = app.get(CurrencyService);
 
   const currencies = [
-    { name: 'British Pound', code: 'GBP', value: 1.0000 },
-    { name: 'US Dollar', code: 'USD', value: 1.2500 },
-    { name: 'Euro', code: 'EUR', value: 1.1500 },
+    { name: 'British Pound', code: 'GBP', value: 1.0 },
+    { name: 'US Dollar', code: 'USD', value: 1.25 },
+    { name: 'Euro', code: 'EUR', value: 1.15 },
   ];
 
   for (const currency of currencies) {
