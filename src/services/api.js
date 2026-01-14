@@ -1,9 +1,9 @@
 import { API_ENDPOINTS } from '../constants/apiEndpoints';
 import axios from 'axios';
 
-// Base API configuration using environment variables
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 const ADMIN_API_BASE_URL = import.meta.env.VITE_ADMIN_API_BASE_URL || '/api';
+const ADMIN_API_TOKEN = import.meta.env.VITE_ADMIN_API_TOKEN;
 
 // Create axios instances with default configurations
 const apiClient = axios.create({
@@ -18,6 +18,14 @@ const adminApiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+});
+
+adminApiClient.interceptors.request.use((config) => {
+  if (ADMIN_API_TOKEN) {
+    config.headers = config.headers || {};
+    config.headers.Authorization = `Bearer ${ADMIN_API_TOKEN}`;
+  }
+  return config;
 });
 
 const externalSportsApiClient = axios.create({
@@ -100,6 +108,7 @@ export const api = {
   getUsers: () => axiosApi(apiClient, API_ENDPOINTS.GET_USERS),
   getUser: (id) => axiosApi(apiClient, API_ENDPOINTS.GET_USER_BY_ID(id)),
   updateUser: (id, user) => axiosPut(apiClient, API_ENDPOINTS.UPDATE_USER(id), user),
+  getAdminUsers: () => axiosApi(adminApiClient, API_ENDPOINTS.GET_ADMIN_USERS),
   
   // Bets
   getBets: () => axiosApi(apiClient, API_ENDPOINTS.GET_BETS),

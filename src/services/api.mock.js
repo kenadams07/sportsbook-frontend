@@ -14,6 +14,7 @@ export const api = {
   getUsers: jest.fn(),
   getUser: jest.fn(),
   updateUser: jest.fn(),
+  getAdminUsers: jest.fn(),
 
   // Bets
   getBets: jest.fn(),

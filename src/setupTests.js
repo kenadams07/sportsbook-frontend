@@ -4,7 +4,8 @@ Object.defineProperty(window, 'import', {
     meta: {
       env: {
         VITE_API_BASE_URL: 'http://localhost:3000/api',
-        VITE_ADMIN_API_BASE_URL: 'http://localhost:3002'
+        VITE_ADMIN_API_BASE_URL: 'http://localhost:3002',
+        VITE_ADMIN_API_TOKEN: 'test-admin-token'
       }
     }
   },
@@ -16,7 +17,8 @@ global.import = {
   meta: {
     env: {
       VITE_API_BASE_URL: 'http://localhost:3000/api',
-      VITE_ADMIN_API_BASE_URL: 'http://localhost:3002'
+      VITE_ADMIN_API_BASE_URL: 'http://localhost:3002',
+      VITE_ADMIN_API_TOKEN: 'test-admin-token'
     }
   }
 };

@@ -19,6 +19,7 @@ export const API_ENDPOINTS = {
   GET_USERS: '/users',
   GET_USER_BY_ID: (id) => `/users/${id}`,
   UPDATE_USER: (id) => `/users/${id}`,
+  GET_ADMIN_USERS: '/users-list',
   
   // Bets endpoints
   GET_BETS: '/bets',
