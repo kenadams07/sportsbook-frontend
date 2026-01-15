@@ -20,7 +20,7 @@ export class UsersController {
     message: string;
     data: User[];
   }> {
-    const users = await this.usersRabbitMQService.findAll();
+    const users = await this.usersService.findAll();
     return successResponse('Users fetched successfully', users);
   }
 }

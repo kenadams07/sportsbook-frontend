@@ -1,7 +1,7 @@
-import { Events } from 'src/events/events.entity';
-import { Markets } from 'src/markets/markets.entity';
-import { Runners } from 'src/runners/runners.entity';
-import { SportStakeSettings } from 'src/sportStakeSettings/sportStakeSettings.entity';
+import { Events } from '../events/events.entity';
+import { Markets } from '../markets/markets.entity';
+import { Runners } from '../runners/runners.entity';
+import { SportStakeSettings } from '../sportStakeSettings/sportStakeSettings.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

@@ -13,7 +13,8 @@ export class UsersService {
   ) {}
 
   async findAll(): Promise<User[]> {
-    // Use the RabbitMQ service to fetch users from the user service
-    return this.usersRabbitMQService.findAll();
+    return this.usersRepository.find({
+      relations: ['currency'],
+    });
   }
 }

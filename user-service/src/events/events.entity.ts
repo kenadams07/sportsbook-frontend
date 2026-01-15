@@ -1,6 +1,6 @@
-import { Markets } from 'src/markets/markets.entity';
-import { Sports } from 'src/sports/sports.entity';
-import { SportStakeSettings } from 'src/sportStakeSettings/sportStakeSettings.entity';
+import { Markets } from '../markets/markets.entity';
+import { Sports } from '../sports/sports.entity';
+import { SportStakeSettings } from '../sportStakeSettings/sportStakeSettings.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
