@@ -39,7 +39,9 @@ describe('SportBetsController', () => {
             findByUserId: jest.fn().mockResolvedValue(mockBets),
             findByUserIdAndEventId: jest.fn().mockResolvedValue(mockBets),
             create: jest.fn().mockResolvedValue(mockBets[0]),
-            placeBet: jest.fn().mockResolvedValue({ success: true, bet: mockBets[0] }),
+            placeBet: jest
+              .fn()
+              .mockResolvedValue({ success: true, bet: mockBets[0] }),
           },
         },
       ],
@@ -62,7 +64,10 @@ describe('SportBetsController', () => {
       const eventId = 'event1';
       const result = await sportBetsController.findUserBets(userId, eventId);
       expect(result).toEqual(mockBets);
-      expect(sportBetsService.findByUserIdAndEventId).toHaveBeenCalledWith(userId, eventId);
+      expect(sportBetsService.findByUserIdAndEventId).toHaveBeenCalledWith(
+        userId,
+        eventId,
+      );
     });
   });
 });

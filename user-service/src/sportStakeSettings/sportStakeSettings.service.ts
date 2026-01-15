@@ -14,7 +14,9 @@ export class SportStakeSettingsService {
     return this.sportStakeSettingsRepository.find();
   }
 
-  create(sportStakeSettings: Partial<SportStakeSettings>): Promise<SportStakeSettings> {
+  create(
+    sportStakeSettings: Partial<SportStakeSettings>,
+  ): Promise<SportStakeSettings> {
     return this.sportStakeSettingsRepository.save(sportStakeSettings);
   }
 }

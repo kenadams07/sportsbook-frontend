@@ -36,7 +36,7 @@ import { LeaguesModule } from './leagues/leagues.module';
         );
         const synchronizeEnv = configService.get<string>(
           'DB_SYNCHRONIZE',
-          'false',
+          'true',
         );
 
         return {
@@ -47,8 +47,9 @@ import { LeaguesModule } from './leagues/leagues.module';
           password: configService.get('DB_PASS', '1478'),
           database: configService.get('DB_NAME', 'sportsbook'),
           entities: [__dirname + '/**/*.entity.{js,ts}'],
+          migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
           autoLoadEntities: autoLoadEntitiesEnv === 'true',
-          synchronize: synchronizeEnv === 'true',
+          synchronize: false, // Disable auto-sync to prevent schema conflicts with user service
         };
       },
       inject: [ConfigService],

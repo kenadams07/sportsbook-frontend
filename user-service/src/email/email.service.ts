@@ -26,7 +26,7 @@ export class EmailService {
         pass: smtpPass,
       },
     });
-    
+
     this.transporter.verify((error, success) => {
       if (error) {
       } else {
@@ -113,14 +113,17 @@ export class EmailService {
     }
   }
 
-  async sendPasswordResetEmail(toMailId: string, resetToken: string): Promise<boolean> {
+  async sendPasswordResetEmail(
+    toMailId: string,
+    resetToken: string,
+  ): Promise<boolean> {
     if (!this.transporter) {
       return false;
     }
 
     try {
       const resetUrl = `${this.configService.get<string>('FRONTEND_URL', 'http://localhost:3000')}/reset-password?token=${resetToken}`;
-      
+
       const mailOptions = {
         from: this.configService.get<string>('SMTP_FROM_MAIL'),
         to: toMailId,

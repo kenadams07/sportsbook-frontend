@@ -43,7 +43,9 @@ describe('UsersController', () => {
 
     controller = module.get<UsersController>(UsersController);
     usersService = module.get<UsersService>(UsersService);
-    currencyRepo = module.get<Repository<Currency>>(getRepositoryToken(Currency));
+    currencyRepo = module.get<Repository<Currency>>(
+      getRepositoryToken(Currency),
+    );
   });
 
   it('should be defined', () => {
@@ -70,21 +72,25 @@ describe('UsersController', () => {
       } as unknown as Users;
 
       // Mock service methods
-      currencyRepo.findOne = jest.fn().mockResolvedValue({ id: 1, name: 'British Pound', code: 'GBP' });
+      currencyRepo.findOne = jest
+        .fn()
+        .mockResolvedValue({ id: 1, name: 'British Pound', code: 'GBP' });
       usersService.create = jest.fn().mockResolvedValue(mockUser);
-      usersService.generateJwtToken = jest.fn().mockReturnValue('mock-jwt-token');
+      usersService.generateJwtToken = jest
+        .fn()
+        .mockReturnValue('mock-jwt-token');
       usersService.updateToken = jest.fn().mockResolvedValue(undefined);
       mockUsersService.sendVerificationEmail.mockResolvedValue(true);
 
       // Mock request and response objects
       const mockReq = {
-        get: jest.fn().mockReturnValue('https://xfair91.com')
+        get: jest.fn().mockReturnValue('https://xfair91.com'),
       };
-      
+
       const mockRes = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn().mockReturnThis(),
-        header: jest.fn().mockReturnThis()
+        header: jest.fn().mockReturnThis(),
       };
 
       await controller.create(signupDto, mockReq as any, mockRes as any);
@@ -95,8 +101,13 @@ describe('UsersController', () => {
       });
       expect(usersService.create).toHaveBeenCalled();
       expect(usersService.generateJwtToken).toHaveBeenCalledWith(mockUser);
-      expect(usersService.updateToken).toHaveBeenCalledWith('1', 'mock-jwt-token');
-      expect(usersService.sendVerificationEmail).toHaveBeenCalledWith('quelea61824@aminating.com');
+      expect(usersService.updateToken).toHaveBeenCalledWith(
+        '1',
+        'mock-jwt-token',
+      );
+      expect(usersService.sendVerificationEmail).toHaveBeenCalledWith(
+        'quelea61824@aminating.com',
+      );
       expect(mockRes.status).toHaveBeenCalledWith(200);
       expect(mockRes.json).toHaveBeenCalled();
     });
@@ -114,13 +125,13 @@ describe('UsersController', () => {
 
       // Mock request and response objects
       const mockReq = {
-        get: jest.fn().mockReturnValue('https://xfair91.com')
+        get: jest.fn().mockReturnValue('https://xfair91.com'),
       };
-      
+
       const mockRes = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn().mockReturnThis(),
-        header: jest.fn().mockReturnThis()
+        header: jest.fn().mockReturnThis(),
       };
 
       await controller.create(signupDto, mockReq as any, mockRes as any);

@@ -15,29 +15,33 @@ export class LoginHistoryService {
     return this.loginHistoryRepository.save(loginHistory);
   }
 
-  async findByEmailAndIPs(email: string, system_ip: string | undefined, browser_ip: string | undefined): Promise<LoginHistory | null> {
+  async findByEmailAndIPs(
+    email: string,
+    system_ip: string | undefined,
+    browser_ip: string | undefined,
+  ): Promise<LoginHistory | null> {
     const whereCondition: any = { email };
-    
+
     if (system_ip) {
       whereCondition.system_ip = system_ip;
     } else {
       whereCondition.system_ip = null;
     }
-    
+
     if (browser_ip) {
       whereCondition.browser_ip = browser_ip;
     } else {
       whereCondition.browser_ip = null;
     }
-    
+
     return this.loginHistoryRepository.findOne({
-      where: whereCondition
+      where: whereCondition,
     });
   }
 
   async updateLastLogin(id: string): Promise<void> {
     await this.loginHistoryRepository.update(id, {
-      last_login: new Date()
+      last_login: new Date(),
     });
   }
 

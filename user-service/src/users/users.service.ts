@@ -23,32 +23,32 @@ export class UsersService {
   }
 
   async findOneById(id: string): Promise<Users | null> {
-    return this.usersRepository.findOne({ 
+    return this.usersRepository.findOne({
       where: { id },
-      relations: ['currency'] 
+      relations: ['currency'],
     });
   }
 
   async create(payload: Partial<Users>): Promise<Users> {
     const user = this.usersRepository.create(payload);
     const savedUser = await this.usersRepository.save(user);
-    
+
     // Create a login history entry after successful signup
     await this.loginHistoryService.create({
       email: user.email,
       system_ip: user.system_ip,
       browser_ip: user.browser_ip,
       created_at: new Date(),
-      last_login: new Date()
+      last_login: new Date(),
     });
-    
+
     return savedUser;
   }
 
   async findOneByEmail(email: string): Promise<Users | null> {
-    return this.usersRepository.findOne({ 
+    return this.usersRepository.findOne({
       where: { email },
-      relations: ['currency'] 
+      relations: ['currency'],
     });
   }
 
@@ -87,7 +87,7 @@ export class UsersService {
       this.storeOTP(email, otp);
 
       const result = await this.emailService.sendOTPMail(email, otp);
-      
+
       return result;
     } catch (error) {
       return false;
@@ -96,7 +96,7 @@ export class UsersService {
 
   async verifyEmail(email: string, otp: string): Promise<boolean> {
     const isValid = this.verifyOTP(email, otp);
-    
+
     if (isValid) {
       const user = await this.findOneByEmail(email);
       if (user) {
@@ -119,7 +119,7 @@ export class UsersService {
     const token = jwt.sign(payload, USERS_CONSTANTS.JWT_SECRET, {
       expiresIn: USERS_CONSTANTS.TOKEN_EXPIRESIN,
     } as jwt.SignOptions);
-    
+
     return token;
   }
 

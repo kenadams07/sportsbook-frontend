@@ -10,7 +10,7 @@ export class QueueTest {
       const result = await this.triggerService.trigger(
         'user_queue',
         payload,
-        'user_to_admin'
+        'user_to_admin',
       );
 
       return result;

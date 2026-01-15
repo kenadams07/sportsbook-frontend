@@ -9,7 +9,9 @@ describe('ResultTransactionController', () => {
       controllers: [ResultTransactionController],
     }).compile();
 
-    controller = module.get<ResultTransactionController>(ResultTransactionController);
+    controller = module.get<ResultTransactionController>(
+      ResultTransactionController,
+    );
   });
 
   it('should be defined', () => {

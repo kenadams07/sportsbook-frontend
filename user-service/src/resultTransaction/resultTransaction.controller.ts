@@ -4,7 +4,9 @@ import { ResultTransaction } from './resultTransaction.entity';
 
 @Controller('resultTransaction')
 export class ResultTransactionController {
-  constructor(private readonly resultTransationService: ResultTransationService) {}
+  constructor(
+    private readonly resultTransationService: ResultTransationService,
+  ) {}
 
   @Get()
   findAll(): Promise<ResultTransaction[]> {
@@ -12,7 +14,9 @@ export class ResultTransactionController {
   }
 
   @Post()
-  create(@Body() resultTransation: Partial<ResultTransaction>): Promise<ResultTransaction> {
+  create(
+    @Body() resultTransation: Partial<ResultTransaction>,
+  ): Promise<ResultTransaction> {
     return this.resultTransationService.create(resultTransation);
   }
 }

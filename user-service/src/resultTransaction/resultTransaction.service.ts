@@ -14,19 +14,21 @@ export class ResultTransationService {
     return this.resultTransactionRepository.find();
   }
 
-  create(resultTransaction: Partial<ResultTransaction>): Promise<ResultTransaction> {
+  create(
+    resultTransaction: Partial<ResultTransaction>,
+  ): Promise<ResultTransaction> {
     return this.resultTransactionRepository.save(resultTransaction);
   }
 
   async findAllByUserId(userId: string): Promise<ResultTransaction[]> {
     return this.resultTransactionRepository.find({
       where: {
-        user: { id: userId }
+        user: { id: userId },
       },
       order: {
-        createdAt: 'ASC'
+        createdAt: 'ASC',
       },
-      relations: ['user', 'market']
+      relations: ['user', 'market'],
     });
   }
 }

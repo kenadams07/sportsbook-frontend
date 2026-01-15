@@ -1,5 +1,10 @@
 import { OnModuleDestroy } from '@nestjs/common';
-import { ClientProxy, ClientProxyFactory, Transport, RmqOptions } from '@nestjs/microservices';
+import {
+  ClientProxy,
+  ClientProxyFactory,
+  Transport,
+  RmqOptions,
+} from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 
 export class RabbitMQTriggerService implements OnModuleDestroy {
@@ -24,7 +29,11 @@ export class RabbitMQTriggerService implements OnModuleDestroy {
     return this.clients[queue];
   }
 
-  async trigger<T = any, R = any>(queue: string, payload: T, pattern: any = {}): Promise<R> {
+  async trigger<T = any, R = any>(
+    queue: string,
+    payload: T,
+    pattern: any = {},
+  ): Promise<R> {
     const client = this.getClient(queue);
 
     try {
@@ -36,6 +45,8 @@ export class RabbitMQTriggerService implements OnModuleDestroy {
   }
 
   async onModuleDestroy() {
-    await Promise.all(Object.values(this.clients).map(client => client.close()));
+    await Promise.all(
+      Object.values(this.clients).map((client) => client.close()),
+    );
   }
 }

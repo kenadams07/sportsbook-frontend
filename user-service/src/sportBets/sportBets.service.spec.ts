@@ -91,11 +91,11 @@ describe('SportBetsService', () => {
       expect(result).toEqual(mockBets);
       expect(mockSportBetsRepository.find).toHaveBeenCalledWith({
         where: {
-          user: { id: userId }
+          user: { id: userId },
         },
         order: {
-          createdAt: 'DESC'
-        }
+          createdAt: 'DESC',
+        },
       });
     });
   });
@@ -111,11 +111,11 @@ describe('SportBetsService', () => {
       expect(mockSportBetsRepository.find).toHaveBeenCalledWith({
         where: {
           user: { id: userId },
-          eventId: eventId
+          eventId: eventId,
         },
         order: {
-          createdAt: 'DESC'
-        }
+          createdAt: 'DESC',
+        },
       });
     });
   });

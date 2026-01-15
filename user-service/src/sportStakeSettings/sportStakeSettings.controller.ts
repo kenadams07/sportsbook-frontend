@@ -4,7 +4,9 @@ import { SportStakeSettings } from './sportStakeSettings.entity';
 
 @Controller('sportStakeSettings')
 export class SportStakeSettingsController {
-  constructor(private readonly sportStakeSettingsService: SportStakeSettingsService) {}
+  constructor(
+    private readonly sportStakeSettingsService: SportStakeSettingsService,
+  ) {}
 
   @Get()
   findAll(): Promise<SportStakeSettings[]> {
@@ -12,7 +14,9 @@ export class SportStakeSettingsController {
   }
 
   @Post()
-  create(@Body() sportStakeSetting: Partial<SportStakeSettings>): Promise<SportStakeSettings> {
+  create(
+    @Body() sportStakeSetting: Partial<SportStakeSettings>,
+  ): Promise<SportStakeSettings> {
     return this.sportStakeSettingsService.create(sportStakeSetting);
   }
 }

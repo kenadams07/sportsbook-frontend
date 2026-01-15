@@ -10,4 +10,3 @@ export class TestController {
     return this.queueTest.notifyAdmin(payload);
   }
 }
-

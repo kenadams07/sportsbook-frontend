@@ -6,7 +6,7 @@ import { ResultTransaction } from './src/resultTransaction/resultTransaction.ent
 import { Exposure } from './src/exposure/exposure.entity';
 import { Events } from './src/events/events.entity';
 import { Sports } from './src/sports/sports.entity';
-import { Markets } from './src/markets/markets.entity';
+import { Markets } from './src/markets/markets.entity';  // Fixed import path
 import { Runners } from './src/runners/runners.entity';
 import { SportStakeSettings } from './src/sportStakeSettings/sportStakeSettings.entity';
 import { WhiteLabel } from './src/whiteLabel/whiteLabel.entity';

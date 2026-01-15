@@ -9,7 +9,9 @@ describe('SportStakeSettingsController', () => {
       controllers: [SportStakeSettingsController],
     }).compile();
 
-    controller = module.get<SportStakeSettingsController>(SportStakeSettingsController);
+    controller = module.get<SportStakeSettingsController>(
+      SportStakeSettingsController,
+    );
   });
 
   it('should be defined', () => {

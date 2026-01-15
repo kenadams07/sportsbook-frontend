@@ -10,7 +10,7 @@ import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Users, Currency, LoginHistory]), 
+    TypeOrmModule.forFeature([Users, Currency, LoginHistory]),
     EmailModule,
   ],
   controllers: [UsersController],

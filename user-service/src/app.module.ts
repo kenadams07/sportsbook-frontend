@@ -1,4 +1,4 @@
-import { Module  } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -24,19 +24,30 @@ import { QueueModule } from './test/testMsgQueue/QueueTest.module';
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT', 5432),
-        username: configService.get<string>('DB_USER', 'postgres'),
-        password: configService.get<string>('DB_PASS', '1478'),
-        database: configService.get<string>('DB_NAME', 'sportsbook'),
-        autoLoadEntities: configService.get<boolean>('DB_AUTO_LOAD_ENTITIES', true),
-        synchronize: configService.get<boolean>('DB_SYNCHRONIZE', true),
-      }),
+      useFactory: (configService: ConfigService) => {
+        const autoLoadEntitiesEnv = configService.get<string>(
+          'DB_AUTO_LOAD_ENTITIES',
+          'true',
+        );
+        const synchronizeEnv = configService.get<string>(
+          'DB_SYNCHRONIZE',
+          'false',
+        );
+
+        return {
+          type: 'postgres',
+          host: configService.get<string>('DB_HOST'),
+          port: configService.get<number>('DB_PORT', 5432),
+          username: configService.get<string>('DB_USER', 'postgres'),
+          password: configService.get<string>('DB_PASS', '1478'),
+          database: configService.get<string>('DB_NAME', 'sportsbook'),
+          autoLoadEntities: autoLoadEntitiesEnv === 'true',
+          synchronize: synchronizeEnv === 'true',
+        };
+      },
       inject: [ConfigService],
     }),
-      CacheModule.registerAsync({
+    CacheModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
         const redisHost = configService.get<string>('REDIS_HOST');
@@ -66,9 +77,8 @@ import { QueueModule } from './test/testMsgQueue/QueueTest.module';
     SportStakeSettingsModule,
     EmailModule,
     QueueModule,
-
   ],
   providers: [AppGateway, RabbitMQTriggerService],
   exports: [],
 })
-export class AppModule { }
+export class AppModule {}

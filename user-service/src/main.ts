@@ -2,16 +2,18 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { WsAdapter } from '@nestjs/platform-ws';
 import { ValidationPipe } from '@nestjs/common';
-import { Transport, RmqOptions  } from '@nestjs/microservices';
+import { Transport, RmqOptions } from '@nestjs/microservices';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    forbidNonWhitelisted: true,
-    transform: true,
-  }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
 
   app.useWebSocketAdapter(new WsAdapter(app));
 
@@ -23,13 +25,18 @@ async function bootstrap() {
       'https://xfair91.com',
       'http://localhost:3000',
       'http://localhost:3001',
-      'http://localhost:5002'
+      'http://localhost:5002',
     ],
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'X-Requested-With',
+      'Accept',
+    ],
     credentials: true,
-    optionsSuccessStatus: 204,  
-    preflightContinue: false
+    optionsSuccessStatus: 204,
+    preflightContinue: false,
   });
 
   const port = process.env.PORT ?? 3001;

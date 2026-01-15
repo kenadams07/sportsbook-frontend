@@ -1,4 +1,8 @@
-export const successResponse = (message: string, data: any = null, code = 200) => {
+export const successResponse = (
+  message: string,
+  data: any = null,
+  code = 200,
+) => {
   return {
     code,
     message,
@@ -6,7 +10,11 @@ export const successResponse = (message: string, data: any = null, code = 200) =
   };
 };
 
-export const errorResponse = (message: string, code = 400, errors: any = null) => {
+export const errorResponse = (
+  message: string,
+  code = 400,
+  errors: any = null,
+) => {
   return {
     code,
     message,

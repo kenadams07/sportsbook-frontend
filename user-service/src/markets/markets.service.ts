@@ -8,7 +8,7 @@ export class MarketsService {
   constructor(
     @InjectRepository(Markets)
     private marketRepository: Repository<Markets>,
-  ) { }
+  ) {}
 
   findAll(): Promise<Markets[]> {
     return this.marketRepository.find();

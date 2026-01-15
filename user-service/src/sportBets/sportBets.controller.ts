@@ -14,7 +14,7 @@ export class SportBetsController {
   @Get('my-bets')
   findUserBets(
     @Query('userId') userId: string,
-    @Query('eventId') eventId?: string
+    @Query('eventId') eventId?: string,
   ) {
     if (!userId) {
       throw new Error('User ID is required');
@@ -25,14 +25,14 @@ export class SportBetsController {
     }
 
     // When eventId is null or not provided, return only unique eventId, sportId, and marketId combinations
-    return this.sportBetsService.findUniqueEventSportAndMarketIdsByUserId(userId);
+    return this.sportBetsService.findUniqueEventSportAndMarketIdsByUserId(
+      userId,
+    );
   }
 
   // New endpoint to get all bets for a user
   @Get('all-bets')
-  findAllUserBets(
-    @Query('userId') userId: string
-  ) {
+  findAllUserBets(@Query('userId') userId: string) {
     if (!userId) {
       throw new Error('User ID is required');
     }
@@ -54,13 +54,16 @@ export class SportBetsController {
   @Post('settle-market')
   async settleMarketResults(
     @Body('marketId') marketId: string,
-    @Body('winningSelection') winningSelection: string
+    @Body('winningSelection') winningSelection: string,
   ) {
     if (!marketId || !winningSelection) {
       throw new Error('marketId and winningSelection are required');
     }
 
-    return this.sportBetsService.settleMarketResults(marketId, winningSelection);
+    return this.sportBetsService.settleMarketResults(
+      marketId,
+      winningSelection,
+    );
   }
 
   // New endpoint to process results and settle bets automatically
@@ -68,13 +71,17 @@ export class SportBetsController {
   async processResultAndSettleBets(
     @Body('event_id') eventId: string,
     @Body('sports_id') sportsId: string,
-    @Body('market_id') marketId: string
+    @Body('market_id') marketId: string,
   ) {
     if (!eventId || !sportsId || !marketId) {
       throw new Error('event_id, sports_id, and market_id are required');
     }
 
-    return this.sportBetsService.processResultAndSettleBets(eventId, sportsId, marketId);
+    return this.sportBetsService.processResultAndSettleBets(
+      eventId,
+      sportsId,
+      marketId,
+    );
   }
 
   // Endpoint to get match results
@@ -83,13 +90,18 @@ export class SportBetsController {
     @Query('sports_id') sportsId: string,
     @Query('event_id') eventId: string,
     @Query('market_id') marketId?: string,
-    @Query('user_id') userId?: string
+    @Query('user_id') userId?: string,
   ) {
     if (!sportsId || !eventId) {
       throw new Error('sports_id and event_id are required');
     }
 
-    return this.sportBetsService.getMatchResults(sportsId, eventId, marketId, userId);
+    return this.sportBetsService.getMatchResults(
+      sportsId,
+      eventId,
+      marketId,
+      userId,
+    );
   }
 
   // New endpoint to generate market report
@@ -97,12 +109,16 @@ export class SportBetsController {
   async generateMarketReport(
     @Query('user_id') userId: string,
     @Query('market_id') marketId?: string,
-    @Query('event_id') eventId?: string
+    @Query('event_id') eventId?: string,
   ) {
     if (!userId) {
       throw new Error('user_id is required');
     }
 
-    return this.sportBetsService.generateMarketReport(userId, marketId, eventId);
+    return this.sportBetsService.generateMarketReport(
+      userId,
+      marketId,
+      eventId,
+    );
   }
 }

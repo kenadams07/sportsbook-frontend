@@ -1,12 +1,16 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { UsersRabbitMQService } from './users.rabbitmq.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { User } from './users.entity';
 import { successResponse } from '../utils/helper';
 
 @Controller('api')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly usersRabbitMQService: UsersRabbitMQService,
+  ) {}
 
   @Get('users-list')
   @UseGuards(AuthGuard)
@@ -16,7 +20,7 @@ export class UsersController {
     message: string;
     data: User[];
   }> {
-    const users = await this.usersService.findAll();
+    const users = await this.usersRabbitMQService.findAll();
     return successResponse('Users fetched successfully', users);
   }
 }

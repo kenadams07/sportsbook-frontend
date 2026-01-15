@@ -66,11 +66,11 @@ export class Users {
   clientShare: number;
 
   @Column('simple-array', { nullable: true })
-  casino: string[]; 
+  casino: string[];
 
   @Column({ type: 'int', default: 0 })
   creditReference: number;
- 
+
   @Column({ type: 'int', default: 0 })
   balance: number;
 
@@ -89,10 +89,16 @@ export class Users {
   @OneToMany(() => SportBets, (sportBets) => sportBets.user)
   sportsBets: SportBets[];
 
-  @Column({ type: 'decimal', precision: 15, scale: 2, default: 0, transformer: {
-    to: (value: number) => value,
-    from: (value: string) => value ? parseFloat(value) : 0
-  }})
+  @Column({
+    type: 'decimal',
+    precision: 15,
+    scale: 2,
+    default: 0,
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => (value ? parseFloat(value) : 0),
+    },
+  })
   exposure: number;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
@@ -104,6 +110,9 @@ export class Users {
   @Column({ nullable: true })
   gap_casino_token: string;
 
-  @OneToMany(() => ResultTransaction, (resultTransaction) => resultTransaction.user)
+  @OneToMany(
+    () => ResultTransaction,
+    (resultTransaction) => resultTransaction.user,
+  )
   resultTransaction: ResultTransaction[];
 }
