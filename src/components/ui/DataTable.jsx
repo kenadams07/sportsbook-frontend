@@ -59,4 +59,3 @@ const DataTable = ({ columns, data, keyField = 'id' }) => {
 };
 
 export default DataTable;
-

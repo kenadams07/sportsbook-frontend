@@ -7,6 +7,7 @@ import createEventReducer from '../reducers/createEventReducer.js';
 import competitionsReducer from '../reducers/competitionsReducer.js';
 import sportsReducer from '../reducers/sportsReducer.js';
 import eventsReducer from '../reducers/eventsReducer.js';
+import usersReducer from '../reducers/usersReducer.js';
 
 // Root reducer
 const rootReducer = combineReducers({
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   competitions: competitionsReducer,
   sports: sportsReducer,
   events: eventsReducer,
+  users: usersReducer,
 });
 
 // Create saga middleware

@@ -20,6 +20,10 @@ export const API_ENDPOINTS = {
   GET_USER_BY_ID: (id) => `/users/${id}`,
   UPDATE_USER: (id) => `/users/${id}`,
   GET_ADMIN_USERS: '/users-list',
+  ADD_USER_BALANCE: '/add-user-balance',
+  WITHDRAW_USER_BALANCE: '/withdraw-user-balance',
+  UPDATE_USER_PASSWORD: '/update-user-password',
+  FETCH_USER_MARKET_REPORTS: '/get-user-market-reports',
   
   // Bets endpoints
   GET_BETS: '/bets',

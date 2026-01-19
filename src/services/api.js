@@ -109,6 +109,10 @@ export const api = {
   getUser: (id) => axiosApi(apiClient, API_ENDPOINTS.GET_USER_BY_ID(id)),
   updateUser: (id, user) => axiosPut(apiClient, API_ENDPOINTS.UPDATE_USER(id), user),
   getAdminUsers: () => axiosApi(adminApiClient, API_ENDPOINTS.GET_ADMIN_USERS),
+  addUserBalance: (userId, amount) => axiosPost(adminApiClient, API_ENDPOINTS.ADD_USER_BALANCE, { userId, amount }),
+  withdrawUserBalance: (userId, amount) => axiosPost(adminApiClient, API_ENDPOINTS.WITHDRAW_USER_BALANCE, { userId, amount }),
+  updateUserPassword: (userId, newPassword) => axiosPost(adminApiClient, API_ENDPOINTS.UPDATE_USER_PASSWORD, { userId, newPassword }),
+  fetchUserMarketReports: (userId) => axiosPost(adminApiClient, API_ENDPOINTS.FETCH_USER_MARKET_REPORTS, { userId }),
   
   // Bets
   getBets: () => axiosApi(apiClient, API_ENDPOINTS.GET_BETS),
