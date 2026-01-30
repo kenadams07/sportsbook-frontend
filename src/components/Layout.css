@@ -18,10 +18,42 @@
   margin-left: 70px; /* Adjust for collapsed sidebar */
 }
 
+.mobile-menu-btn {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 990;
+  background: #1a2a6c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-btn:hover {
+  background: #2c3e50;
+  transform: scale(1.05);
+}
+
+.mobile-menu-btn svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: block;
+  }
+
   .layout-main.with-sidebar {
     margin-left: 0;
+    padding-top: 60px; /* Space for the mobile menu button */
   }
   
   .layout-main.with-sidebar:not(.collapsed) {

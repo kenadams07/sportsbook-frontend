@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
+import { FaBars } from 'react-icons/fa';
 import Sidebar from './Sidebar/Sidebar';
 import './Layout.css';
 
@@ -28,6 +29,10 @@ const Layout = ({ children }) => {
   
   return (
     <div className="layout">
+      <button className="mobile-menu-btn" onClick={toggleSidebar} aria-label="Toggle Menu">
+        <FaBars />
+      </button>
+
       <Sidebar 
         isOpen={isSidebarOpen} 
         onClose={closeSidebar} 
