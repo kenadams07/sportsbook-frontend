@@ -305,7 +305,7 @@ export class SportBetsService {
     newBet.marketId = betData.marketId;
     newBet.selection = betData.runnername;
     newBet.marketType = betData.marketType;
-    newBet.leagueId = betData.competitionId;
+    newBet.leagueId = betData.competitionId || '';
     newBet.selectionId = betData.runnerid;
     newBet.marketName = betData.marketName;
     newBet.bettingType = BettingType.ODDS;
@@ -768,23 +768,26 @@ export class SportBetsService {
     eventId: string,
     betStake: number,
   ): Promise<void> {
-    // According to requirements, do not modify the exposure table
-    // Only update the user's exposure in the user table by deducting the bet stake
-
-    const user = await queryRunner.manager.findOne(Users, {
-      where: { id: userId },
+    // Mark related exposure records as cleared for this user + market + event
+    const exposures = await queryRunner.manager.find(Exposure, {
+      where: {
+        user: { id: userId },
+        market: { marketId: marketId },
+        eventId: eventId,
+        is_clear: 'false',
+      },
+      relations: ['market', 'user'],
     });
-    if (user) {
-      // Reduce the user's total exposure by the bet stake amount
-      const newExposure = Math.max(0, user.exposure - betStake);
 
-      await queryRunner.manager.update(Users, userId, {
-        exposure: newExposure,
-      });
-
-      // Emit socket event for frontend
-      this.appGateway.emitExposureUpdate(userId, newExposure);
+    if (exposures && exposures.length > 0) {
+      for (const exp of exposures) {
+        exp.is_clear = 'true';
+        await queryRunner.manager.save(Exposure, exp);
+      }
     }
+
+    // Recalculate and update user's total exposure based on non-cleared exposures only
+    await this.updateUserTotalExposure(queryRunner, userId);
   }
 
   // Helper method to recalculate and update user's total exposure

@@ -89,7 +89,7 @@ export class UsersService {
       const result = await this.emailService.sendOTPMail(email, otp);
 
       return result;
-    } catch (error) {
+    } catch {
       return false;
     }
   }

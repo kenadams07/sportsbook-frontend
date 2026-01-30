@@ -9,7 +9,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Currency } from '../currency/currency.entity';
-import { Exposure } from '../exposure/exposure.entity';
 import { ResultTransaction } from '../resultTransaction/resultTransaction.entity';
 import { SportBets } from '../sportBets/sportBets.entity';
 

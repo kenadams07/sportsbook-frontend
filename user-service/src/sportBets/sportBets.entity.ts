@@ -62,7 +62,7 @@ export class SportBets {
   @Column({ type: 'varchar' })
   marketType: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   leagueId: string;
 
   @Column({ type: 'varchar' })

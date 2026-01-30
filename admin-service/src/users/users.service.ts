@@ -17,4 +17,38 @@ export class UsersService {
       relations: ['currency'],
     });
   }
+
+  async addUserBalance(
+    userId: string,
+    amount: number,
+  ): Promise<{ previousBalance: number; newBalance: number } | null> {
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      return null;
+    }
+    const previousBalance = Number(user.balance) || 0;
+    const newBalance = previousBalance + Number(amount);
+    await this.usersRepository.update(userId, { balance: newBalance });
+    return { previousBalance, newBalance };
+  }
+
+  async withdrawUserBalance(
+    userId: string,
+    amount: number,
+  ): Promise<{ previousBalance: number; newBalance: number } | null> {
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      return null;
+    }
+    const previousBalance = Number(user.balance) || 0;
+    
+    // Check if user has sufficient balance
+    if (previousBalance < amount) {
+      throw new Error('Insufficient balance');
+    }
+
+    const newBalance = previousBalance - Number(amount);
+    await this.usersRepository.update(userId, { balance: newBalance });
+    return { previousBalance, newBalance };
+  }
 }

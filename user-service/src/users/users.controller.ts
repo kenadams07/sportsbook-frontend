@@ -28,6 +28,7 @@ import { validate } from 'class-validator';
 import * as jwt from 'jsonwebtoken';
 import { USERS_CONSTANTS } from './users.constants';
 import { LoginHistoryService } from './login-history.service';
+import type { Request, Response } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -50,9 +51,9 @@ export class UsersController {
   @Post('signup')
   async create(
     @Body(new ValidationPipe()) signupDto: SignupDto,
-    @Req() req,
-    @Res() res,
-  ) {
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
     try {
       console.log('Signup request received:', signupDto);
 
@@ -98,15 +99,23 @@ export class UsersController {
 
       if (typeof payload.password !== 'string') {
         console.log('Password validation failed: not a string');
-        return errorResponse(
-          'The "password" field is required and must be a string.',
-          400,
-        );
+        res
+          .status(400)
+          .json(
+            errorResponse(
+              'The "password" field is required and must be a string.',
+              400,
+            ),
+          );
+        return;
       }
       const rawPassword = payload.password.trim();
       if (!rawPassword) {
         console.log('Password validation failed: empty password');
-        return errorResponse('The "password" field cannot be empty.', 400);
+        res
+          .status(400)
+          .json(errorResponse('The "password" field cannot be empty.', 400));
+        return;
       }
       payload.passwordText = rawPassword;
 
@@ -130,10 +139,15 @@ export class UsersController {
 
         if (!currencyRecord) {
           console.log('Currency not found:', signupDto.currency);
-          return errorResponse(
-            `Currency "${signupDto.currency}" does not exist.`,
-            400,
-          );
+          res
+            .status(400)
+            .json(
+              errorResponse(
+                `Currency "${signupDto.currency}" does not exist.`,
+                400,
+              ),
+            );
+          return;
         }
 
         payload.currency = currencyRecord;
@@ -182,12 +196,13 @@ export class UsersController {
         delete (newUser as any).token;
 
         console.log('Sending successful response');
-        return res.status(200).json({
+        res.status(200).json({
           success: true,
           message: 'Signup Success.',
           data: response,
           token: token,
         });
+        return;
       }
     } catch (error) {
       console.error('Signup error:', error);
@@ -217,7 +232,7 @@ export class UsersController {
       res.header('Access-Control-Allow-Credentials', 'true');
 
       console.log('Sending error response');
-      return res
+      res
         .status(error.status || 500)
         .json(
           errorResponse(
@@ -225,15 +240,16 @@ export class UsersController {
             error.status || 500,
           ),
         );
+      return;
     }
   }
 
   @Post('login')
   async login(
     @Body(new ValidationPipe()) loginDto: LoginDto,
-    @Req() req,
-    @Res() res,
-  ) {
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
     try {
       console.log('Login request received:', loginDto);
 
@@ -263,7 +279,7 @@ export class UsersController {
       );
       res.header('Access-Control-Allow-Credentials', 'true');
 
-      const { emailOrUsername, password, rememberMe } = loginDto;
+      const { emailOrUsername, password } = loginDto;
       console.log('Processing login for:', emailOrUsername);
 
       let user: Users | null = null;
@@ -283,7 +299,8 @@ export class UsersController {
 
       if (!user) {
         console.log('User not found');
-        return res.status(401).json(errorResponse('Invalid credentials', 401));
+        res.status(401).json(errorResponse('Invalid credentials', 401));
+        return;
       }
 
       console.log('Verifying password');
@@ -292,7 +309,8 @@ export class UsersController {
 
       if (!isPasswordValid) {
         console.log('Invalid password');
-        return res.status(401).json(errorResponse('Invalid credentials', 401));
+        res.status(401).json(errorResponse('Invalid credentials', 401));
+        return;
       }
 
       console.log('Generating JWT token');
@@ -355,12 +373,13 @@ export class UsersController {
       delete (response as any).token;
 
       console.log('Sending successful login response');
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         message: 'Login Success.',
         data: response,
         token: token,
       });
+      return;
     } catch (error) {
       console.error('Login error:', error);
       // Set CORS headers for error responses as well
@@ -389,7 +408,7 @@ export class UsersController {
       res.header('Access-Control-Allow-Credentials', 'true');
 
       console.log('Sending error response');
-      return res
+      res
         .status(error.status || 500)
         .json(
           errorResponse(
@@ -397,6 +416,7 @@ export class UsersController {
             error.status || 500,
           ),
         );
+      return;
     }
   }
 
@@ -451,10 +471,6 @@ export class UsersController {
         );
       }
 
-      const resetToken =
-        Math.random().toString(36).substring(2, 15) +
-        Math.random().toString(36).substring(2, 15);
-
       const emailSent = await this.usersService.sendVerificationEmail(email);
 
       if (emailSent) {
@@ -508,10 +524,10 @@ export class UsersController {
 
   @Get('profile')
   async getProfile(
-    @Req() req,
+    @Req() req: Request,
     @Headers('authorization') authHeader: string,
-    @Res() res,
-  ) {
+    @Res() res: Response,
+  ): Promise<void> {
     try {
       // Set CORS headers manually since we're using @Res()
       // Match the allowed origins from main.ts
@@ -540,9 +556,10 @@ export class UsersController {
       res.header('Access-Control-Allow-Credentials', 'true');
 
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res
+        res
           .status(401)
           .json(errorResponse('Authorization token is required', 401));
+        return;
       }
 
       const token = authHeader.substring(7);
@@ -551,15 +568,15 @@ export class UsersController {
       try {
         decoded = jwt.verify(token, USERS_CONSTANTS.JWT_SECRET);
       } catch (error) {
-        return res
-          .status(401)
-          .json(errorResponse('Invalid or expired token', 401));
+        res.status(401).json(errorResponse('Invalid or expired token', 401));
+        return;
       }
 
       const user = await this.usersService.findOneByEmail(decoded.email);
 
       if (!user) {
-        return res.status(404).json(errorResponse('User not found', 404));
+        res.status(404).json(errorResponse('User not found', 404));
+        return;
       }
 
       const response = {
@@ -591,11 +608,12 @@ export class UsersController {
       delete (response as any).passwordText;
       delete (response as any).token;
 
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         message: 'Profile retrieved successfully',
         data: response,
       });
+      return;
     } catch (error) {
       // Set CORS headers for error responses as well
       const origin = req.get('Origin');
@@ -622,7 +640,7 @@ export class UsersController {
       );
       res.header('Access-Control-Allow-Credentials', 'true');
 
-      return res
+      res
         .status(error.status || 500)
         .json(
           errorResponse(
@@ -630,6 +648,7 @@ export class UsersController {
             error.status || 500,
           ),
         );
+      return;
     }
   }
 }
