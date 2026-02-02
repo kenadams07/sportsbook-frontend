@@ -25,6 +25,7 @@ import { Input } from "../components/ui/input";
 
 export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
   const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.Login);
   const navigate = useNavigate();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [shouldReopenRegister, setShouldReopenRegister] = useState(false);
@@ -49,6 +50,13 @@ export default function RegisterModal({ isOpen, onClose, onCloseAll }) {
       // Don't close the register modal, just reset the flag
     }
   }, [shouldReopenRegister, isLoginModalOpen]);
+
+  // Close modal when user becomes authenticated (after successful signup)
+  useEffect(() => {
+    if (isAuthenticated && isOpen) {
+      handleClose();
+    }
+  }, [isAuthenticated, isOpen]);
 
   // Clear errors and form data when modal opens
   useEffect(() => {

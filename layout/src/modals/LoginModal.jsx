@@ -5,7 +5,7 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Checkbox } from "../components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "../components/ui/dialog";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/Action/auth/loginAction";
 import { verifyEmail } from "../redux/Action/auth/verifyEmailAction";
 import { notifyError } from "../utils/notificationService";
@@ -27,6 +27,7 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
   });
 
   const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.Login);
 
   // Watch form values to manage floating labels
   const emailOrUsername = watch("emailOrUsername");
@@ -43,6 +44,13 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
     }
   }, [isOpen, reset]);
 
+  // Close modal when user becomes authenticated
+  useEffect(() => {
+    if (isAuthenticated && isOpen) {
+      onClose();
+    }
+  }, [isAuthenticated, isOpen, onClose]);
+
   const handleClose = () => {
     // Clear all errors when closing modal
     reset({
@@ -54,12 +62,8 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
   };
 
   const onSubmit = (data) => {
-    // Dispatch login action with callback
-    dispatch(
-      login(data, (response) => {
-         onClose();
-      })
-    );
+    // Dispatch login action
+    dispatch(login(data));
   };
 
   const handleForgotPassword = () => {

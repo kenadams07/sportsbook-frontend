@@ -232,7 +232,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
     return () => {
       abortController.abort();
     };
-  }, [selectedType, location.key]);
+  }, [selectedType]);
 
   // Only poll odds and scores for the expanded sport
   useEffect(() => {

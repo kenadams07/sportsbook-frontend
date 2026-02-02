@@ -342,6 +342,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
   const [allMarketsExpanded, setAllMarketsExpanded] = useState(false);
   const [filteredMarkets, setFilteredMarkets] = useState([]);
   const [selectedMarketFilter, setSelectedMarketFilter] = useState('All');
+  const [showEmptyState, setShowEmptyState] = useState(false); // Moved to top level
   const prevMarketsRef = useRef([]);
   const intervalRef = useRef(null);
   const highlightedOddsRef = useRef({});
@@ -402,9 +403,10 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
     const isNewMatch = !prevSelectedMatchRef.current || 
                       (selectedMatch && prevSelectedMatchRef.current.eventId !== selectedMatch.eventId);
     
-    // If switching to a new match, show loading state
+    // If switching to a new match, show loading state and clean up previous data
     if (isNewMatch && selectedMatch) {
       setLoading(true);
+      setShowEmptyState(false); // Reset empty state when switching matches
       // Clear previous markets immediately when switching matches
       setMarkets([]);
       setFilteredMarkets([]);
@@ -477,45 +479,68 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
         const newMarketsRaw = Array.isArray(marketsData) ? marketsData : [];
         const newMarkets = newMarketsRaw.filter(m => m && typeof m === 'object');
         
-        // Only update state if data has actually changed to prevent unnecessary re-renders
+        // Always update markets state to ensure consistency
         const prevMarkets = prevMarketsRef.current;
-        if (JSON.stringify(prevMarkets) !== JSON.stringify(newMarkets)) {
-          // Check for odds changes to highlight
-          const newHighlightedOdds = {};
-          newMarkets.forEach((market, marketIndex) => {
-            const prevMarket = prevMarkets[marketIndex];
-            if (prevMarket && market.runners) {
-              market.runners.forEach((runner, runnerIndex) => {
-                const prevRunner = prevMarket.runners?.[runnerIndex];
-                if (prevRunner && runner.backPrices?.[0]?.price !== prevRunner.backPrices?.[0]?.price) {
-                  newHighlightedOdds[runner.runnerName] = runner.backPrices?.[0]?.price?.toFixed(2) || '-';
-                }
-              });
-            }
+        
+        // Check for odds changes to highlight
+        const newHighlightedOdds = {};
+        newMarkets.forEach((market, marketIndex) => {
+          const prevMarket = prevMarkets[marketIndex];
+          if (prevMarket && market.runners) {
+            market.runners.forEach((runner, runnerIndex) => {
+              const prevRunner = prevMarket.runners?.[runnerIndex];
+              if (prevRunner && runner.backPrices?.[0]?.price !== prevRunner.backPrices?.[0]?.price) {
+                newHighlightedOdds[runner.runnerName] = runner.backPrices?.[0]?.price?.toFixed(2) || '-';
+              }
+            });
+          }
+        });
+        
+        if (Object.keys(newHighlightedOdds).length > 0) {
+          highlightedOddsRef.current = newHighlightedOdds;
+          // Clear highlights after 1 second
+          setTimeout(() => {
+            highlightedOddsRef.current = {};
+          }, 1000);
+        }
+        
+        // Update markets state
+        setMarkets(newMarkets);
+        prevMarketsRef.current = newMarkets;
+        
+        // Initialize all markets as collapsed by default (only for new matches)
+        if (isNewMatch && newMarkets.length > 0) {
+          const initialExpanded = {};
+          newMarkets.forEach((market, index) => {
+            initialExpanded[market.marketId || index] = false;
           });
-          
-          if (Object.keys(newHighlightedOdds).length > 0) {
-            highlightedOddsRef.current = newHighlightedOdds;
-            // Clear highlights after 1 second
-            setTimeout(() => {
-              highlightedOddsRef.current = {};
-            }, 1000);
+          setExpandedById(initialExpanded);
+          setAllMarketsExpanded(false);
+        }
+        
+        // Set loading to false after successful fetch
+        setLoading(false);
+        
+        // Set up polling interval with error handling - only for established matches
+        if (selectedMatch && newMarkets.length > 0) {
+          // Clear any existing interval
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current);
           }
           
-          setMarkets(newMarkets);
-          prevMarketsRef.current = newMarkets;
-          
-          // Initialize all markets as collapsed by default (only for new matches)
-          if (isNewMatch && newMarkets.length > 0) {
-            const initialExpanded = {};
-            newMarkets.forEach((market, index) => {
-              initialExpanded[market.marketId || index] = false;
-            });
-            setExpandedById(initialExpanded);
-            setAllMarketsExpanded(false);
+          try {
+            intervalRef.current = setInterval(() => {
+              // Add a try-catch around the fetch to prevent interval crashes
+              try {
+                fetchMarkets();
+              } catch (error) {
+                // Removed console.error("Error in markets polling interval:", error);
+              }
+            }, 1000);
+          } catch (error) {
+            // Removed console.error("Error setting up markets polling interval:", error);
           }
         }
-        setLoading(false);
       } catch (error) {
         // Ignore aborted requests
         if (error.name === 'AbortError') {
@@ -540,20 +565,6 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
 
     // Fetch immediately
     fetchMarkets();
-
-    // Set up polling interval with error handling
-    try {
-      intervalRef.current = setInterval(() => {
-        // Add a try-catch around the fetch to prevent interval crashes
-        try {
-          fetchMarkets();
-        } catch (error) {
-          // Removed console.error("Error in markets polling interval:", error);
-        }
-      }, 1000);
-    } catch (error) {
-      // Removed console.error("Error setting up markets polling interval:", error);
-    }
 
     // Clean up on selectedMatch change or component unmount
     return () => {
@@ -615,10 +626,34 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
   const marketNames = Object.entries(marketNameCounts)
     .filter(([name, count]) => count > 2)
     .map(([name, count]) => name);
-
-  // Show loading state when switching matches or when markets are loading
+  
+  // Manage empty state with delay to prevent flickering
+  useEffect(() => {
+    // Clear any existing timers
+    let timer;
+    
+    if (filteredMarkets.length === 0 && !loading) {
+      // Delay showing empty state by 300ms to prevent flickering
+      timer = setTimeout(() => {
+        // Double-check that we still have no markets and aren't loading
+        if (filteredMarkets.length === 0 && !loading) {
+          setShowEmptyState(true);
+        }
+      }, 300);
+    } else {
+      setShowEmptyState(false);
+    }
+    
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [filteredMarkets.length, loading]);
+    
+  // Render content based on state
+  let content;
+    
   if (loading) {
-    return (
+    content = (
       <div className="text-live-primary p-4 flex items-center justify-center h-full">
         <div className="flex flex-col items-center animate-pulse-scale">
           <div className="relative w-12 h-12">
@@ -629,11 +664,8 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
         </div>
       </div>
     );
-  }
-
-  // Show empty state when no markets
-  if (filteredMarkets.length === 0) {
-    return (
+  } else if (showEmptyState) {
+    content = (
       <div className="text-live-primary p-4 flex items-center justify-center h-full">
         <div className="text-center">
           <div className="text-lg font-bold mb-2">No Markets Available</div>
@@ -641,72 +673,74 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
         </div>
       </div>
     );
-  }
-
-  return (
-    <div className="flex flex-col h-full">
-      {/* Expand/Collapse All button - Modified to show "All Markets" only with theme-matching shadow */}
-      <div className="px-2 pb-2 pt-3 cursor-pointer">
-        <button
-          onClick={toggleAllMarkets}
-          className="w-full text-left px-3 py-2 text-xs bg-live-primary hover:bg-live-hover cursor-pointer rounded transition-colors flex items-center justify-between shadow-[0_2px_12px_var(--live-accent-primary)]"
-        >
-          <span className="text-live-primary font-medium">
-            All Markets
-          </span>
-          <span className="text-live-accent text-xs">
-            {filteredMarkets.length} markets
-          </span>
-        </button>
-      </div>
-
-      {/* Sleek Navbar with market names */}
-      <div className="px-2 pb-2">
-        <SleekNavbar 
-          onSearchChange={onSearchChange}
-          searchValue={searchTerm}
-          onSearchClear={onSearchClear}
-          marketNames={marketNames}
-          onMarketFilter={handleMarketFilter}
-        />
-      </div>
-
-      {/* Two-column layout for markets */}
-      <div className="flex-grow overflow-y-auto px-2">
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 h-full">
-          {/* Left column */}
-          <div className="flex-1 space-y-2">
-            {leftColumn.map((market) => (
-              <MarketItem
-                key={market.id}
-                market={market}
-                isOpen={expandedById[market.id] ?? false}
-                onToggle={() => toggleMarket(market.id)}
-                highlightedOdds={highlightedOddsRef.current}
-                onRunnerSelect={onRunnerSelect}
-                selectedMatch={selectedMatch}
-              />
-            ))}
-          </div>
-          
-          {/* Right column */}
-          <div className="flex-1 space-y-2">
-            {rightColumn.map((market) => (
-              <MarketItem
-                key={market.id}
-                market={market}
-                isOpen={expandedById[market.id] ?? false}
-                onToggle={() => toggleMarket(market.id)}
-                highlightedOdds={highlightedOddsRef.current}
-                onRunnerSelect={onRunnerSelect}
-                selectedMatch={selectedMatch}
-              />
-            ))}
+  } else {
+    content = (
+      <div className="flex flex-col h-full">
+        {/* Expand/Collapse All button - Modified to show "All Markets" only with theme-matching shadow */}
+        <div className="px-2 pb-2 pt-3 cursor-pointer">
+          <button
+            onClick={toggleAllMarkets}
+            className="w-full text-left px-3 py-2 text-xs bg-live-primary hover:bg-live-hover cursor-pointer rounded transition-colors flex items-center justify-between shadow-[0_2px_12px_var(--live-accent-primary)]"
+          >
+            <span className="text-live-primary font-medium">
+              All Markets
+            </span>
+            <span className="text-live-accent text-xs">
+              {filteredMarkets.length} markets
+            </span>
+          </button>
+        </div>
+  
+        {/* Sleek Navbar with market names */}
+        <div className="px-2 pb-2">
+          <SleekNavbar
+            onSearchChange={onSearchChange}
+            searchValue={searchTerm}
+            onSearchClear={onSearchClear}
+            marketNames={marketNames}
+            onMarketFilter={handleMarketFilter}
+          />
+        </div>
+  
+        {/* Two-column layout for markets */}
+        <div className="flex-grow overflow-y-auto px-2">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 h-full">
+            {/* Left column */}
+            <div className="flex-1 space-y-2">
+              {leftColumn.map((market) => (
+                <MarketItem
+                  key={market.id}
+                  market={market}
+                  isOpen={expandedById[market.id] ?? false}
+                  onToggle={() => toggleMarket(market.id)}
+                  highlightedOdds={highlightedOddsRef.current}
+                  onRunnerSelect={onRunnerSelect}
+                  selectedMatch={selectedMatch}
+                />
+              ))}
+            </div>
+              
+            {/* Right column */}
+            <div className="flex-1 space-y-2">
+              {rightColumn.map((market) => (
+                <MarketItem
+                  key={market.id}
+                  market={market}
+                  isOpen={expandedById[market.id] ?? false}
+                  onToggle={() => toggleMarket(market.id)}
+                  highlightedOdds={highlightedOddsRef.current}
+                  onRunnerSelect={onRunnerSelect}
+                  selectedMatch={selectedMatch}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
+    
+  return content;
 }
 
 /**

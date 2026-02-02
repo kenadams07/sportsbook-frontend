@@ -45,7 +45,7 @@ function extractOddsW1W2(markets) {
 }
 
 export default function MainLiveSection() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
   const [selectedMatch, setSelectedMatch] = useState(null)
@@ -79,8 +79,17 @@ export default function MainLiveSection() {
 
   useEffect(() => {
     const navigationState = location.state || {};
-    const selectedGameId = navigationState.selectedGameId || eventIdFromUrl;
-    if (!selectedGameId) return;
+    // Check if we have a selected game ID from either URL or navigation state
+    const selectedGameIdFromUrl = eventIdFromUrl;
+    const selectedGameIdFromState = navigationState.selectedGameId;
+    const selectedGameId = selectedGameIdFromState || selectedGameIdFromUrl;
+    
+    // Determine the source
+    const source = navigationState.source || null;
+    
+    // We should process if we have a selectedGameId OR if we're coming from upcoming matches
+    // This ensures upcoming matches flow continues even if URL params are not set yet
+    if (!selectedGameId && source !== 'upcoming_matches') return;
     // Remove the mobile-only check to allow deep linking/navigation on desktop too
     // if (window.innerWidth >= 768) return;
 
@@ -91,47 +100,59 @@ export default function MainLiveSection() {
 
     setEntrySource(navigationState.source || null);
 
-    // For upcoming matches flow, we rely on the direct setting above.
-    // However, if that condition fails (e.g. missing requestedSportKey), we might fall through.
-    // But critically, we must ensure we are using the navigation state correctly.
-    // The issue is likely that entrySource isn't set yet when we check it inside loadSelectedMatch
-    // because setEntrySource is async/batched React state update.
-    
-    // Instead of using state variable entrySource inside the effect that sets it, 
-    // use the local variable derived from location.state
-    const source = navigationState.source || null;
-    
     async function loadSelectedMatch() {
       setLoadingEvents(true);
       try {
         // If we have both sportKey and gameId from upcoming matches, 
         // we can directly set the selected match without fetching the full list first
         // This is much faster and follows the requested "direct flow"
-        if (source === 'upcoming_matches' && requestedSportKey && selectedGameId) {
-          const sport = SPORTS.find((s) => s.key === requestedSportKey);
-          if (sport) {
-            setSelectedSport(sport);
-            setMobileHeaderSport(sport);
-            
-            // Construct a partial match object with what we know
-            // The MiddleGameDisplay component will fetch the full markets
-            const matchDetails = navigationState.matchDetails || {};
-            
-            setSelectedMatch({
-              eventId: selectedGameId,
-              sportKey: requestedSportKey,
-              sportId: SPORT_ID_BY_KEY[requestedSportKey],
-              // Populate from passed details if available
-              eventName: matchDetails.eventName || "", 
-              team1: matchDetails.team1 || "",
-              team2: matchDetails.team2 || "",
-              openDate: matchDetails.openDate || Date.now(), 
-              status: matchDetails.status || "UPCOMING"
-            });
-            
-            setMobileView("markets");
-            return;
+        if (source === 'upcoming_matches' && selectedGameId) {
+          // Use requestedSportKey if available, otherwise try to get it from matchDetails
+          const effectiveSportKey = requestedSportKey || navigationState.matchDetails?.sportKey;
+          
+          if (effectiveSportKey) {
+            const sport = SPORTS.find((s) => s.key === effectiveSportKey);
+            if (sport) {
+              setSelectedSport(sport);
+              setMobileHeaderSport(sport);
+              
+              // Construct a partial match object with what we know
+              // The MiddleGameDisplay component will fetch the full markets
+              const matchDetails = navigationState.matchDetails || {};
+              
+              const selectedMatchData = {
+                eventId: selectedGameId,
+                sportKey: effectiveSportKey,
+                sportId: SPORT_ID_BY_KEY[effectiveSportKey],
+                // Populate from passed details if available
+                eventName: matchDetails.eventName || "", 
+                team1: matchDetails.team1 || "",
+                team2: matchDetails.team2 || "",
+                openDate: matchDetails.openDate || Date.now(), 
+                status: matchDetails.status || "UPCOMING"
+              };
+              
+              setSelectedMatch(selectedMatchData);
+
+              // Update URL with the match info for persistence
+              // Only update if parameters are different to prevent infinite loops
+              const currentParams = new URLSearchParams(window.location.search);
+              if (currentParams.get('eventId') !== selectedGameId || 
+                  currentParams.get('sportKey') !== effectiveSportKey) {
+                setSearchParams({
+                  eventId: selectedGameId,
+                  sportKey: effectiveSportKey,
+                  eventName: matchDetails.eventName || '',
+                  source: 'upcoming_matches'
+                });
+              }
+
+              setMobileView("markets");
+              return;
+            }
           }
+          // If we don't have a sportKey but still have a selectedGameId from upcoming matches,
+          // we'll continue to the next part of the function to fetch the match details
         }
 
         const searchSportKeys = requestedSportKey
@@ -159,13 +180,29 @@ export default function MainLiveSection() {
           const team1 = parts[0]?.trim() || "";
           const team2 = parts[1]?.trim() || "";
 
-          setSelectedMatch({
+          const selectedMatchData = {
             ...match,
             team1,
             team2,
             odds: extractOddsW1W2(match.markets),
             sportKey
-          });
+          };
+          
+          setSelectedMatch(selectedMatchData);
+          
+          // Update URL with the match info for persistence
+          // Only update if parameters are different to prevent infinite loops
+          const currentParams = new URLSearchParams(window.location.search);
+          if (currentParams.get('eventId') !== match.eventId || 
+              currentParams.get('sportKey') !== sportKey) {
+            setSearchParams({
+              eventId: match.eventId,
+              sportKey: sportKey,
+              eventName: match.eventName || '',
+              source: entrySource || '',
+              viewType: viewType || 'live'
+            });
+          }
           
           setMobileView("markets");
           return;
@@ -181,6 +218,10 @@ export default function MainLiveSection() {
     };
   }, [eventIdFromUrl, location.key]);
 
+
+  
+
+  
   // When we direct link to markets without full event details, we need to fetch event details 
   // MiddleGameDisplay will fetch markets, but we need team names etc.
   useEffect(() => {
@@ -283,8 +324,31 @@ export default function MainLiveSection() {
   // Handle match selection on mobile
   const handleMatchSelect = (match) => {
     setSelectedMatch(match);
+    // Update URL with selected match info for persistence
+    if (match && match.eventId) {
+      setSearchParams({
+        eventId: match.eventId,
+        sportKey: match.sportKey || selectedSport?.key || '',
+        eventName: match.eventName || '',
+        viewType: 'live' // default view type
+      });
+    }
     if (window.innerWidth < 768) {
       setMobileView('markets'); // Show markets
+    }
+  };
+  
+  // Handle match selection on desktop
+  const handleMatchSelectDesktop = (match) => {
+    setSelectedMatch(match);
+    // Update URL with selected match info for persistence
+    if (match && match.eventId) {
+      setSearchParams({
+        eventId: match.eventId,
+        sportKey: match.sportKey || selectedSport?.key || '',
+        eventName: match.eventName || '',
+        viewType: 'live' // default view type
+      });
     }
   };
 
@@ -418,9 +482,9 @@ export default function MainLiveSection() {
       {/* Desktop Left Section */}
       <div className="hidden md:flex md:w-[18%] min-w-[200px] max-w-[360px] overflow-y-auto">
         <LeftSidebarEventView
-          setSelectedMatch={setSelectedMatch}
+          setSelectedMatch={handleMatchSelectDesktop}
           setSelectedSport={setSelectedSport}
-          selectedMatch={selectedMatch} 
+          selectedMatch={selectedMatch}
           onSelectedMatchOddsUpdate={updateSelectedMatchOdds}
         />
       </div>

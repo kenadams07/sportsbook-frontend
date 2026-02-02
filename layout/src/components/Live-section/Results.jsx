@@ -16,6 +16,7 @@ const Results = () => {
   const [startDate, setStartDate] = useState(new Date(2025, 7, 22)); // August is month 7 (0-indexed)
   const [endDate, setEndDate] = useState(new Date(2025, 7, 22));
   const [expandedEvents, setExpandedEvents] = useState({});
+  const [selectedEvent, setSelectedEvent] = useState(null); // Track selected event for detail view
 
   // Fetch user bets when component mounts and userData is available
   useEffect(() => {
@@ -49,6 +50,48 @@ const Results = () => {
       ...prev,
       [eventId]: !prev[eventId]
     }));
+  };
+
+  const selectEvent = (event) => {
+    setSelectedEvent(event);
+    // Expand the clicked event
+    setExpandedEvents(prev => ({
+      ...prev,
+      [event.eventId]: true
+    }));
+  };
+
+  // Helper function to determine if an event is finished (has results)
+  const isEventFinished = (event) => {
+    if (!event?.markets) return false;
+    
+    // Check if any runner has a result (won/lost)
+    for (const marketType in event.markets) {
+      const markets = event.markets[marketType];
+      if (Array.isArray(markets)) {
+        for (const market of markets) {
+          if (Array.isArray(market.runners)) {
+            for (const runner of market.runners) {
+              if (runner.result === 'won' || runner.result === 'lost') {
+                return true;
+              }
+            }
+          }
+        }
+      }
+    }
+    return false;
+  };
+
+  // Filter events based on active tab
+  const getFilteredEvents = () => {
+    const allEvents = getEventData();
+    
+    if (activeTab === 'Live') {
+      return allEvents.filter(event => !isEventFinished(event));
+    } else {
+      return allEvents.filter(event => isEventFinished(event));
+    }
   };
 
   const resetFilters = () => {
@@ -132,7 +175,7 @@ const Results = () => {
     return Object.values(eventMap);
   };
 
-  const eventData = getEventData();
+  const filteredEventData = getFilteredEvents();
  
   return (
     <div className="results-container bg-live-tertiary text-live-primary min-h-screen">
@@ -237,13 +280,13 @@ const Results = () => {
       <div className="results-content flex flex-col md:flex-row min-h-[calc(100vh-200px)] bg-live-tertiary">
         {/* Leagues list - Full width on mobile, half on desktop */}
         <div className="leagues-list w-full md:w-1/2 bg-live-tertiary md:border-r border-live overflow-y-auto p-2 sm:p-0">
-          {eventData.length > 0 ? (
+          {filteredEventData.length > 0 ? (
             <div className="flex flex-col gap-2 sm:gap-0">
-              {eventData.map((event) => (
+              {filteredEventData.map((event) => (
                 <div key={event.eventId} className="league-item bg-live-primary rounded-lg sm:rounded-none border border-live sm:border-0 sm:border-b last:border-0 overflow-hidden shadow-sm sm:shadow-none transition-all duration-200">
                   <div 
-                    className={`league-header flex items-center justify-between px-4 py-3 cursor-pointer transition-colors duration-200 ${expandedEvents[event.eventId] ? 'bg-live-secondary/10' : 'hover:bg-live-secondary/5'}`}
-                    onClick={() => toggleEvent(event.eventId)}
+                    className={`league-header flex items-center justify-between px-4 py-3 cursor-pointer transition-colors duration-200 ${selectedEvent?.eventId === event.eventId ? 'bg-live-secondary/10' : 'hover:bg-live-secondary/5'}`}
+                    onClick={() => selectEvent(event)}
                   >
                     <div className="league-info flex items-center gap-3 flex-1 min-w-0">
                       <div className="flex items-center justify-center w-8 h-8 rounded-full bg-live-tertiary border border-live shadow-sm flex-shrink-0 group-hover:scale-105 transition-transform">
@@ -259,54 +302,11 @@ const Results = () => {
                         </div>
                       </div>
                     </div>
-                    <span className={`expand-arrow text-live-secondary w-6 h-6 flex items-center justify-center rounded-full bg-live-tertiary border border-live/30 transition-all duration-300 flex-shrink-0 ml-2 ${expandedEvents[event.eventId] ? 'rotate-180 bg-live-accent text-live-dark border-live-accent' : 'group-hover:bg-live-hover'}`}>
+                    <span className={`expand-arrow text-live-secondary w-6 h-6 flex items-center justify-center rounded-full bg-live-tertiary border border-live/30 transition-all duration-300 flex-shrink-0 ml-2 ${selectedEvent?.eventId === event.eventId ? 'transform rotate-90 bg-live-accent text-live-dark border-live-accent' : 'group-hover:bg-live-hover'}`}>
                       ▼
                     </span>
                   </div>
-                  {expandedEvents[event.eventId] && (
-                    <div className="league-content bg-live-tertiary/50 p-3 border-t border-live animate-in slide-in-from-top-2 duration-200">
-                      {event.markets && Object.keys(event.markets).some(marketType => event.markets[marketType] && event.markets[marketType].length > 0) ? (
-                        Object.entries(event.markets).map(([marketType, marketList]) => 
-                          marketList && marketList.length > 0 ? (
-                            marketList.map((market, index) => (
-                              <div key={`${event.eventId}-${market.marketId}`} className="mb-3 last:mb-0 bg-live-primary rounded-lg border border-live p-3 shadow-sm">
-                                <div className="flex items-center gap-2 mb-3 pb-2 border-b border-live/50">
-                                  <div className="w-1 h-3 bg-live-accent rounded-full"></div>
-                                  <div className="font-bold text-live-primary text-xs uppercase tracking-wider">{market.marketName}</div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-2">
-                                  {market.runners && market.runners.map((runner, runnerIndex) => (
-                                    <div 
-                                      key={`${event.eventId}-${market.marketId}-${runner.runnerId}`} 
-                                      className={`relative p-2.5 rounded-md text-center text-xs transition-all duration-200 border ${
-                                        runner.result === 'won' 
-                                          ? 'bg-green-500/10 text-green-500 border-green-500/30' 
-                                          : runner.result === 'lost'
-                                          ? 'bg-red-500/10 text-red-500 border-red-500/30'
-                                          : 'bg-live-tertiary text-live-primary border-live'
-                                      }`}
-                                    >
-                                      <div className="font-bold truncate mb-1.5">{runner.runnerName}</div>
-                                      <div className={`text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full inline-block ${
-                                         runner.result === 'won' ? 'bg-green-500/20' : runner.result === 'lost' ? 'bg-red-500/20' : 'bg-live-secondary/20'
-                                      }`}>
-                                        {runner.result ? runner.result : 'Pending'}
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            ))
-                          ) : null
-                        )
-                      ) : (
-                        <div className="no-matches flex flex-col items-center justify-center py-6 text-live-muted">
-                          <span className="text-2xl mb-2 opacity-20">📊</span>
-                          <span className="text-xs font-medium">No market data available</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
+
                 </div>
               ))}
             </div>
@@ -324,10 +324,69 @@ const Results = () => {
         </div>
         
         {/* Results display - Hidden on mobile, shown on desktop */}
-        <div className="results-display hidden md:flex flex-1 bg-live-tertiary items-center justify-center">
-          <div className="no-results text-live-muted text-base sm:text-lg font-medium">
-            No Results
-          </div>
+        <div className="results-display hidden md:flex flex-1 bg-live-tertiary items-center justify-center p-4">
+          {selectedEvent ? (
+            <div className="w-full max-w-2xl bg-live-primary rounded-lg border border-live shadow-lg animate-in fade-in duration-300">
+              <div className="border-b border-live px-4 py-3 bg-live-secondary/5">
+                <h3 className="text-lg font-bold text-live-primary truncate">{selectedEvent.eventName}</h3>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-xs text-live-secondary px-2 py-1 bg-live-tertiary rounded border border-live/50">
+                    {selectedEvent.openDate ? new Date(selectedEvent.openDate).toLocaleDateString() : 'Today'}
+                  </span>
+                  <span className="text-xs text-live-secondary">
+                    {selectedEvent.openDate ? new Date(selectedEvent.openDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Live'}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="p-4 max-h-96 overflow-y-auto">
+                {selectedEvent.markets && Object.keys(selectedEvent.markets).some(marketType => selectedEvent.markets[marketType] && selectedEvent.markets[marketType].length > 0) ? (
+                  Object.entries(selectedEvent.markets).map(([marketType, marketList]) => 
+                    marketList && marketList.length > 0 ? (
+                      marketList.map((market, index) => (
+                        <div key={`${selectedEvent.eventId}-${market.marketId}`} className="mb-4 last:mb-0 bg-live-tertiary rounded-lg border border-live p-3 shadow-sm">
+                          <div className="flex items-center gap-2 mb-3 pb-2 border-b border-live/50">
+                            <div className="w-1 h-3 bg-live-accent rounded-full"></div>
+                            <div className="font-bold text-live-primary text-sm uppercase tracking-wider">{market.marketName}</div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            {market.runners && market.runners.map((runner, runnerIndex) => (
+                              <div 
+                                key={`${selectedEvent.eventId}-${market.marketId}-${runner.runnerId}`} 
+                                className={`relative p-3 rounded-md text-center transition-all duration-200 border ${
+                                  runner.result === 'won' 
+                                    ? 'bg-green-500/10 text-green-500 border-green-500/30 shadow-green-500/10 shadow-sm' 
+                                    : runner.result === 'lost'
+                                    ? 'bg-red-500/10 text-red-500 border-red-500/30 shadow-red-500/10 shadow-sm'
+                                    : 'bg-live-primary text-live-primary border-live shadow-sm'
+                                }`}
+                              >
+                                <div className="font-bold truncate mb-2">{runner.runnerName}</div>
+                                <div className={`text-xs uppercase tracking-wider font-bold px-2 py-1 rounded-full inline-block ${
+                                   runner.result === 'won' ? 'bg-green-500/20' : runner.result === 'lost' ? 'bg-red-500/20' : 'bg-live-secondary/20'
+                                }`}>
+                                  {runner.result ? runner.result : 'Pending'}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))
+                    ) : null
+                  )
+                ) : (
+                  <div className="no-matches flex flex-col items-center justify-center py-8 text-live-muted">
+                    <span className="text-3xl mb-3 opacity-20">📊</span>
+                    <span className="text-sm font-medium">No market data available</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="text-live-muted text-base sm:text-lg font-medium text-center">
+              {activeTab === 'Live' ? 'Select a live event to view details' : 'Select a finished event to view results'}
+            </div>
+          )}
         </div>
       </div>
     </div>
