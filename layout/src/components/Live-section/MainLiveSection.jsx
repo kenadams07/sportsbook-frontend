@@ -81,6 +81,7 @@ export default function MainLiveSection() {
     console.log('=== MAIN LIVE SECTION EFFECT TRIGGERED ===');
     console.log('Location state:', location.state);
     console.log('Current URL search params:', window.location.search);
+    console.log('EventId from URL params:', eventIdFromUrl);
     
     const navigationState = location.state || {};
     // Check if we have a selected game ID from either URL or navigation state
@@ -95,10 +96,11 @@ export default function MainLiveSection() {
     console.log('SelectedGameId from state:', selectedGameIdFromState);
     console.log('Effective selectedGameId:', selectedGameId);
     console.log('Source:', source);
+    console.log('Entry source:', entrySource);
     
     // We should process if we have a selectedGameId OR if we're coming from upcoming matches
-    // This ensures upcoming matches flow continues even if URL params are not set yet
-    if (!selectedGameId && source !== 'upcoming_matches') {
+    // OR if we're doing initial load with no specific selection (for default match selection)
+    if (!selectedGameId && source !== 'upcoming_matches' && entrySource !== 'upcoming_matches') {
       console.log('Returning early - no selectedGameId and not from upcoming_matches');
       return;
     }

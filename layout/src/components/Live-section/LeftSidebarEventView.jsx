@@ -4,7 +4,7 @@ import { ChevronDown, ChevronUp, Search, Globe, Monitor } from "lucide-react";
 import { SPORTS, SPORT_ID_BY_KEY } from "../../utils/CommonExports";
 import { Button } from "../ui/button";
 import GameCard from "./GameCard";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import SkeletonLoader from "../ui/SkeletonLoader";
 import { fetchSportsEvents } from "../../utils/sportsEventsApi";
 import { fetchUserBets } from "../../redux/Action/userBetsActions";
@@ -118,6 +118,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState("");
   const [expanded, setExpanded] = useState({});
   const [selectedType, setSelectedType] = useState("live"); 
@@ -356,14 +357,34 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
 
   useEffect(() => {
     // Check if there's navigation state to pre-select a game
-    const { selectedGameId, selectedSportKey } = location.state || {};
+    const { selectedGameId: stateGameId, selectedSportKey: stateSportKey } = location.state || {};
+    
+    // Also check for URL parameters
+    const urlGameId = searchParams.get('eventId');
+    const urlSportKey = searchParams.get('sportKey');
+    
+    // Use URL parameters as fallback if state is not available
+    const selectedGameId = stateGameId || urlGameId;
+    const selectedSportKey = stateSportKey || urlSportKey;
+    
+    console.log('=== LEFT SIDEBAR EVENT VIEW EFFECT ===');
+    console.log('State Game ID:', stateGameId);
+    console.log('URL Game ID:', urlGameId);
+    console.log('Effective Game ID:', selectedGameId);
+    console.log('State Sport Key:', stateSportKey);
+    console.log('URL Sport Key:', urlSportKey);
+    console.log('Effective Sport Key:', selectedSportKey);
+    console.log('Has processed initial selection:', hasProcessedInitialSelection);
+    console.log('Selected match exists:', !!selectedMatch);
 
     if (selectedSportFilter) {
+      console.log('Selected sport filter active, skipping default selection');
       return;
     }
     
-    // Only process location state if it exists and hasn't been processed yet
-    if (selectedGameId && !hasProcessedLocationState.current) {
+    // Only process if we have a game ID and haven't processed initial selection yet
+    if (selectedGameId && !hasProcessedInitialSelection) {
+      console.log('Processing initial selection for game ID:', selectedGameId);
       hasProcessedLocationState.current = true; // Mark as processed
       
       let foundSportKey = selectedSportKey;
@@ -381,6 +402,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
       }
       
       if (foundSportKey) {
+        console.log('Found sport key:', foundSportKey);
         // Set the sport as expanded
         setExpanded(prev => ({ ...prev, [foundSportKey]: true }));
         
@@ -396,6 +418,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
           // If matches are loaded, try to find and select the game
           const selectedGame = matches.find(match => match.eventId === selectedGameId);
           if (selectedGame) {
+            console.log('Found matching game:', selectedGame.eventName);
             const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
             const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
             const selectedMatchData = {
@@ -409,23 +432,34 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
             
             // Mark that initial selection has been processed
             setHasProcessedInitialSelection(true);
+            console.log('Initial selection processed successfully');
           }
         } else {
           // If matches aren't loaded yet, store the selection for later
+          console.log('Matches not loaded yet, storing pending selection');
           setPendingSelection({ selectedGameId, selectedSportKey: foundSportKey });
         }
       } else {
         // If we couldn't find the sport, still store the selection for later
+        console.log('Could not find sport, storing pending selection');
         setPendingSelection({ selectedGameId, selectedSportKey: null });
       }
     }
-    // Default behavior - only expand the first sport with matches
-    else if (!selectedGameId && !selectedSportKey && !selectedMatch && !hasProcessedInitialSelection) {
-      // Only expand the first sport with matches, not all sports
-      // Only run this if no specific event has been selected and no initial selection has been processed
+    // Default behavior - select first available match if no specific selection
+    else if (!selectedGameId && !hasProcessedInitialSelection) {
+      console.log('No specific game selected, applying default selection');
+      console.log('Selected match exists:', !!selectedMatch);
+      console.log('Matches by sport:', Object.keys(matchesBySport).map(key => ({
+        sport: key, 
+        count: matchesBySport[key]?.length || 0
+      })));
+      
+      // Find the first sport with matches and select its first match
       for (const sport of SPORTS) {
         const matches = matchesBySport[sport.key] || [];
         if (matches.length > 0) {
+          console.log(`Found ${matches.length} matches for ${sport.key}`);
+          
           setExpanded((prev) => {
             // Check if any sport is already expanded
             const isAnySportExpanded = Object.keys(prev).length > 0 && Object.values(prev).some(val => val);
@@ -439,6 +473,8 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
           // Select the first game of the first sport with matches (only if no match is already selected)
           if (!selectedMatch) {
             const firstMatch = matches[0];
+            console.log('Selecting first match:', firstMatch.eventName);
+            
             const team1 = firstMatch.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
             const team2 = firstMatch.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
             const selectedMatchData = {
@@ -450,12 +486,34 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
             };
             setSelectedMatch(selectedMatchData);
             setSelectedSport(sport);
+            console.log('Default selection applied:', firstMatch.eventName);
+            
+            // Update URL with default selection for persistence
+            setSearchParams({
+              eventId: firstMatch.eventId,
+              sportKey: sport.key,
+              eventName: firstMatch.eventName || '',
+              viewType: 'live'
+            }, { replace: true }); // Use replace to avoid adding to browser history
+            console.log('URL updated with default selection:', {
+              eventId: firstMatch.eventId,
+              sportKey: sport.key,
+              eventName: firstMatch.eventName || ''
+            });
+          } else {
+            console.log('Match already selected, skipping default selection');
           }
+          
+          // Mark initial selection as processed
+          setHasProcessedInitialSelection(true);
           break; // Exit after handling the first sport with matches
         }
       }
     }
-  }, [matchesBySport, selectedMatch, setSelectedMatch, setSelectedSport, selectedSportFilter, location.state]);
+    else {
+      console.log('Skipping selection logic - already processed or has selection');
+    }
+  }, [matchesBySport, selectedMatch, setSelectedMatch, setSelectedSport, selectedSportFilter, location.state, searchParams]);
 
   // Handle pending selection when matches data is loaded
   useEffect(() => {
