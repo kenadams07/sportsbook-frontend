@@ -543,7 +543,7 @@ export default function MainLiveSection() {
       </div>
 
       {/* Desktop Middle section: game display */}
-      <div className="hidden md:flex flex-1 overflow-y-auto h-full w-full">
+      <div className="hidden md:flex flex-1 overflow-y-auto h-full w-full min-h-full">
         <MiddleGameDisplay 
           match={selectedMatch} 
           sport={selectedSport} 

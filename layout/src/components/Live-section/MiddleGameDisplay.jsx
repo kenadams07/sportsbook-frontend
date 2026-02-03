@@ -43,9 +43,9 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
 
   if (!match || !sport) {
     return (
-      <div className="flex items-center justify-center h-full text-live-muted text-sm">
-        <div className="flex flex-col items-center animate-pulse-scale">
-          <div className="relative w-12 h-12">
+      <div className="flex items-center justify-center h-full w-full min-h-full text-live-muted text-sm">
+        <div className="flex flex-col items-center justify-center animate-pulse-scale">
+          <div className="relative w-12 h-12 flex items-center justify-center">
             <div className="absolute w-full h-full rounded-full border-4 border-live-accent border-t-transparent animate-spin"></div>
             <div className="absolute w-8 h-8 top-2 left-2 rounded-full border-4 border-live-primary border-b-transparent animate-spin-reverse"></div>
           </div>
