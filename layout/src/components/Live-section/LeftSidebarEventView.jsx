@@ -529,8 +529,24 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
   // Effect to clear location state after initial selection has been processed
   useEffect(() => {
     if (hasProcessedInitialSelection && location.state) {
+      // Don't clear state if we're in the middle of an upcoming matches navigation
+      // This allows MainLiveSection to properly set URL parameters first
+      if (location.state.source === 'upcoming_matches') {
+        console.log('=== PRESERVING LOCATION STATE FOR UPCOMING MATCHES FLOW ===');
+        console.log('Keeping state for URL parameter setup:', location.state);
+        return;
+      }
+      
+      console.log('=== LEFT SIDEBAR CLEARING LOCATION STATE ===');
+      console.log('Current pathname:', location.pathname);
+      console.log('Current search:', location.search);
+      console.log('Current state:', location.state);
+      
       // Clear the location state to prevent issues with subsequent navigation
-      navigate(location.pathname, { replace: true, state: null });
+      // Preserve URL search parameters to maintain selected match info
+      navigate(`${location.pathname}${location.search}`, { replace: true, state: null });
+      
+      console.log('After clearing state - URL should be preserved');
     }
   }, [hasProcessedInitialSelection, location.state, navigate]);
 
@@ -683,6 +699,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
                             odds: latestOdds, // Include the latest odds in the selected match data
                             sportKey: sport.key // Include sportKey for markets API call
                           };
+                          // Use the prop function which handles both setting the match and updating URL
                           setSelectedMatch(selectedMatchData);
                           if (!selectedSportFilter) {
                             setSelectedSport(sport);

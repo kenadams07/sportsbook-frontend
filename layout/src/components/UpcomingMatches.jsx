@@ -262,11 +262,16 @@ export default function UpcomingMatches() {
   }, [filteredEvents, oddsByEventId, highlightedOdds, selectedTimeFilter])
 
   const handleGameClick = (id, sportKey) => {
+    console.log('=== UPCOMING MATCHES NAVIGATION START ===');
+    console.log('Clicked game ID:', id);
+    console.log('Clicked sport key:', sportKey);
+    
     setSelectedGameId(id)
     setSelectedGameSportKey(sportKey || null)
     
     // Find the full event object to pass detailed data
     const clickedMatch = matches.find(m => m.id === id);
+    console.log('Found clicked match:', clickedMatch);
     
     // Determine viewType based on the fact we are fetching live matches (true) 
     // or based on event status if available.
@@ -275,22 +280,25 @@ export default function UpcomingMatches() {
     const viewType = 'live'; 
 
     // Navigate to the Live section with the selected game and sport
+    const navigationState = {
+      selectedGameId: id,
+      selectedSportKey: sportKey || selectedSportKey,
+      viewType: viewType,
+      source: 'upcoming_matches',
+      // Pass full match details to avoid refetching/delay
+      matchDetails: clickedMatch ? {
+        eventName: clickedMatch.team1 + " vs " + clickedMatch.team2,
+        team1: clickedMatch.team1,
+        team2: clickedMatch.team2,
+        openDate: clickedMatch.openDate,
+        status: clickedMatch.status,
+        sportKey: clickedMatch.sportKey
+      } : null
+    };
+    
+    console.log('Navigating with state:', navigationState);
     navigate('/live_events/event-view', {
-      state: {
-        selectedGameId: id,
-        selectedSportKey: sportKey || selectedSportKey,
-        viewType: viewType,
-        source: 'upcoming_matches',
-        // Pass full match details to avoid refetching/delay
-        matchDetails: clickedMatch ? {
-          eventName: clickedMatch.team1 + " vs " + clickedMatch.team2,
-          team1: clickedMatch.team1,
-          team2: clickedMatch.team2,
-          openDate: clickedMatch.openDate,
-          status: clickedMatch.status,
-          sportKey: clickedMatch.sportKey
-        } : null
-      }
+      state: navigationState
     })
   }
 

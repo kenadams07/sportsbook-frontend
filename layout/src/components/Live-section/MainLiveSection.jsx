@@ -78,6 +78,10 @@ export default function MainLiveSection() {
   const eventIdFromUrl = searchParams.get('eventId');
 
   useEffect(() => {
+    console.log('=== MAIN LIVE SECTION EFFECT TRIGGERED ===');
+    console.log('Location state:', location.state);
+    console.log('Current URL search params:', window.location.search);
+    
     const navigationState = location.state || {};
     // Check if we have a selected game ID from either URL or navigation state
     const selectedGameIdFromUrl = eventIdFromUrl;
@@ -87,9 +91,17 @@ export default function MainLiveSection() {
     // Determine the source
     const source = navigationState.source || null;
     
+    console.log('SelectedGameId from URL:', selectedGameIdFromUrl);
+    console.log('SelectedGameId from state:', selectedGameIdFromState);
+    console.log('Effective selectedGameId:', selectedGameId);
+    console.log('Source:', source);
+    
     // We should process if we have a selectedGameId OR if we're coming from upcoming matches
     // This ensures upcoming matches flow continues even if URL params are not set yet
-    if (!selectedGameId && source !== 'upcoming_matches') return;
+    if (!selectedGameId && source !== 'upcoming_matches') {
+      console.log('Returning early - no selectedGameId and not from upcoming_matches');
+      return;
+    }
     // Remove the mobile-only check to allow deep linking/navigation on desktop too
     // if (window.innerWidth >= 768) return;
 
@@ -135,17 +147,22 @@ export default function MainLiveSection() {
               setSelectedMatch(selectedMatchData);
 
               // Update URL with the match info for persistence
-              // Only update if parameters are different to prevent infinite loops
-              const currentParams = new URLSearchParams(window.location.search);
-              if (currentParams.get('eventId') !== selectedGameId || 
-                  currentParams.get('sportKey') !== effectiveSportKey) {
-                setSearchParams({
-                  eventId: selectedGameId,
-                  sportKey: effectiveSportKey,
-                  eventName: matchDetails.eventName || '',
-                  source: 'upcoming_matches'
-                });
-              }
+              // Always update URL when coming from upcoming matches to ensure proper URL format
+              console.log('=== UPDATING URL FROM UPCOMING MATCHES ===');
+              console.log('Setting params:', {
+                eventId: selectedGameId,
+                sportKey: effectiveSportKey,
+                eventName: matchDetails.eventName || '',
+                viewType: 'live',
+                source: 'upcoming_matches'
+              });
+              setSearchParams({
+                eventId: selectedGameId,
+                sportKey: effectiveSportKey,
+                eventName: matchDetails.eventName || '',
+                viewType: 'live',
+                source: 'upcoming_matches'
+              });
 
               setMobileView("markets");
               return;
@@ -192,9 +209,16 @@ export default function MainLiveSection() {
           
           // Update URL with the match info for persistence
           // Only update if parameters are different to prevent infinite loops
+          console.log('=== UPDATING URL FROM MATCH FETCH ===');
           const currentParams = new URLSearchParams(window.location.search);
+          console.log('Current params eventId:', currentParams.get('eventId'));
+          console.log('Current params sportKey:', currentParams.get('sportKey'));
+          console.log('New eventId:', match.eventId);
+          console.log('New sportKey:', sportKey);
+          
           if (currentParams.get('eventId') !== match.eventId || 
               currentParams.get('sportKey') !== sportKey) {
+            console.log('Params differ - updating URL');
             setSearchParams({
               eventId: match.eventId,
               sportKey: sportKey,
@@ -202,6 +226,8 @@ export default function MainLiveSection() {
               source: entrySource || '',
               viewType: viewType || 'live'
             });
+          } else {
+            console.log('Params are the same - skipping URL update');
           }
           
           setMobileView("markets");
@@ -216,21 +242,30 @@ export default function MainLiveSection() {
     return () => {
       cancelled = true;
     };
-  }, [eventIdFromUrl, location.key]);
+  }, [eventIdFromUrl, entrySource]);
 
 
-  
-
-  
-  // When we direct link to markets without full event details, we need to fetch event details 
-  // MiddleGameDisplay will fetch markets, but we need team names etc.
   useEffect(() => {
+    // Get the eventId from URL parameters
+    const eventIdFromUrl = searchParams.get('eventId');
+    const urlSource = location.state?.source || entrySource || searchParams.get('source') || '';
+    
+    // If we're coming from upcoming matches and already have a selected match with the same eventId, skip this effect
+    if (urlSource === 'upcoming_matches' && selectedMatch && eventIdFromUrl === selectedMatch.eventId) {
+      return;
+    }
+    
+    // If we don't have an eventIdFromUrl, nothing to process
+    if (!eventIdFromUrl) return;
+    
+    // When we direct link to markets without full event details, we need to fetch event details 
+    // MiddleGameDisplay will fetch markets, but we need team names etc.
     // Also use the local state check or ensure entrySource is up to date.
     // Since this is a separate effect, entrySource state should be updated by now,
     // but relying on the location state is safer for initial load.
-    const source = location.state?.source || entrySource;
+    const effectSource = location.state?.source || entrySource;
     
-    if (source === 'upcoming_matches' && selectedMatch && (!selectedMatch.team1 || !selectedMatch.eventName)) {
+    if (effectSource === 'upcoming_matches' && selectedMatch && (!selectedMatch.team1 || !selectedMatch.eventName)) {
        const fetchEventDetails = async () => {
          try {
            const sportId = selectedMatch.sportId || SPORT_ID_BY_KEY[selectedMatch.sportKey];
@@ -264,7 +299,7 @@ export default function MainLiveSection() {
        
        fetchEventDetails();
     }
-  }, [selectedMatch?.eventId, entrySource]);
+  }, [eventIdFromUrl, selectedMatch, entrySource]);
 
   // Function to update the selected match with new odds
   const updateSelectedMatchOdds = (updatedMatch) => {
@@ -323,9 +358,17 @@ export default function MainLiveSection() {
 
   // Handle match selection on mobile
   const handleMatchSelect = (match) => {
+    console.log('=== HANDLE MATCH SELECT (MOBILE) ===');
+    console.log('Selected match:', match);
     setSelectedMatch(match);
     // Update URL with selected match info for persistence
     if (match && match.eventId) {
+      console.log('Updating URL with match data:', {
+        eventId: match.eventId,
+        sportKey: match.sportKey || selectedSport?.key || '',
+        eventName: match.eventName || '',
+        viewType: 'live'
+      });
       setSearchParams({
         eventId: match.eventId,
         sportKey: match.sportKey || selectedSport?.key || '',
@@ -340,9 +383,17 @@ export default function MainLiveSection() {
   
   // Handle match selection on desktop
   const handleMatchSelectDesktop = (match) => {
+    console.log('=== HANDLE MATCH SELECT (DESKTOP) ===');
+    console.log('Selected match:', match);
     setSelectedMatch(match);
     // Update URL with selected match info for persistence
     if (match && match.eventId) {
+      console.log('Updating URL with match data:', {
+        eventId: match.eventId,
+        sportKey: match.sportKey || selectedSport?.key || '',
+        eventName: match.eventName || '',
+        viewType: 'live'
+      });
       setSearchParams({
         eventId: match.eventId,
         sportKey: match.sportKey || selectedSport?.key || '',
@@ -568,5 +619,5 @@ export default function MainLiveSection() {
         }}
       />
     </div>
-  )
+  );
 }
