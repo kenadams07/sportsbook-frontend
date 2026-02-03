@@ -155,8 +155,39 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
     const { viewType } = location.state || {};
     if (viewType === 'prematch') {
       setSelectedType('prematch');
+      
+      // Update URL parameters to reflect the view type
+      const eventId = searchParams.get('eventId');
+      const sportKey = searchParams.get('sportKey');
+      const eventName = searchParams.get('eventName');
+      const source = searchParams.get('source');
+      
+      // Only update URL if we have event parameters to preserve
+      if (eventId && sportKey) {
+        setSearchParams({
+          eventId,
+          sportKey,
+          eventName: eventName || '',
+          source: source || '',
+          viewType: 'prematch'
+        }, { replace: true });
+      } else {
+        // If no specific event parameters, just ensure viewType is in URL
+        setSearchParams(prev => {
+          const newParams = new URLSearchParams(prev);
+          newParams.set('viewType', 'prematch');
+          return newParams;
+        }, { replace: true });
+      }
+    } else if (!searchParams.get('viewType')) {
+      // If no view type in URL and not prematch in state, default to 'live'
+      setSearchParams(prev => {
+        const newParams = new URLSearchParams(prev);
+        newParams.set('viewType', 'live');
+        return newParams;
+      }, { replace: true });
     }
-  }, [location.state]);
+  }, [location.state, searchParams, setSearchParams]);
 
   // Handle selectedSportFilter change (Mobile View)
   useEffect(() => {

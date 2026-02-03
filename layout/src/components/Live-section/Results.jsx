@@ -183,13 +183,19 @@ const Results = () => {
       <div className="results-tabs bg-live-tertiary border-b border-live flex">
         <button 
           className={`tab flex-1 bg-live-tertiary text-live-secondary border-b-2 hover:bg-live-primary text-xs sm:text-sm py-2 sm:py-3 ${activeTab === 'Live' ? 'active bg-live-hover text-live-primary border-live-primary' : 'border-transparent'}`}
-          onClick={() => setActiveTab('Live')}
+          onClick={() => {
+            setActiveTab('Live');
+            setSelectedEvent(null); // Clear the selected event when switching tabs
+          }}
         >
           Live
         </button>
         <button 
           className={`tab flex-1 bg-live-tertiary text-live-secondary border-b-2 hover:bg-live-primary text-xs sm:text-sm py-2 sm:py-3 ${activeTab === 'Finished' ? 'active bg-live-hover text-live-primary border-live-primary' : 'border-transparent'}`}
-          onClick={() => setActiveTab('Finished')}
+          onClick={() => {
+            setActiveTab('Finished');
+            setSelectedEvent(null); // Clear the selected event when switching tabs
+          }}
         >
           Finished
         </button>
@@ -283,9 +289,9 @@ const Results = () => {
           {filteredEventData.length > 0 ? (
             <div className="flex flex-col gap-2 sm:gap-0">
               {filteredEventData.map((event) => (
-                <div key={event.eventId} className="league-item bg-live-primary rounded-lg sm:rounded-none border border-live sm:border-0 sm:border-b last:border-0 overflow-hidden shadow-sm sm:shadow-none transition-all duration-200">
+                <div key={event.eventId} className={`league-item bg-live-primary rounded-lg sm:rounded-none border border-live sm:border-0 sm:border-b last:border-0 overflow-hidden shadow-sm sm:shadow-none transition-all duration-200 ${selectedEvent?.eventId === event.eventId ? 'bg-yellow-400/10' : ''}`}>
                   <div 
-                    className={`league-header flex items-center justify-between px-4 py-3 cursor-pointer transition-colors duration-200 ${selectedEvent?.eventId === event.eventId ? 'bg-live-secondary/10' : 'hover:bg-live-secondary/5'}`}
+                    className={`league-header flex items-center justify-between px-4 py-3 cursor-pointer transition-colors duration-200 ${selectedEvent?.eventId === event.eventId ? 'bg-yellow-400/20 border-l-4 border-yellow-400' : 'hover:bg-live-secondary/5'}`}
                     onClick={() => selectEvent(event)}
                   >
                     <div className="league-info flex items-center gap-3 flex-1 min-w-0">
@@ -298,12 +304,18 @@ const Results = () => {
                           <span className="text-[10px] text-live-secondary px-1.5 py-0.5 bg-live-tertiary rounded border border-live/50">
                              {event.openDate ? new Date(event.openDate).toLocaleDateString() : 'Today'}
                           </span>
-                          <span className="text-[10px] text-live-secondary truncate">{event.openDate ? new Date(event.openDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Live'}</span>
+                          {activeTab === 'Finished' ? (
+                            <span className="text-[10px] text-green-500 px-1.5 py-0.5 bg-green-500/20 rounded border border-green-500/30 whitespace-nowrap">
+                              Settled
+                            </span>
+                          ) : (
+                            <span className="text-[10px] text-live-secondary truncate">{event.openDate ? new Date(event.openDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Live'}</span>
+                          )}
                         </div>
                       </div>
                     </div>
                     <span className={`expand-arrow text-live-secondary w-6 h-6 flex items-center justify-center rounded-full bg-live-tertiary border border-live/30 transition-all duration-300 flex-shrink-0 ml-2 ${selectedEvent?.eventId === event.eventId ? 'transform rotate-90 bg-live-accent text-live-dark border-live-accent' : 'group-hover:bg-live-hover'}`}>
-                      ▼
+                      ◀
                     </span>
                   </div>
 
@@ -324,22 +336,28 @@ const Results = () => {
         </div>
         
         {/* Results display - Hidden on mobile, shown on desktop */}
-        <div className="results-display hidden md:flex flex-1 bg-live-tertiary items-center justify-center p-4">
+        <div className="results-display w-full md:w-1/2 bg-live-tertiary">
           {selectedEvent ? (
-            <div className="w-full max-w-2xl bg-live-primary rounded-lg border border-live shadow-lg animate-in fade-in duration-300">
+            <div className="w-full max-w-full bg-live-primary rounded-lg border border-live shadow-lg animate-in fade-in duration-300 flex flex-col h-full">
               <div className="border-b border-live px-4 py-3 bg-live-secondary/5">
                 <h3 className="text-lg font-bold text-live-primary truncate">{selectedEvent.eventName}</h3>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-xs text-live-secondary px-2 py-1 bg-live-tertiary rounded border border-live/50">
                     {selectedEvent.openDate ? new Date(selectedEvent.openDate).toLocaleDateString() : 'Today'}
                   </span>
-                  <span className="text-xs text-live-secondary">
-                    {selectedEvent.openDate ? new Date(selectedEvent.openDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Live'}
-                  </span>
+                  {activeTab === 'Finished' ? (
+                    <span className="text-xs text-green-500 px-2 py-1 bg-green-500/20 rounded border border-green-500/30 whitespace-nowrap">
+                      Settled
+                    </span>
+                  ) : (
+                    <span className="text-xs text-live-secondary">
+                      {selectedEvent.openDate ? new Date(selectedEvent.openDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Live'}
+                    </span>
+                  )}
                 </div>
               </div>
               
-              <div className="p-4 max-h-96 overflow-y-auto">
+              <div className="p-4 max-h-96 overflow-y-auto flex-grow">
                 {selectedEvent.markets && Object.keys(selectedEvent.markets).some(marketType => selectedEvent.markets[marketType] && selectedEvent.markets[marketType].length > 0) ? (
                   Object.entries(selectedEvent.markets).map(([marketType, marketList]) => 
                     marketList && marketList.length > 0 ? (
@@ -383,7 +401,7 @@ const Results = () => {
               </div>
             </div>
           ) : (
-            <div className="text-live-muted text-base sm:text-lg font-medium text-center">
+            <div className="text-live-muted text-base sm:text-lg font-medium text-center h-full flex items-start justify-center pt-4">
               {activeTab === 'Live' ? 'Select a live event to view details' : 'Select a finished event to view results'}
             </div>
           )}
