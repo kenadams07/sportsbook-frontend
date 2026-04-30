@@ -73,7 +73,7 @@ describe('EventsService', () => {
       const result = await service.getLiveEvents(sportId);
 
       expect(httpService.get).toHaveBeenCalledWith(
-        'http://89.116.20.218:2700/events',
+        'http://46.202.166.160:3009/events',
         {
           params: {
             live_matches: 'true',

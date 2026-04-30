@@ -8,5 +8,5 @@ export default () => ({
     name: process.env.DB_NAME || 'userdb',
   },
   resultApiUrl:
-    process.env.RESULT_API_URL || 'http://89.116.20.218:2700/result',
+    process.env.RESULT_API_URL || 'http://46.202.166.160:3009/result',
 });

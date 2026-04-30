@@ -32,7 +32,7 @@ export class SportBetsService {
   ) {
     this.resultApiUrl = this.configService.get<string>(
       'resultApiUrl',
-      'http://89.116.20.218:2700/result',
+      'http://46.202.166.160:3009/result',
     );
   }
 
@@ -76,7 +76,7 @@ export class SportBetsService {
       try {
         // Use the exact format as specified with live_matches parameter
         const eventsResponse = await axios.get(
-          `http://89.116.20.218:2700/events?sport_id=${sportId}&live_matches=true`,
+          `http://46.202.166.160:3009/events?sport_id=${sportId}&live_matches=true`,
         );
         const eventsData = eventsResponse.data;
 

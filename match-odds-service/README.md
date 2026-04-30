@@ -107,11 +107,11 @@ This service includes proxy endpoints that forward requests to a third-party API
 ### Configuration
 
 The third-party API base URL is configurable through the `MATCH_ODDS_API` environment variable.
-Default value is `http://89.116.20.218:2700`.
+Default value is `http://46.202.166.160:3009`.
 
 Example configuration in `.env`:
 ```
-MATCH_ODDS_API=http://89.116.20.218:2700
+MATCH_ODDS_API=http://46.202.166.160:3009
 ```
 
 ### How It Works

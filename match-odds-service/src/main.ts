@@ -27,7 +27,7 @@ async function bootstrap() {
     try {
       // Forward query parameters to third-party API
       const queryParams = new URLSearchParams(req.query as any).toString();
-      const baseUrl = process.env.MATCH_ODDS_API || 'http://89.116.20.218:2700';
+      const baseUrl = process.env.MATCH_ODDS_API || 'http://46.202.166.160:3009';
       const url = `${baseUrl}/events${queryParams ? `?${queryParams}` : ''}`;
       
    
@@ -54,7 +54,7 @@ async function bootstrap() {
     try {
       // Forward query parameters to third-party API
       const queryParams = new URLSearchParams(req.query as any).toString();
-      const baseUrl = process.env.MATCH_ODDS_API || 'http://89.116.20.218:2700';
+      const baseUrl = process.env.MATCH_ODDS_API || 'http://46.202.166.160:3009';
       const url = `${baseUrl}/markets${queryParams ? `?${queryParams}` : ''}`;
       
     
