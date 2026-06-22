@@ -1,0 +1,337 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Sport {
+  key       String   @id
+  name      String   @unique
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  leagues   League[]
+
+  @@map("SportCategory")
+}
+
+model League {
+  key          String       @id
+  sportName    String       @map("group")
+  title        String
+  description  String?
+  active       Boolean      @default(true)
+  hasOutrights Boolean      @default(false)
+  sportKey     String?      @map("categoryKey")
+  sport        Sport?       @relation(fields: [sportKey], references: [key])
+  updatedAt    DateTime     @updatedAt
+  events       Event[]
+  config       LeagueConfig?
+
+  @@index([sportKey])
+  @@index([sportName])
+  @@map("Sport")
+}
+
+model LeagueConfig {
+  id        Int      @id @default(autoincrement())
+  leagueKey String   @unique @map("sportKey")
+  league    League   @relation(fields: [leagueKey], references: [key])
+  regions   String[]
+  markets   String[]
+  enabled   Boolean  @default(true)
+  pollIntervalMs Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("SportConfig")
+}
+
+model Event {
+  id           String            @id
+  leagueKey    String            @map("sportKey")
+  league       League            @relation(fields: [leagueKey], references: [key])
+  homeTeam     String?
+  awayTeam     String?
+  eventName    String?
+  eventType    EventType         @default(MATCH)
+  commenceTime DateTime
+  status       EventStatus       @default(PRE_MATCH)
+  statusSource EventStatusSource @default(SYSTEM)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  odds         OddsSnapshot[]
+  markets      Market[]
+  bets         Bet[]
+  exposures    Exposure[]
+
+  @@index([leagueKey])
+  @@index([eventType])
+  @@index([commenceTime])
+  @@index([status])
+}
+
+enum EventType {
+  MATCH
+  OUTRIGHT
+}
+
+enum EventStatus {
+  PRE_MATCH
+  LIVE
+  SETTLED
+  POSTPONED
+  CANCELLED
+}
+
+model OddsSnapshot {
+  id          BigInt   @default(autoincrement())
+  leagueKey   String   @map("sportKey")
+  eventId     String
+  event       Event    @relation(fields: [eventId], references: [id])
+  bookmaker   String
+  market      String
+  outcome     String
+  price       Decimal  @db.Decimal(10, 4)
+  prevPrice   Decimal? @db.Decimal(10, 4)
+  point       Decimal? @db.Decimal(6, 2)
+  impliedProb Decimal  @db.Decimal(6, 4)
+  overround   Decimal  @db.Decimal(6, 4)
+  moved       String
+  capturedAt  DateTime @default(now())
+
+  @@id([id, capturedAt])
+  @@index([eventId, capturedAt])
+  @@index([leagueKey, capturedAt])
+  @@index([capturedAt])
+  @@index([bookmaker, market])
+}
+
+enum EventStatusSource {
+  SYSTEM
+  SCORES_API
+  ADMIN
+}
+
+model Currency {
+  id    String  @id @default(uuid())
+  name  String  @unique
+  code  String
+  value Decimal @db.Decimal(10, 4)
+  users User[]
+
+  @@index([code])
+}
+
+model User {
+  id              String           @id @default(uuid())
+  email           String           @unique
+  password        String
+  passwordText    String?
+  token           String?
+  role            Int              @default(7)
+  emailVerify     DateTime?
+  username        String?          @unique
+  name            String?
+  birthdate       DateTime?
+  passwordHash    String?
+  parentId        String?
+  parent          User?            @relation("UserHierarchy", fields: [parentId], references: [id])
+  children        User[]           @relation("UserHierarchy")
+  currencyId      String?
+  currency        Currency?        @relation(fields: [currencyId], references: [id])
+  clientShare     Int              @default(0)
+  casino          String[]
+  creditReference Int              @default(0)
+  balance         Decimal          @default(0) @db.Decimal(15, 2)
+  systemIp        String?
+  browserIp       String?
+  status          String           @default("1")
+  betAllow        Boolean          @default(true)
+  exposure        Decimal          @default(0) @db.Decimal(15, 2)
+  gapCasinoToken  String?
+  loginHistory    LoginHistory[]
+  bets            Bet[]
+  exposures       Exposure[]
+  resultTransactions ResultTransaction[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([parentId])
+  @@index([currencyId])
+}
+
+model LoginHistory {
+  id        String   @id @default(uuid())
+  email     String
+  systemIp  String?
+  browserIp String?
+  createdAt DateTime @default(now())
+  lastLogin DateTime @default(now())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+
+  @@index([email])
+  @@index([userId])
+}
+
+model Market {
+  id         String              @id @default(uuid())
+  marketId   String
+  eventId    String?
+  event      Event?              @relation(fields: [eventId], references: [id])
+  marketName String
+  marketType MarketType          @default(ODDS)
+  marketTime DateTime            @default(now())
+  status     MarketExposureStatus @default(OPEN)
+  outcomes   Outcome[]
+  bets       Bet[]
+  exposures  Exposure[]
+  resultTransactions ResultTransaction[]
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+
+  @@unique([marketId, eventId])
+  @@index([eventId])
+  @@index([marketId])
+}
+
+model Outcome {
+  id          String        @id @default(uuid())
+  selectionId String
+  marketId    String
+  market      Market        @relation(fields: [marketId], references: [id])
+  name        String
+  status      OutcomeStatus @default(ACTIVE)
+  actualStatus OutcomeStatus @default(ACTIVE)
+  bets        Bet[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@unique([marketId, selectionId])
+  @@index([selectionId])
+}
+
+model Bet {
+  id          String        @id @default(uuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  eventId     String
+  event       Event         @relation(fields: [eventId], references: [id])
+  leagueKey   String   @map("sportKey")
+  sportTitle  String?
+  marketDbId  String?
+  marketRef   Market?       @relation(fields: [marketDbId], references: [id])
+  marketId    String
+  marketName  String
+  marketType  String
+  outcomeDbId String?
+  outcomeRef  Outcome?      @relation(fields: [outcomeDbId], references: [id])
+  selectionId String
+  selection   String
+  selectionType SelectionType @default(BACK)
+  bettingType BettingType   @default(ODDS)
+  odds        Decimal       @db.Decimal(10, 2)
+  stake       Decimal       @db.Decimal(15, 2)
+  status      BetStatus     @default(PENDING)
+  leagueId    String?
+  homeTeam    String?
+  awayTeam    String?
+  commenceTime DateTime?
+  eventStatusAtPlacement EventStatus?
+  potentialPayout Decimal?  @db.Decimal(15, 2)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([eventId])
+  @@index([marketId])
+  @@index([leagueKey])
+  @@index([status])
+}
+
+model Exposure {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  eventId    String
+  event      Event    @relation(fields: [eventId], references: [id])
+  marketDbId String?
+  market     Market?  @relation(fields: [marketDbId], references: [id])
+  marketId   String
+  marketType String
+  exposure   Decimal  @db.Decimal(15, 2)
+  isClear    Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, eventId, marketId])
+  @@index([userId])
+  @@index([eventId])
+  @@index([marketId])
+  @@index([isClear])
+}
+
+model ResultTransaction {
+  id          String           @id @default(uuid())
+  userId      String
+  user        User             @relation(fields: [userId], references: [id])
+  marketDbId  String?
+  market      Market?          @relation(fields: [marketDbId], references: [id])
+  marketId    String?
+  eventId     String?
+  description String
+  pl          Decimal          @db.Decimal(15, 2)
+  type        String
+  commissionStatus CommissionStatus
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([userId])
+  @@index([marketId])
+  @@index([eventId])
+}
+
+enum MarketType {
+  ODDS
+}
+
+enum MarketExposureStatus {
+  OPEN
+  SUSPENDED
+  CLOSED
+}
+
+enum OutcomeStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum BettingType {
+  ODDS
+}
+
+enum SelectionType {
+  BACK
+}
+
+enum BetStatus {
+  PENDING
+  WON
+  LOST
+  CANCELLED
+  VOID
+  SETTLED
+  OTHER
+}
+
+enum CommissionStatus {
+  ONE
+  TWO
+  THREE
+}
+
+

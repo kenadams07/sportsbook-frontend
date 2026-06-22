@@ -1,0 +1,3 @@
+ALTER TYPE "MarketExposureStatus" RENAME VALUE 'ONE' TO 'OPEN';
+ALTER TYPE "MarketExposureStatus" RENAME VALUE 'TWO' TO 'SUSPENDED';
+ALTER TYPE "MarketExposureStatus" RENAME VALUE 'THREE' TO 'CLOSED';

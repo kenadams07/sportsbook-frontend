@@ -1,0 +1,28 @@
+{
+  "name": "@sportbooks/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/client.js",
+  "types": "dist/client.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/client.d.ts",
+      "default": "./dist/client.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "generate": "prisma generate --schema prisma/schema.prisma",
+    "migrate": "prisma migrate dev --schema prisma/schema.prisma",
+    "deploy": "prisma migrate deploy --schema prisma/schema.prisma",
+    "studio": "prisma studio --schema prisma/schema.prisma"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.22.0",
+    "typescript": "^6.0.3"
+  }
+}
