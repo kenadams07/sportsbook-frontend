@@ -1,1 +1,0 @@
-// Email constants will be defined here
