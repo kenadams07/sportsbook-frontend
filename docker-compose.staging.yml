@@ -41,6 +41,10 @@ services:
     restart: "no"
 
   user-server:
+    build:
+      context: .
+      args:
+        APP_WORKSPACE: apps/user-server
     image: sportbooks-user-server:staging
     restart: unless-stopped
     environment:
@@ -103,4 +107,6 @@ services:
 
 volumes:
   postgres_data:
+    name: sportsbook_v2_postgres_data
   redis_data:
+    name: sportsbook_v2_redis_data
