@@ -11,7 +11,10 @@ import { Link } from 'react-router-dom';
 import { ChevronDown, User } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserData } from '../redux/Action';
+import { getUserDataSuccess } from '../redux/Action/auth/getUserDataAction';
+import { updateUserBalanceExposureSuccess } from '../redux/Action/auth/updateUserBalanceExposureAction';
 import { logout } from '../redux/Action/auth/logoutAction';
+import { getLocalStorageItem, setLocalStorageItem } from '../utils/Helper';
 
 const navItems = [
     {
@@ -68,45 +71,53 @@ export default function MainNavbar() {
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [forceUpdate, setForceUpdate] = useState(0);
-  const [exposure, setExposure] = useState(0);
-  const [socket, setSocket] = useState(null);
+  const [exposure, setExposure] = useState(null);
+  const userWsUrl = import.meta.env.VITE_USER_WS_URL;
 
-  // Initialize WebSocket connection
+  // Keep account figures fresh when the user-server publishes balance/exposure changes.
   useEffect(() => {
-    if (isAuthenticated && userData?._id) {
-      const newSocket = new WebSocket('ws://localhost:3001'); // Adjust URL as needed
-      
-      newSocket.onopen = () => {
-        // Removed console.log('WebSocket connection established');
-      };
+    const token = getLocalStorageItem('token');
 
-      newSocket.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        
-        if (data.type === 'exposureUpdate' && data.userId === userData._id) {
-          // Removed console.log(`User ${data.userId} exposure updated to ${data.exposure}`);
-          setExposure(data.exposure);
-        }
-      };
-
-      newSocket.onclose = () => {
-        // Removed console.log('WebSocket connection closed');
-      };
-
-      newSocket.onerror = (error) => {
-        // Removed console.error('WebSocket error:', error);
-      };
-
-      setSocket(newSocket);
-
-      // Clean up function to close the socket when component unmounts or user logs out
-      return () => {
-        if (newSocket) {
-          newSocket.close();
-        }
-      };
+    if (!isAuthenticated || !userData?._id || !userWsUrl || !token) {
+      setExposure(null);
+      return undefined;
     }
-  }, [isAuthenticated, userData?._id]);
+
+    const separator = userWsUrl.includes('?') ? '&' : '?';
+    const ws = new WebSocket(`${userWsUrl}${separator}token=${encodeURIComponent(token)}`);
+
+    ws.onmessage = (event) => {
+      try {
+        const message = JSON.parse(event.data);
+
+        if (message.type !== 'user:balance_exposure:update') return;
+
+        const account = message.data || {};
+        if (account.userId !== userData._id) return;
+
+        const nextUserData = {
+          ...userData,
+          balance: account.balance,
+          exposure: account.exposure,
+          availableBalance: account.availableBalance,
+        };
+
+        setExposure(Number(account.exposure) || 0);
+        setLocalStorageItem('userData', nextUserData);
+        dispatch(updateUserBalanceExposureSuccess({
+          balance: account.balance,
+          exposure: account.exposure,
+        }));
+        dispatch(getUserDataSuccess(nextUserData));
+      } catch (error) {
+        // Ignore malformed socket payloads; REST remains the source of truth.
+      }
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, [dispatch, isAuthenticated, userData, userWsUrl]);
 
   // Calculate total exposure from exposures array
   const calculateTotalExposure = useCallback((exposures) => {
@@ -140,7 +151,7 @@ export default function MainNavbar() {
   const getTotalExposure = useMemo(() => {
     
     // Use WebSocket exposure when available, otherwise fallback to existing logic
-    if (exposure !== 0) {
+    if (exposure !== null) {
       return exposure;
     }
     

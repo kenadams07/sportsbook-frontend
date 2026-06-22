@@ -5,6 +5,7 @@ import {
   removeLocalStorageItem,
 } from "./Helper";
 import { BACKEND_API } from "./Constants";
+import { getApiErrorMessage, getApiStatusCode } from "./apiResponse";
 
 // Use proxy endpoint in development to avoid CORS issues
 const isDevelopment = import.meta.env.MODE === 'development';
@@ -39,10 +40,10 @@ api.interceptors.response.use(
   (response) => {
     // Log successful response for debugging
     console.log("API Response:", response.status, response.data);
-    if (response?.data?.meta?.status === 401) {
-      handleUnauthorized(response.data.meta.message);
+    if (getApiStatusCode(response.data) === 401 && getLocalStorageItem("token")) {
+      handleUnauthorized(response.data.message || "Please login again.");
       return Promise.reject(
-        new Error(response.data.meta.message || "Unauthorized")
+        new Error(response.data.message || "Unauthorized")
       );
     }
     return response;
@@ -56,9 +57,17 @@ api.interceptors.response.use(
       return Promise.reject(new Error('Request timeout. Server is taking too long to respond. Please try again.'));
     }
     
-    if (error?.response?.status === 401 || error?.response?.data?.meta?.status === 401) {
+    const requestUrl = error?.config?.url || "";
+    const isAuthRoute = requestUrl.includes("/users/login") || requestUrl.includes("/users/signup");
+
+    if (
+      (error?.response?.status === 401 || getApiStatusCode(error) === 401) &&
+      getLocalStorageItem("token") &&
+      !isAuthRoute
+    ) {
       handleUnauthorized("Please login again.");
     }
+    error.message = getApiErrorMessage(error, error.message);
     return Promise.reject(error);
   }
 );

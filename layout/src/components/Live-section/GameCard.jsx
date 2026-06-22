@@ -1,6 +1,22 @@
 import React from "react";
+import { Star } from "lucide-react";
+
+function getMarketCount(markets) {
+  if (!markets || typeof markets !== "object") {
+    return 0;
+  }
+
+  return Object.values(markets).reduce((count, marketGroup) => {
+    if (Array.isArray(marketGroup)) {
+      return count + marketGroup.length;
+    }
+
+    return count;
+  }, 0);
+}
 
 export default function GameCard({
+  eventId,
   team1,
   team2,
   score1,
@@ -9,15 +25,20 @@ export default function GameCard({
   time,
   odds,
   league,
-  sport, // <-- Add sport prop
-  sportKey, // <-- Add sportKey prop
+  sport,
+  sportKey,
+  markets,
+  eventType = "MATCH",
+  outrightRunners = [],
   highlight = false,
-  oddsHighlight = { w1: false, w2: false },
+  oddsHighlight = { w1: false, x: false, w2: false },
   onClick,
 }) {
+  const isOutright = eventType === "OUTRIGHT";
   let team1Display = team1;
   let team2Display = team2;
-  if (team1 && !team2) {
+
+  if (!isOutright && team1 && !team2) {
     const parts = team1.split(/\s*vs\.?\s*/i);
     if (parts.length === 2) {
       team1Display = parts[0].trim();
@@ -25,76 +46,97 @@ export default function GameCard({
     }
   }
 
-  // Convert time if it's a timestamp (e.g., openDate)
   let displayTime = time;
-  if (typeof time === 'number' && time > 1000000000000) {
-    const dateObj = new Date(time);
-    displayTime = dateObj.toLocaleString();
+  if (typeof time === "number" && time > 1000000000000) {
+    displayTime = new Date(time).toLocaleString();
+  } else if (typeof time === "string" && !Number.isNaN(new Date(time).getTime())) {
+    displayTime = new Date(time).toLocaleString();
   }
 
-  // Check if market is suspended
   const isSuspended = odds.w1 === "SUSPENDED" && odds.x === "SUSPENDED" && odds.w2 === "SUSPENDED";
+  const displayRunners = outrightRunners.slice(0, 3);
+  const marketCount = getMarketCount(markets);
 
   return (
     <div
-      className={`bg-live-primary rounded-md p-2 mb-2 border transition-all duration-300 ease-in-out transform ${
-        highlight 
-          ? 'border-live-accent shadow-[0_0_12px_var(--live-accent-primary)] scale-[1.02]' 
-          : 'border-live shadow-md hover:shadow-lg'
-      } cursor-pointer hover:bg-live-hover hover:scale-[1.01]`}
+      className={`bg-live-primary rounded-md p-1.5 mb-1.5 border transition-all duration-300 ease-in-out ${
+        highlight
+          ? "border-live-accent shadow-[0_0_12px_var(--live-accent-primary)]"
+          : "border-live shadow-sm hover:shadow-md"
+      } cursor-pointer hover:bg-live-hover`}
       onClick={onClick}
-      data-sport-key={sportKey} // Add data attribute for debugging
-      data-event-id={time} // Add data attribute for debugging
+      data-sport-key={sportKey}
+      data-event-id={eventId}
     >
-      {/* League and status vertically */}
-      <div className="flex flex-col items-start mb-1 gap-1">
-        <span className="text-xs sm:text-sm text-live-secondary font-semibold truncate">{league}</span>
-        <span className="text-xs sm:text-sm text-live-muted">{matchStatus}</span>
-        <span className="text-xs sm:text-sm text-live-accent">{displayTime}</span>
-      </div>
-      {/* Teams and scores */}
-      <div className="flex flex-col sm:flex-row items-center justify-between mb-1 gap-1 sm:gap-0">
-        <div className="flex flex-col flex-1 min-w-0">
-          <span className="text-sm sm:text-base text-live-primary font-bold truncate">{team1Display}</span>
-          <span className="text-xs sm:text-sm text-live-muted font-bold">vs.</span>
-          <span className="text-sm sm:text-base text-live-primary font-bold truncate">{team2Display}</span>
-        </div>
-        <div className="flex flex-col items-center sm:items-end sm:flex-row gap-1 sm:gap-2 ml-2">
-          <div className="flex flex-col items-end">
-            <span className="text-base sm:text-lg text-live-accent font-bold">{score1}</span>
-            <span className="text-base sm:text-lg text-live-accent font-bold">{score2}</span>
+      <div className="flex items-start justify-between gap-2 mb-1">
+        <div className="min-w-0 flex-1">
+          <span className="block text-[11px] text-live-secondary font-semibold truncate">{league}</span>
+          <div className="flex items-center gap-1.5 mt-0.5 text-[10px] leading-none">
+            <span className="text-live-muted uppercase">{matchStatus}</span>
+            <span className="text-live-muted">|</span>
+            <span className="text-live-accent truncate">{displayTime}</span>
           </div>
         </div>
+        <div className="flex items-center gap-1 shrink-0">
+          <span className="text-[10px] bg-live-hover text-live-muted rounded px-1.5 py-0.5">+{marketCount}</span>
+          <Star className="w-3.5 h-3.5 text-live-muted hover:text-live-accent" />
+        </div>
       </div>
-      {/* Odds */}
-      <div className="flex flex-wrap sm:flex-nowrap gap-1 sm:gap-2 mt-2">
+
+      {isOutright ? (
+        <div className="mb-1.5">
+          <span className="text-sm text-live-primary font-bold truncate block">{team1Display}</span>
+          <span className="text-[10px] text-live-muted font-semibold uppercase">Outright</span>
+        </div>
+      ) : (
+        <div className="grid grid-cols-[1fr_auto] gap-2 mb-1.5">
+          <div className="min-w-0 space-y-0.5">
+            <span className="block text-sm text-live-primary font-bold truncate">{team1Display}</span>
+            <span className="block text-sm text-live-primary font-bold truncate">{team2Display}</span>
+          </div>
+          <div className="flex flex-col items-end justify-center leading-none">
+            <span className="text-base text-live-accent font-bold">{score1}</span>
+            <span className="text-base text-live-accent font-bold">{score2}</span>
+          </div>
+        </div>
+      )}
+
+      <div className="flex gap-1">
         {isSuspended ? (
-          // Display full suspended box
-          <div className="w-full flex items-center justify-center bg-live-odds rounded p-2">
-            <span className="text-sm font-bold text-live-primary">SUSPENDED</span>
+          <div className="w-full flex items-center justify-center bg-live-odds rounded px-2 py-1.5">
+            <span className="text-xs font-bold text-live-primary">SUSPENDED</span>
           </div>
+        ) : isOutright ? (
+          displayRunners.length > 0 ? (
+            displayRunners.map((runner) => {
+              const price = runner?.backPrices?.[0]?.price;
+              return (
+                <div key={runner.runnerName} className="flex-1 min-w-0 bg-live-odds rounded-md px-1.5 py-1 text-center">
+                  <span className="block text-[10px] text-live-muted truncate">{runner.runnerName}</span>
+                  <span className="inline-flex min-w-[44px] items-center justify-center rounded px-2 py-0.5 text-sm font-bold odds-value transition-all duration-300">
+                    {typeof price === "number" ? price.toFixed(2) : "-"}
+                  </span>
+                </div>
+              );
+            })
+          ) : (
+            <div className="w-full flex items-center justify-center bg-live-odds rounded px-2 py-1.5">
+              <span className="text-xs font-bold text-live-muted">Awaiting outright odds</span>
+            </div>
+          )
         ) : (
-          // Display regular odds
           <>
-            <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105">
-              <span className="text-xs sm:text-sm text-live-muted">W1</span>
-              <span className={`text-sm sm:text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${
-                oddsHighlight?.w1 
-                  ? 'odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110' 
-                  : 'hover:shadow-md'
-              }`}>{odds.w1}</span>
+            <div className="flex-1 bg-live-odds rounded-md px-1.5 py-1 text-center">
+              <span className="block text-[10px] text-live-muted text-center">W1</span>
+              <span className={`inline-flex min-w-[44px] items-center justify-center rounded px-2 py-0.5 text-sm font-bold odds-value transition-all duration-300 ${oddsHighlight?.w1 ? "odds-highlight" : ""}`}>{odds.w1}</span>
             </div>
-            <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105">
-              <span className="text-xs sm:text-sm text-live-muted">X</span>
-              <span className="text-sm sm:text-base text-live-accent font-bold transition-all duration-300 hover:shadow-md">{odds.x}</span>
+            <div className="flex-1 bg-live-odds rounded-md px-1.5 py-1 text-center">
+              <span className="block text-[10px] text-live-muted text-center">X</span>
+              <span className={`inline-flex min-w-[44px] items-center justify-center rounded px-2 py-0.5 text-sm font-bold text-live-accent transition-all duration-300 ${oddsHighlight?.x ? "odds-highlight" : ""}`}>{odds.x}</span>
             </div>
-            <div className="flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105">
-              <span className="text-xs sm:text-sm text-live-muted">W2</span>
-              <span className={`text-sm sm:text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${
-                oddsHighlight?.w2 
-                  ? 'odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110' 
-                  : 'hover:shadow-md'
-              }`}>{odds.w2}</span>
+            <div className="flex-1 bg-live-odds rounded-md px-1.5 py-1 text-center">
+              <span className="block text-[10px] text-live-muted text-center">W2</span>
+              <span className={`inline-flex min-w-[44px] items-center justify-center rounded px-2 py-0.5 text-sm font-bold odds-value transition-all duration-300 ${oddsHighlight?.w2 ? "odds-highlight" : ""}`}>{odds.w2}</span>
             </div>
           </>
         )}

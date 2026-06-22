@@ -52,3 +52,13 @@ export const SPORT_ID_BY_KEY = {
   snooker: "sr:sport:19",
   futsal: "sr:sport:29",
 }
+
+export const ODDS_SPORT_KEY_BY_FRONTEND_KEY = {
+  baseball: "baseball_mlb",
+  soccer: "soccer_brazil_campeonato",
+  basketball: "basketball_wnba",
+  cricket: "cricket_odi",
+  tennis: "tennis_wta_queens_club_champ",
+  american_football: "americanfootball_nfl",
+  ice_hockey: "icehockey_nhl",
+}

@@ -5,7 +5,10 @@ import {
     verifyEmailFailure,
 } from "../../Action/auth/verifyEmailAction";
 import { VERIFY_EMAIL } from "../../Action/actionTypes";
+import { loginSuccess } from "../../Action/auth/loginAction";
+import { setLocalStorageItem } from "../../../utils/Helper";
 import { notifyPromise } from "../../../utils/notificationService";
+import { unwrapApiResponse } from "../../../utils/apiResponse";
 
 function* verifyEmailRequest(action) {
     try {
@@ -21,12 +24,6 @@ function* verifyEmailRequest(action) {
             endpoint = "/users/forget-password";
             notificationOptions = {
                 loadingText: "Processing...",
-                getSuccessMessage: (res) => {
-                    if (res?.data?.code === 200) {
-                        return res?.data?.message || "Request processed successfully";
-                    }
-                    return null;
-                },
                 getErrorMessage: (err) => {
                     return err?.response?.data?.message || err?.message || "Failed to process request";
                 }
@@ -37,12 +34,6 @@ function* verifyEmailRequest(action) {
             endpoint = "/users/verify-otp";
             notificationOptions = {
                 loadingText: "Verifying OTP...",
-                getSuccessMessage: (res) => {
-                    if (res?.data?.code === 200) {
-                        return res?.data?.message || "OTP verified successfully";
-                    }
-                    return null;
-                },
                 getErrorMessage: (err) => {
                     return err?.response?.data?.message || err?.message || "Failed to verify OTP";
                 },
@@ -55,12 +46,6 @@ function* verifyEmailRequest(action) {
             endpoint = "/users/verifyemail";
             notificationOptions = {
                 loadingText: "Sending OTP...",
-                getSuccessMessage: (res) => {
-                    if (res?.data?.code === 200) {
-                        return res?.data?.message || "OTP sent to your email";
-                    }
-                    return null;
-                },
                 getErrorMessage: (err) => {
                     return err?.response?.data?.message || err?.message || "Failed to send OTP";
                 },
@@ -74,17 +59,21 @@ function* verifyEmailRequest(action) {
                 notifyPromise(() => API.post(endpoint, payload), notificationOptions)
             );
 
-            if (data?.code === 200) {
-                yield put(verifyEmailSuccess(data?.data));
+            const result = unwrapApiResponse({ data });
+            const responseData = result.data;
 
-                if (action.callback && typeof action.callback === 'function') {
-                    yield call(action.callback, data);
+                if (payload?.hasOwnProperty("otp") && responseData?.token && responseData?.user) {
+                    yield call(setLocalStorageItem, "token", responseData.token);
+                    yield call(setLocalStorageItem, "userData", JSON.stringify(responseData.user));
+                    yield put(loginSuccess(responseData.user));
                 }
 
-            } else {
-                // Pass the error data to the failure action
-                yield put(verifyEmailFailure(data));
-            }
+                yield put(verifyEmailSuccess(responseData));
+
+                if (action.callback && typeof action.callback === 'function') {
+                    yield call(action.callback, result.raw);
+                }
+
         } catch (apiError) {
             // Removed console.error("API Error:", apiError);
             // Pass the error to the failure action

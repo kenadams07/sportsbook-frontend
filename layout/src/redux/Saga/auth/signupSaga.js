@@ -2,9 +2,10 @@ import { all, call, put, takeEvery } from "redux-saga/effects";
 import API from "../../../utils/api";
 import { setLocalStorageItem, getIPAddresses } from "../../../utils/Helper";
 import { signupSuccess, signupFailure } from "../../Action/auth/signupAction";
-import { LOGIN_SUCCESS } from "../../Action/actionTypes"; // Import LOGIN_SUCCESS
 import { SIGNUP } from "../../Action/actionTypes";
+import { loginVerificationPending } from "../../Action/auth/loginAction";
 import { notifyPromise } from "../../../utils/notificationService";
+import { unwrapApiResponse } from "../../../utils/apiResponse";
 
 function* signupRequest(action) {
   try {
@@ -26,10 +27,6 @@ function* signupRequest(action) {
     const data = yield call(() =>
       notifyPromise(() => API.post("/users/signup", payload), {
         loadingText: "Creating your account...",
-        getSuccessMessage: (res) => {
-          if (res?.data?.success) return res.data.message || "Account created successfully!";
-          return null; // null prevents success notification if success !== true
-        },
         getErrorMessage: (err) => {
           // Handle different types of errors
           if (err?.code === 'ECONNABORTED') {
@@ -65,16 +62,17 @@ function* signupRequest(action) {
       })
     );
 
-    if (data?.data?.success) {
-      yield call(setLocalStorageItem, "token", data.data.token);
-      yield call(setLocalStorageItem, "userData", data.data.data);
-      yield put(signupSuccess(data.data.data));
-      // Dispatch login success as well to update the state
-      yield put({ type: LOGIN_SUCCESS, payload: data.data.data });
+    const result = unwrapApiResponse(data);
+    const user = result.data.user;
+
+    if (user) {
+      yield call(setLocalStorageItem, "pendingVerificationUser", user);
+      yield put(signupSuccess(user));
+      yield put(loginVerificationPending(user));
       
       // Execute callback if provided
       if (action.callback && typeof action.callback === 'function') {
-        yield call(action.callback, data.data);
+        yield call(action.callback, result.raw);
       }
     } else {
       yield put(signupFailure());

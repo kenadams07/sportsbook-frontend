@@ -1,4 +1,5 @@
 import api from "./api";
+import { unwrapApiResponse } from "./apiResponse";
 
 /**
  * Fetch match results from the API
@@ -14,7 +15,7 @@ export async function fetchMatchResults(eventId, sportId, marketId, userId) {
       url += `&user_id=${userId}`;
     }
     const response = await api.get(url);
-    return response.data;
+    return unwrapApiResponse(response).data;
   } catch (error) {
     console.error("Error fetching match results:", error);
     throw error;

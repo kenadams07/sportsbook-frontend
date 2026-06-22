@@ -102,7 +102,12 @@ export default function MobileRegisterModal({ isOpen, onClose, onCloseAll, onSwi
     e.preventDefault();
     if (!validateForm()) return;
 
-    dispatch(signup(formData));
+    dispatch(
+      signup(formData, () => {
+        handleClose();
+        navigate(Paths.verifyEmail);
+      })
+    );
   };
 
   // Close modal and navigate when user becomes authenticated

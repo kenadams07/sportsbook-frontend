@@ -4,6 +4,7 @@ import { setLocalStorageItem, getIPAddresses } from "../../../utils/Helper";
 import { loginFailure, loginSuccess } from "../../Action/auth/loginAction";
 import { LOGIN } from "../../Action/actionTypes";
 import { notifyPromise } from "../../../utils/notificationService";
+import { unwrapApiResponse } from "../../../utils/apiResponse";
 
 function* loginRequest(action) {
   try {
@@ -23,17 +24,6 @@ function* loginRequest(action) {
     const data = yield call(() =>
       notifyPromise(() => API.post("/users/login", payloadWithIPs), {
         loadingText: "Logging in...",
-        getSuccessMessage: (res) => {
-          // Handle the login response structure (success: true)
-          if (res?.data?.success === true) {
-            return res.data.message || "Login successful";
-          }
-          // Also handle the existing structure for backward compatibility
-          else if (res?.data?.meta?.code === 200 || res?.data?.code === 200) {
-            return res?.data?.meta?.message || res?.data?.message || "Login successful";
-          }
-          return null; // null prevents success notification if not successful
-        },
         getErrorMessage: (err) => {
           // Handle timeout errors specifically
           if (err?.code === 'ECONNABORTED') {
@@ -62,20 +52,16 @@ function* loginRequest(action) {
       })
     );
 
-    if (data?.data?.success === true || data?.data?.meta?.code === 200 || data?.data?.code === 200) {
-      yield put(loginSuccess(data?.data?.data));
-      yield call(setLocalStorageItem, "userData", JSON.stringify(data?.data?.data));
-      yield call(setLocalStorageItem, "token", data?.data?.token || data?.data?.meta?.token);
+    const result = unwrapApiResponse(data);
+    yield put(loginSuccess(result.data.user));
+    yield call(setLocalStorageItem, "userData", JSON.stringify(result.data.user));
+    yield call(setLocalStorageItem, "token", result.data.token);
       
-      // Execute callback if provided
-      if (action.callback && typeof action.callback === 'function') {
-        yield call(action.callback, data?.data);
-      }
-    } else {
-      yield put(loginFailure());
+    if (action.callback && typeof action.callback === 'function') {
+      yield call(action.callback, result.raw);
     }
   } catch (error) {
-    yield put(loginFailure());
+    yield put(loginFailure(error));
   }
 }
 

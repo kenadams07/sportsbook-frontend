@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { IoSearchOutline, IoCloseOutline, IoChevronDown, IoChevronUp } from "react-icons/io5";
+import { IoSearchOutline, IoCloseOutline, IoChevronDown, IoChevronUp, IoStarOutline } from "react-icons/io5";
 import { SPORT_ID_BY_KEY } from "../../utils/CommonExports";
 import { fetchMarketsData } from "../../utils/sportsEventsApi";
 
@@ -30,7 +30,179 @@ const isMatchSuspended = (match) => {
   return false;
 };
 
-export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
+const MARKET_NAME_BY_KEY = {
+  matchOdds: "Match Odds",
+  h2h: "Match Odds",
+  spreads: "Handicap",
+  totals: "Totals",
+  outrights: "Outrights",
+};
+
+const MARKET_CATEGORY_TABS = [
+  { id: "All", label: "All" },
+  { id: "Match", label: "Match" },
+  { id: "Totals", label: "Totals" },
+  { id: "Handicaps", label: "Handicaps" },
+  { id: "Halves", label: "Halves" },
+  { id: "Outrights", label: "Outrights" },
+];
+
+function humanizeMarketName(value = "") {
+  if (MARKET_NAME_BY_KEY[value]) {
+    return MARKET_NAME_BY_KEY[value];
+  }
+
+  return value
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function getMarketCategory(market = {}) {
+  const raw = [
+    market.marketCategory,
+    market.marketGroupKey,
+    market.key,
+    market.marketType,
+    market.marketName,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  if (raw.includes("outright") || raw.includes("winner")) {
+    return "Outrights";
+  }
+
+  if (raw.includes("spread") || raw.includes("handicap") || raw.includes("asian handicap")) {
+    return "Handicaps";
+  }
+
+  if (raw.includes("total") || raw.includes("over") || raw.includes("under") || raw.includes("goal")) {
+    return "Totals";
+  }
+
+  if (raw.includes("half") || raw.includes("1st") || raw.includes("2nd")) {
+    return "Halves";
+  }
+
+  return "Match";
+}
+
+function normaliseMarket(market, marketGroupKey = "market", marketIndex = 0) {
+  const rawMarketName = market.marketName || market.marketType || market.key || marketGroupKey;
+  const marketName = humanizeMarketName(rawMarketName);
+  const marketKey = market.key || market.marketType || marketGroupKey;
+  const categoryInput = {
+    ...market,
+    marketGroupKey,
+    key: marketKey,
+    marketName,
+  };
+
+  return {
+    ...market,
+    marketGroupKey,
+    marketKey,
+    marketCategory: getMarketCategory(categoryInput),
+    marketId: market.marketId || marketGroupKey + "-" + marketIndex,
+    marketName,
+    runners: (market.runners || []).map((runner, runnerIndex) => ({
+      ...runner,
+      runnerId: runner.runnerId || marketGroupKey + "-" + marketIndex + "-" + runnerIndex,
+    })),
+  };
+}
+
+function normaliseMarketsForDisplay(markets) {
+  if (!markets) {
+    return [];
+  }
+
+  if (Array.isArray(markets)) {
+    return markets.map((market, marketIndex) => normaliseMarket(market, market.key || market.marketType || "market", marketIndex));
+  }
+
+  return Object.entries(markets).flatMap(([marketGroupKey, marketList]) => {
+    if (!Array.isArray(marketList)) {
+      return [];
+    }
+
+    return marketList.map((market, marketIndex) => normaliseMarket(market, marketGroupKey, marketIndex));
+  });
+}
+
+function getMatchTeams(match = {}) {
+  if (match.eventType === "OUTRIGHT") {
+    return {
+      team1: match.eventName || match.competitionName || "Outright",
+      team2: "",
+    };
+  }
+
+  const parts = (match.eventName || "").split(/\s+vs\.?\s+/i);
+
+  return {
+    team1: match.team1 || parts[0]?.trim() || match.homeTeam || "Team 1",
+    team2: match.team2 || parts[1]?.trim() || match.awayTeam || "Team 2",
+  };
+}
+
+function extractBoardOdds(match = {}) {
+  if (match.odds) {
+    return {
+      w1: match.odds.w1 || "-",
+      x: match.odds.x || "-",
+      w2: match.odds.w2 || "-",
+    };
+  }
+
+  const market = match.markets?.matchOdds?.[0] || normaliseMarketsForDisplay(match.markets)[0];
+  const runners = market?.runners || [];
+  const drawRunner = runners.find((runner) => runner.runnerName?.toLowerCase?.() === "draw");
+  const nonDrawRunners = runners.filter((runner) => runner.runnerName?.toLowerCase?.() !== "draw");
+  const firstRunner = nonDrawRunners[0];
+  const secondRunner = nonDrawRunners.length > 1 ? nonDrawRunners[nonDrawRunners.length - 1] : undefined;
+  const formatPrice = (runner) => {
+    const price = runner?.backPrices?.[0]?.price;
+    return typeof price === "number" ? price.toFixed(2) : "-";
+  };
+
+  return {
+    w1: formatPrice(firstRunner),
+    x: formatPrice(drawRunner),
+    w2: formatPrice(secondRunner),
+  };
+}
+
+function formatBoardDate(value) {
+  const date = new Date(value || Date.now());
+
+  if (Number.isNaN(date.getTime())) {
+    return "Date TBA";
+  }
+
+  return date.toLocaleDateString(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  });
+}
+
+function formatBoardTime(value) {
+  const date = new Date(value || Date.now());
+
+  if (Number.isNaN(date.getTime())) {
+    return "TBA";
+  }
+
+  return date.toLocaleTimeString(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+export default function MiddleGameDisplay({ match, sport, onRunnerSelect, eventBoardMatches = [], boardViewMode = "live", onMatchSelect = () => {} }) {
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearchChange = (value) => {
@@ -40,6 +212,17 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
   const handleSearchClear = () => {
     setSearchTerm('');
   };
+
+  if (boardViewMode === "prematch") {
+    return (
+      <PrematchEventBoard
+        matches={eventBoardMatches}
+        selectedMatch={match}
+        onMatchSelect={onMatchSelect}
+        onRunnerSelect={onRunnerSelect}
+      />
+    );
+  }
 
   if (!match || !sport) {
     return (
@@ -71,10 +254,10 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
     displayTime = dateObj.toLocaleString();
   }
 
-  // Extract team names from eventName
-  const teamNames = match.eventName ? match.eventName.split(' vs. ') : ['Team 1', 'Team 2'];
-  const team1 = teamNames[0] || 'Team 1';
-  const team2 = teamNames[1] || 'Team 2';
+    const isOutright = match.eventType === "OUTRIGHT";
+  const teamNames = !isOutright && match.eventName ? match.eventName.split(/\s+vs\.?\s+/i) : [match.eventName || match.team1 || "Outright", ""];
+  const team1 = isOutright ? (match.eventName || match.team1 || "Outright") : (teamNames[0] || "Team 1");
+  const team2 = isOutright ? "" : (teamNames[1] || "Team 2");
 
   // Use real-time scores from match prop
   const homeScore = match.homeScore ?? 0;
@@ -103,7 +286,7 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
           <div className="flex justify-between items-center p-2 sm:p-3 md:p-4">
             <div className="flex items-center gap-1 sm:gap-2">
               <div className="w-5 h-3 sm:w-6 sm:h-4 bg-live-info border border-live-primary rounded-sm flex items-center justify-center">
-                <span className="text-live-primary text-[10px] sm:text-xs font-bold">🇬🇧</span>
+                <span className="text-live-primary text-[10px] sm:text-xs font-bold">ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§</span>
               </div>
               <span className="text-live-primary text-xs sm:text-sm font-medium truncate">{match.competitionName || 'League'}</span>
             </div>
@@ -121,22 +304,28 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
               {/* Left side - Teams */}
               <div className="space-y-1 sm:space-y-2 md:space-y-3 flex-1 min-w-0">
                 <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
-                  <span className="text-live-danger text-sm sm:text-base md:text-lg">★</span>
+                  <span className="text-live-danger text-sm sm:text-base md:text-lg">ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¹Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦</span>
                   <span className="text-live-primary text-sm sm:text-base md:text-lg font-medium truncate">{team1}</span>
                 </div>
-                <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
-                  <span className="text-live-accent text-sm sm:text-base md:text-lg">★</span>
-                  <span className="text-live-primary text-sm sm:text-base md:text-lg font-medium truncate">{team2}</span>
-                </div>
+                {isOutright ? (
+                  <div className="text-live-muted text-xs sm:text-sm font-semibold">Outright winner market</div>
+                ) : (
+                  <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
+                    <span className="text-live-accent text-sm sm:text-base md:text-lg">ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¹Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦</span>
+                    <span className="text-live-primary text-sm sm:text-base md:text-lg font-medium truncate">{team2}</span>
+                  </div>
+                )}
               </div>
 
         
 
               {/* Right side - Current scores */}
-              <div className="text-right space-y-1 sm:space-y-2 md:space-y-3 flex-shrink-0 ml-2">
-                <div className="text-live-primary text-lg sm:text-xl md:text-2xl font-bold">{homeScore}</div>
-                <div className="text-live-primary text-lg sm:text-xl md:text-2xl font-bold">{awayScore}</div>
-              </div>
+              {!isOutright && (
+                <div className="text-right space-y-1 sm:space-y-2 md:space-y-3 flex-shrink-0 ml-2">
+                  <div className="text-live-primary text-lg sm:text-xl md:text-2xl font-bold">{homeScore}</div>
+                  <div className="text-live-primary text-lg sm:text-xl md:text-2xl font-bold">{awayScore}</div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -147,10 +336,10 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
                 Stats
               </button>
               <button className="bg-live-tertiary hover:bg-live-hover text-live-primary p-1 sm:p-1.5 md:p-2 rounded text-xs sm:text-sm">
-                ⚡
+                ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡
               </button>
               <button className="bg-live-tertiary hover:bg-live-hover text-live-primary p-1 sm:p-1.5 md:p-2 rounded text-xs sm:text-sm">
-                📊
+                ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â 
               </button>
             </div>
           </div>
@@ -181,148 +370,225 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
   );
 }
 
-/**
- * MarketItem Component - Displays a single market with its runners and odds
- */
-function MarketItem({ market, isOpen, onToggle, highlightedOdds = {}, onRunnerSelect, selectedMatch }) {
-  const contentRef = useRef(null);
-  const [measuredHeight, setMeasuredHeight] = useState(0);
+function PrematchEventBoard({ matches = [], selectedMatch, onMatchSelect, onRunnerSelect }) {
+  const [boardSearch, setBoardSearch] = useState("");
 
-  // Measure content height for smooth animation
+  // Accordion open state per date group and refs for measuring height
+  const [openDates, setOpenDates] = useState({});
+  const groupRefs = useRef({});
+  const groupedMatches = useMemo(() => {
+    const search = boardSearch.trim().toLowerCase();
+    const filtered = matches
+      .filter((match) => match?.eventId)
+      .filter((match) => {
+        if (!search) return true;
+        const haystack = [match.eventName, match.competitionName, match.sportKey, match.status]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+        return haystack.includes(search);
+      })
+      .sort((a, b) => new Date(a.openDate || a.commenceTime || 0).getTime() - new Date(b.openDate || b.commenceTime || 0).getTime());
+
+    return filtered.reduce((groups, match) => {
+      const dateKey = formatBoardDate(match.openDate || match.commenceTime);
+      if (!groups[dateKey]) groups[dateKey] = [];
+      groups[dateKey].push(match);
+      return groups;
+    }, {});
+  }, [matches, boardSearch]);
+
+  // Open all date groups by default when groups are first computed
   useEffect(() => {
-    if (contentRef.current) {
-      setMeasuredHeight(contentRef.current.scrollHeight);
+    const keys = Object.keys(groupedMatches || {});
+    if (keys.length > 0 && Object.keys(openDates).length === 0) {
+      const initial = {};
+      keys.forEach((k) => (initial[k] = true));
+      setOpenDates(initial);
     }
-  }, [isOpen, market.runners]);
+  }, [groupedMatches]);
 
-  // Extract odds from back prices
-  const getOdds = (runner) => {
-    if (!runner || runner.status === "SUSPENDED") return "SUSPENDED";
-    const backPrice = runner.backPrices?.[0]?.price;
-    return typeof backPrice === "number" ? backPrice.toFixed(2) : "-";
-  };
+  const totalMatches = Object.values(groupedMatches).reduce((total, items) => total + items.length, 0);
 
-  // Check if odds have changed for highlighting
-  const isOddsHighlighted = (runner, oddsValue) => {
-    if (!runner || !highlightedOdds[runner.runnerName]) return false;
-    return highlightedOdds[runner.runnerName] === oddsValue;
-  };
-
-  // Check if this runner is currently selected
-  const isSelectedRunner = (runner) => {
-    if (!selectedMatch || !selectedMatch.selectedRunner || !runner) return false;
-    return selectedMatch.selectedRunner.runnerId === runner.runnerId;
-  };
-
-  // Effect to update selected runner odds when they change
-  useEffect(() => {
-    // If this runner is selected and odds have changed, notify parent
-    if (selectedMatch && selectedMatch.selectedRunner && selectedMatch.selectedMarket && market) {
-      const runner = market.runners?.find(r => r && r.runnerId === selectedMatch.selectedRunner.runnerId);
-      const isSelected = isSelectedRunner(runner);
-      if (isSelected && market.marketId === selectedMatch.selectedMarket.marketId) {
-        if (runner) {
-          const newOdds = getOdds(runner);
-          // Only update if odds have actually changed
-          if (newOdds !== selectedMatch.selectedOdd && newOdds !== "SUSPENDED" && newOdds !== "-") {
-            // Update the selected runner with new odds
-            onRunnerSelect({
-              ...selectedMatch,
-              selectedMarket: market,
-              selectedRunner: runner,
-              selectedOdd: newOdds
-            });
-          }
-        }
-      }
-    }
-  }, [market.runners, selectedMatch, market, onRunnerSelect]);
-
-  // Handle runner selection
-  const handleRunnerSelect = (runner) => {
-    if (onRunnerSelect && selectedMatch) {
-      const oddsValue = getOdds(runner);
-      if (oddsValue !== "SUSPENDED" && oddsValue !== "-") {
-        onRunnerSelect({
-          ...selectedMatch,
-          selectedMarket: market,
-          selectedRunner: runner,
-          selectedOdd: oddsValue
-        });
-      }
-    }
-  };
+  const selectedTeams = getMatchTeams(selectedMatch || {});
+  const selectedTitle = selectedTeams.team2 ? selectedTeams.team1 + " vs " + selectedTeams.team2 : selectedTeams.team1;
+  const selectedMarketCount = selectedMatch ? normaliseMarketsForDisplay(selectedMatch.markets).length : 0;
 
   return (
-    <div className="transition-colors overflow-hidden bg-gradient-to-r from-live-primary to-live-tertiary shadow rounded">
-      {/* Market header */}
-      <button
-        type="button"
-        onClick={onToggle}
-        className="w-full flex items-center justify-between px-2 sm:px-3 py-2 text-xs sm:py-2.5 hover:bg-live-hover transition-colors"
-        aria-expanded={isOpen}
-      >
-        <div className="flex items-center gap-3">
-          <span className="text-live-accent text-xs">⭐</span>
-          <span className="text-live-primary font-medium truncate text-xs">{market.marketName}</span>
-        </div>
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <span className="text-live-dark text-[10px] px-2 py-1 bg-live-accent rounded">🔗</span>
-          <span className="text-live-accent text-xs">{market.runners?.length || 0}</span>
-          <span className="text-live-accent text-sm">📊</span>
-          {isOpen ? <IoChevronUp className="w-4 h-4 text-live-primary" /> : <IoChevronDown className="w-4 h-4 text-live-primary" />}
-        </div>
-      </button>
-
-      {/* Market content */}
-      <div
-        style={{
-          maxHeight: isOpen ? `${measuredHeight}px` : "0px",
-          transition: "max-height 280ms ease, opacity 200ms ease",
-          overflow: "hidden",
-          backgroundColor: "var(--live-bg-tertiary)",
-          opacity: isOpen ? 1 : 0,
-        }}
-      >
-        <div ref={contentRef}>
-          <div className="px-2 sm:px-3 pb-2 pt-1 sm:pb-2.5 sm:pt-1.5">
-            <ul className="text-xs text-live-primary space-y-1 sm:space-y-1.5">
-              {market.runners && market.runners.length > 0 ? (
-                market.runners.map((runner, idx) => {
-                  const oddsValue = getOdds(runner);
-                  const isHighlighted = isOddsHighlighted(runner, oddsValue);
-                  const isSelected = isSelectedRunner(runner);
-                  
-                  return (
-                    <li
-                      key={`${market.marketId}-${runner.runnerId}`} // Use unique key
-                      className={`flex items-center justify-between py-1 sm:py-1.5 px-2 bg-live-hover rounded cursor-pointer hover:bg-live-accent hover:bg-opacity-20 transition-colors ${
-                        runner.status === "SUSPENDED" ? "opacity-50 cursor-not-allowed" : ""
-                      } ${isSelected ? "ring-2 ring-live-accent" : ""}`}
-                      onClick={() => {
-                        if (runner.status !== "SUSPENDED") {
-                          handleRunnerSelect(runner);
-                        }
-                      }}
-                    >
-                      <span className="text-live-primary truncate text-xs">{runner.runnerName}</span>
-                      <span className={`text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded font-medium flex-shrink-0 ${
-                        runner.status === "SUSPENDED" 
-                          ? "bg-live-danger text-white" 
-                          : isHighlighted
-                            ? "odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110"
-                            : "bg-live-tertiary text-live-primary"
-                      }`}>
-                        {oddsValue}
-                      </span>
-                    </li>
-                  );
-                })
-              ) : (
-                <li className="px-2 py-1 sm:py-1.5 text-live-secondary text-xs">No runners available</li>
-              )}
-            </ul>
+    <div className="h-full min-h-0 w-full bg-live-primary px-2 py-2 text-live-primary">
+      <div className="grid h-full min-h-0 grid-cols-[minmax(420px,1.3fr)_minmax(360px,0.9fr)] gap-2">
+        <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-md border border-live bg-live-secondary">
+        <div className="flex items-center justify-between gap-3 border-b border-live bg-live-tertiary px-3 py-2">
+          <div className="min-w-0">
+            <div className="text-xs font-bold uppercase tracking-wide text-live-primary">Prematch Event Board</div>
+            <div className="text-[11px] text-live-muted">{totalMatches} events grouped by date</div>
           </div>
+          <div className="flex min-w-[220px] items-center gap-2 rounded border border-live bg-live-primary px-2 py-1.5">
+            <IoSearchOutline className="h-4 w-4 text-live-muted" />
+            <input
+              value={boardSearch}
+              onChange={(event) => setBoardSearch(event.target.value)}
+              placeholder="Search events"
+              className="w-full bg-transparent text-xs text-live-primary outline-none placeholder:text-live-muted"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-[minmax(180px,1fr)_80px_72px_72px_72px_72px]  items-center gap-1 border-b border-live bg-live-hover px-3 py-2 text-[11px] font-bold uppercase text-live-muted ">
+          <div>Event</div>
+          <div className="text-center">Time</div>
+          <div className="text-center">W1</div>
+          <div className="text-center">X</div>
+          <div className="text-center">W2</div>
+          <div className="text-center">More</div>
+        </div>
+
+        <div className="min-h-0 flex-1 overflow-y-auto custom-scrollbar ">
+          {totalMatches === 0 ? (
+            <div className="flex h-full items-center justify-center p-8 text-center text-sm text-live-muted">
+              No prematch events available for the current selection.
+            </div>
+          ) : (
+            Object.entries(groupedMatches).map(([dateLabel, dateMatches]) => (
+              <div key={dateLabel} className="border-b border-live/70 last:border-b-0">
+                <div className="sticky top-0 z-10 bg-live-primary shadow-sm">
+                  <button
+                    type="button"
+                    onClick={() => setOpenDates((prev) => ({ ...prev, [dateLabel]: !prev[dateLabel] }))}
+                    className="w-full flex items-center  justify-between px-3 py-2 text-xs font-bold text-live-accent"
+                    aria-expanded={!!openDates[dateLabel]}
+                  >
+                    <span>{dateLabel}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="rounded bg-live-tertiary px-2 py-0.5 text-[10px] text-live-muted">{dateMatches.length}</span>
+                      <span className={["transition-transform duration-200", openDates[dateLabel] ? "rotate-180" : "rotate-0"].join(" ") }>
+                        {openDates[dateLabel] ? <IoChevronUp className="h-4 w-4 text-live-muted" /> : <IoChevronDown className="h-4 w-4 text-live-muted" />}
+                      </span>
+                    </div>
+                  </button>
+                </div>
+
+                <div
+                  ref={(el) => (groupRefs.current[dateLabel] = el)}
+                  style={{
+                    maxHeight: openDates[dateLabel] ? (groupRefs.current[dateLabel]?.scrollHeight || 0) + "px" : "0px",
+                    transition: "max-height 260ms ease",
+                    overflow: "hidden",
+                  }}
+                >
+                  
+                  {dateMatches.map((event) => {
+                    const teams = getMatchTeams(event);
+                    const odds = extractBoardOdds(event);
+                    const active = selectedMatch?.eventId && String(selectedMatch.eventId) === String(event.eventId);
+                    const marketCount = normaliseMarketsForDisplay(event.markets).length;
+                    const eventTitle = teams.team2 ? teams.team1 + " vs " + teams.team2 : teams.team1;
+                    const oddsHighlight = event.oddsHighlight || {};
+
+                    return (
+                      <button
+                        key={event.eventId}
+                        type="button"
+                        onClick={() => onMatchSelect({
+                          ...event,
+                          ...teams,
+                          odds,
+                          sportKey: event.sportKey,
+                        })}
+                        className={[
+                          "grid w-full my-2 rounded-md grid-cols-[minmax(180px,1fr)_80px_72px_72px_72px_72px] items-center gap-1 border-t border-live/60 px-3 py-2 text-left transition-colors duration-150 active:scale-[0.998]",
+                          active ? "bg-live-odds/60 shadow-[inset_3px_0_0_#ffc400]" : "bg-live-secondary hover:bg-live-hover",
+                        ].join(" ")}
+                      >
+                        <div className="min-w-0">
+                          <div className="truncate text-xs font-semibold text-live-primary">{eventTitle}</div>
+                          <div className="mt-0.5 flex min-w-0 items-center gap-2 text-[10px] text-live-muted">
+                            <span className="truncate">{event.competitionName || event.sportKey || "League"}</span>
+                            <span className="rounded bg-live-tertiary px-1.5 py-0.5 uppercase">{event.status || "PRE_MATCH"}</span>
+                          </div>
+                        </div>
+                        <div className="text-center text-xs text-live-muted">{formatBoardTime(event.openDate || event.commenceTime)}</div>
+                        {[
+                          { value: odds.w1, key: "w1" },
+                          { value: odds.x, key: "x" },
+                          { value: odds.w2, key: "w2" },
+                        ].map((odd) => (
+                          <div
+                            key={odd.key}
+                            className={[
+                              "mx-auto flex min-h-[30px] w-full max-w-[64px] items-center justify-center rounded px-2 text-xs font-bold transition-colors duration-150 cursor-pointer",
+                              oddsHighlight[odd.key] ? "odds-highlight text-live-primary" : "bg-live-hover text-live-accent",
+                            ].join(" ")}
+                          >
+                            {odd.value}
+                          </div>
+                        ))}
+                        <div className="text-center text-[11px] font-semibold text-live-muted">+{marketCount}</div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+        </div>
+
+        <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-md border border-live bg-live-secondary">
+          {selectedMatch ? (
+            <>
+              <div className="relative h-36 flex-shrink-0 overflow-hidden border-b border-live bg-live-tertiary">
+                <img
+                  src="/assets/img1.jpg"
+                  alt={selectedTitle}
+                  className="absolute inset-0 h-full w-full object-cover opacity-55"
+                  onError={(event) => {
+                    event.currentTarget.style.display = "none";
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/35 to-live-secondary" />
+                <div className="relative z-10 flex h-full flex-col justify-between p-3">
+                  <div className="flex items-center justify-between gap-2 text-[10px] text-live-muted">
+                    <span className="truncate rounded bg-live-primary/70 px-2 py-1 font-semibold uppercase">{selectedMatch.competitionName || selectedMatch.sportKey || "League"}</span>
+                    <span className="rounded bg-live-accent px-2 py-1 font-bold text-live-dark">{selectedMatch.status || "PRE_MATCH"}</span>
+                  </div>
+                  <div className="rounded bg-black/35 px-3 py-2">
+                    <div className="text-sm font-bold text-live-primary">{selectedTitle}</div>
+                    <div className="mt-1 flex items-center justify-between text-[11px] text-live-muted">
+                      <span>{formatBoardDate(selectedMatch.openDate || selectedMatch.commenceTime)}</span>
+                      <span>{formatBoardTime(selectedMatch.openDate || selectedMatch.commenceTime)}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between text-[11px] text-live-muted">
+                    <span>Selected event markets</span>
+                    <span className="rounded bg-live-primary/75 px-2 py-0.5 text-live-accent">{selectedMarketCount} markets</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="min-h-0 flex-1 overflow-hidden">
+                <MarketSection
+                  selectedMatch={selectedMatch}
+                  onRunnerSelect={onRunnerSelect}
+                  searchTerm=""
+                  onSearchChange={() => {}}
+                  onSearchClear={() => {}}
+                />
+              </div>
+            </>
+          ) : (
+            <div className="flex h-full items-center justify-center p-8 text-center">
+              <div>
+                <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full border border-live bg-live-tertiary text-live-accent">
+                  <IoStarOutline className="h-5 w-5" />
+                </div>
+                <div className="text-sm font-bold text-live-primary">Select an event</div>
+                <div className="mt-1 max-w-[260px] text-xs leading-5 text-live-muted">
+                  Click any prematch row to view its markets and place bets from the right panel.
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -330,10 +596,109 @@ function MarketItem({ market, isOpen, onToggle, highlightedOdds = {}, onRunnerSe
 }
 
 /**
+ * MarketItem Component - Displays a single market with its runners and odds
+ */
+function MarketItem({ market, isOpen, onToggle, highlightedOdds = {}, onRunnerSelect, selectedMatch }) {
+  const runners = market.runners || [];
+  const isOutright = market.marketType === "OUTRIGHT" || market.key === "outrights" || market.marketName?.toLowerCase?.().includes("winner");
+  const gridClass = isOutright || runners.length > 3 ? "grid-cols-1 md:grid-cols-2" : "grid-cols-3";
+
+  function getOdds(runner) {
+    if (!runner || runner.status === "SUSPENDED") return "SUSPENDED";
+    const price = runner.backPrices?.[0]?.price;
+    return typeof price === "number" ? price.toFixed(2) : "-";
+  }
+
+  function isSelectedRunner(runner) {
+    return Boolean(selectedMatch?.selectedRunner && runner && selectedMatch.selectedRunner.runnerId === runner.runnerId);
+  }
+
+  function handleRunnerSelect(runner) {
+    const selectedOdd = getOdds(runner);
+    if (!selectedMatch || selectedOdd === "SUSPENDED" || selectedOdd === "-") return;
+
+    onRunnerSelect({
+      ...selectedMatch,
+      selectedMarket: market,
+      selectedRunner: runner,
+      selectedOdd,
+    });
+  }
+
+  useEffect(() => {
+    if (!selectedMatch?.selectedRunner || selectedMatch.selectedMarket?.marketId !== market.marketId) return;
+    const runner = runners.find((item) => item?.runnerId === selectedMatch.selectedRunner.runnerId);
+    const selectedOdd = getOdds(runner);
+
+    if (runner && selectedOdd !== selectedMatch.selectedOdd && selectedOdd !== "SUSPENDED" && selectedOdd !== "-") {
+      onRunnerSelect({ ...selectedMatch, selectedMarket: market, selectedRunner: runner, selectedOdd });
+    }
+  }, [runners, selectedMatch, market, onRunnerSelect]);
+
+  return (
+    <div className="overflow-hidden rounded-md border border-live bg-live-primary shadow-sm">
+      <button
+        type="button"
+        onClick={onToggle}
+        className="flex w-full items-center justify-between gap-3 px-3 py-2 text-xs transition-colors duration-150 hover:bg-live-hover active:scale-[0.99]"
+        aria-expanded={isOpen}
+      >
+        <div className="flex min-w-0 items-center gap-2">
+          <IoStarOutline className="h-3.5 w-3.5 shrink-0 text-live-accent" />
+          <span className="truncate text-xs font-semibold uppercase tracking-wide text-live-primary">{market.marketName}</span>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <span className="rounded bg-live-tertiary px-1.5 py-0.5 text-[10px] text-live-muted">{runners.length}</span>
+          {isOpen ? <IoChevronUp className="h-4 w-4 text-live-muted" /> : <IoChevronDown className="h-4 w-4 text-live-muted" />}
+        </div>
+      </button>
+
+      <div className={["grid transition-[grid-template-rows,opacity] duration-200 ease-out", isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0 pointer-events-none"].join(" ")}>
+        <div className="min-h-0 overflow-hidden">
+          <div className="border-t border-live bg-live-tertiary px-2 py-2">
+            {runners.length > 0 ? (
+              <div className={["grid", gridClass, "gap-1.5"].join(" ")}>
+                {runners.map((runner) => {
+                  const oddsValue = getOdds(runner);
+                  const highlighted = highlightedOdds[runner.runnerName] === oddsValue;
+                  const selected = isSelectedRunner(runner);
+                  const disabled = runner.status === "SUSPENDED" || oddsValue === "SUSPENDED" || oddsValue === "-";
+
+                  return (
+                    <button
+                      type="button"
+                      key={market.marketId + "-" + runner.runnerId}
+                      className={[
+                        "min-w-0 rounded bg-live-hover px-2 py-1.5 text-left transition-colors duration-150 active:scale-[0.98]",
+                        disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:bg-live-odds",
+                        selected ? "ring-1 ring-live-accent" : "",
+                      ].join(" ")}
+                      disabled={disabled}
+                      onClick={() => handleRunnerSelect(runner)}
+                    >
+                      <div className={["flex", isOutright || runners.length > 3 ? "items-center justify-between gap-2" : "flex-col gap-1"].join(" ")}>
+                        <span className={["truncate text-[11px] font-medium text-live-primary", isOutright || runners.length > 3 ? "flex-1" : "w-full text-center"].join(" ")}>{runner.runnerName}</span>
+                        <span className={[
+                          "inline-flex min-w-[48px] items-center justify-center rounded px-2 py-0.5 text-xs font-bold",
+                          disabled ? "bg-live-danger text-white" : highlighted ? "odds-highlight text-live-primary" : "bg-live-odds text-live-accent",
+                        ].join(" ")}>{oddsValue}</span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="rounded bg-live-hover px-3 py-3 text-center text-xs text-live-muted">Markets currently unavailable</div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+/**
  * MarketSection
- * - Two column flex layout (two vertical stacks) so items never jump columns.
- * - Smooth expand/collapse by animating max-height using measured scrollHeight.
- * - Panel shell color: #3c3c3c, content background: #626262
+ * - Dense responsive market grid for sportsbook-style market browsing.
  */
 function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearchChange, onSearchClear }) {
   const [markets, setMarkets] = useState([]);
@@ -345,7 +710,8 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
   const [showEmptyState, setShowEmptyState] = useState(false); // Moved to top level
   const prevMarketsRef = useRef([]);
   const intervalRef = useRef(null);
-  const highlightedOddsRef = useRef({});
+  const [highlightedOdds, setHighlightedOdds] = useState({});
+  const oddsHighlightTimerRef = useRef(null);
   const selectedRunnerRef = useRef(null);
   const prevSelectedMatchRef = useRef(null);
   const currentFetchControllerRef = useRef(null); // To cancel ongoing fetch requests
@@ -380,7 +746,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
     
     // Apply market filter
     if (selectedMarketFilter !== 'All') {
-      result = result.filter(market => market.marketName === selectedMarketFilter);
+      result = result.filter(market => market.marketCategory === selectedMarketFilter);
     }
     
     // Apply search term filter
@@ -436,148 +802,63 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
       return;
     }
 
-    // Try to get sportKey from multiple possible sources
-    // Also support getting sportId directly if sportKey resolution fails
-    const sportKey = selectedMatch.sportKey || selectedMatch.sport?.key || selectedMatch.sport?.name;
-    const directSportId = selectedMatch.sportId; // Support direct sportId if passed
-    
-    // We need either a valid sportKey OR a direct sportId
-    if (!sportKey && !directSportId) {
-      setMarkets([]);
-      setFilteredMarkets([]);
+    const localMarkets = normaliseMarketsForDisplay(selectedMatch.markets);
+
+    if (localMarkets.length > 0) {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
+
+      const prevMarkets = prevMarketsRef.current;
+      const newHighlightedOdds = {};
+
+      localMarkets.forEach((market, marketIndex) => {
+        const prevMarket = prevMarkets[marketIndex];
+
+        if (prevMarket && market.runners) {
+          market.runners.forEach((runner, runnerIndex) => {
+            const prevRunner = prevMarket.runners?.[runnerIndex];
+
+            if (prevRunner && runner.backPrices?.[0]?.price !== prevRunner.backPrices?.[0]?.price) {
+              newHighlightedOdds[runner.runnerName] = runner.backPrices?.[0]?.price?.toFixed(2) || "-";
+            }
+          });
+        }
+      });
+
+      if (Object.keys(newHighlightedOdds).length > 0) {
+        if (oddsHighlightTimerRef.current) {
+          clearTimeout(oddsHighlightTimerRef.current);
+        }
+        setHighlightedOdds(newHighlightedOdds);
+        oddsHighlightTimerRef.current = setTimeout(() => {
+          setHighlightedOdds({});
+        }, 700);
+      }
+
+      setMarkets(localMarkets);
+      prevMarketsRef.current = localMarkets;
+
+      if (isNewMatch) {
+        const initialExpanded = {};
+        localMarkets.forEach((market, index) => {
+          initialExpanded[market.marketId || index] = index < 8;
+        });
+        setExpandedById(initialExpanded);
+        setAllMarketsExpanded(false);
+      }
+
       setLoading(false);
       return;
     }
 
-    const fetchMarkets = async () => {
-      try {
-        // Create a new AbortController for this fetch request
-        const controller = new AbortController();
-        currentFetchControllerRef.current = controller;
-        
-        // Resolve sportId: either use the direct one or look it up from the key
-        const sportId = directSportId || SPORT_ID_BY_KEY[sportKey];
-        
-        if (!sportId) {
-          setMarkets([]);
-          setFilteredMarkets([]);
-          setLoading(false);
-          return;
-        }
-
-        const marketsData = await fetchMarketsData(selectedMatch.eventId, sportId);
-        
-        // Check if the request was aborted
-        if (controller.signal.aborted) {
-          return;
-        }
-        
-        const newMarketsRaw = Array.isArray(marketsData) ? marketsData : [];
-        const newMarkets = newMarketsRaw.filter(m => m && typeof m === 'object');
-        
-        // Always update markets state to ensure consistency
-        const prevMarkets = prevMarketsRef.current;
-        
-        // Check for odds changes to highlight
-        const newHighlightedOdds = {};
-        newMarkets.forEach((market, marketIndex) => {
-          const prevMarket = prevMarkets[marketIndex];
-          if (prevMarket && market.runners) {
-            market.runners.forEach((runner, runnerIndex) => {
-              const prevRunner = prevMarket.runners?.[runnerIndex];
-              if (prevRunner && runner.backPrices?.[0]?.price !== prevRunner.backPrices?.[0]?.price) {
-                newHighlightedOdds[runner.runnerName] = runner.backPrices?.[0]?.price?.toFixed(2) || '-';
-              }
-            });
-          }
-        });
-        
-        if (Object.keys(newHighlightedOdds).length > 0) {
-          highlightedOddsRef.current = newHighlightedOdds;
-          // Clear highlights after 1 second
-          setTimeout(() => {
-            highlightedOddsRef.current = {};
-          }, 1000);
-        }
-        
-        // Update markets state
-        setMarkets(newMarkets);
-        prevMarketsRef.current = newMarkets;
-        
-        // Initialize all markets as collapsed by default (only for new matches)
-        if (isNewMatch && newMarkets.length > 0) {
-          const initialExpanded = {};
-          newMarkets.forEach((market, index) => {
-            initialExpanded[market.marketId || index] = false;
-          });
-          setExpandedById(initialExpanded);
-          setAllMarketsExpanded(false);
-        }
-        
-        // Set loading to false after successful fetch
-        setLoading(false);
-        
-        // Set up polling interval with error handling - only for established matches
-        if (selectedMatch && newMarkets.length > 0) {
-          // Clear any existing interval
-          if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-          }
-          
-          try {
-            intervalRef.current = setInterval(() => {
-              // Add a try-catch around the fetch to prevent interval crashes
-              try {
-                fetchMarkets();
-              } catch (error) {
-                // Removed console.error("Error in markets polling interval:", error);
-              }
-            }, 1000);
-          } catch (error) {
-            // Removed console.error("Error setting up markets polling interval:", error);
-          }
-        }
-      } catch (error) {
-        // Ignore aborted requests
-        if (error.name === 'AbortError') {
-          return;
-        }
-        
-        // Removed console.error("Error fetching markets data:", error);
-        // Only reset markets if there was an actual error and we have previous data
-        // This prevents clearing the UI when there are temporary network issues
-        if (prevMarketsRef.current.length > 0) {
-          // Keep existing markets data instead of clearing it
-          // Removed console.warn("Keeping existing markets data due to network error");
-        }
-        setLoading(false);
-      }
-    };
-
-    // Clear any existing interval
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-
-    // Fetch immediately
-    fetchMarkets();
-
-    // Clean up on selectedMatch change or component unmount
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-      // Cancel any ongoing fetch requests
-      if (currentFetchControllerRef.current) {
-        currentFetchControllerRef.current.abort();
-      }
-    };
-  }, [selectedMatch?.eventId, selectedMatch?.sportKey, selectedMatch]); // Include full selectedMatch for comprehensive updates
+    // Markets are supplied by the odds-server event payload and updated via WebSocket.
+    // Do not fall back to the legacy market service or browser polling here.
+    setMarkets([]);
+    setFilteredMarkets([]);
+    setLoading(false);
+  }, [selectedMatch]); // Include full selectedMatch for comprehensive updates
 
   const toggleMarket = (marketId) => {
     setExpandedById(prev => ({
@@ -614,18 +895,12 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
     }
   });
 
-  // Extract market names that appear more than twice for the navbar
-  const marketNameCounts = markets.reduce((acc, market) => {
-    const name = market?.marketName;
-    if (name) {
-      acc[name] = (acc[name] || 0) + 1;
-    }
-    return acc;
-  }, {});
-  
-  const marketNames = Object.entries(marketNameCounts)
-    .filter(([name, count]) => count > 2)
-    .map(([name, count]) => name);
+  const marketTabs = MARKET_CATEGORY_TABS.map((tab) => ({
+    ...tab,
+    count: tab.id === "All"
+      ? markets.length
+      : markets.filter((market) => market.marketCategory === tab.id).length,
+  })).filter((tab) => tab.id === "All" || tab.count > 0);
   
   // Manage empty state with delay to prevent flickering
   useEffect(() => {
@@ -668,8 +943,8 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
     content = (
       <div className="text-live-primary p-4 flex items-center justify-center h-full">
         <div className="text-center">
-          <div className="text-lg font-bold mb-2">No Markets Available</div>
-          <div className="text-sm text-live-muted">There are currently no markets for this event</div>
+          <div className="text-lg font-bold mb-2">Markets currently unavailable</div>
+          <div className="text-sm text-live-muted">Odds will appear here as soon as this event has active markets.</div>
         </div>
       </div>
     );
@@ -680,7 +955,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
         <div className="px-2 pb-2 pt-3 cursor-pointer">
           <button
             onClick={toggleAllMarkets}
-            className="w-full text-left px-3 py-2 text-xs bg-live-primary hover:bg-live-hover cursor-pointer rounded transition-colors flex items-center justify-between shadow-[0_2px_12px_var(--live-accent-primary)]"
+            className="w-full text-left px-3 py-2 text-xs bg-live-primary hover:bg-live-hover cursor-pointer rounded transition-colors duration-150 flex items-center justify-between border border-live"
           >
             <span className="text-live-primary font-medium">
               All Markets
@@ -697,43 +972,28 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
             onSearchChange={onSearchChange}
             searchValue={searchTerm}
             onSearchClear={onSearchClear}
-            marketNames={marketNames}
+            marketTabs={marketTabs}
             onMarketFilter={handleMarketFilter}
           />
         </div>
   
-        {/* Two-column layout for markets */}
-        <div className="flex-grow overflow-y-auto px-2">
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 h-full">
-            {/* Left column */}
-            <div className="flex-1 space-y-2">
-              {leftColumn.map((market) => (
+        {/* Dense responsive market grid */}
+        <div className="flex-grow overflow-y-auto px-2 pb-2 custom-scrollbar">
+          <div className="grid grid-cols-1 items-start gap-2">
+            {filteredMarkets.map((market, idx) => {
+              const marketId = market.marketId || idx;
+              return (
                 <MarketItem
-                  key={market.id}
+                  key={marketId}
                   market={market}
-                  isOpen={expandedById[market.id] ?? false}
-                  onToggle={() => toggleMarket(market.id)}
-                  highlightedOdds={highlightedOddsRef.current}
+                  isOpen={expandedById[marketId] ?? true}
+                  onToggle={() => toggleMarket(marketId)}
+                  highlightedOdds={highlightedOdds}
                   onRunnerSelect={onRunnerSelect}
                   selectedMatch={selectedMatch}
                 />
-              ))}
-            </div>
-              
-            {/* Right column */}
-            <div className="flex-1 space-y-2">
-              {rightColumn.map((market) => (
-                <MarketItem
-                  key={market.id}
-                  market={market}
-                  isOpen={expandedById[market.id] ?? false}
-                  onToggle={() => toggleMarket(market.id)}
-                  highlightedOdds={highlightedOddsRef.current}
-                  onRunnerSelect={onRunnerSelect}
-                  selectedMatch={selectedMatch}
-                />
-              ))}
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -746,9 +1006,16 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = '', onSearc
 /**
  * SleekNavbar Component - Search bar with clear button
  */
-function SleekNavbar({ onSearchChange, searchValue, onSearchClear, marketNames = [], onMarketFilter }) {
+function SleekNavbar({ onSearchChange, searchValue, onSearchClear, marketTabs = [], onMarketFilter }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('All');
+
+  useEffect(() => {
+    if (!marketTabs.some((tab) => tab.id === activeTab)) {
+      setActiveTab('All');
+      onMarketFilter?.('All');
+    }
+  }, [marketTabs, activeTab, onMarketFilter]);
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -757,28 +1024,22 @@ function SleekNavbar({ onSearchChange, searchValue, onSearchClear, marketNames =
     }
   };
 
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-    // Call the market filter function to filter markets based on selected tab
-    if (onMarketFilter) {
-      onMarketFilter(tab);
-    }
+  const handleTabClick = (tabId) => {
+    setActiveTab(tabId);
+    onMarketFilter?.(tabId);
   };
 
-  // Get unique market names from the marketNames prop
-  const uniqueMarketNames = [...new Set(marketNames)];
-
   return (
-    <div className="bg-live-tertiary rounded-md px-2 sm:px-3 py-2 flex items-center gap-2">
+    <div className="bg-live-tertiary rounded-md px-2 py-1.5 flex items-center gap-2 border border-live">
       {isSearchOpen ? (
         <>
           <button
             onClick={toggleSearch}
-            className="text-live-primary hover:text-live-accent flex-shrink-0 mr-3"
+            className="text-live-primary hover:text-live-accent flex-shrink-0 mr-2 transition-colors duration-150"
           >
             <IoCloseOutline size={18} />
           </button>
-          <div className="h-6 w-px bg-live-primary mx-2"></div>
+          <div className="h-6 w-px bg-live-primary/60 mx-1"></div>
           <input
             type="text"
             placeholder="Search markets or runners..."
@@ -789,42 +1050,31 @@ function SleekNavbar({ onSearchChange, searchValue, onSearchClear, marketNames =
           />
         </>
       ) : (
-        <div className="flex items-center w-full overflow-x-auto">
+        <div className="flex items-center w-full min-w-0">
           <button
             onClick={toggleSearch}
-            className="text-live-primary hover:text-live-accent flex-shrink-0 mr-3"
+            className="text-live-primary hover:text-live-accent flex-shrink-0 mr-2 transition-colors duration-150"
           >
             <IoSearchOutline size={18} />
           </button>
-          <div className="h-6 w-px bg-live-primary mx-2"></div>
-          <div className="flex space-x-3 sm:space-x-6 min-w-max">
-            <button 
-              className={`text-xs sm:text-sm font-medium relative py-1 px-1 whitespace-nowrap cursor-pointer ${
-                activeTab === 'All' 
-                  ? 'text-live-accent' 
-                  : 'text-live-primary hover:text-live-accent'
-              }`}
-              onClick={() => handleTabClick('All')}
-            >
-              All
-              {activeTab === 'All' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-live-accent"></div>
-              )}
-            </button>
-            {uniqueMarketNames.map((marketName, index) => (
-              <button 
-                key={index}
-                className={`text-xs sm:text-sm font-medium relative py-1 px-1 whitespace-nowrap cursor-pointer ${
-                  activeTab === marketName 
-                    ? 'text-live-accent' 
-                    : 'text-live-primary hover:text-live-accent'
-                }`}
-                onClick={() => handleTabClick(marketName)}
+          <div className="h-6 w-px bg-live-primary/60 mx-1"></div>
+          <div className="flex items-center gap-1 overflow-x-auto custom-scrollbar min-w-0">
+            {marketTabs.map((tab) => (
+              <button
+                key={tab.id}
+                className={[
+                  "relative rounded px-2.5 py-1 text-xs font-semibold whitespace-nowrap cursor-pointer transition-colors duration-150",
+                  activeTab === tab.id
+                    ? "bg-live-accent text-live-dark"
+                    : "text-live-muted hover:text-live-primary hover:bg-live-hover",
+                ].join(" ")}
+                onClick={() => handleTabClick(tab.id)}
               >
-                {marketName}
-                {activeTab === marketName && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-live-accent"></div>
-                )}
+                <span>{tab.label}</span>
+                <span className={[
+                  "ml-1 text-[10px]",
+                  activeTab === tab.id ? "text-live-dark" : "text-live-accent",
+                ].join(" ")}>{tab.count}</span>
               </button>
             ))}
           </div>

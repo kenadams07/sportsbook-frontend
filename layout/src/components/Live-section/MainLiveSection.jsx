@@ -50,6 +50,7 @@ export default function MainLiveSection() {
   const navigate = useNavigate();
   const [selectedMatch, setSelectedMatch] = useState(null)
   const [selectedSport, setSelectedSport] = useState(null)
+  const [desktopEventsSnapshot, setDesktopEventsSnapshot] = useState({ selectedType: "live", matchesBySport: {} })
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false)
   const selectedRunnerRef = useRef(null);
@@ -365,17 +366,18 @@ export default function MainLiveSection() {
     setSelectedMatch(match);
     // Update URL with selected match info for persistence
     if (match && match.eventId) {
+      const currentViewType = searchParams.get('viewType') || location.state?.viewType || 'live';
       console.log('Updating URL with match data:', {
         eventId: match.eventId,
         sportKey: match.sportKey || selectedSport?.key || '',
         eventName: match.eventName || '',
-        viewType: 'live'
+        viewType: currentViewType
       });
       setSearchParams({
         eventId: match.eventId,
         sportKey: match.sportKey || selectedSport?.key || '',
         eventName: match.eventName || '',
-        viewType: 'live' // default view type
+        viewType: currentViewType
       });
     }
     if (window.innerWidth < 768) {
@@ -390,17 +392,18 @@ export default function MainLiveSection() {
     setSelectedMatch(match);
     // Update URL with selected match info for persistence
     if (match && match.eventId) {
+      const currentViewType = searchParams.get('viewType') || location.state?.viewType || 'live';
       console.log('Updating URL with match data:', {
         eventId: match.eventId,
         sportKey: match.sportKey || selectedSport?.key || '',
         eventName: match.eventName || '',
-        viewType: 'live'
+        viewType: currentViewType
       });
       setSearchParams({
         eventId: match.eventId,
         sportKey: match.sportKey || selectedSport?.key || '',
         eventName: match.eventName || '',
-        viewType: 'live' // default view type
+        viewType: currentViewType
       });
     }
   };
@@ -423,6 +426,20 @@ export default function MainLiveSection() {
       }
     }
   }, [selectedMatch]);
+
+  const activeDesktopViewType = searchParams.get('viewType') || desktopEventsSnapshot.selectedType || 'live';
+  const selectedDesktopSportKey = selectedSport?.key;
+  const desktopBoardEntries = Object.entries(desktopEventsSnapshot.matchesBySport || {}).filter(([sportKey]) =>
+    activeDesktopViewType === 'prematch' && selectedDesktopSportKey ? sportKey === selectedDesktopSportKey : true,
+  );
+  const desktopBoardMatches = desktopBoardEntries.flatMap(([sportKey, matches]) =>
+    (Array.isArray(matches) ? matches : []).map((match) => ({
+      ...match,
+      sportKey: match.sportKey || sportKey,
+      odds: desktopEventsSnapshot.oddsByEventId?.[match.eventId] || match.odds,
+      oddsHighlight: desktopEventsSnapshot.highlightedOdds?.[match.eventId] || {},
+    })),
+  );
 
   // Prepare info for RightEventInfoSection
   const rightEventInfo = selectedMatch && selectedMatch.selectedMarket 
@@ -539,6 +556,7 @@ export default function MainLiveSection() {
           setSelectedSport={setSelectedSport}
           selectedMatch={selectedMatch}
           onSelectedMatchOddsUpdate={updateSelectedMatchOdds}
+          onEventsSnapshot={setDesktopEventsSnapshot}
         />
       </div>
 
@@ -548,6 +566,9 @@ export default function MainLiveSection() {
           match={selectedMatch} 
           sport={selectedSport} 
           onRunnerSelect={handleRunnerSelect}
+          eventBoardMatches={desktopBoardMatches}
+          boardViewMode={activeDesktopViewType}
+          onMatchSelect={handleMatchSelectDesktop}
         />
       </div>
 

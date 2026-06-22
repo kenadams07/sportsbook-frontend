@@ -14,16 +14,15 @@ const UserBetsSection = ({ userId, eventId }) => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-20 sm:h-24">
-        <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-b-2 border-live-accent"></div>
-        <span className="ml-2 text-xs sm:text-live-primary">Loading bets...</span>
+      <div className="flex min-h-[52px] items-center justify-center rounded border border-live-accent bg-live-tertiary px-3 text-xs text-live-muted">
+        Checking bets for this event...
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-live-tertiary p-2 sm:p-3 rounded border border-live-accent">
+      <div className="min-h-[52px] bg-live-tertiary p-2 sm:p-3 rounded border border-live-accent">
         <div className="text-live-error text-center text-xs sm:text-sm">Error loading bets: {error}</div>
       </div>
     );
@@ -31,7 +30,7 @@ const UserBetsSection = ({ userId, eventId }) => {
 
   if (!bets || bets.length === 0) {
     return (
-      <div className="bg-live-tertiary p-2 sm:p-3 rounded border border-live-accent">
+      <div className="min-h-[52px] bg-live-tertiary p-2 sm:p-3 rounded border border-live-accent">
         <div className="text-live-muted text-center text-xs sm:text-sm">No bets placed for this event</div>
       </div>
     );
@@ -50,7 +49,7 @@ const UserBetsSection = ({ userId, eventId }) => {
               <span className="text-[10px] text-live-muted">{bet.marketName}</span>
             </div>
             <div className="flex flex-col items-end">
-              <span className="text-xs font-bold text-live-accent">{bet.stake} €</span>
+              <span className="text-xs font-bold text-live-accent">{bet.stake} â‚¬</span>
               <span className="text-[10px] text-live-muted">Odds: {bet.odds}</span>
             </div>
           </div>

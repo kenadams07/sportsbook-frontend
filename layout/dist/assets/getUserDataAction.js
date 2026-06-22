@@ -1,4 +1,4 @@
-import { L as LOGOUT, a as LOGOUT_SUCCESS, b as LOGOUT_FAILURE, G as GET_USER_DATA, c as GET_USER_DATA_SUCCESS, d as GET_USER_DATA_FAILURE } from './__federation_expose_LayoutApp.js';
+import { L as LOGOUT, a as LOGOUT_SUCCESS, b as LOGOUT_FAILURE, G as GET_USER_DATA_SUCCESS, c as GET_USER_DATA, d as GET_USER_DATA_FAILURE } from './__federation_expose_LayoutApp.js';
 
 const logout = (payload, callback) => ({
   type: LOGOUT,
@@ -29,4 +29,4 @@ const getUserDataFailure = () => ({
   type: GET_USER_DATA_FAILURE,
 });
 
-export { logoutSuccess as a, logoutFailure as b, getUserDataSuccess as c, getUserDataFailure as d, getUserData as g, logout as l };
+export { getUserData as a, logoutSuccess as b, logoutFailure as c, getUserDataFailure as d, getUserDataSuccess as g, logout as l };

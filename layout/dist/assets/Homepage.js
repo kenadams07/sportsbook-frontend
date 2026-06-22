@@ -1,5 +1,5 @@
 import { importShared } from './__federation_fn_import.js';
-import { e as createLucideIcon, j as jsxRuntimeExports, V as Link, m as Primitive, q as createPopperScope, o as useControllableState, r as Root2$1, f as createContextScope, l as useId$1, u as useComposedRefs, bq as useLayoutEffect2, s as Anchor, n as composeEventHandlers, v as Portal$1, br as usePrevious, p as useCallbackRef, w as hideOthers, z as useFocusGuards, y as ReactRemoveScroll, g as createSlot, F as FocusScope, D as DismissableLayer, H as Content, J as Arrow, h as cn, Q as ChevronDown, bs as Check, bt as ChevronUp, M as useNavigate, bu as SPORTS, B as Button, bv as ChevronRight, bw as SkeletonLoader, bx as SPORT_ID_BY_KEY, by as fetchSportsEvents, X, S as useDispatch, T as useSelector, k as getLocalStorageItem, aU as setLocalStorageItem, bz as fetchHomepageCasinoGames, bA as fetchHomepageLiveGames, W as RegisterModal, bB as Carousel, bC as CarouselContent, bD as CarouselItem, bE as CarouselPrevious, bF as CarouselNext, bG as useNotification } from './__federation_expose_LayoutApp.js';
+import { e as createLucideIcon, j as jsxRuntimeExports, Y as Link, m as Primitive, q as createPopperScope, o as useControllableState, r as Root2$1, f as createContextScope, l as useId$1, u as useComposedRefs, bx as useLayoutEffect2, s as Anchor, n as composeEventHandlers, v as Portal$1, by as usePrevious, p as useCallbackRef, w as hideOthers, z as useFocusGuards, y as ReactRemoveScroll, g as createSlot, F as FocusScope, D as DismissableLayer, H as Content, J as Arrow, h as cn, Q as ChevronDown, bz as Check, bA as ChevronUp, M as useNavigate, bB as createOddsSocket, B as Button, bC as ChevronRight, bD as SPORTS, bE as SkeletonLoader, bF as SPORT_ID_BY_KEY, bG as fetchSportsEvents, bH as ODDS_SPORT_KEY_BY_FRONTEND_KEY, X, S as useDispatch, T as useSelector, k as getLocalStorageItem, V as setLocalStorageItem, bI as fetchHomepageCasinoGames, bJ as fetchHomepageLiveGames, Z as RegisterModal, bK as Carousel, bL as CarouselContent, bM as CarouselItem, bN as CarouselPrevious, bO as CarouselNext, bP as useNotification } from './__federation_expose_LayoutApp.js';
 import { u as useDirection, c as createCollection, D as DepositModal, b as buildExports } from './DepositModal.js';
 
 /**
@@ -1519,6 +1519,13 @@ const SelectScrollDownButton = React$5.forwardRef(({ className, ...props }, ref)
 SelectScrollDownButton.displayName = "SelectScrollDownButton";
 
 const {useEffect: useEffect$7,useMemo: useMemo$4,useRef: useRef$3,useState: useState$4} = await importShared('react');
+const PREFERRED_BOOKMAKER = "draftkings";
+function getOddsKeyFromDelta(delta) {
+  if (delta.outcome === delta.homeTeam) return "w1";
+  if (delta.outcome === delta.awayTeam) return "w2";
+  if (delta.outcome?.toLowerCase() === "draw") return "x";
+  return null;
+}
 function formatDateOrInPlay(status, openDateMs) {
   if (status === "IN_PLAY") return "IN PLAY";
   if (!openDateMs) return "-";
@@ -1616,7 +1623,7 @@ function UpcomingMatches() {
       setError(null);
       try {
         const sportId = selectedSportKey ? SPORT_ID_BY_KEY[selectedSportKey] : void 0;
-        const data = sportId ? await fetchSportsEvents(sportId, true) : { sports: [] };
+        const data = sportId ? await fetchSportsEvents(sportId, false) : { sports: [] };
         if (!data || !Array.isArray(data.sports)) {
           throw new Error("Invalid data format received from API");
         }
@@ -1642,59 +1649,56 @@ function UpcomingMatches() {
     return () => controller.abort();
   }, [selectedSportKey]);
   useEffect$7(() => {
-    let intervalId;
-    async function pollOdds() {
-      try {
-        const sportId = selectedSportKey ? SPORT_ID_BY_KEY[selectedSportKey] : void 0;
-        const data = sportId ? await fetchSportsEvents(sportId, true) : { sports: [] };
-        if (!data || !Array.isArray(data.sports)) {
+    const oddsSportKey = ODDS_SPORT_KEY_BY_FRONTEND_KEY[selectedSportKey];
+    if (!oddsSportKey) {
+      return;
+    }
+    const socket = createOddsSocket({
+      sportKeys: [oddsSportKey],
+      onOddsUpdate: (message) => {
+        const nextOddsByEventId = { ...oddsPrevRef.current };
+        const nextHighlights = {};
+        let hasUpdates = false;
+        for (const delta of message.deltas || []) {
+          if (delta.market !== "h2h" || delta.bookmaker !== PREFERRED_BOOKMAKER) {
+            continue;
+          }
+          const oddsKey = getOddsKeyFromDelta(delta);
+          if (!oddsKey) {
+            continue;
+          }
+          const previousEventOdds = nextOddsByEventId[delta.eventId] || {};
+          nextOddsByEventId[delta.eventId] = {
+            ...previousEventOdds,
+            [oddsKey]: Number(delta.price).toFixed(2)
+          };
+          nextHighlights[delta.eventId] = {
+            ...nextHighlights[delta.eventId] || {},
+            [oddsKey]: true
+          };
+          hasUpdates = true;
+        }
+        if (!hasUpdates) {
           return;
         }
-        const list = data.sports;
-        const oddsMap = { ...oddsByEventId };
-        const highlights = {};
-        for (const e of list) {
-          const newOdds = extractOddsW1W2(e.markets);
-          const prevOdds = oddsPrevRef.current[e.eventId] || {};
-          oddsMap[e.eventId] = newOdds;
-          highlights[e.eventId] = {
-            w1: prevOdds.w1 !== newOdds.w1,
-            w2: prevOdds.w2 !== newOdds.w2
-          };
-        }
-        setOddsByEventId(oddsMap);
-        setHighlightedOdds(highlights);
-        oddsPrevRef.current = oddsMap;
+        setOddsByEventId(nextOddsByEventId);
+        setHighlightedOdds((previous) => ({
+          ...previous,
+          ...nextHighlights
+        }));
+        oddsPrevRef.current = nextOddsByEventId;
         setTimeout(() => {
           setHighlightedOdds({});
         }, 1e3);
-      } catch (error2) {
       }
-    }
-    try {
-      intervalId = setInterval(() => {
-        try {
-          pollOdds();
-        } catch (error2) {
-          console.error("Error in pollOdds interval:", error2);
-        }
-      }, 1e3);
-    } catch (error2) {
-      console.error("Error setting up polling interval:", error2);
-    }
+    });
     return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
+      socket.close();
     };
-  }, [selectedSportKey, oddsByEventId]);
+  }, [selectedSportKey]);
   const filteredEvents = useMemo$4(() => {
-    if (!selectedSportKey) return events;
-    const sportConf = SPORTS.find((s) => s.key === selectedSportKey);
-    if (!sportConf) return events;
-    const allowed = new Set(sportConf.sportNames.map(normalize));
-    return events.filter((e) => allowed.has(normalize(e.sportName)));
-  }, [events, selectedSportKey]);
+    return events;
+  }, [events]);
   const matches = useMemo$4(() => {
     const sportFilteredMatches = filteredEvents.map((e, idx) => {
       const { team1, team2 } = splitEventName(e.eventName);
@@ -1730,15 +1734,32 @@ function UpcomingMatches() {
     return sportFilteredMatches;
   }, [filteredEvents, oddsByEventId, highlightedOdds, selectedTimeFilter]);
   const handleGameClick = (id, sportKey) => {
+    console.log("=== UPCOMING MATCHES NAVIGATION START ===");
+    console.log("Clicked game ID:", id);
+    console.log("Clicked sport key:", sportKey);
     setSelectedGameId(id);
     setSelectedGameSportKey(sportKey || null);
+    const clickedMatch = matches.find((m) => m.id === id);
+    console.log("Found clicked match:", clickedMatch);
+    const viewType = "prematch";
+    const navigationState = {
+      selectedGameId: id,
+      selectedSportKey: sportKey || selectedSportKey,
+      viewType,
+      source: "upcoming_matches",
+      // Pass full match details to avoid refetching/delay
+      matchDetails: clickedMatch ? {
+        eventName: clickedMatch.team1 + " vs " + clickedMatch.team2,
+        team1: clickedMatch.team1,
+        team2: clickedMatch.team2,
+        openDate: clickedMatch.openDate,
+        status: clickedMatch.status,
+        sportKey: clickedMatch.sportKey
+      } : null
+    };
+    console.log("Navigating with state:", navigationState);
     navigate("/live_events/event-view", {
-      state: {
-        selectedGameId: id,
-        selectedSportKey: sportKey || selectedSportKey,
-        viewType: "prematch",
-        source: "upcoming_matches"
-      }
+      state: navigationState
     });
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#3f3e3e] text-white", children: [
@@ -12366,7 +12387,7 @@ const Home = () => {
   };
   homepageCasinoGames && homepageCasinoGames.length > 0 ? (homepageCasinoGames[0].games || []).slice(0, 5) : [];
   homepageLiveGames && homepageLiveGames.length > 0 ? (homepageLiveGames[0].games || []).slice(0, 5) : [];
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full mx-auto px-2 py-2 md:px-4 md:py-4", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full mx-auto", children: [
     showWelcome && /* @__PURE__ */ jsxRuntimeExports.jsx(WelcomeComponent, { onClose: handleCloseWelcome, showDepositButton: true }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       RegisterModal,
@@ -12387,7 +12408,7 @@ const Home = () => {
         children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronUp, { className: "w-5 h-5" })
       }
     ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full rounded-lg overflow-hidden shadow-lg mb-3 md:mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full mb-3 md:mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
       Carousel,
       {
         className: "w-full",
@@ -12400,12 +12421,12 @@ const Home = () => {
         },
         onMouseLeave: handleUserInteraction,
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(CarouselContent, { className: "custom-scrollbar", children: sliderImages.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(CarouselItem, { children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative w-full aspect-[3/1] md:aspect-[16/6]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CarouselContent, { className: "custom-scrollbar ml-0", children: sliderImages.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(CarouselItem, { className: "pl-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative w-full pt-[40%] md:pt-[28.2%]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
             buildExports.LazyLoadImage,
             {
               src: item.src,
               alt: item.alt,
-              className: "w-full h-full object-contain md:object-cover rounded-sm cursor-pointer bg-gray-900",
+              className: "absolute inset-0 w-full h-full object-contain md:object-cover cursor-pointer bg-gray-900",
               effect: "opacity",
               width: "100%",
               height: "100%",
@@ -12415,7 +12436,7 @@ const Home = () => {
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             CarouselPrevious,
             {
-              className: "left-2 md:left-4 bg-[white] w-[32px] h-[32px] md:w-[40px] md:h-[40px] rounded-full flex items-center justify-center opacity-80 hover:opacity-100",
+              className: "left-2 md:left-4 bg-[white] w-[32px] h-[32px] md:w-[40px] md:h-[40px] rounded-full flex items-center justify-center opacity-80 hover:opacity-100 absolute z-10",
               onClick: () => {
                 if (apiRef.current) {
                   apiRef.current.scrollPrev();
@@ -12427,7 +12448,7 @@ const Home = () => {
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             CarouselNext,
             {
-              className: "right-2 md:right-4 bg-[white] w-[32px] h-[32px] md:w-[40px] md:h-[40px] rounded-full flex items-center justify-center opacity-80 hover:opacity-100",
+              className: "right-2 md:right-4 bg-[white] w-[32px] h-[32px] md:w-[40px] md:h-[40px] rounded-full flex items-center justify-center opacity-80 hover:opacity-100 absolute z-10",
               onClick: () => {
                 if (apiRef.current) {
                   apiRef.current.scrollNext();
@@ -12439,7 +12460,7 @@ const Home = () => {
         ]
       }
     ) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mx-0 md:mx-1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(UpcomingMatches, {}) })
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mx-0 md:mx-1 px-2 md:px-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(UpcomingMatches, {}) })
   ] });
 };
 

@@ -1,4 +1,5 @@
 import toast from "react-hot-toast";
+import { getApiErrorMessage, getApiMessage, isApiSuccess } from "./apiResponse";
 
 export const getLocalStorageItem = (key) => {
   const item = localStorage.getItem(key);
@@ -43,25 +44,16 @@ export const notifyError = (message) => {
 export const notifyPromise = (promise, message) => {
   return toast.promise(
     promise.then((res) => {
-     
-      if (res?.data?.meta?.code === 200) {
-        
+      if (isApiSuccess(res?.data)) {
         return res;
       }
-      if(res?.data?.code === 200)
-      { 
-         return res;
-      }
-      
-      else {
-       
-        throw { response: res };
-      }
+
+      throw { response: res };
     }),
     {
       loading: message || "Loading...",
-      success: (res) => `${res?.data?.meta?.message || res?.data?.message|| "Success."}`,
-      error: (err) => `${err?.response?.data?.meta?.message || err?.response?.data?.message|| "Failed"}`,
+      success: (res) => `${getApiMessage(res?.data, "Success.")}`,
+      error: (err) => `${getApiErrorMessage(err, "Failed")}`,
     }
   );
 };

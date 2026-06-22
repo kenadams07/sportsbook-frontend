@@ -7,6 +7,7 @@ export const SIGNUP_FAILURE = "SIGNUP_FAILURE";
 export const LOGIN = "LOGIN";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "LOGIN_FAILURE";
+export const LOGIN_VERIFICATION_PENDING = "LOGIN_VERIFICATION_PENDING";
 
 // Auth - Logout
 export const LOGOUT = "LOGOUT";

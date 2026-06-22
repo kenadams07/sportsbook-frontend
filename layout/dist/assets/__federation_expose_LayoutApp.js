@@ -6025,7 +6025,7 @@ function is(x, y) {
 }
 var objectIs = "function" === typeof Object.is ? Object.is : is,
   useSyncExternalStore = React$1r.useSyncExternalStore,
-  useRef$c = React$1r.useRef,
+  useRef$d = React$1r.useRef,
   useEffect$l = React$1r.useEffect,
   useMemo$4 = React$1r.useMemo,
   useDebugValue = React$1r.useDebugValue;
@@ -6036,7 +6036,7 @@ useSyncExternalStoreWithSelector_production.useSyncExternalStoreWithSelector = f
   selector,
   isEqual
 ) {
-  var instRef = useRef$c(null);
+  var instRef = useRef$d(null);
   if (null === instRef.current) {
     var inst = { hasValue: false, value: null };
     instRef.current = inst;
@@ -6361,6 +6361,7 @@ const SIGNUP_FAILURE = "SIGNUP_FAILURE";
 const LOGIN = "LOGIN";
 const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 const LOGIN_FAILURE = "LOGIN_FAILURE";
+const LOGIN_VERIFICATION_PENDING = "LOGIN_VERIFICATION_PENDING";
 
 // Auth - Logout
 const LOGOUT = "LOGOUT";
@@ -6673,7 +6674,7 @@ const CasinoGameCard = ({ game, onPlay }) => {
 };
 
 const React$1o = await importShared('react');
-const {useState: useState$n,useEffect: useEffect$k,useCallback: useCallback$3,useRef: useRef$b,useMemo: useMemo$3} = React$1o;
+const {useState: useState$n,useEffect: useEffect$k,useCallback: useCallback$3,useRef: useRef$c,useMemo: useMemo$3} = React$1o;
 const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
   const dispatch = useDispatch();
   const {
@@ -6689,8 +6690,8 @@ const CasinoProvidersGamesSection = ({ onProviderSearch, onGameSearch }) => {
   const [providerSearchQuery, setProviderSearchQuery] = useState$n("");
   const [gameSearchQuery, setGameSearchQuery] = useState$n("");
   const [selectedProvider, setSelectedProvider] = useState$n(null);
-  const debounceRef = useRef$b(null);
-  const gamesContainerRef = useRef$b(null);
+  const debounceRef = useRef$c(null);
+  const gamesContainerRef = useRef$c(null);
   useEffect$k(() => {
     dispatch(fetchCasinoProviders());
     dispatch(fetchCasinoGames({
@@ -8730,11 +8731,11 @@ function EmblaCarousel(root, userOptions, userPlugins) {
 }
 EmblaCarousel.globalOptions = undefined;
 
-const {useRef: useRef$a,useState: useState$m,useCallback: useCallback$2,useEffect: useEffect$j} = await importShared('react');
+const {useRef: useRef$b,useState: useState$m,useCallback: useCallback$2,useEffect: useEffect$j} = await importShared('react');
 
 function useEmblaCarousel(options = {}, plugins = []) {
-  const storedOptions = useRef$a(options);
-  const storedPlugins = useRef$a(plugins);
+  const storedOptions = useRef$b(options);
+  const storedPlugins = useRef$b(plugins);
   const [emblaApi, setEmblaApi] = useState$m();
   const [viewport, setViewport] = useState$m();
   const reInit = useCallback$2(() => {
@@ -8883,11 +8884,25 @@ const createLucideIcon = (iconName, iconNode) => {
  */
 
 
-const __iconNode$g = [
+const __iconNode$h = [
   ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
   ["path", { d: "M19 12H5", key: "x3x0zl" }]
 ];
-const ArrowLeft = createLucideIcon("arrow-left", __iconNode$g);
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$h);
+
+/**
+ * @license lucide-react v0.525.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$g = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+];
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$g);
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -8898,26 +8913,12 @@ const ArrowLeft = createLucideIcon("arrow-left", __iconNode$g);
 
 
 const __iconNode$f = [
-  ["path", { d: "M5 12h14", key: "1ays0h" }],
-  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
-];
-const ArrowRight = createLucideIcon("arrow-right", __iconNode$f);
-
-/**
- * @license lucide-react v0.525.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-
-
-const __iconNode$e = [
   ["path", { d: "M8 2v4", key: "1cmpym" }],
   ["path", { d: "M16 2v4", key: "4m81vk" }],
   ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
   ["path", { d: "M3 10h18", key: "8toen8" }]
 ];
-const Calendar$1 = createLucideIcon("calendar", __iconNode$e);
+const Calendar$1 = createLucideIcon("calendar", __iconNode$f);
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -8927,8 +8928,8 @@ const Calendar$1 = createLucideIcon("calendar", __iconNode$e);
  */
 
 
-const __iconNode$d = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$d);
+const __iconNode$e = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$e);
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -8938,8 +8939,8 @@ const Check = createLucideIcon("check", __iconNode$d);
  */
 
 
-const __iconNode$c = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$c);
+const __iconNode$d = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+const ChevronDown = createLucideIcon("chevron-down", __iconNode$d);
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -8949,8 +8950,8 @@ const ChevronDown = createLucideIcon("chevron-down", __iconNode$c);
  */
 
 
-const __iconNode$b = [["path", { d: "m15 18-6-6 6-6", key: "1wnfg3" }]];
-const ChevronLeft = createLucideIcon("chevron-left", __iconNode$b);
+const __iconNode$c = [["path", { d: "m15 18-6-6 6-6", key: "1wnfg3" }]];
+const ChevronLeft = createLucideIcon("chevron-left", __iconNode$c);
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -8960,8 +8961,8 @@ const ChevronLeft = createLucideIcon("chevron-left", __iconNode$b);
  */
 
 
-const __iconNode$a = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$a);
+const __iconNode$b = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$b);
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -8971,8 +8972,8 @@ const ChevronRight = createLucideIcon("chevron-right", __iconNode$a);
  */
 
 
-const __iconNode$9 = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$9);
+const __iconNode$a = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$a);
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -8982,7 +8983,7 @@ const ChevronUp = createLucideIcon("chevron-up", __iconNode$9);
  */
 
 
-const __iconNode$8 = [
+const __iconNode$9 = [
   [
     "path",
     {
@@ -9000,7 +9001,27 @@ const __iconNode$8 = [
   ],
   ["path", { d: "m2 2 20 20", key: "1ooewy" }]
 ];
-const EyeOff = createLucideIcon("eye-off", __iconNode$8);
+const EyeOff = createLucideIcon("eye-off", __iconNode$9);
+
+/**
+ * @license lucide-react v0.525.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$8 = [
+  [
+    "path",
+    {
+      d: "M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0",
+      key: "1nclc0"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+];
+const Eye = createLucideIcon("eye", __iconNode$8);
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -9011,16 +9032,11 @@ const EyeOff = createLucideIcon("eye-off", __iconNode$8);
 
 
 const __iconNode$7 = [
-  [
-    "path",
-    {
-      d: "M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0",
-      key: "1nclc0"
-    }
-  ],
-  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
+  ["path", { d: "M2 12h20", key: "9i4pu4" }]
 ];
-const Eye = createLucideIcon("eye", __iconNode$7);
+const Globe = createLucideIcon("globe", __iconNode$7);
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -9031,11 +9047,10 @@ const Eye = createLucideIcon("eye", __iconNode$7);
 
 
 const __iconNode$6 = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
-  ["path", { d: "M2 12h20", key: "9i4pu4" }]
+  ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
+  ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
 ];
-const Globe = createLucideIcon("globe", __iconNode$6);
+const Mail = createLucideIcon("mail", __iconNode$6);
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -9046,10 +9061,11 @@ const Globe = createLucideIcon("globe", __iconNode$6);
 
 
 const __iconNode$5 = [
-  ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
-  ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
+  ["rect", { width: "20", height: "14", x: "2", y: "3", rx: "2", key: "48i651" }],
+  ["line", { x1: "8", x2: "16", y1: "21", y2: "21", key: "1svkeh" }],
+  ["line", { x1: "12", x2: "12", y1: "17", y2: "21", key: "vw1qmm" }]
 ];
-const Mail = createLucideIcon("mail", __iconNode$5);
+const Monitor = createLucideIcon("monitor", __iconNode$5);
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -9060,11 +9076,12 @@ const Mail = createLucideIcon("mail", __iconNode$5);
 
 
 const __iconNode$4 = [
-  ["rect", { width: "20", height: "14", x: "2", y: "3", rx: "2", key: "48i651" }],
-  ["line", { x1: "8", x2: "16", y1: "21", y2: "21", key: "1svkeh" }],
-  ["line", { x1: "12", x2: "12", y1: "17", y2: "21", key: "vw1qmm" }]
+  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
+  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
+  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
+  ["path", { d: "M8 16H3v5", key: "1cv678" }]
 ];
-const Monitor = createLucideIcon("monitor", __iconNode$4);
+const RefreshCw = createLucideIcon("refresh-cw", __iconNode$4);
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -9075,12 +9092,10 @@ const Monitor = createLucideIcon("monitor", __iconNode$4);
 
 
 const __iconNode$3 = [
-  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
-  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
-  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
-  ["path", { d: "M8 16H3v5", key: "1cv678" }]
+  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
 ];
-const RefreshCw = createLucideIcon("refresh-cw", __iconNode$3);
+const Search = createLucideIcon("search", __iconNode$3);
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -9091,10 +9106,15 @@ const RefreshCw = createLucideIcon("refresh-cw", __iconNode$3);
 
 
 const __iconNode$2 = [
-  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
-  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+  [
+    "path",
+    {
+      d: "M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z",
+      key: "r04s7s"
+    }
+  ]
 ];
-const Search = createLucideIcon("search", __iconNode$2);
+const Star = createLucideIcon("star", __iconNode$2);
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -9511,7 +9531,7 @@ function CarouselNext({
 }
 
 const React$1j = await importShared('react');
-const {useState: useState$l,useRef: useRef$9,useEffect: useEffect$i} = React$1j;
+const {useState: useState$l,useRef: useRef$a,useEffect: useEffect$i} = React$1j;
 const casinoBanners = [
   { id: 1, src: "/casinoBanners/casino1.png", alt: "Casino Banner 1" },
   { id: 2, src: "/casinoBanners/casino2.png", alt: "Casino Banner 2" }
@@ -9532,8 +9552,8 @@ const Casino = () => {
   useLocation();
   const [activeTab, setActiveTab] = useState$l("home");
   const [searchQuery, setSearchQuery] = useState$l("");
-  const intervalRef = useRef$9(null);
-  const apiRef = useRef$9(null);
+  const intervalRef = useRef$a(null);
+  const apiRef = useRef$a(null);
   const tabs = [
     { id: "home", label: "Home", to: "/casino" },
     { id: "tournaments", label: "Tournaments", to: "/casino/tournaments" }
@@ -9902,9 +9922,30 @@ const SPORT_ID_BY_KEY = {
   futsal: "sr:sport:29",
 };
 
-await importShared('react');
+const ODDS_SPORT_KEY_BY_FRONTEND_KEY = {
+  baseball: "baseball_mlb",
+  soccer: "soccer_brazil_campeonato",
+  basketball: "basketball_wnba",
+  cricket: "cricket_odi",
+  tennis: "tennis_wta_queens_club_champ",
+  american_football: "americanfootball_nfl",
+  ice_hockey: "icehockey_nhl",
+};
 
+await importShared('react');
+function getMarketCount(markets) {
+  if (!markets || typeof markets !== "object") {
+    return 0;
+  }
+  return Object.values(markets).reduce((count, marketGroup) => {
+    if (Array.isArray(marketGroup)) {
+      return count + marketGroup.length;
+    }
+    return count;
+  }, 0);
+}
 function GameCard({
+  eventId,
   team1,
   team2,
   score1,
@@ -9914,16 +9955,18 @@ function GameCard({
   odds,
   league,
   sport,
-  // <-- Add sport prop
   sportKey,
-  // <-- Add sportKey prop
+  markets,
+  eventType = "MATCH",
+  outrightRunners = [],
   highlight = false,
-  oddsHighlight = { w1: false, w2: false },
+  oddsHighlight = { w1: false, x: false, w2: false },
   onClick
 }) {
+  const isOutright = eventType === "OUTRIGHT";
   let team1Display = team1;
   let team2Display = team2;
-  if (team1 && !team2) {
+  if (!isOutright && team1 && !team2) {
     const parts = team1.split(/\s*vs\.?\s*/i);
     if (parts.length === 2) {
       team1Display = parts[0].trim();
@@ -9932,54 +9975,71 @@ function GameCard({
   }
   let displayTime = time;
   if (typeof time === "number" && time > 1e12) {
-    const dateObj = new Date(time);
-    displayTime = dateObj.toLocaleString();
+    displayTime = new Date(time).toLocaleString();
+  } else if (typeof time === "string" && !Number.isNaN(new Date(time).getTime())) {
+    displayTime = new Date(time).toLocaleString();
   }
   const isSuspended = odds.w1 === "SUSPENDED" && odds.x === "SUSPENDED" && odds.w2 === "SUSPENDED";
+  const displayRunners = outrightRunners.slice(0, 3);
+  const marketCount = getMarketCount(markets);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "div",
     {
-      className: `bg-live-primary rounded-md p-2 mb-2 border transition-all duration-300 ease-in-out transform ${highlight ? "border-live-accent shadow-[0_0_12px_var(--live-accent-primary)] scale-[1.02]" : "border-live shadow-md hover:shadow-lg"} cursor-pointer hover:bg-live-hover hover:scale-[1.01]`,
+      className: `bg-live-primary rounded-md p-1.5 mb-1.5 border transition-all duration-300 ease-in-out ${highlight ? "border-live-accent shadow-[0_0_12px_var(--live-accent-primary)]" : "border-live shadow-sm hover:shadow-md"} cursor-pointer hover:bg-live-hover`,
       onClick,
       "data-sport-key": sportKey,
-      "data-event-id": time,
+      "data-event-id": eventId,
       children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-start mb-1 gap-1", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs sm:text-sm text-live-secondary font-semibold truncate", children: league }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs sm:text-sm text-live-muted", children: matchStatus }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs sm:text-sm text-live-accent", children: displayTime })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row items-center justify-between mb-1 gap-1 sm:gap-0", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col flex-1 min-w-0", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm sm:text-base text-live-primary font-bold truncate", children: team1Display }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs sm:text-sm text-live-muted font-bold", children: "vs." }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm sm:text-base text-live-primary font-bold truncate", children: team2Display })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col items-center sm:items-end sm:flex-row gap-1 sm:gap-2 ml-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-end", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-base sm:text-lg text-live-accent font-bold", children: score1 }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-base sm:text-lg text-live-accent font-bold", children: score2 })
-          ] }) })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap sm:flex-nowrap gap-1 sm:gap-2 mt-2", children: isSuspended ? (
-          // Display full suspended box
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full flex items-center justify-center bg-live-odds rounded p-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-bold text-live-primary", children: "SUSPENDED" }) })
-        ) : (
-          // Display regular odds
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs sm:text-sm text-live-muted", children: "W1" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-sm sm:text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${oddsHighlight?.w1 ? "odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110" : "hover:shadow-md"}`, children: odds.w1 })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs sm:text-sm text-live-muted", children: "X" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm sm:text-base text-live-accent font-bold transition-all duration-300 hover:shadow-md", children: odds.x })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 flex flex-col items-center bg-live-odds rounded p-1 transition-all duration-200 hover:scale-105", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs sm:text-sm text-live-muted", children: "W2" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-sm sm:text-base font-bold px-2 py-1 rounded odds-value transition-all duration-300 ${oddsHighlight?.w2 ? "odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110" : "hover:shadow-md"}`, children: odds.w2 })
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-2 mb-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0 flex-1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-[11px] text-live-secondary font-semibold truncate", children: league }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 mt-0.5 text-[10px] leading-none", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-muted uppercase", children: matchStatus }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-muted", children: "|" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent truncate", children: displayTime })
             ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 shrink-0", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[10px] bg-live-hover text-live-muted rounded px-1.5 py-0.5", children: [
+              "+",
+              marketCount
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 text-live-muted hover:text-live-accent" })
           ] })
-        ) })
+        ] }),
+        isOutright ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-1.5", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-live-primary font-bold truncate block", children: team1Display }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-live-muted font-semibold uppercase", children: "Outright" })
+        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-[1fr_auto] gap-2 mb-1.5", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0 space-y-0.5", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-sm text-live-primary font-bold truncate", children: team1Display }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-sm text-live-primary font-bold truncate", children: team2Display })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-end justify-center leading-none", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-base text-live-accent font-bold", children: score1 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-base text-live-accent font-bold", children: score2 })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-1", children: isSuspended ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full flex items-center justify-center bg-live-odds rounded px-2 py-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-bold text-live-primary", children: "SUSPENDED" }) }) : isOutright ? displayRunners.length > 0 ? displayRunners.map((runner) => {
+          const price = runner?.backPrices?.[0]?.price;
+          return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0 bg-live-odds rounded-md px-1.5 py-1 text-center", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-[10px] text-live-muted truncate", children: runner.runnerName }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "inline-flex min-w-[44px] items-center justify-center rounded px-2 py-0.5 text-sm font-bold odds-value transition-all duration-300", children: typeof price === "number" ? price.toFixed(2) : "-" })
+          ] }, runner.runnerName);
+        }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full flex items-center justify-center bg-live-odds rounded px-2 py-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-bold text-live-muted", children: "Awaiting outright odds" }) }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 bg-live-odds rounded-md px-1.5 py-1 text-center", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-[10px] text-live-muted text-center", children: "W1" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `inline-flex min-w-[44px] items-center justify-center rounded px-2 py-0.5 text-sm font-bold odds-value transition-all duration-300 ${oddsHighlight?.w1 ? "odds-highlight" : ""}`, children: odds.w1 })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 bg-live-odds rounded-md px-1.5 py-1 text-center", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-[10px] text-live-muted text-center", children: "X" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `inline-flex min-w-[44px] items-center justify-center rounded px-2 py-0.5 text-sm font-bold text-live-accent transition-all duration-300 ${oddsHighlight?.x ? "odds-highlight" : ""}`, children: odds.x })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 bg-live-odds rounded-md px-1.5 py-1 text-center", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-[10px] text-live-muted text-center", children: "W2" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `inline-flex min-w-[44px] items-center justify-center rounded px-2 py-0.5 text-sm font-bold odds-value transition-all duration-300 ${oddsHighlight?.w2 ? "odds-highlight" : ""}`, children: odds.w2 })
+          ] })
+        ] }) })
       ]
     }
   );
@@ -10058,8 +10118,17 @@ const SkeletonLoader = ({ type = "row", count = 1, className = "" }) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: Array.from({ length: count }).map((_, index) => /* @__PURE__ */ jsxRuntimeExports.jsx(React$1f.Fragment, { children: renderSkeleton() }, index)) });
 };
 
-const EVENTS_API_BASE_URL = "https://xfair91.com:3003";
-const MARKETS_API_BASE_URL = "https://xfair91.com:3003";
+const ODDS_API_BASE_URL = "https://odds-api.xfair91.com";
+const SPORT_CATEGORY_KEY_BY_SPORT_ID = {
+  "sr:sport:1": "soccer",
+  "sr:sport:2": "basketball",
+  "sr:sport:3": "baseball",
+  "sr:sport:4": "ice_hockey",
+  "sr:sport:5": "tennis",
+  "sr:sport:16": "american_football",
+  "sr:sport:21": "cricket"
+};
+const leagueKeysCache = /* @__PURE__ */ new Map();
 async function retryWithBackoff(fn, retries = 3, delay = 1e3) {
   try {
     return await fn();
@@ -10074,37 +10143,53 @@ async function retryWithBackoff(fn, retries = 3, delay = 1e3) {
     return retryWithBackoff(fn, retries - 1, delay * 2);
   }
 }
+async function fetchJson(url) {
+  const response = await retryWithBackoff(async () => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 1e4);
+    try {
+      const res = await fetch(url, {
+        method: "GET",
+        headers: {
+          accept: "application/json"
+        },
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+      return res;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      throw error;
+    }
+  }, 2, 1e3);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  return response.json();
+}
+async function fetchConfiguredLeagueKeysForSportCategory(categoryKey) {
+  if (!categoryKey) {
+    return [];
+  }
+  if (leagueKeysCache.has(categoryKey)) {
+    return leagueKeysCache.get(categoryKey);
+  }
+  const data = await fetchJson(
+    `${ODDS_API_BASE_URL}/frontend/sports/${encodeURIComponent(categoryKey)}/leagues`
+  );
+  const leagueKeys = Array.isArray(data.leagues) ? data.leagues.map((league) => league.key).filter(Boolean) : [];
+  leagueKeysCache.set(categoryKey, leagueKeys);
+  return leagueKeys;
+}
 async function fetchSportsEvents(sportId, liveMatches = true) {
   try {
-    const url = `${EVENTS_API_BASE_URL}/api/events?sport_id=${sportId}&live_matches=${liveMatches}`;
-    const response = await retryWithBackoff(async () => {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 1e4);
-      try {
-        const res = await fetch(url, {
-          method: "GET",
-          headers: {
-            "accept": "application/json"
-          },
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        return res;
-      } catch (error) {
-        clearTimeout(timeoutId);
-        throw error;
-      }
-    }, 2, 1e3);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    if (data.status !== "RS_OK") {
-      throw new Error(`API error: ${data.errorDescription || "Unknown error"}`);
+    const categoryKey = SPORT_CATEGORY_KEY_BY_SPORT_ID[sportId];
+    if (categoryKey) {
+      return fetchOddsServerCategoryEvents(categoryKey, liveMatches);
     }
     return {
-      sports: data?.sports || [],
-      eventsCount: data?.sports?.length || 0
+      sports: [],
+      eventsCount: 0
     };
   } catch (error) {
     if (error.name !== "AbortError") {
@@ -10116,44 +10201,133 @@ async function fetchSportsEvents(sportId, liveMatches = true) {
     };
   }
 }
-async function fetchMarketsData(eventId, sportId) {
-  try {
-    const url = `${MARKETS_API_BASE_URL}/api/markets?event_id=${eventId}&sport_id=${sportId}`;
-    const response = await retryWithBackoff(async (signal) => {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 1e4);
-      if (signal) {
-        signal.addEventListener("abort", () => {
-          controller.abort();
-        });
-      }
-      try {
-        const res = await fetch(url, {
-          method: "GET",
-          headers: {
-            "accept": "application/json"
-          },
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        return res;
-      } catch (error) {
-        clearTimeout(timeoutId);
-        throw error;
-      }
-    }, 2, 1e3);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    if (data.status !== "RS_OK") {
-      throw new Error(`API error: ${data.errorDescription || "Unknown error"}`);
-    }
-    return data?.event?.markets?.matchOdds || [];
-  } catch (error) {
-    console.error(`API request failed for event_id=${eventId}, sport_id=${sportId}:`, error.message);
-    return [];
+async function fetchOddsServerCategoryEvents(categoryKey, liveMatches) {
+  const leagueKeys = await fetchConfiguredLeagueKeysForSportCategory(categoryKey);
+  if (leagueKeys.length === 0) {
+    return {
+      sports: [],
+      eventsCount: 0
+    };
   }
+  const results = await Promise.all(
+    leagueKeys.map(
+      (leagueKey) => fetchOddsServerSportsEvents(leagueKey, liveMatches).catch((error) => {
+        console.error(`Error fetching events for league ${leagueKey}:`, error.message);
+        return { sports: [], eventsCount: 0 };
+      })
+    )
+  );
+  const sports = results.flatMap((result) => result.sports || []);
+  return {
+    sports,
+    eventsCount: sports.length
+  };
+}
+async function fetchOddsServerSportsEvents(oddsSportKey, liveMatches) {
+  const status = liveMatches ? "live" : "pre_match";
+  const url = `${ODDS_API_BASE_URL}/frontend/events/${oddsSportKey}?status=${status}&limit=100`;
+  const data = await fetchJson(url);
+  return {
+    sports: Array.isArray(data.events) ? data.events : [],
+    eventsCount: Array.isArray(data.events) ? data.events.length : 0
+  };
+}
+
+const ODDS_WS_URL = "wss://odds-api.xfair91.com/ws/odds";
+function createOddsSocket({ sportKeys = [], onOddsUpdate, onStatus }) {
+  let socket;
+  let manuallyClosed = false;
+  let reconnectAttempts = 0;
+  let reconnectTimer = null;
+  let currentSportKeys = [...sportKeys];
+  function connect() {
+    socket = new WebSocket(ODDS_WS_URL);
+    socket.onopen = () => {
+      reconnectAttempts = 0;
+      onStatus?.("connected");
+      subscribe(currentSportKeys);
+    };
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      if (message.type === "connected") {
+        onStatus?.("ready");
+        return;
+      }
+      if (message.type === "subscribed") {
+        onStatus?.("subscribed", message);
+        return;
+      }
+      if (message.type === "odds:update") {
+        onOddsUpdate?.(message);
+        return;
+      }
+      if (message.type === "error") {
+        onStatus?.("error", message);
+      }
+    };
+    socket.onerror = (error) => {
+      onStatus?.("error", error);
+    };
+    socket.onclose = () => {
+      onStatus?.("closed");
+      if (!manuallyClosed) {
+        scheduleReconnect();
+      }
+    };
+  }
+  function send(payload) {
+    if (socket?.readyState !== WebSocket.OPEN) {
+      return false;
+    }
+    socket.send(JSON.stringify(payload));
+    return true;
+  }
+  function subscribe(nextSportKeys) {
+    currentSportKeys = [...nextSportKeys];
+    if (currentSportKeys.length === 0) {
+      return;
+    }
+    send({
+      type: "subscribe",
+      sportKeys: currentSportKeys
+    });
+  }
+  function scheduleReconnect() {
+    if (reconnectTimer) {
+      return;
+    }
+    const delay = Math.min(1e3 * 2 ** reconnectAttempts, 1e4);
+    reconnectAttempts += 1;
+    onStatus?.("reconnecting", { delay });
+    reconnectTimer = setTimeout(() => {
+      reconnectTimer = null;
+      if (!manuallyClosed) {
+        connect();
+      }
+    }, delay);
+  }
+  connect();
+  return {
+    get socket() {
+      return socket;
+    },
+    subscribe(nextSportKeys) {
+      subscribe(nextSportKeys);
+    },
+    unsubscribe(nextSportKeys) {
+      send({
+        type: "unsubscribe",
+        sportKeys: nextSportKeys
+      });
+    },
+    close() {
+      manuallyClosed = true;
+      if (reconnectTimer) {
+        clearTimeout(reconnectTimer);
+      }
+      socket?.close();
+    }
+  };
 }
 
 // Fetch user bets actions
@@ -10175,13 +10349,6 @@ const fetchUserBetsFailure = (error) => {
   return {
     type: FETCH_USER_BETS_FAILURE,
     payload: error,
-  };
-};
-
-// Action to skip the next automatic fetch
-const skipNextUserBetsFetch = () => {
-  return {
-    type: SKIP_NEXT_USER_BETS_FETCH,
   };
 };
 
@@ -10208,7 +10375,8 @@ const fetchAllUserBetsFailure = (error) => {
 };
 
 const React$1e = await importShared('react');
-const {useEffect: useEffect$h,useState: useState$j,useRef: useRef$8} = React$1e;
+const {useEffect: useEffect$h,useState: useState$j,useRef: useRef$9} = React$1e;
+const PREFERRED_BOOKMAKER = "draftkings";
 function normalize(str = "") {
   return str.trim().toLowerCase();
 }
@@ -10278,16 +10446,170 @@ function filterSports(sports, matchesBySport, searchTerm) {
     return filterMatches(matches, searchTerm).length > 0;
   });
 }
+function isMatchSuspended$2(match) {
+  if (match?.status === "SUSPENDED") {
+    return true;
+  }
+  const matchOdds = match?.markets?.matchOdds?.[0];
+  if (matchOdds?.status === "SUSPENDED") {
+    return true;
+  }
+  const odds = extractOddsW1W2$2(match?.markets);
+  return odds.w1 === "SUSPENDED" && odds.x === "SUSPENDED" && odds.w2 === "SUSPENDED";
+}
+function getMatchPriority(match) {
+  if (isMatchSuspended$2(match)) {
+    return 3;
+  }
+  if (match?.status === "LIVE" || match?.status === "IN_PLAY") {
+    return 0;
+  }
+  if (match?.status === "PRE_MATCH" || match?.status === "UPCOMING") {
+    return 1;
+  }
+  return 2;
+}
+function sortMatchesForSidebar(matches) {
+  return [...matches].sort((a, b) => {
+    const priorityDifference = getMatchPriority(a) - getMatchPriority(b);
+    if (priorityDifference !== 0) {
+      return priorityDifference;
+    }
+    return new Date(a.openDate || 0).getTime() - new Date(b.openDate || 0).getTime();
+  });
+}
+function getMatchTeams$1(match) {
+  if (match?.eventType === "OUTRIGHT") {
+    return {
+      team1: match.eventName || match.competitionName || "Outright",
+      team2: ""
+    };
+  }
+  if (!match?.eventName) {
+    return { team1: "", team2: "" };
+  }
+  const parts = match.eventName.split(/\s+vs\.?\s+/i);
+  return {
+    team1: parts[0]?.trim() || "",
+    team2: parts[1]?.trim() || ""
+  };
+}
+function getSidebarMarketType(match) {
+  return match?.eventType === "OUTRIGHT" ? "Outrights" : "Match Result";
+}
+function getSidebarGroupName(match) {
+  if (match?.eventType === "OUTRIGHT") {
+    return "Season Outrights";
+  }
+  return match?.country || match?.region || match?.group || "Featured";
+}
+function getSidebarLeagueName(match) {
+  return match?.competitionName || match?.sportName || match?.sportKey || "League";
+}
+function groupMatchesForSidebar(matches) {
+  const marketGroups = /* @__PURE__ */ new Map();
+  for (const match of matches) {
+    const marketType = getSidebarMarketType(match);
+    const groupName = getSidebarGroupName(match);
+    const leagueName = getSidebarLeagueName(match);
+    if (!marketGroups.has(marketType)) {
+      marketGroups.set(marketType, /* @__PURE__ */ new Map());
+    }
+    const groupMap = marketGroups.get(marketType);
+    if (!groupMap.has(groupName)) {
+      groupMap.set(groupName, /* @__PURE__ */ new Map());
+    }
+    const leagueMap = groupMap.get(groupName);
+    if (!leagueMap.has(leagueName)) {
+      leagueMap.set(leagueName, []);
+    }
+    leagueMap.get(leagueName).push(match);
+  }
+  return Array.from(marketGroups.entries()).map(([marketType, groupMap]) => ({
+    marketType,
+    count: Array.from(groupMap.values()).reduce(
+      (total, leagueMap) => total + Array.from(leagueMap.values()).reduce((leagueTotal, leagueMatches) => leagueTotal + leagueMatches.length, 0),
+      0
+    ),
+    groups: Array.from(groupMap.entries()).map(([groupName, leagueMap]) => ({
+      groupName,
+      count: Array.from(leagueMap.values()).reduce((total, leagueMatches) => total + leagueMatches.length, 0),
+      leagues: Array.from(leagueMap.entries()).map(([leagueName, leagueMatches]) => ({
+        leagueName,
+        matches: leagueMatches
+      }))
+    }))
+  }));
+}
+function getOddsKeyFromDelta(delta) {
+  if (delta.outcome === delta.homeTeam) {
+    return "w1";
+  }
+  if (delta.outcome === delta.awayTeam) {
+    return "w2";
+  }
+  if (delta.outcome?.toLowerCase() === "draw") {
+    return "x";
+  }
+  return null;
+}
+function getMarketGroupKeyFromDelta(delta) {
+  if (delta.market === "h2h" || delta.market === "outrights") {
+    return "matchOdds";
+  }
+  return delta.market;
+}
+function applyDeltaToMarkets(markets, delta) {
+  if (!markets) {
+    return markets;
+  }
+  const marketGroupKey = getMarketGroupKeyFromDelta(delta);
+  if (Array.isArray(markets)) {
+    return markets.map((market) => updateMarketWithDelta(market, delta));
+  }
+  return {
+    ...markets,
+    [marketGroupKey]: (markets[marketGroupKey] || []).map(
+      (market) => updateMarketWithDelta(market, delta)
+    )
+  };
+}
+function updateMarketWithDelta(market, delta) {
+  const shouldUpdateMarket = market?.marketType === delta.market || market?.key === delta.market || delta.market === "h2h" && market?.marketType === "MATCH_ODDS" || delta.market === "outrights" && market?.marketType === "OUTRIGHT";
+  if (!shouldUpdateMarket) {
+    return market;
+  }
+  return {
+    ...market,
+    runners: (market.runners || []).map((runner) => {
+      if (runner.runnerName !== delta.outcome) {
+        return runner;
+      }
+      return {
+        ...runner,
+        backPrices: [
+          {
+            ...runner.backPrices?.[0] || {},
+            price: delta.price
+          },
+          ...(runner.backPrices || []).slice(1)
+        ]
+      };
+    })
+  };
+}
 function LeftSidebarEventView({ setSelectedMatch = () => {
 }, setSelectedSport = () => {
 }, selectedMatch, onSelectedMatchOddsUpdate = () => {
-}, selectedSportFilter = null }) {
+}, selectedSportFilter = null, onEventsSnapshot = () => {
+} }) {
   useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState$j("");
   const [expanded, setExpanded] = useState$j({});
-  const [selectedType, setSelectedType] = useState$j("live");
+  const [selectedType, setSelectedType] = useState$j(() => searchParams.get("viewType") === "prematch" ? "prematch" : "live");
   const [matchesBySport, setMatchesBySport] = useState$j({});
   const [loadingBySport, setLoadingBySport] = useState$j({});
   const [oddsByEventId, setOddsByEventId] = useState$j({});
@@ -10296,10 +10618,127 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
   const [pendingSelection, setPendingSelection] = useState$j(null);
   const [placeholderIndex, setPlaceholderIndex] = useState$j(0);
   const [hasProcessedInitialSelection, setHasProcessedInitialSelection] = useState$j(false);
-  const oddsPrevRef = useRef$8({});
-  const placeholderIntervalRef = useRef$8(null);
-  const hasProcessedLocationState = useRef$8(false);
+  const oddsPrevRef = useRef$9({});
+  const placeholderIntervalRef = useRef$9(null);
+  const hasProcessedLocationState = useRef$9(false);
+  const oddsSocketRef = useRef$9(null);
   const placeholderTexts = ["competition", "team", "date"];
+  const handleSelectedTypeChange = (nextType) => {
+    if (nextType === selectedType) {
+      return;
+    }
+    setSelectedType(nextType);
+    setHasProcessedInitialSelection(false);
+    setPendingSelection(null);
+    setSelectedMatch(null);
+    setSelectedSport(null);
+    setOddsByEventId({});
+    setScoresByEventId({});
+    setHighlightedOdds({});
+    oddsPrevRef.current = {};
+    setSearchParams((previousParams) => {
+      const nextParams = new URLSearchParams(previousParams);
+      nextParams.set("viewType", nextType === "prematch" ? "prematch" : "live");
+      nextParams.delete("eventId");
+      nextParams.delete("sportKey");
+      nextParams.delete("eventName");
+      nextParams.delete("source");
+      return nextParams;
+    }, { replace: true });
+  };
+  useEffect$h(() => {
+    let cancelled = false;
+    const expandedSportKeys = Object.keys(expanded).filter((key) => expanded[key]);
+    async function connectOddsSocket() {
+      const resolvedLeagueKeys = await Promise.all(
+        expandedSportKeys.map(async (key) => {
+          try {
+            const leagueKeys = await fetchConfiguredLeagueKeysForSportCategory(key);
+            return leagueKeys.length > 0 ? leagueKeys : [ODDS_SPORT_KEY_BY_FRONTEND_KEY[key]].filter(Boolean);
+          } catch (error) {
+            console.error(`[odds-ws] failed to resolve leagues for ${key}:`, error.message);
+            return [ODDS_SPORT_KEY_BY_FRONTEND_KEY[key]].filter(Boolean);
+          }
+        })
+      );
+      if (cancelled) {
+        return;
+      }
+      const oddsSportKeys = [...new Set(resolvedLeagueKeys.flat().filter(Boolean))];
+      if (oddsSportKeys.length === 0) {
+        oddsSocketRef.current?.close();
+        oddsSocketRef.current = null;
+        return;
+      }
+      oddsSocketRef.current?.close();
+      oddsSocketRef.current = createOddsSocket({
+        sportKeys: oddsSportKeys,
+        onStatus: (status, payload) => {
+        },
+        onOddsUpdate: (message) => {
+          const nextOddsByEventId = { ...oddsPrevRef.current };
+          const nextHighlights = {};
+          const selectedMatchDeltas = [];
+          let hasUpdates = false;
+          for (const delta of message.deltas || []) {
+            if (delta.bookmaker !== PREFERRED_BOOKMAKER) {
+              continue;
+            }
+            if (selectedMatch?.eventId === delta.eventId) {
+              selectedMatchDeltas.push(delta);
+              hasUpdates = true;
+            }
+            if (!["h2h", "outrights"].includes(delta.market)) {
+              continue;
+            }
+            const oddsKey = getOddsKeyFromDelta(delta);
+            if (!oddsKey) {
+              continue;
+            }
+            const previousEventOdds = nextOddsByEventId[delta.eventId] || {};
+            nextOddsByEventId[delta.eventId] = {
+              ...previousEventOdds,
+              [oddsKey]: Number(delta.price).toFixed(2)
+            };
+            nextHighlights[delta.eventId] = {
+              ...nextHighlights[delta.eventId] || {},
+              [oddsKey]: true
+            };
+            hasUpdates = true;
+          }
+          if (!hasUpdates) {
+            return;
+          }
+          setOddsByEventId(nextOddsByEventId);
+          setHighlightedOdds((previous) => ({
+            ...previous,
+            ...nextHighlights
+          }));
+          oddsPrevRef.current = nextOddsByEventId;
+          if (selectedMatch?.eventId && selectedMatchDeltas.length > 0) {
+            const nextMarkets = selectedMatchDeltas.reduce(
+              (markets, delta) => applyDeltaToMarkets(markets, delta),
+              selectedMatch.markets
+            );
+            onSelectedMatchOddsUpdate({
+              ...selectedMatch,
+              odds: nextOddsByEventId[selectedMatch.eventId],
+              markets: nextMarkets
+            });
+          }
+          setTimeout(() => {
+            setHighlightedOdds({});
+          }, 1e3);
+        }
+      });
+    }
+    void connectOddsSocket();
+    return () => {
+      cancelled = true;
+      oddsSocketRef.current?.close();
+      oddsSocketRef.current = null;
+    };
+  }, [expanded, selectedMatch, onSelectedMatchOddsUpdate]);
   useEffect$h(() => {
     placeholderIntervalRef.current = setInterval(() => {
       setPlaceholderIndex((prev) => (prev + 1) % placeholderTexts.length);
@@ -10311,17 +10750,47 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
     };
   }, []);
   useEffect$h(() => {
-    const { viewType } = location.state || {};
+    const viewType = location.state?.viewType || searchParams.get("viewType");
     if (viewType === "prematch") {
       setSelectedType("prematch");
+      const eventId = searchParams.get("eventId");
+      const sportKey = searchParams.get("sportKey");
+      const eventName = searchParams.get("eventName");
+      const source = searchParams.get("source");
+      if (eventId && sportKey) {
+        setSearchParams({
+          eventId,
+          sportKey,
+          eventName: eventName || "",
+          source: source || "",
+          viewType: "prematch"
+        }, { replace: true });
+      } else {
+        setSearchParams((prev) => {
+          const newParams = new URLSearchParams(prev);
+          newParams.set("viewType", "prematch");
+          return newParams;
+        }, { replace: true });
+      }
+    } else if (!searchParams.get("viewType")) {
+      setSearchParams((prev) => {
+        const newParams = new URLSearchParams(prev);
+        newParams.set("viewType", "live");
+        return newParams;
+      }, { replace: true });
     }
-  }, [location.state]);
+  }, [location.state, searchParams, setSearchParams]);
   useEffect$h(() => {
     if (selectedSportFilter) {
       setExpanded((prev) => ({ ...prev, [selectedSportFilter.key]: true }));
       setSelectedSport(selectedSportFilter);
     }
   }, [selectedSportFilter, setSelectedSport]);
+  useEffect$h(() => {
+    if (selectedMatch && selectedMatch.sportKey) {
+      setExpanded((prev) => ({ ...prev, [selectedMatch.sportKey]: true }));
+    }
+  }, [selectedMatch]);
   useEffect$h(() => {
     if (location.state) ;
   }, []);
@@ -10363,86 +10832,10 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
     return () => {
       abortController.abort();
     };
-  }, [selectedType, location.key]);
+  }, [selectedType]);
   useEffect$h(() => {
-    let intervalId;
-    let abortController = new AbortController();
-    function pollOdds() {
-      abortController = new AbortController();
-      const expandedSportKeys = Object.keys(expanded).filter((key) => expanded[key]);
-      expandedSportKeys.forEach((sportKey) => {
-        const sportId = SPORT_ID_BY_KEY[sportKey];
-        if (!sportId) return;
-        fetchSportsEvents(sportId, selectedType === "live").then((json) => {
-          if (abortController.signal.aborted) {
-            return;
-          }
-          if (!json || !Array.isArray(json.sports)) {
-            return;
-          }
-          const list = json.sports;
-          const oddsMap = { ...oddsByEventId };
-          const scoresMap = { ...scoresByEventId };
-          const highlights = { ...highlightedOdds };
-          for (const e of list) {
-            const newOdds = extractOddsW1W2$2(e.markets);
-            const prevOdds = oddsPrevRef.current[e.eventId] || {};
-            oddsMap[e.eventId] = newOdds;
-            scoresMap[e.eventId] = {
-              // Update scores
-              homeScore: e.homeScore || 0,
-              awayScore: e.awayScore || 0,
-              halfTimeScore: e.halfTimeScore || null,
-              currentTime: e.currentTime || null
-            };
-            highlights[e.eventId] = {
-              w1: prevOdds.w1 !== newOdds.w1,
-              w2: prevOdds.w2 !== newOdds.w2
-            };
-            if (selectedMatch && selectedMatch.eventId === e.eventId) {
-              onSelectedMatchOddsUpdate({
-                ...selectedMatch,
-                odds: newOdds,
-                markets: e.markets,
-                homeScore: e.homeScore || 0,
-                awayScore: e.awayScore || 0,
-                halfTimeScore: e.halfTimeScore || null,
-                currentTime: e.currentTime || null,
-                status: e.status || selectedMatch.status
-                // Preserve selectedMarket and selectedRunner if they exist
-              });
-            }
-          }
-          setOddsByEventId(oddsMap);
-          setScoresByEventId(scoresMap);
-          setHighlightedOdds(highlights);
-          oddsPrevRef.current = oddsMap;
-          setTimeout(() => {
-            setHighlightedOdds({});
-          }, 1e3);
-        }).catch((error) => {
-          if (error.name === "AbortError") {
-            return;
-          }
-        });
-      });
-    }
-    try {
-      intervalId = setInterval(() => {
-        try {
-          pollOdds();
-        } catch (error) {
-        }
-      }, 1e3);
-    } catch (error) {
-    }
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-      abortController.abort();
-    };
-  }, [selectedType, oddsByEventId, scoresByEventId, expanded, selectedMatch, onSelectedMatchOddsUpdate]);
+    onEventsSnapshot({ selectedType, matchesBySport, expanded, oddsByEventId, highlightedOdds });
+  }, [matchesBySport, selectedType, expanded, oddsByEventId, highlightedOdds, onEventsSnapshot]);
   const toggleExpand = (sportKey) => {
     setExpanded((prevExpanded) => {
       const isCurrentlyExpanded = prevExpanded[sportKey];
@@ -10460,11 +10853,17 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
     });
   };
   useEffect$h(() => {
-    const { selectedGameId, selectedSportKey } = location.state || {};
+    const { selectedGameId: stateGameId, selectedSportKey: stateSportKey } = location.state || {};
+    const urlGameId = searchParams.get("eventId");
+    const urlSportKey = searchParams.get("sportKey");
+    const selectedGameId = stateGameId || urlGameId;
+    const selectedSportKey = stateSportKey || urlSportKey;
     if (selectedSportFilter) {
+      console.log("Selected sport filter active, skipping default selection");
       return;
     }
-    if (selectedGameId && !hasProcessedLocationState.current) {
+    if (selectedGameId && !hasProcessedInitialSelection) {
+      console.log("Processing initial selection for game ID:", selectedGameId);
       hasProcessedLocationState.current = true;
       let foundSportKey = selectedSportKey;
       if (!selectedSportKey) {
@@ -10478,6 +10877,7 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
         }
       }
       if (foundSportKey) {
+        console.log("Found sport key:", foundSportKey);
         setExpanded((prev) => ({ ...prev, [foundSportKey]: true }));
         const sport = SPORTS.find((s) => s.key === foundSportKey);
         if (sport) {
@@ -10487,8 +10887,8 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
         if (matches.length > 0) {
           const selectedGame = matches.find((match) => match.eventId === selectedGameId);
           if (selectedGame) {
-            const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || "";
-            const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || "";
+            console.log("Found matching game:", selectedGame.eventName);
+            const { team1, team2 } = getMatchTeams$1(selectedGame);
             const selectedMatchData = {
               ...selectedGame,
               team1,
@@ -10498,17 +10898,27 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
             };
             setSelectedMatch(selectedMatchData);
             setHasProcessedInitialSelection(true);
+            console.log("Initial selection processed successfully");
           }
         } else {
+          console.log("Matches not loaded yet, storing pending selection");
           setPendingSelection({ selectedGameId, selectedSportKey: foundSportKey });
         }
       } else {
+        console.log("Could not find sport, storing pending selection");
         setPendingSelection({ selectedGameId, selectedSportKey: null });
       }
-    } else if (!selectedGameId && !selectedSportKey && !selectedMatch && !hasProcessedInitialSelection) {
+    } else if (!selectedGameId && !hasProcessedInitialSelection) {
+      console.log("No specific game selected, applying default selection");
+      console.log("Selected match exists:", !!selectedMatch);
+      console.log("Matches by sport:", Object.keys(matchesBySport).map((key) => ({
+        sport: key,
+        count: matchesBySport[key]?.length || 0
+      })));
       for (const sport of SPORTS) {
         const matches = matchesBySport[sport.key] || [];
         if (matches.length > 0) {
+          console.log(`Found ${matches.length} matches for ${sport.key}`);
           setExpanded((prev) => {
             const isAnySportExpanded = Object.keys(prev).length > 0 && Object.values(prev).some((val) => val);
             if (!isAnySportExpanded && !prev.hasOwnProperty(sport.key)) {
@@ -10518,8 +10928,8 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
           });
           if (!selectedMatch) {
             const firstMatch = matches[0];
-            const team1 = firstMatch.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || "";
-            const team2 = firstMatch.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || "";
+            console.log("Selecting first match:", firstMatch.eventName);
+            const { team1, team2 } = getMatchTeams$1(firstMatch);
             const selectedMatchData = {
               ...firstMatch,
               team1,
@@ -10529,12 +10939,27 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
             };
             setSelectedMatch(selectedMatchData);
             setSelectedSport(sport);
+            console.log("Default selection applied:", firstMatch.eventName);
+            setSearchParams({
+              eventId: firstMatch.eventId,
+              sportKey: sport.key,
+              eventName: firstMatch.eventName || "",
+              viewType: selectedType === "prematch" ? "prematch" : "live"
+            }, { replace: true });
+            console.log("URL updated with default selection:", {
+              eventId: firstMatch.eventId,
+              sportKey: sport.key,
+              eventName: firstMatch.eventName || ""
+            });
+          } else {
+            console.log("Match already selected, skipping default selection");
           }
+          setHasProcessedInitialSelection(true);
           break;
         }
       }
-    }
-  }, [matchesBySport, selectedMatch, setSelectedMatch, setSelectedSport, selectedSportFilter, location.state]);
+    } else ;
+  }, [matchesBySport, selectedMatch, setSelectedMatch, setSelectedSport, selectedSportFilter, location.state, searchParams, selectedType]);
   useEffect$h(() => {
     if (pendingSelection) {
       const { selectedGameId, selectedSportKey } = pendingSelection;
@@ -10543,8 +10968,7 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
         if (matches.length > 0) {
           const selectedGame = matches.find((match) => match.eventId === selectedGameId);
           if (selectedGame) {
-            const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || "";
-            const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || "";
+            const { team1, team2 } = getMatchTeams$1(selectedGame);
             const selectedMatchData = {
               ...selectedGame,
               team1,
@@ -10565,8 +10989,7 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
           const matches = matchesBySport[sport.key] || [];
           const selectedGame = matches.find((match) => match.eventId === selectedGameId);
           if (selectedGame) {
-            const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || "";
-            const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || "";
+            const { team1, team2 } = getMatchTeams$1(selectedGame);
             const selectedMatchData = {
               ...selectedGame,
               team1,
@@ -10587,9 +11010,62 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
   }, [matchesBySport, pendingSelection, setSelectedMatch, location.pathname]);
   useEffect$h(() => {
     if (hasProcessedInitialSelection && location.state) {
-      navigate(location.pathname, { replace: true, state: null });
+      if (location.state.source === "upcoming_matches") {
+        console.log("=== PRESERVING LOCATION STATE FOR UPCOMING MATCHES FLOW ===");
+        console.log("Keeping state for URL parameter setup:", location.state);
+        return;
+      }
+      console.log("=== LEFT SIDEBAR CLEARING LOCATION STATE ===");
+      console.log("Current pathname:", location.pathname);
+      console.log("Current search:", location.search);
+      console.log("Current state:", location.state);
+      navigate(`${location.pathname}${location.search}`, { replace: true, state: null });
+      console.log("After clearing state - URL should be preserved");
     }
   }, [hasProcessedInitialSelection, location.state, navigate]);
+  const renderMatchCard = (match, idx, sport) => {
+    const { team1, team2 } = getMatchTeams$1(match);
+    const isSelected = selectedMatch && String(selectedMatch.eventId) === String(match.eventId);
+    const odds = oddsByEventId[match.eventId] || extractOddsW1W2$2(match.markets);
+    const scores = scoresByEventId[match.eventId] || { homeScore: 0, awayScore: 0 };
+    const highlight = highlightedOdds[match.eventId] || { w1: false, w2: false };
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      GameCard,
+      {
+        eventId: match.eventId,
+        team1,
+        team2,
+        score1: scores.homeScore,
+        score2: scores.awayScore,
+        matchStatus: match.status,
+        time: match.openDate,
+        odds,
+        league: match.competitionName,
+        sport: sport.key,
+        sportKey: sport.key,
+        markets: match.markets,
+        eventType: match.eventType,
+        outrightRunners: match.markets?.matchOdds?.[0]?.runners || [],
+        highlight: isSelected,
+        oddsHighlight: highlight,
+        onClick: () => {
+          const latestOdds = oddsByEventId[match.eventId] || extractOddsW1W2$2(match.markets);
+          const selectedMatchData = {
+            ...match,
+            team1,
+            team2,
+            odds: latestOdds,
+            sportKey: sport.key
+          };
+          setSelectedMatch(selectedMatchData);
+          if (!selectedSportFilter) {
+            setSelectedSport(sport);
+          }
+        }
+      },
+      match.eventId || idx
+    );
+  };
   const filteredSports = filterSports(SPORTS, matchesBySport, search);
   const displaySports = selectedSportFilter ? filteredSports.filter((s) => s.key === selectedSportFilter.key) : filteredSports;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { className: "flex-1 bg-live-secondary h-full flex flex-col p-2 min-w-0 sm:p-2 md:p-2 lg:p-2 xl:p-2", children: [
@@ -10600,7 +11076,7 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
           variant: selectedType === "live" ? "default" : "outline",
           size: "sm",
           className: `flex-1 text-xs ${selectedType === "live" ? "btn-live-toggle-active" : "btn-live-toggle-inactive"}`,
-          onClick: () => setSelectedType("live"),
+          onClick: () => handleSelectedTypeChange("live"),
           children: "Live"
         }
       ),
@@ -10610,7 +11086,7 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
           variant: selectedType === "prematch" ? "default" : "outline",
           size: "sm",
           className: `flex-1 text-xs ${selectedType === "prematch" ? "btn-live-toggle-active" : "btn-live-toggle-inactive"}`,
-          onClick: () => setSelectedType("prematch"),
+          onClick: () => handleSelectedTypeChange("prematch"),
           children: "Prematch"
         }
       )
@@ -10641,7 +11117,7 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 overflow-y-auto custom-scrollbar pr-1", children: displaySports.map((sport) => {
       const Icon = sport.icon;
       const allMatches = matchesBySport[sport.key] || [];
-      const filteredMatches = filterMatches(allMatches, search);
+      const filteredMatches = sortMatchesForSidebar(filterMatches(allMatches, search));
       const matchCount = filteredMatches.length;
       const isMobileSingleView = !!selectedSportFilter;
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-2 bg-live-tertiary rounded", children: [
@@ -10660,51 +11136,25 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
             ]
           }
         ),
-        (expanded[sport.key] || isMobileSingleView) && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `pl-1 sm:pl-2 pb-1 sm:pb-2 ${isMobileSingleView ? "pt-2" : ""}`, children: loadingBySport[sport.key] ? /* @__PURE__ */ jsxRuntimeExports.jsx(SkeletonLoader, { type: "game-card", count: 3 }) : matchCount === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-live-muted px-2 py-1 sm:py-2", children: "No matches" }) : filteredMatches.map((match, idx) => {
-          let team1 = "";
-          let team2 = "";
-          if (match.eventName) {
-            const parts = match.eventName.split(/\s+vs\.?\s+/i);
-            team1 = parts[0]?.trim() || "";
-            team2 = parts[1]?.trim() || "";
-          }
-          const isSelected = selectedMatch && selectedMatch.eventId === match.eventId;
-          const odds = oddsByEventId[match.eventId] || extractOddsW1W2$2(match.markets);
-          const scores = scoresByEventId[match.eventId] || { homeScore: 0, awayScore: 0 };
-          const highlight = highlightedOdds[match.eventId] || { w1: false, w2: false };
-          return /* @__PURE__ */ jsxRuntimeExports.jsx(
-            GameCard,
-            {
-              team1,
-              team2,
-              score1: scores.homeScore,
-              score2: scores.awayScore,
-              matchStatus: match.status,
-              time: match.openDate,
-              odds,
-              league: match.competitionName,
-              sport: sport.key,
-              sportKey: sport.key,
-              highlight: isSelected,
-              oddsHighlight: highlight,
-              onClick: () => {
-                const latestOdds = oddsByEventId[match.eventId] || extractOddsW1W2$2(match.markets);
-                const selectedMatchData = {
-                  ...match,
-                  team1,
-                  team2,
-                  odds: latestOdds,
-                  // Include the latest odds in the selected match data
-                  sportKey: sport.key
-                  // Include sportKey for markets API call
-                };
-                setSelectedMatch(selectedMatchData);
-                setSelectedSport(sport);
-              }
-            },
-            match.eventId || idx
-          );
-        }) })
+        (expanded[sport.key] || isMobileSingleView) && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `pl-1 sm:pl-2 pb-1 sm:pb-2 ${isMobileSingleView ? "pt-2" : ""}`, children: loadingBySport[sport.key] ? /* @__PURE__ */ jsxRuntimeExports.jsx(SkeletonLoader, { type: "game-card", count: 3 }) : matchCount === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-live-muted px-2 py-1 sm:py-2", children: "No matches" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: groupMatchesForSidebar(filteredMatches).map((marketSection) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "rounded bg-live-primary/60 border border-live overflow-hidden", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between px-2 py-1.5 bg-live-hover/70", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-semibold uppercase tracking-wide text-live-primary", children: marketSection.marketType }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] bg-live-tertiary text-live-muted rounded px-1.5 py-0.5", children: marketSection.count })
+          ] }),
+          marketSection.groups.map((group) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-live/70", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between px-2 py-1 text-[11px] text-live-muted", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate", children: group.groupName }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: group.count })
+            ] }),
+            group.leagues.map((league) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-1.5 pb-1.5", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between px-1 py-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-semibold text-live-primary truncate", children: league.leagueName }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] bg-live-hover text-live-muted rounded px-1.5 py-0.5", children: league.matches.length })
+              ] }),
+              league.matches.map((match, idx) => renderMatchCard(match, idx, sport))
+            ] }, league.leagueName))
+          ] }, group.groupName))
+        ] }, marketSection.marketType)) }) })
       ] }, sport.key);
     }) })
   ] });
@@ -10719,10 +11169,12 @@ function IoChevronDown (props) {
   return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"fill":"none","strokeLinecap":"round","strokeLinejoin":"round","strokeWidth":"32","d":"M368 368 144 144m224 0L144 368"},"child":[]}]})(props);
 }function IoSearchOutline (props) {
   return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"fill":"none","strokeMiterlimit":"10","strokeWidth":"32","d":"M221.09 64a157.09 157.09 0 1 0 157.09 157.09A157.1 157.1 0 0 0 221.09 64z"},"child":[]},{"tag":"path","attr":{"fill":"none","strokeLinecap":"round","strokeMiterlimit":"10","strokeWidth":"32","d":"M338.29 338.29 448 448"},"child":[]}]})(props);
+}function IoStarOutline (props) {
+  return GenIcon({"attr":{"viewBox":"0 0 512 512"},"child":[{"tag":"path","attr":{"fill":"none","strokeLinejoin":"round","strokeWidth":"32","d":"M480 208H308L256 48l-52 160H32l140 96-54 160 138-100 138 100-54-160z"},"child":[]}]})(props);
 }
 
 const React$1d = await importShared('react');
-const {useEffect: useEffect$g,useMemo: useMemo$2,useRef: useRef$7,useState: useState$i} = React$1d;
+const {useEffect: useEffect$g,useMemo: useMemo$2,useRef: useRef$8,useState: useState$i} = React$1d;
 const sportImageMap = {
   soccer: "/assets/img1.jpg",
   football: "/assets/img2.jpg",
@@ -10741,7 +11193,147 @@ const isMatchSuspended$1 = (match) => {
   if (markets?.status === "SUSPENDED") return true;
   return false;
 };
-function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
+const MARKET_NAME_BY_KEY = {
+  matchOdds: "Match Odds",
+  h2h: "Match Odds",
+  spreads: "Handicap",
+  totals: "Totals",
+  outrights: "Outrights"
+};
+const MARKET_CATEGORY_TABS = [
+  { id: "All", label: "All" },
+  { id: "Match", label: "Match" },
+  { id: "Totals", label: "Totals" },
+  { id: "Handicaps", label: "Handicaps" },
+  { id: "Halves", label: "Halves" },
+  { id: "Outrights", label: "Outrights" }
+];
+function humanizeMarketName(value = "") {
+  if (MARKET_NAME_BY_KEY[value]) {
+    return MARKET_NAME_BY_KEY[value];
+  }
+  return value.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+}
+function getMarketCategory(market = {}) {
+  const raw = [
+    market.marketCategory,
+    market.marketGroupKey,
+    market.key,
+    market.marketType,
+    market.marketName
+  ].filter(Boolean).join(" ").toLowerCase();
+  if (raw.includes("outright") || raw.includes("winner")) {
+    return "Outrights";
+  }
+  if (raw.includes("spread") || raw.includes("handicap") || raw.includes("asian handicap")) {
+    return "Handicaps";
+  }
+  if (raw.includes("total") || raw.includes("over") || raw.includes("under") || raw.includes("goal")) {
+    return "Totals";
+  }
+  if (raw.includes("half") || raw.includes("1st") || raw.includes("2nd")) {
+    return "Halves";
+  }
+  return "Match";
+}
+function normaliseMarket(market, marketGroupKey = "market", marketIndex = 0) {
+  const rawMarketName = market.marketName || market.marketType || market.key || marketGroupKey;
+  const marketName = humanizeMarketName(rawMarketName);
+  const marketKey = market.key || market.marketType || marketGroupKey;
+  const categoryInput = {
+    ...market,
+    marketGroupKey,
+    key: marketKey,
+    marketName
+  };
+  return {
+    ...market,
+    marketGroupKey,
+    marketKey,
+    marketCategory: getMarketCategory(categoryInput),
+    marketId: market.marketId || marketGroupKey + "-" + marketIndex,
+    marketName,
+    runners: (market.runners || []).map((runner, runnerIndex) => ({
+      ...runner,
+      runnerId: runner.runnerId || marketGroupKey + "-" + marketIndex + "-" + runnerIndex
+    }))
+  };
+}
+function normaliseMarketsForDisplay(markets) {
+  if (!markets) {
+    return [];
+  }
+  if (Array.isArray(markets)) {
+    return markets.map((market, marketIndex) => normaliseMarket(market, market.key || market.marketType || "market", marketIndex));
+  }
+  return Object.entries(markets).flatMap(([marketGroupKey, marketList]) => {
+    if (!Array.isArray(marketList)) {
+      return [];
+    }
+    return marketList.map((market, marketIndex) => normaliseMarket(market, marketGroupKey, marketIndex));
+  });
+}
+function getMatchTeams(match = {}) {
+  if (match.eventType === "OUTRIGHT") {
+    return {
+      team1: match.eventName || match.competitionName || "Outright",
+      team2: ""
+    };
+  }
+  const parts = (match.eventName || "").split(/\s+vs\.?\s+/i);
+  return {
+    team1: match.team1 || parts[0]?.trim() || match.homeTeam || "Team 1",
+    team2: match.team2 || parts[1]?.trim() || match.awayTeam || "Team 2"
+  };
+}
+function extractBoardOdds(match = {}) {
+  if (match.odds) {
+    return {
+      w1: match.odds.w1 || "-",
+      x: match.odds.x || "-",
+      w2: match.odds.w2 || "-"
+    };
+  }
+  const market = match.markets?.matchOdds?.[0] || normaliseMarketsForDisplay(match.markets)[0];
+  const runners = market?.runners || [];
+  const drawRunner = runners.find((runner) => runner.runnerName?.toLowerCase?.() === "draw");
+  const nonDrawRunners = runners.filter((runner) => runner.runnerName?.toLowerCase?.() !== "draw");
+  const firstRunner = nonDrawRunners[0];
+  const secondRunner = nonDrawRunners.length > 1 ? nonDrawRunners[nonDrawRunners.length - 1] : void 0;
+  const formatPrice = (runner) => {
+    const price = runner?.backPrices?.[0]?.price;
+    return typeof price === "number" ? price.toFixed(2) : "-";
+  };
+  return {
+    w1: formatPrice(firstRunner),
+    x: formatPrice(drawRunner),
+    w2: formatPrice(secondRunner)
+  };
+}
+function formatBoardDate(value) {
+  const date = new Date(value || Date.now());
+  if (Number.isNaN(date.getTime())) {
+    return "Date TBA";
+  }
+  return date.toLocaleDateString(void 0, {
+    weekday: "short",
+    month: "short",
+    day: "2-digit",
+    year: "numeric"
+  });
+}
+function formatBoardTime(value) {
+  const date = new Date(value || Date.now());
+  if (Number.isNaN(date.getTime())) {
+    return "TBA";
+  }
+  return date.toLocaleTimeString(void 0, {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+function MiddleGameDisplay({ match, sport, onRunnerSelect, eventBoardMatches = [], boardViewMode = "live", onMatchSelect = () => {
+} }) {
   const [searchTerm, setSearchTerm] = useState$i("");
   const handleSearchChange = (value) => {
     setSearchTerm(value);
@@ -10749,9 +11341,20 @@ function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
   const handleSearchClear = () => {
     setSearchTerm("");
   };
+  if (boardViewMode === "prematch") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      PrematchEventBoard,
+      {
+        matches: eventBoardMatches,
+        selectedMatch: match,
+        onMatchSelect,
+        onRunnerSelect
+      }
+    );
+  }
   if (!match || !sport) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center h-full text-live-muted text-sm", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center animate-pulse-scale", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-12 h-12", children: [
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center h-full w-full min-h-full text-live-muted text-sm", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center justify-center animate-pulse-scale", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-12 h-12 flex items-center justify-center", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute w-full h-full rounded-full border-4 border-live-accent border-t-transparent animate-spin" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute w-8 h-8 top-2 left-2 rounded-full border-4 border-live-primary border-b-transparent animate-spin-reverse" })
       ] }),
@@ -10767,14 +11370,15 @@ function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
     const dateObj = new Date(displayTime);
     displayTime = dateObj.toLocaleString();
   }
-  const teamNames = match.eventName ? match.eventName.split(" vs. ") : ["Team 1", "Team 2"];
-  const team1 = teamNames[0] || "Team 1";
-  const team2 = teamNames[1] || "Team 2";
+  const isOutright = match.eventType === "OUTRIGHT";
+  const teamNames = !isOutright && match.eventName ? match.eventName.split(/\s+vs\.?\s+/i) : [match.eventName || match.team1 || "Outright", ""];
+  const team1 = isOutright ? match.eventName || match.team1 || "Outright" : teamNames[0] || "Team 1";
+  const team2 = isOutright ? "" : teamNames[1] || "Team 2";
   const homeScore = match.homeScore ?? 0;
   const awayScore = match.awayScore ?? 0;
   const matchIsSuspended = isMatchSuspended$1(match);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-2 sm:p-2 md:p-3 flex flex-col gap-2 sm:gap-3 md:gap-4 h-full min-w-0", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-full h-40 sm:h-48 md:h-56 lg:h-64 rounded-md overflow-hidden flex-shrink-0", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-2 sm:gap-3 md:gap-4 h-full min-w-0 w-full", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-full h-40 sm:h-48 md:h-56 lg:h-64 overflow-hidden flex-shrink-0", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "img",
         {
@@ -10791,7 +11395,7 @@ function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute inset-0 flex flex-col text-white", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center p-2 sm:p-3 md:p-4", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-5 h-3 sm:w-6 sm:h-4 bg-live-info border border-live-primary rounded-sm flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary text-[10px] sm:text-xs font-bold", children: "🇬🇧" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-5 h-3 sm:w-6 sm:h-4 bg-live-info border border-live-primary rounded-sm flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary text-[10px] sm:text-xs font-bold", children: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§" }) }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary text-xs sm:text-sm font-medium truncate", children: match.competitionName || "League" })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-1 sm:gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-live-dark text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 bg-live-accent rounded ${match.status === "IN_PLAY" ? "animate-pulse-highlight in-play-golden" : ""}`, children: match.status === "IN_PLAY" ? "IN PLAY" : match.status || "N/A" }) })
@@ -10799,23 +11403,23 @@ function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 flex items-center justify-between px-2 sm:px-3 md:px-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full flex items-center justify-between", style: { background: "rgba(0,0,0,0.4)", padding: "8px 12px", borderRadius: "8px" }, children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1 sm:space-y-2 md:space-y-3 flex-1 min-w-0", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 md:gap-3", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-danger text-sm sm:text-base md:text-lg", children: "★" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-danger text-sm sm:text-base md:text-lg", children: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¹Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary text-sm sm:text-base md:text-lg font-medium truncate", children: team1 })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 md:gap-3", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent text-sm sm:text-base md:text-lg", children: "★" }),
+            isOutright ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-muted text-xs sm:text-sm font-semibold", children: "Outright winner market" }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 md:gap-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent text-sm sm:text-base md:text-lg", children: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¹Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary text-sm sm:text-base md:text-lg font-medium truncate", children: team2 })
             ] })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-right space-y-1 sm:space-y-2 md:space-y-3 flex-shrink-0 ml-2", children: [
+          !isOutright && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-right space-y-1 sm:space-y-2 md:space-y-3 flex-shrink-0 ml-2", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-primary text-lg sm:text-xl md:text-2xl font-bold", children: homeScore }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-primary text-lg sm:text-xl md:text-2xl font-bold", children: awayScore })
           ] })
         ] }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-center pb-2 sm:pb-3 md:pb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-1 sm:gap-2", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-live-tertiary hover:bg-live-hover text-live-primary px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 rounded text-[10px] sm:text-xs md:text-sm", children: "Stats" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-live-tertiary hover:bg-live-hover text-live-primary p-1 sm:p-1.5 md:p-2 rounded text-xs sm:text-sm", children: "⚡" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-live-tertiary hover:bg-live-hover text-live-primary p-1 sm:p-1.5 md:p-2 rounded text-xs sm:text-sm", children: "📊" })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-live-tertiary hover:bg-live-hover text-live-primary p-1 sm:p-1.5 md:p-2 rounded text-xs sm:text-sm", children: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-live-tertiary hover:bg-live-hover text-live-primary p-1 sm:p-1.5 md:p-2 rounded text-xs sm:text-sm", children: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â" })
         ] }) })
       ] })
     ] }),
@@ -10837,114 +11441,282 @@ function MiddleGameDisplay({ match, sport, onRunnerSelect }) {
     ) })
   ] });
 }
-function MarketItem({ market, isOpen, onToggle, highlightedOdds = {}, onRunnerSelect, selectedMatch }) {
-  const contentRef = useRef$7(null);
-  const [measuredHeight, setMeasuredHeight] = useState$i(0);
+function PrematchEventBoard({ matches = [], selectedMatch, onMatchSelect, onRunnerSelect }) {
+  const [boardSearch, setBoardSearch] = useState$i("");
+  const [openDates, setOpenDates] = useState$i({});
+  const groupRefs = useRef$8({});
+  const groupedMatches = useMemo$2(() => {
+    const search = boardSearch.trim().toLowerCase();
+    const filtered = matches.filter((match) => match?.eventId).filter((match) => {
+      if (!search) return true;
+      const haystack = [match.eventName, match.competitionName, match.sportKey, match.status].filter(Boolean).join(" ").toLowerCase();
+      return haystack.includes(search);
+    }).sort((a, b) => new Date(a.openDate || a.commenceTime || 0).getTime() - new Date(b.openDate || b.commenceTime || 0).getTime());
+    return filtered.reduce((groups, match) => {
+      const dateKey = formatBoardDate(match.openDate || match.commenceTime);
+      if (!groups[dateKey]) groups[dateKey] = [];
+      groups[dateKey].push(match);
+      return groups;
+    }, {});
+  }, [matches, boardSearch]);
   useEffect$g(() => {
-    if (contentRef.current) {
-      setMeasuredHeight(contentRef.current.scrollHeight);
+    const keys = Object.keys(groupedMatches || {});
+    if (keys.length > 0 && Object.keys(openDates).length === 0) {
+      const initial = {};
+      keys.forEach((k) => initial[k] = true);
+      setOpenDates(initial);
     }
-  }, [isOpen, market.runners]);
-  const getOdds = (runner) => {
-    if (!runner || runner.status === "SUSPENDED") return "SUSPENDED";
-    const backPrice = runner.backPrices?.[0]?.price;
-    return typeof backPrice === "number" ? backPrice.toFixed(2) : "-";
-  };
-  const isOddsHighlighted = (runner, oddsValue) => {
-    if (!runner || !highlightedOdds[runner.runnerName]) return false;
-    return highlightedOdds[runner.runnerName] === oddsValue;
-  };
-  const isSelectedRunner = (runner) => {
-    if (!selectedMatch || !selectedMatch.selectedRunner || !runner) return false;
-    return selectedMatch.selectedRunner.runnerId === runner.runnerId;
-  };
-  useEffect$g(() => {
-    if (selectedMatch && selectedMatch.selectedRunner && selectedMatch.selectedMarket && market) {
-      const runner = market.runners?.find((r) => r && r.runnerId === selectedMatch.selectedRunner.runnerId);
-      const isSelected = isSelectedRunner(runner);
-      if (isSelected && market.marketId === selectedMatch.selectedMarket.marketId) {
-        if (runner) {
-          const newOdds = getOdds(runner);
-          if (newOdds !== selectedMatch.selectedOdd && newOdds !== "SUSPENDED" && newOdds !== "-") {
-            onRunnerSelect({
-              ...selectedMatch,
-              selectedMarket: market,
-              selectedRunner: runner,
-              selectedOdd: newOdds
-            });
+  }, [groupedMatches]);
+  const totalMatches = Object.values(groupedMatches).reduce((total, items) => total + items.length, 0);
+  const selectedTeams = getMatchTeams(selectedMatch || {});
+  const selectedTitle = selectedTeams.team2 ? selectedTeams.team1 + " vs " + selectedTeams.team2 : selectedTeams.team1;
+  const selectedMarketCount = selectedMatch ? normaliseMarketsForDisplay(selectedMatch.markets).length : 0;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-full min-h-0 w-full bg-live-primary px-2 py-2 text-live-primary", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid h-full min-h-0 grid-cols-[minmax(420px,1.3fr)_minmax(360px,0.9fr)] gap-2", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-full min-h-0 flex-col overflow-hidden rounded-md border border-live bg-live-secondary", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between gap-3 border-b border-live bg-live-tertiary px-3 py-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs font-bold uppercase tracking-wide text-live-primary", children: "Prematch Event Board" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-[11px] text-live-muted", children: [
+            totalMatches,
+            " events grouped by date"
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex min-w-[220px] items-center gap-2 rounded border border-live bg-live-primary px-2 py-1.5", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(IoSearchOutline, { className: "h-4 w-4 text-live-muted" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              value: boardSearch,
+              onChange: (event) => setBoardSearch(event.target.value),
+              placeholder: "Search events",
+              className: "w-full bg-transparent text-xs text-live-primary outline-none placeholder:text-live-muted"
+            }
+          )
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-[minmax(180px,1fr)_80px_72px_72px_72px_72px]  items-center gap-1 border-b border-live bg-live-hover px-3 py-2 text-[11px] font-bold uppercase text-live-muted ", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Event" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center", children: "Time" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center", children: "W1" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center", children: "X" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center", children: "W2" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center", children: "More" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-0 flex-1 overflow-y-auto custom-scrollbar ", children: totalMatches === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex h-full items-center justify-center p-8 text-center text-sm text-live-muted", children: "No prematch events available for the current selection." }) : Object.entries(groupedMatches).map(([dateLabel, dateMatches]) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-b border-live/70 last:border-b-0", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sticky top-0 z-10 bg-live-primary shadow-sm", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            type: "button",
+            onClick: () => setOpenDates((prev) => ({ ...prev, [dateLabel]: !prev[dateLabel] })),
+            className: "w-full flex items-center  justify-between px-3 py-2 text-xs font-bold text-live-accent",
+            "aria-expanded": !!openDates[dateLabel],
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: dateLabel }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded bg-live-tertiary px-2 py-0.5 text-[10px] text-live-muted", children: dateMatches.length }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: ["transition-transform duration-200", openDates[dateLabel] ? "rotate-180" : "rotate-0"].join(" "), children: openDates[dateLabel] ? /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronUp, { className: "h-4 w-4 text-live-muted" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronDown, { className: "h-4 w-4 text-live-muted" }) })
+              ] })
+            ]
+          }
+        ) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            ref: (el) => groupRefs.current[dateLabel] = el,
+            style: {
+              maxHeight: openDates[dateLabel] ? (groupRefs.current[dateLabel]?.scrollHeight || 0) + "px" : "0px",
+              transition: "max-height 260ms ease",
+              overflow: "hidden"
+            },
+            children: dateMatches.map((event) => {
+              const teams = getMatchTeams(event);
+              const odds = extractBoardOdds(event);
+              const active = selectedMatch?.eventId && String(selectedMatch.eventId) === String(event.eventId);
+              const marketCount = normaliseMarketsForDisplay(event.markets).length;
+              const eventTitle = teams.team2 ? teams.team1 + " vs " + teams.team2 : teams.team1;
+              const oddsHighlight = event.oddsHighlight || {};
+              return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "button",
+                {
+                  type: "button",
+                  onClick: () => onMatchSelect({
+                    ...event,
+                    ...teams,
+                    odds,
+                    sportKey: event.sportKey
+                  }),
+                  className: [
+                    "grid w-full my-2 rounded-md grid-cols-[minmax(180px,1fr)_80px_72px_72px_72px_72px] items-center gap-1 border-t border-live/60 px-3 py-2 text-left transition-colors duration-150 active:scale-[0.998]",
+                    active ? "bg-live-odds/60 shadow-[inset_3px_0_0_#ffc400]" : "bg-live-secondary hover:bg-live-hover"
+                  ].join(" "),
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "truncate text-xs font-semibold text-live-primary", children: eventTitle }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-0.5 flex min-w-0 items-center gap-2 text-[10px] text-live-muted", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate", children: event.competitionName || event.sportKey || "League" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded bg-live-tertiary px-1.5 py-0.5 uppercase", children: event.status || "PRE_MATCH" })
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center text-xs text-live-muted", children: formatBoardTime(event.openDate || event.commenceTime) }),
+                    [
+                      { value: odds.w1, key: "w1" },
+                      { value: odds.x, key: "x" },
+                      { value: odds.w2, key: "w2" }
+                    ].map((odd) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "div",
+                      {
+                        className: [
+                          "mx-auto flex min-h-[30px] w-full max-w-[64px] items-center justify-center rounded px-2 text-xs font-bold transition-colors duration-150 cursor-pointer",
+                          oddsHighlight[odd.key] ? "odds-highlight text-live-primary" : "bg-live-hover text-live-accent"
+                        ].join(" "),
+                        children: odd.value
+                      },
+                      odd.key
+                    )),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center text-[11px] font-semibold text-live-muted", children: [
+                      "+",
+                      marketCount
+                    ] })
+                  ]
+                },
+                event.eventId
+              );
+            })
+          }
+        )
+      ] }, dateLabel)) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex h-full min-h-0 flex-col overflow-hidden rounded-md border border-live bg-live-secondary", children: selectedMatch ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative h-36 flex-shrink-0 overflow-hidden border-b border-live bg-live-tertiary", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "img",
+          {
+            src: "/assets/img1.jpg",
+            alt: selectedTitle,
+            className: "absolute inset-0 h-full w-full object-cover opacity-55",
+            onError: (event) => {
+              event.currentTarget.style.display = "none";
+            }
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-gradient-to-b from-black/45 via-black/35 to-live-secondary" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 flex h-full flex-col justify-between p-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between gap-2 text-[10px] text-live-muted", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate rounded bg-live-primary/70 px-2 py-1 font-semibold uppercase", children: selectedMatch.competitionName || selectedMatch.sportKey || "League" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded bg-live-accent px-2 py-1 font-bold text-live-dark", children: selectedMatch.status || "PRE_MATCH" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "rounded bg-black/35 px-3 py-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-bold text-live-primary", children: selectedTitle }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-1 flex items-center justify-between text-[11px] text-live-muted", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: formatBoardDate(selectedMatch.openDate || selectedMatch.commenceTime) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: formatBoardTime(selectedMatch.openDate || selectedMatch.commenceTime) })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between text-[11px] text-live-muted", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Selected event markets" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "rounded bg-live-primary/75 px-2 py-0.5 text-live-accent", children: [
+              selectedMarketCount,
+              " markets"
+            ] })
+          ] })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-0 flex-1 overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        MarketSection,
+        {
+          selectedMatch,
+          onRunnerSelect,
+          searchTerm: "",
+          onSearchChange: () => {
+          },
+          onSearchClear: () => {
           }
         }
-      }
+      ) })
+    ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex h-full items-center justify-center p-8 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full border border-live bg-live-tertiary text-live-accent", children: /* @__PURE__ */ jsxRuntimeExports.jsx(IoStarOutline, { className: "h-5 w-5" }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-bold text-live-primary", children: "Select an event" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 max-w-[260px] text-xs leading-5 text-live-muted", children: "Click any prematch row to view its markets and place bets from the right panel." })
+    ] }) }) })
+  ] }) });
+}
+function MarketItem({ market, isOpen, onToggle, highlightedOdds = {}, onRunnerSelect, selectedMatch }) {
+  const runners = market.runners || [];
+  const isOutright = market.marketType === "OUTRIGHT" || market.key === "outrights" || market.marketName?.toLowerCase?.().includes("winner");
+  const gridClass = isOutright || runners.length > 3 ? "grid-cols-1 md:grid-cols-2" : "grid-cols-3";
+  function getOdds(runner) {
+    if (!runner || runner.status === "SUSPENDED") return "SUSPENDED";
+    const price = runner.backPrices?.[0]?.price;
+    return typeof price === "number" ? price.toFixed(2) : "-";
+  }
+  function isSelectedRunner(runner) {
+    return Boolean(selectedMatch?.selectedRunner && runner && selectedMatch.selectedRunner.runnerId === runner.runnerId);
+  }
+  function handleRunnerSelect(runner) {
+    const selectedOdd = getOdds(runner);
+    if (!selectedMatch || selectedOdd === "SUSPENDED" || selectedOdd === "-") return;
+    onRunnerSelect({
+      ...selectedMatch,
+      selectedMarket: market,
+      selectedRunner: runner,
+      selectedOdd
+    });
+  }
+  useEffect$g(() => {
+    if (!selectedMatch?.selectedRunner || selectedMatch.selectedMarket?.marketId !== market.marketId) return;
+    const runner = runners.find((item) => item?.runnerId === selectedMatch.selectedRunner.runnerId);
+    const selectedOdd = getOdds(runner);
+    if (runner && selectedOdd !== selectedMatch.selectedOdd && selectedOdd !== "SUSPENDED" && selectedOdd !== "-") {
+      onRunnerSelect({ ...selectedMatch, selectedMarket: market, selectedRunner: runner, selectedOdd });
     }
-  }, [market.runners, selectedMatch, market, onRunnerSelect]);
-  const handleRunnerSelect = (runner) => {
-    if (onRunnerSelect && selectedMatch) {
-      const oddsValue = getOdds(runner);
-      if (oddsValue !== "SUSPENDED" && oddsValue !== "-") {
-        onRunnerSelect({
-          ...selectedMatch,
-          selectedMarket: market,
-          selectedRunner: runner,
-          selectedOdd: oddsValue
-        });
-      }
-    }
-  };
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "transition-colors overflow-hidden bg-gradient-to-r from-live-primary to-live-tertiary shadow rounded", children: [
+  }, [runners, selectedMatch, market, onRunnerSelect]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "overflow-hidden rounded-md border border-live bg-live-primary shadow-sm", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "button",
       {
         type: "button",
         onClick: onToggle,
-        className: "w-full flex items-center justify-between px-2 sm:px-3 py-2 text-xs sm:py-2.5 hover:bg-live-hover transition-colors",
+        className: "flex w-full items-center justify-between gap-3 px-3 py-2 text-xs transition-colors duration-150 hover:bg-live-hover active:scale-[0.99]",
         "aria-expanded": isOpen,
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent text-xs", children: "⭐" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary font-medium truncate text-xs", children: market.marketName })
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex min-w-0 items-center gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(IoStarOutline, { className: "h-3.5 w-3.5 shrink-0 text-live-accent" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate text-xs font-semibold uppercase tracking-wide text-live-primary", children: market.marketName })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 flex-shrink-0", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-dark text-[10px] px-2 py-1 bg-live-accent rounded", children: "🔗" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent text-xs", children: market.runners?.length || 0 }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent text-sm", children: "📊" }),
-            isOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronUp, { className: "w-4 h-4 text-live-primary" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronDown, { className: "w-4 h-4 text-live-primary" })
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex shrink-0 items-center gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded bg-live-tertiary px-1.5 py-0.5 text-[10px] text-live-muted", children: runners.length }),
+            isOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronUp, { className: "h-4 w-4 text-live-muted" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(IoChevronDown, { className: "h-4 w-4 text-live-muted" })
           ] })
         ]
       }
     ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "div",
-      {
-        style: {
-          maxHeight: isOpen ? `${measuredHeight}px` : "0px",
-          transition: "max-height 280ms ease, opacity 200ms ease",
-          overflow: "hidden",
-          backgroundColor: "var(--live-bg-tertiary)",
-          opacity: isOpen ? 1 : 0
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: ["grid transition-[grid-template-rows,opacity] duration-200 ease-out", isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0 pointer-events-none"].join(" "), children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-0 overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-t border-live bg-live-tertiary px-2 py-2", children: runners.length > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: ["grid", gridClass, "gap-1.5"].join(" "), children: runners.map((runner) => {
+      const oddsValue = getOdds(runner);
+      const highlighted = highlightedOdds[runner.runnerName] === oddsValue;
+      const selected = isSelectedRunner(runner);
+      const disabled = runner.status === "SUSPENDED" || oddsValue === "SUSPENDED" || oddsValue === "-";
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          type: "button",
+          className: [
+            "min-w-0 rounded bg-live-hover px-2 py-1.5 text-left transition-colors duration-150 active:scale-[0.98]",
+            disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:bg-live-odds",
+            selected ? "ring-1 ring-live-accent" : ""
+          ].join(" "),
+          disabled,
+          onClick: () => handleRunnerSelect(runner),
+          children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: ["flex", isOutright || runners.length > 3 ? "items-center justify-between gap-2" : "flex-col gap-1"].join(" "), children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: ["truncate text-[11px] font-medium text-live-primary", isOutright || runners.length > 3 ? "flex-1" : "w-full text-center"].join(" "), children: runner.runnerName }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: [
+              "inline-flex min-w-[48px] items-center justify-center rounded px-2 py-0.5 text-xs font-bold",
+              disabled ? "bg-live-danger text-white" : highlighted ? "odds-highlight text-live-primary" : "bg-live-odds text-live-accent"
+            ].join(" "), children: oddsValue })
+          ] })
         },
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: contentRef, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-2 sm:px-3 pb-2 pt-1 sm:pb-2.5 sm:pt-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "text-xs text-live-primary space-y-1 sm:space-y-1.5", children: market.runners && market.runners.length > 0 ? market.runners.map((runner, idx) => {
-          const oddsValue = getOdds(runner);
-          const isHighlighted = isOddsHighlighted(runner, oddsValue);
-          const isSelected = isSelectedRunner(runner);
-          return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "li",
-            {
-              className: `flex items-center justify-between py-1 sm:py-1.5 px-2 bg-live-hover rounded cursor-pointer hover:bg-live-accent hover:bg-opacity-20 transition-colors ${runner.status === "SUSPENDED" ? "opacity-50 cursor-not-allowed" : ""} ${isSelected ? "ring-2 ring-live-accent" : ""}`,
-              onClick: () => {
-                if (runner.status !== "SUSPENDED") {
-                  handleRunnerSelect(runner);
-                }
-              },
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary truncate text-xs", children: runner.runnerName }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded font-medium flex-shrink-0 ${runner.status === "SUSPENDED" ? "bg-live-danger text-white" : isHighlighted ? "odds-highlight shadow-[0_0_8px_var(--live-accent-primary)] scale-110" : "bg-live-tertiary text-live-primary"}`, children: oddsValue })
-              ]
-            },
-            `${market.marketId}-${runner.runnerId}`
-          );
-        }) : /* @__PURE__ */ jsxRuntimeExports.jsx("li", { className: "px-2 py-1 sm:py-1.5 text-live-secondary text-xs", children: "No runners available" }) }) }) })
-      }
-    )
+        market.marketId + "-" + runner.runnerId
+      );
+    }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded bg-live-hover px-3 py-3 text-center text-xs text-live-muted", children: "Markets currently unavailable" }) }) }) })
   ] });
 }
 function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "", onSearchChange, onSearchClear }) {
@@ -10954,12 +11726,14 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "", onSearc
   const [allMarketsExpanded, setAllMarketsExpanded] = useState$i(false);
   const [filteredMarkets, setFilteredMarkets] = useState$i([]);
   const [selectedMarketFilter, setSelectedMarketFilter] = useState$i("All");
-  const prevMarketsRef = useRef$7([]);
-  const intervalRef = useRef$7(null);
-  const highlightedOddsRef = useRef$7({});
-  const selectedRunnerRef = useRef$7(null);
-  const prevSelectedMatchRef = useRef$7(null);
-  const currentFetchControllerRef = useRef$7(null);
+  const [showEmptyState, setShowEmptyState] = useState$i(false);
+  const prevMarketsRef = useRef$8([]);
+  const intervalRef = useRef$8(null);
+  const [highlightedOdds, setHighlightedOdds] = useState$i({});
+  const oddsHighlightTimerRef = useRef$8(null);
+  const selectedRunnerRef = useRef$8(null);
+  const prevSelectedMatchRef = useRef$8(null);
+  const currentFetchControllerRef = useRef$8(null);
   useEffect$g(() => {
     if (selectedMatch && selectedMatch.selectedRunner) {
       selectedRunnerRef.current = {
@@ -10982,7 +11756,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "", onSearc
   useEffect$g(() => {
     let result = markets;
     if (selectedMarketFilter !== "All") {
-      result = result.filter((market) => market.marketName === selectedMarketFilter);
+      result = result.filter((market) => market.marketCategory === selectedMarketFilter);
     }
     if (searchTerm) {
       const term = searchTerm.toLowerCase().trim();
@@ -10998,6 +11772,7 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "", onSearc
     const isNewMatch = !prevSelectedMatchRef.current || selectedMatch && prevSelectedMatchRef.current.eventId !== selectedMatch.eventId;
     if (isNewMatch && selectedMatch) {
       setLoading(true);
+      setShowEmptyState(false);
       setMarkets([]);
       setFilteredMarkets([]);
       prevMarketsRef.current = [];
@@ -11019,96 +11794,51 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "", onSearc
       setLoading(false);
       return;
     }
-    const sportKey = selectedMatch.sportKey || selectedMatch.sport?.key || selectedMatch.sport?.name;
-    if (!sportKey) {
-      setMarkets([]);
-      setFilteredMarkets([]);
+    const localMarkets = normaliseMarketsForDisplay(selectedMatch.markets);
+    if (localMarkets.length > 0) {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
+      }
+      const prevMarkets = prevMarketsRef.current;
+      const newHighlightedOdds = {};
+      localMarkets.forEach((market, marketIndex) => {
+        const prevMarket = prevMarkets[marketIndex];
+        if (prevMarket && market.runners) {
+          market.runners.forEach((runner, runnerIndex) => {
+            const prevRunner = prevMarket.runners?.[runnerIndex];
+            if (prevRunner && runner.backPrices?.[0]?.price !== prevRunner.backPrices?.[0]?.price) {
+              newHighlightedOdds[runner.runnerName] = runner.backPrices?.[0]?.price?.toFixed(2) || "-";
+            }
+          });
+        }
+      });
+      if (Object.keys(newHighlightedOdds).length > 0) {
+        if (oddsHighlightTimerRef.current) {
+          clearTimeout(oddsHighlightTimerRef.current);
+        }
+        setHighlightedOdds(newHighlightedOdds);
+        oddsHighlightTimerRef.current = setTimeout(() => {
+          setHighlightedOdds({});
+        }, 700);
+      }
+      setMarkets(localMarkets);
+      prevMarketsRef.current = localMarkets;
+      if (isNewMatch) {
+        const initialExpanded = {};
+        localMarkets.forEach((market, index) => {
+          initialExpanded[market.marketId || index] = index < 8;
+        });
+        setExpandedById(initialExpanded);
+        setAllMarketsExpanded(false);
       }
       setLoading(false);
       return;
     }
-    const fetchMarkets = async () => {
-      try {
-        const controller = new AbortController();
-        currentFetchControllerRef.current = controller;
-        const sportId = SPORT_ID_BY_KEY[sportKey];
-        if (!sportId) {
-          setMarkets([]);
-          setFilteredMarkets([]);
-          setLoading(false);
-          return;
-        }
-        const marketsData = await fetchMarketsData(selectedMatch.eventId, sportId);
-        if (controller.signal.aborted) {
-          return;
-        }
-        const newMarkets = Array.isArray(marketsData) ? marketsData : [];
-        const prevMarkets = prevMarketsRef.current;
-        if (JSON.stringify(prevMarkets) !== JSON.stringify(newMarkets)) {
-          const newHighlightedOdds = {};
-          newMarkets.forEach((market, marketIndex) => {
-            const prevMarket = prevMarkets[marketIndex];
-            if (prevMarket && market.runners) {
-              market.runners.forEach((runner, runnerIndex) => {
-                const prevRunner = prevMarket.runners?.[runnerIndex];
-                if (prevRunner && runner.backPrices?.[0]?.price !== prevRunner.backPrices?.[0]?.price) {
-                  newHighlightedOdds[runner.runnerName] = runner.backPrices?.[0]?.price?.toFixed(2) || "-";
-                }
-              });
-            }
-          });
-          if (Object.keys(newHighlightedOdds).length > 0) {
-            highlightedOddsRef.current = newHighlightedOdds;
-            setTimeout(() => {
-              highlightedOddsRef.current = {};
-            }, 1e3);
-          }
-          setMarkets(newMarkets);
-          prevMarketsRef.current = newMarkets;
-          if (isNewMatch && newMarkets.length > 0) {
-            const initialExpanded = {};
-            newMarkets.forEach((market, index) => {
-              initialExpanded[market.marketId || index] = false;
-            });
-            setExpandedById(initialExpanded);
-            setAllMarketsExpanded(false);
-          }
-        }
-        setLoading(false);
-      } catch (error) {
-        if (error.name === "AbortError") {
-          return;
-        }
-        if (prevMarketsRef.current.length > 0) ;
-        setLoading(false);
-      }
-    };
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-    fetchMarkets();
-    try {
-      intervalRef.current = setInterval(() => {
-        try {
-          fetchMarkets();
-        } catch (error) {
-        }
-      }, 1e3);
-    } catch (error) {
-    }
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-      if (currentFetchControllerRef.current) {
-        currentFetchControllerRef.current.abort();
-      }
-    };
-  }, [selectedMatch?.eventId, selectedMatch?.sportKey, selectedMatch]);
+    setMarkets([]);
+    setFilteredMarkets([]);
+    setLoading(false);
+  }, [selectedMatch]);
   const toggleMarket = (marketId) => {
     setExpandedById((prev) => ({
       ...prev,
@@ -11137,108 +11867,113 @@ function MarketSection({ selectedMatch, onRunnerSelect, searchTerm = "", onSearc
       rightColumn.push({ ...market, id: marketId });
     }
   });
-  const marketNameCounts = markets.reduce((acc, market) => {
-    const name = market.marketName;
-    if (name) {
-      acc[name] = (acc[name] || 0) + 1;
+  const marketTabs = MARKET_CATEGORY_TABS.map((tab) => ({
+    ...tab,
+    count: tab.id === "All" ? markets.length : markets.filter((market) => market.marketCategory === tab.id).length
+  })).filter((tab) => tab.id === "All" || tab.count > 0);
+  useEffect$g(() => {
+    let timer;
+    if (filteredMarkets.length === 0 && !loading) {
+      timer = setTimeout(() => {
+        if (filteredMarkets.length === 0 && !loading) {
+          setShowEmptyState(true);
+        }
+      }, 300);
+    } else {
+      setShowEmptyState(false);
     }
-    return acc;
-  }, {});
-  const marketNames = Object.entries(marketNameCounts).filter(([name, count]) => count > 2).map(([name, count]) => name);
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [filteredMarkets.length, loading]);
+  let content;
   if (loading) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-primary p-4 flex items-center justify-center h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center animate-pulse-scale", children: [
+    content = /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-primary p-4 flex items-center justify-center h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center animate-pulse-scale", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-12 h-12", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute w-full h-full rounded-full border-4 border-live-accent border-t-transparent animate-spin" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute w-8 h-8 top-2 left-2 rounded-full border-4 border-live-primary border-b-transparent animate-spin-reverse" })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-4 text-live-primary text-sm font-medium", children: "Loading markets..." })
     ] }) });
-  }
-  if (filteredMarkets.length === 0) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-primary p-4 flex items-center justify-center h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-lg font-bold mb-2", children: "No Markets Available" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm text-live-muted", children: "There are currently no markets for this event" })
+  } else if (showEmptyState) {
+    content = /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-primary p-4 flex items-center justify-center h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-lg font-bold mb-2", children: "Markets currently unavailable" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm text-live-muted", children: "Odds will appear here as soon as this event has active markets." })
     ] }) });
+  } else {
+    content = /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-2 pb-2 pt-3 cursor-pointer", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          onClick: toggleAllMarkets,
+          className: "w-full text-left px-3 py-2 text-xs bg-live-primary hover:bg-live-hover cursor-pointer rounded transition-colors duration-150 flex items-center justify-between border border-live",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary font-medium", children: "All Markets" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-live-accent text-xs", children: [
+              filteredMarkets.length,
+              " markets"
+            ] })
+          ]
+        }
+      ) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-2 pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        SleekNavbar,
+        {
+          onSearchChange,
+          searchValue: searchTerm,
+          onSearchClear,
+          marketTabs,
+          onMarketFilter: handleMarketFilter
+        }
+      ) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-grow overflow-y-auto px-2 pb-2 custom-scrollbar", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 items-start gap-2", children: filteredMarkets.map((market, idx) => {
+        const marketId = market.marketId || idx;
+        return /* @__PURE__ */ jsxRuntimeExports.jsx(
+          MarketItem,
+          {
+            market,
+            isOpen: expandedById[marketId] ?? true,
+            onToggle: () => toggleMarket(marketId),
+            highlightedOdds,
+            onRunnerSelect,
+            selectedMatch
+          },
+          marketId
+        );
+      }) }) })
+    ] });
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col h-full", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-2 pb-2 pt-3 cursor-pointer", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "button",
-      {
-        onClick: toggleAllMarkets,
-        className: "w-full text-left px-3 py-2 text-xs bg-live-primary hover:bg-live-hover cursor-pointer rounded transition-colors flex items-center justify-between shadow-[0_2px_12px_var(--live-accent-primary)]",
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary font-medium", children: "All Markets" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-live-accent text-xs", children: [
-            filteredMarkets.length,
-            " markets"
-          ] })
-        ]
-      }
-    ) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-2 pb-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-      SleekNavbar,
-      {
-        onSearchChange,
-        searchValue: searchTerm,
-        onSearchClear,
-        marketNames,
-        onMarketFilter: handleMarketFilter
-      }
-    ) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-grow overflow-y-auto px-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row gap-2 sm:gap-3 h-full", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 space-y-2", children: leftColumn.map((market) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-        MarketItem,
-        {
-          market,
-          isOpen: expandedById[market.id] ?? false,
-          onToggle: () => toggleMarket(market.id),
-          highlightedOdds: highlightedOddsRef.current,
-          onRunnerSelect,
-          selectedMatch
-        },
-        market.id
-      )) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 space-y-2", children: rightColumn.map((market) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-        MarketItem,
-        {
-          market,
-          isOpen: expandedById[market.id] ?? false,
-          onToggle: () => toggleMarket(market.id),
-          highlightedOdds: highlightedOddsRef.current,
-          onRunnerSelect,
-          selectedMatch
-        },
-        market.id
-      )) })
-    ] }) })
-  ] });
+  return content;
 }
-function SleekNavbar({ onSearchChange, searchValue, onSearchClear, marketNames = [], onMarketFilter }) {
+function SleekNavbar({ onSearchChange, searchValue, onSearchClear, marketTabs = [], onMarketFilter }) {
   const [isSearchOpen, setIsSearchOpen] = useState$i(false);
   const [activeTab, setActiveTab] = useState$i("All");
+  useEffect$g(() => {
+    if (!marketTabs.some((tab) => tab.id === activeTab)) {
+      setActiveTab("All");
+      onMarketFilter?.("All");
+    }
+  }, [marketTabs, activeTab, onMarketFilter]);
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
     if (isSearchOpen) {
       onSearchClear();
     }
   };
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-    if (onMarketFilter) {
-      onMarketFilter(tab);
-    }
+  const handleTabClick = (tabId) => {
+    setActiveTab(tabId);
+    onMarketFilter?.(tabId);
   };
-  const uniqueMarketNames = [...new Set(marketNames)];
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-live-tertiary rounded-md px-2 sm:px-3 py-2 flex items-center gap-2", children: isSearchOpen ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-live-tertiary rounded-md px-2 py-1.5 flex items-center gap-2 border border-live", children: isSearchOpen ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       "button",
       {
         onClick: toggleSearch,
-        className: "text-live-primary hover:text-live-accent flex-shrink-0 mr-3",
+        className: "text-live-primary hover:text-live-accent flex-shrink-0 mr-2 transition-colors duration-150",
         children: /* @__PURE__ */ jsxRuntimeExports.jsx(IoCloseOutline, { size: 18 })
       }
     ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-6 w-px bg-live-primary mx-2" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-6 w-px bg-live-primary/60 mx-1" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       "input",
       {
@@ -11250,41 +11985,34 @@ function SleekNavbar({ onSearchChange, searchValue, onSearchClear, marketNames =
         autoFocus: true
       }
     )
-  ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center w-full overflow-x-auto", children: [
+  ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center w-full min-w-0", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       "button",
       {
         onClick: toggleSearch,
-        className: "text-live-primary hover:text-live-accent flex-shrink-0 mr-3",
+        className: "text-live-primary hover:text-live-accent flex-shrink-0 mr-2 transition-colors duration-150",
         children: /* @__PURE__ */ jsxRuntimeExports.jsx(IoSearchOutline, { size: 18 })
       }
     ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-6 w-px bg-live-primary mx-2" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex space-x-3 sm:space-x-6 min-w-max", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "button",
-        {
-          className: `text-xs sm:text-sm font-medium relative py-1 px-1 whitespace-nowrap cursor-pointer ${activeTab === "All" ? "text-live-accent" : "text-live-primary hover:text-live-accent"}`,
-          onClick: () => handleTabClick("All"),
-          children: [
-            "All",
-            activeTab === "All" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-0 left-0 right-0 h-0.5 bg-live-accent" })
-          ]
-        }
-      ),
-      uniqueMarketNames.map((marketName, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "button",
-        {
-          className: `text-xs sm:text-sm font-medium relative py-1 px-1 whitespace-nowrap cursor-pointer ${activeTab === marketName ? "text-live-accent" : "text-live-primary hover:text-live-accent"}`,
-          onClick: () => handleTabClick(marketName),
-          children: [
-            marketName,
-            activeTab === marketName && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-0 left-0 right-0 h-0.5 bg-live-accent" })
-          ]
-        },
-        index
-      ))
-    ] })
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-6 w-px bg-live-primary/60 mx-1" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-1 overflow-x-auto custom-scrollbar min-w-0", children: marketTabs.map((tab) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        className: [
+          "relative rounded px-2.5 py-1 text-xs font-semibold whitespace-nowrap cursor-pointer transition-colors duration-150",
+          activeTab === tab.id ? "bg-live-accent text-live-dark" : "text-live-muted hover:text-live-primary hover:bg-live-hover"
+        ].join(" "),
+        onClick: () => handleTabClick(tab.id),
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: tab.label }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: [
+            "ml-1 text-[10px]",
+            activeTab === tab.id ? "text-live-dark" : "text-live-accent"
+          ].join(" "), children: tab.count })
+        ]
+      },
+      tab.id
+    )) })
   ] }) });
 }
 
@@ -11319,6 +12047,11 @@ const notifyPromise = (promise, options) => {
   if (!notifier) throw new Error("NotificationProvider is not initialized");
   return notifier.notifyPromise(promise, options);
 };
+
+/**
+ * Convenience functions for non-react code
+ */
+const notifySuccess = (message, title, duration) => notifier?.success(message, title, duration);
 const notifyError$1 = (message, title, duration) => notifier?.error(message, title, duration);
 const notifyInfo = (message, title, duration) => notifier?.info(message, title, duration);
 
@@ -15277,6 +16010,39 @@ m(T.createElement);u$1`
   }
 `;var Vt=c;
 
+function isApiSuccess(body) {
+  return body?.success === true;
+}
+
+function getApiMessage(body, fallback = "Success") {
+  return body?.message || body?.meta?.message || fallback;
+}
+
+function getApiErrorMessage(error, fallback = "Something went wrong") {
+  const body = error?.response?.data;
+  return body?.message || body?.meta?.message || error?.message || fallback;
+}
+
+function getApiStatusCode(bodyOrError) {
+  const body = bodyOrError?.response?.data ?? bodyOrError;
+  return body?.meta?.statusCode ?? bodyOrError?.response?.status;
+}
+
+function unwrapApiResponse(response) {
+  const body = response?.data;
+
+  if (!isApiSuccess(body)) {
+    throw new Error(getApiMessage(body, "Something went wrong"));
+  }
+
+  return {
+    data: body.data,
+    message: body.message,
+    meta: body.meta ?? {},
+    raw: body,
+  };
+}
+
 const getLocalStorageItem = (key) => {
   const item = localStorage.getItem(key);
   if (item === null) {
@@ -15367,10 +16133,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => {
     console.log("API Response:", response.status, response.data);
-    if (response?.data?.meta?.status === 401) {
-      handleUnauthorized(response.data.meta.message);
+    if (getApiStatusCode(response.data) === 401 && getLocalStorageItem("token")) {
+      handleUnauthorized(response.data.message || "Please login again.");
       return Promise.reject(
-        new Error(response.data.meta.message || "Unauthorized")
+        new Error(response.data.message || "Unauthorized")
       );
     }
     return response;
@@ -15381,9 +16147,12 @@ api.interceptors.response.use(
       console.error("Request timeout");
       return Promise.reject(new Error("Request timeout. Server is taking too long to respond. Please try again."));
     }
-    if (error?.response?.status === 401 || error?.response?.data?.meta?.status === 401) {
+    const requestUrl = error?.config?.url || "";
+    const isAuthRoute = requestUrl.includes("/users/login") || requestUrl.includes("/users/signup");
+    if ((error?.response?.status === 401 || getApiStatusCode(error) === 401) && getLocalStorageItem("token") && !isAuthRoute) {
       handleUnauthorized("Please login again.");
     }
+    error.message = getApiErrorMessage(error, error.message);
     return Promise.reject(error);
   }
 );
@@ -15405,19 +16174,16 @@ const UserBetsSection = ({ userId, eventId }) => {
     }
   }, [dispatch, userId, eventId]);
   if (loading) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-center h-20 sm:h-24", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-b-2 border-live-accent" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "ml-2 text-xs sm:text-live-primary", children: "Loading bets..." })
-    ] });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex min-h-[52px] items-center justify-center rounded border border-live-accent bg-live-tertiary px-3 text-xs text-live-muted", children: "Checking bets for this event..." });
   }
   if (error) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-live-tertiary p-2 sm:p-3 rounded border border-live-accent", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-live-error text-center text-xs sm:text-sm", children: [
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-[52px] bg-live-tertiary p-2 sm:p-3 rounded border border-live-accent", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-live-error text-center text-xs sm:text-sm", children: [
       "Error loading bets: ",
       error
     ] }) });
   }
   if (!bets || bets.length === 0) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-live-tertiary p-2 sm:p-3 rounded border border-live-accent", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-muted text-center text-xs sm:text-sm", children: "No bets placed for this event" }) });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-[52px] bg-live-tertiary p-2 sm:p-3 rounded border border-live-accent", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-muted text-center text-xs sm:text-sm", children: "No bets placed for this event" }) });
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-live-tertiary rounded border border-live-accent", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-b border-live-accent px-2 sm:px-3 py-1.5 sm:py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xs sm:text-sm font-bold text-live-accent", children: "My Bets" }) }),
@@ -15429,7 +16195,7 @@ const UserBetsSection = ({ userId, eventId }) => {
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-end", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs font-bold text-live-accent", children: [
           bet.stake,
-          " €"
+          " â‚¬"
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[10px] text-live-muted", children: [
           "Odds: ",
@@ -15440,10 +16206,10 @@ const UserBetsSection = ({ userId, eventId }) => {
   ] });
 };
 
-const {useState: useState$h,useEffect: useEffect$e,useRef: useRef$6} = await importShared('react');
+const {useState: useState$h,useEffect: useEffect$e,useRef: useRef$7} = await importShared('react');
 const formatDateTime$1 = (timestamp) => {
   if (!timestamp) return "N/A";
-  const date = new Date(parseInt(timestamp));
+  const date = typeof timestamp === "number" ? new Date(timestamp) : /^\d+$/.test(String(timestamp)) ? new Date(Number(timestamp)) : new Date(timestamp);
   if (isNaN(date.getTime())) return "Invalid Date";
   const options = {
     year: "numeric",
@@ -15564,8 +16330,6 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
   const { isAuthenticated, userData } = useSelector((state) => state.Login);
   const { loading: exposureLoading, error: exposureError } = useSelector((state) => state.UpdateUserBalanceExposure);
   const { userData: profileData, loading } = useSelector((state) => state.GetUserData);
-  const [socketExposure, setSocketExposure] = useState$h(0);
-  const [isSocketConnected, setIsSocketConnected] = useState$h(false);
   const [selectedRunnerInfo, setSelectedRunnerInfo] = useState$h(null);
   const isMarketRunnerSelection = selectedGame?.selectedMarket && selectedGame?.selectedRunner;
   const matchIsSuspended = isMatchSuspended(selectedGame);
@@ -15579,31 +16343,6 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
     return "Match Odds";
   };
   const marketName = getMarketName();
-  useEffect$e(() => {
-    if (isAuthenticated && userData?._id) {
-      const newSocket = new WebSocket("ws://localhost:3001");
-      newSocket.onopen = () => {
-        setIsSocketConnected(true);
-      };
-      newSocket.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        if (data.type === "exposureUpdate" && data.userId === userData._id) {
-          setSocketExposure(parseFloat(data.exposure) || 0);
-        }
-      };
-      newSocket.onclose = () => {
-        setIsSocketConnected(false);
-      };
-      newSocket.onerror = (error) => {
-        setIsSocketConnected(false);
-      };
-      return () => {
-        if (newSocket) {
-          newSocket.close();
-        }
-      };
-    }
-  }, [isAuthenticated, userData?._id]);
   const [isOpen, setIsOpen] = useState$h(false);
   const [betAmounts, setBetAmounts] = useState$h([500, 1e3, 5e3]);
   const [editableIndex, setEditableIndex] = useState$h(null);
@@ -15614,8 +16353,8 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
   const [selectedOdd, setSelectedOdd] = useState$h(null);
   const [previousOdds, setPreviousOdds] = useState$h({ w1: null, x: null, w2: null });
   const [highlightedOdds, setHighlightedOdds] = useState$h({ w1: false, x: false, w2: false });
-  const editInputRef = useRef$6(null);
-  const containerRef = useRef$6(null);
+  const editInputRef = useRef$7(null);
+  const containerRef = useRef$7(null);
   useEffect$e(() => {
     if (userData) {
       calculateActiveExposure(userData.exposures);
@@ -15747,12 +16486,6 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
           marketName: marketName2,
           runners: market?.runners?.map((runner) => runner.runnerName) || []
         }));
-      }
-      if (userData?._id && selectedGame?.eventId) {
-        dispatch(skipNextUserBetsFetch());
-        setTimeout(() => {
-          dispatch(fetchUserBets(userData._id, selectedGame.eventId));
-        }, 1e3);
       }
     } catch (err) {
       notifyError$1(err.message || "Failed to place bet");
@@ -15949,7 +16682,7 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
               )
             ] })
           ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[10px] text-live-secondary mb-1", children: isMarketRunnerSelection ? `${selectedGame?.team1} - ${selectedGame?.team2}` : `${selectedGame?.team1} - ${selectedGame?.team2}` }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[10px] text-live-secondary mb-1", children: isMarketRunnerSelection ? `${selectedGame?.eventType === "OUTRIGHT" ? selectedGame?.eventName : `${selectedGame?.team1} - ${selectedGame?.team2}`}` : `${selectedGame?.eventType === "OUTRIGHT" ? selectedGame?.eventName : `${selectedGame?.team1} - ${selectedGame?.team2}`}` }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[10px] text-live-secondary", children: formatDateTime$1(selectedGame?.openDate) })
         ] }),
         !matchIsSuspended && (selectedTeam || isMarketRunnerSelection) && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
@@ -16137,7 +16870,7 @@ function RightEventInfoSection({ selectedGame, onLogin, onRegister, isCompact = 
             )
           ] })
         ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-live-secondary mb-1", children: isMarketRunnerSelection ? `${selectedGame?.team1} - ${selectedGame?.team2}` : `${selectedGame?.team1} - ${selectedGame?.team2}` }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-live-secondary mb-1", children: isMarketRunnerSelection ? `${selectedGame?.eventType === "OUTRIGHT" ? selectedGame?.eventName : `${selectedGame?.team1} - ${selectedGame?.team2}`}` : `${selectedGame?.eventType === "OUTRIGHT" ? selectedGame?.eventName : `${selectedGame?.team1} - ${selectedGame?.team2}`}` }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-live-secondary", children: formatDateTime$1(selectedGame?.openDate) })
       ] }),
       !matchIsSuspended && (selectedTeam || isMarketRunnerSelection) && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
@@ -20868,6 +21601,11 @@ const loginFailure = (error) => ({
   error,
 });
 
+const loginVerificationPending = (payload) => ({
+  type: LOGIN_VERIFICATION_PENDING,
+  payload,
+});
+
 const verifyEmail = (payload, callback) => ({
   type: VERIFY_EMAIL,
   payload,
@@ -20884,7 +21622,77 @@ const verifyEmailFailure = (error) => ({
   payload: error,
 });
 
-const {useEffect: useEffect$d,useState: useState$f} = await importShared('react');
+const React$L = await importShared('react');
+const OTPInput = React$L.forwardRef(({
+  value,
+  onChange,
+  length = 6,
+  disabled = false,
+  className,
+  ...props
+}, ref) => {
+  const inputRefs = React$L.useRef([]);
+  const handleChange = (elementValue, index) => {
+    if (isNaN(elementValue)) return;
+    const newOtp = value ? value.split("") : Array(length).fill("");
+    newOtp[index] = elementValue;
+    onChange(newOtp.join(""));
+    if (elementValue && index < length - 1) {
+      inputRefs.current[index + 1].focus();
+    }
+  };
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace") {
+      if (!value[index] && index > 0) {
+        inputRefs.current[index - 1].focus();
+      } else if (value[index]) {
+        const newOtp = value.split("");
+        newOtp[index] = "";
+        onChange(newOtp.join(""));
+      }
+    } else if (e.key === "ArrowLeft" && index > 0) {
+      inputRefs.current[index - 1].focus();
+    } else if (e.key === "ArrowRight" && index < length - 1) {
+      inputRefs.current[index + 1].focus();
+    }
+  };
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text/plain").slice(0, length);
+    if (/^\d+$/.test(pastedData)) {
+      onChange(pastedData.padEnd(length, "").slice(0, length));
+      const nextIndex = Math.min(pastedData.length, length - 1);
+      inputRefs.current[nextIndex].focus();
+    }
+  };
+  const otpValues = value ? value.split("") : Array(length).fill("");
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: cn$1("flex gap-3 justify-center", className), children: Array.from({ length }, (_, index) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "input",
+    {
+      ref: (el) => inputRefs.current[index] = el,
+      type: "text",
+      inputMode: "numeric",
+      pattern: "[0-9]*",
+      maxLength: "1",
+      value: otpValues[index] || "",
+      onChange: (e) => handleChange(e.target.value, index),
+      onKeyDown: (e) => handleKeyDown(e, index),
+      onPaste: handlePaste,
+      disabled,
+      className: cn$1(
+        "w-12 h-12 text-center text-lg font-bold rounded-md border border-gray-600 bg-[#404040] text-white",
+        "focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500",
+        "disabled:opacity-50 disabled:cursor-not-allowed",
+        value && value[index] ? "border-yellow-500" : ""
+      ),
+      ...props
+    },
+    index
+  )) });
+});
+OTPInput.displayName = "OTPInput";
+
+const {useEffect: useEffect$d,useState: useState$f,useRef: useRef$6} = await importShared('react');
 function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
   const {
     register,
@@ -20901,8 +21709,21 @@ function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
     }
   });
   const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.Login);
+  const verifyEmailState = useSelector((state) => state?.VerifyEmail);
   const emailOrUsername = watch("emailOrUsername");
   watch("password");
+  const [forgotPasswordStep, setForgotPasswordStep] = useState$f("login");
+  const [forgotEmail, setForgotEmail] = useState$f("");
+  const [otpCode, setOtpCode] = useState$f("");
+  const [newPassword, setNewPassword] = useState$f("");
+  const [confirmPassword, setConfirmPassword] = useState$f("");
+  const [isOtpInputDisabled, setIsOtpInputDisabled] = useState$f(true);
+  const [isTimerOn, setIsTimerOn] = useState$f(false);
+  const [timeLeft, setTimeLeft] = useState$f(0);
+  const [isLoading, setIsLoading] = useState$f(false);
+  const [verificationStatus, setVerificationStatus] = useState$f("");
+  const timerRef = useRef$6(null);
   useEffect$d(() => {
     if (isOpen) {
       reset({
@@ -20912,34 +21733,154 @@ function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
       });
     }
   }, [isOpen, reset]);
+  useEffect$d(() => {
+    if (isAuthenticated && isOpen) {
+      onClose();
+    }
+  }, [isAuthenticated, isOpen, onClose]);
+  useEffect$d(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    if (isTimerOn) {
+      timerRef.current = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            if (timerRef.current) {
+              clearInterval(timerRef.current);
+              timerRef.current = null;
+            }
+            setIsTimerOn(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1e3);
+    }
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [isTimerOn]);
+  useEffect$d(() => {
+    if (forgotPasswordStep === "otp" && verifyEmailState?.success && !verifyEmailState?.loading) {
+      if (!verifyEmailState?.data?.hasOwnProperty("otp")) {
+        setIsOtpInputDisabled(false);
+        setIsTimerOn(true);
+        setTimeLeft(120);
+        notifySuccess("OTP sent to your email");
+      }
+    }
+  }, [verifyEmailState, forgotPasswordStep]);
   const handleClose = () => {
     reset({
       emailOrUsername: "",
       password: "",
       rememberMe: false
     });
+    setForgotPasswordStep("login");
+    setForgotEmail("");
+    setOtpCode("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setIsOtpInputDisabled(true);
+    setIsTimerOn(false);
+    setTimeLeft(0);
+    setIsLoading(false);
+    setVerificationStatus("");
     onClose();
   };
   const onSubmit = (data) => {
-    dispatch(
-      login(data, (response) => {
-        onClose();
-      })
-    );
+    dispatch(login(data));
   };
   const handleForgotPassword = () => {
     if (!emailOrUsername) {
       notifyError$1("Please enter email");
       return;
     }
-    console.log("emailOrUsername", emailOrUsername);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailOrUsername)) {
+      notifyError$1("Please enter a valid email address");
+      return;
+    }
+    setForgotEmail(emailOrUsername);
+    setForgotPasswordStep("otp");
+    setOtpCode("");
+    setIsOtpInputDisabled(true);
     dispatch(
       verifyEmail({
         payload: { email: emailOrUsername },
         route: "FP"
-        // Forget Password route
       })
     );
+  };
+  const handleResendOTP = () => {
+    if (!forgotEmail) return;
+    setOtpCode("");
+    setIsOtpInputDisabled(true);
+    dispatch(
+      verifyEmail({
+        payload: { email: forgotEmail },
+        route: "FP"
+      })
+    );
+  };
+  const handleVerifyOTP = () => {
+    if (!otpCode || otpCode.length !== 6) {
+      notifyError$1("Please enter a valid 6-digit OTP");
+      return;
+    }
+    setIsLoading(true);
+    setVerificationStatus("Verifying");
+    dispatch(
+      verifyEmail({
+        payload: { email: forgotEmail, otp: otpCode },
+        route: "FP"
+      }, (response) => {
+        setIsLoading(false);
+        setVerificationStatus("");
+        if (response?.code === 200) {
+          setForgotPasswordStep("newPassword");
+          notifySuccess("OTP verified successfully");
+        }
+      })
+    );
+  };
+  const handleResetPassword = () => {
+    if (!newPassword || newPassword.length < 6) {
+      notifyError$1("Password must be at least 6 characters");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      notifyError$1("Passwords do not match");
+      return;
+    }
+    setIsLoading(true);
+    setVerificationStatus("Resetting password");
+    setTimeout(() => {
+      setIsLoading(false);
+      setVerificationStatus("");
+      notifySuccess("Password reset successfully");
+      handleClose();
+    }, 1e3);
+  };
+  const handleBackToLogin = () => {
+    setForgotPasswordStep("login");
+    setForgotEmail("");
+    setOtpCode("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setIsOtpInputDisabled(true);
+    setIsTimerOn(false);
+    setTimeLeft(0);
+  };
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s < 10 ? "0" + s : s}`;
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open: isOpen, onOpenChange: handleClose, children: /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContent, { className: "max-w-md w-full mx-auto bg-[#2a2a2a] text-white p-0 max-h-[95vh] overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(DialogHeader, { className: "flex flex-row items-center justify-between p-4 sm:p-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
@@ -20949,108 +21890,222 @@ function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
     /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { className: "sr-only", children: "Login to SportsBook" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(DialogDescription, { className: "sr-only", children: "Sign in to your SportsBook account to access your betting features and account information." }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 sm:px-6 pb-6 overflow-y-auto", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-400 text-sm mb-2", children: "Already have an account?" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-xl sm:text-2xl font-bold", children: "Sign in, we are waiting for you" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit(onSubmit), className: "space-y-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Input,
-          {
-            type: "text",
-            placeholder: "Email / Username",
-            error: errors.emailOrUsername?.message,
-            ...register("emailOrUsername", {
-              required: "Email or username is required"
-            })
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Input,
-          {
-            type: "password",
-            placeholder: "Password",
-            error: errors.password?.message,
-            ...register("password", {
-              required: "Password is required",
-              minLength: { value: 6, message: "Password must be at least 6 characters" }
-            })
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between py-2", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2", children: [
+      forgotPasswordStep === "login" && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-400 text-sm mb-2", children: "Already have an account?" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-xl sm:text-2xl font-bold", children: "Sign in, we are waiting for you" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit(onSubmit), className: "space-y-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Input,
+            {
+              type: "text",
+              placeholder: "Email / Username",
+              error: errors.emailOrUsername?.message,
+              ...register("emailOrUsername", {
+                required: "Email or username is required"
+              })
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Input,
+            {
+              type: "password",
+              placeholder: "Password",
+              error: errors.password?.message,
+              ...register("password", {
+                required: "Password is required",
+                minLength: { value: 6, message: "Password must be at least 6 characters" }
+              })
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between py-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Checkbox,
+                {
+                  id: "remember",
+                  className: "border-gray-400 data-[state=checked]:bg-yellow-500 data-[state=checked]:border-yellow-500",
+                  ...register("rememberMe")
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { htmlFor: "remember", className: "text-sm text-gray-300 cursor-pointer", children: "Remember me" })
+            ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
-              Checkbox,
+              "button",
               {
-                id: "remember",
-                className: "border-gray-400 data-[state=checked]:bg-yellow-500 data-[state=checked]:border-yellow-500",
-                ...register("rememberMe")
+                type: "button",
+                onClick: handleForgotPassword,
+                className: "text-sm text-gray-400 hover:text-yellow-500 cursor-pointer underline",
+                children: "Forgot Password?"
               }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { htmlFor: "remember", className: "text-sm text-gray-300 cursor-pointer", children: "Remember me" })
+            )
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "pt-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Button$1,
             {
-              type: "button",
-              onClick: handleForgotPassword,
-              className: "text-sm text-gray-400 hover:text-yellow-500 cursor-pointer underline",
-              children: "Forgot Password?"
+              type: "submit",
+              className: "w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-12 text-base",
+              children: "SIGN IN"
             }
-          )
+          ) })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "pt-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Button$1,
-          {
-            type: "submit",
-            className: "w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-12 text-base",
-            children: "SIGN IN"
-          }
-        ) })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 p-4 bg-[#333333] rounded text-center", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-gray-300 leading-relaxed", children: [
-          "Safer Gambling message. Set limits on your gambling. For support, contact the National Gambling Helpline on ",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-white font-medium", children: "0808 8020 133" })
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 p-4 bg-[#333333] rounded text-center", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-gray-300 leading-relaxed", children: [
+            "Safer Gambling message. Set limits on your gambling. For support, contact the National Gambling Helpline on ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-white font-medium", children: "0808 8020 133" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-gray-400 text-xs", children: [
+            "Have no account?",
+            " ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => {
+                  handleClose();
+                  onSwitchToRegister();
+                },
+                className: "text-yellow-500 hover:text-yellow-400 underline",
+                children: "Join us"
+              }
+            )
+          ] }) })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-gray-400 text-xs", children: [
-          "Have no account?",
-          " ",
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              type: "button",
-              onClick: () => {
-                handleClose();
-                onSwitchToRegister();
-              },
-              className: "text-yellow-500 hover:text-yellow-400 underline",
-              children: "Join us"
-            }
-          )
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 flex items-center justify-center gap-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-xs text-gray-500", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "GAMBLING" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "COMMISSION" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-gray-500", children: "GambleAware" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-gray-600 px-2 py-1 rounded text-xs text-white", children: "18+" })
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Button$1, { variant: "ghost", className: "text-gray-400 hover:text-white text-sm hover:bg-[#404040]", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(User, { className: "w-4 h-4 mr-2" }),
+          "Contact support"
         ] }) })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 flex items-center justify-center gap-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-xs text-gray-500", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "GAMBLING" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "COMMISSION" })
+      forgotPasswordStep === "otp" && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: handleBackToLogin,
+              className: "text-sm text-gray-400 hover:text-yellow-500 mb-4 flex items-center gap-1",
+              children: "← Back to Login"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-xl sm:text-2xl font-bold mb-2", children: "Verify OTP" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-gray-400 text-sm", children: [
+            "We've sent a verification code to ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-yellow-500", children: forgotEmail })
+          ] })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-gray-500", children: "GambleAware" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-gray-600 px-2 py-1 rounded text-xs text-white", children: "18+" })
-      ] }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-6 pt-4 border-t border-gray-600 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        Button$1,
-        {
-          variant: "ghost",
-          className: "text-gray-400 hover:text-white text-sm font-medium hover:bg-[#404040]",
-          onClick: handleForgotPassword,
-          children: "FORGOT YOUR PASSWORD?"
-        }
-      ) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Button$1, { variant: "ghost", className: "text-gray-400 hover:text-white text-sm hover:bg-[#404040]", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(User, { className: "w-4 h-4 mr-2" }),
-        "Contact support"
-      ] }) })
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-center mb-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 bg-[#404040] rounded-full flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(User, { className: "w-8 h-8 text-yellow-500" }) }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm font-medium text-gray-300 mb-2 text-center", children: "Verification Code" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-center mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              OTPInput,
+              {
+                value: otpCode,
+                onChange: setOtpCode,
+                disabled: isOtpInputDisabled,
+                length: 6
+              }
+            ) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Button$1,
+            {
+              type: "button",
+              onClick: handleVerifyOTP,
+              disabled: isLoading || otpCode.length !== 6 || isOtpInputDisabled,
+              className: "w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-12 text-base disabled:opacity-50",
+              children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { className: "w-4 h-4 animate-spin" }),
+                verificationStatus || "Verifying..."
+              ] }) : verificationStatus || "Verify OTP"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center", children: isTimerOn ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-sm text-gray-400", children: [
+            "Didn't receive the code?",
+            " ",
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                type: "button",
+                disabled: isTimerOn,
+                className: "text-yellow-500 font-medium disabled:opacity-50",
+                children: [
+                  "Resend in ",
+                  formatTime(timeLeft)
+                ]
+              }
+            )
+          ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: handleResendOTP,
+              className: "text-sm text-yellow-500 hover:text-yellow-400 font-medium",
+              children: "Resend OTP"
+            }
+          ) })
+        ] })
+      ] }),
+      forgotPasswordStep === "newPassword" && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: handleBackToLogin,
+              className: "text-sm text-gray-400 hover:text-yellow-500 mb-4 flex items-center gap-1",
+              children: "← Back to Login"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-xl sm:text-2xl font-bold mb-2", children: "Reset Password" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-gray-400 text-sm", children: [
+            "Enter your new password for ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-yellow-500", children: forgotEmail })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Input,
+            {
+              type: "password",
+              placeholder: "New Password",
+              value: newPassword,
+              onChange: (e) => setNewPassword(e.target.value)
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Input,
+            {
+              type: "password",
+              placeholder: "Confirm New Password",
+              value: confirmPassword,
+              onChange: (e) => setConfirmPassword(e.target.value)
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Button$1,
+            {
+              type: "button",
+              onClick: handleResetPassword,
+              disabled: isLoading || !newPassword || !confirmPassword,
+              className: "w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-12 text-base disabled:opacity-50",
+              children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { className: "w-4 h-4 animate-spin" }),
+                verificationStatus || "Resetting..."
+              ] }) : verificationStatus || "Reset Password"
+            }
+          )
+        ] })
+      ] })
     ] })
   ] }) }) });
 }
@@ -26048,7 +27103,7 @@ function getClassNamesForModifiers(modifiers, classNames, modifiersClassNames = 
     return modifierClassNames;
 }
 
-const React$L = await importShared('react');
+const React$K = await importShared('react');
 
 /**
  * Render the button elements in the calendar.
@@ -26057,10 +27112,10 @@ const React$L = await importShared('react');
  * @deprecated Use `PreviousMonthButton` or `@link NextMonthButton` instead.
  */
 function Button(props) {
-    return React$L.createElement("button", { ...props });
+    return React$K.createElement("button", { ...props });
 }
 
-const React$K = await importShared('react');
+const React$J = await importShared('react');
 
 /**
  * Render the label in the month caption.
@@ -26069,10 +27124,10 @@ const React$K = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function CaptionLabel(props) {
-    return React$K.createElement("span", { ...props });
+    return React$J.createElement("span", { ...props });
 }
 
-const React$J = await importShared('react');
+const React$I = await importShared('react');
 
 /**
  * Render the chevron icon used in the navigation buttons and dropdowns.
@@ -26082,14 +27137,14 @@ const React$J = await importShared('react');
  */
 function Chevron(props) {
     const { size = 24, orientation = "left", className } = props;
-    return (React$J.createElement("svg", { className: className, width: size, height: size, viewBox: "0 0 24 24" },
-        orientation === "up" && (React$J.createElement("polygon", { points: "6.77 17 12.5 11.43 18.24 17 20 15.28 12.5 8 5 15.28" })),
-        orientation === "down" && (React$J.createElement("polygon", { points: "6.77 8 12.5 13.57 18.24 8 20 9.72 12.5 17 5 9.72" })),
-        orientation === "left" && (React$J.createElement("polygon", { points: "16 18.112 9.81111111 12 16 5.87733333 14.0888889 4 6 12 14.0888889 20" })),
-        orientation === "right" && (React$J.createElement("polygon", { points: "8 18.112 14.18888889 12 8 5.87733333 9.91111111 4 18 12 9.91111111 20" }))));
+    return (React$I.createElement("svg", { className: className, width: size, height: size, viewBox: "0 0 24 24" },
+        orientation === "up" && (React$I.createElement("polygon", { points: "6.77 17 12.5 11.43 18.24 17 20 15.28 12.5 8 5 15.28" })),
+        orientation === "down" && (React$I.createElement("polygon", { points: "6.77 8 12.5 13.57 18.24 8 20 9.72 12.5 17 5 9.72" })),
+        orientation === "left" && (React$I.createElement("polygon", { points: "16 18.112 9.81111111 12 16 5.87733333 14.0888889 4 6 12 14.0888889 20" })),
+        orientation === "right" && (React$I.createElement("polygon", { points: "8 18.112 14.18888889 12 8 5.87733333 9.91111111 4 18 12 9.91111111 20" }))));
 }
 
-const React$I = await importShared('react');
+const React$H = await importShared('react');
 
 /**
  * Render a grid cell for a specific day in the calendar.
@@ -26103,10 +27158,10 @@ const React$I = await importShared('react');
  */
 function Day(props) {
     const { day, modifiers, ...tdProps } = props;
-    return React$I.createElement("td", { ...tdProps });
+    return React$H.createElement("td", { ...tdProps });
 }
 
-const React$H = await importShared('react');
+const React$G = await importShared('react');
 
 /**
  * Render a button for a specific day in the calendar.
@@ -26116,15 +27171,15 @@ const React$H = await importShared('react');
  */
 function DayButton(props) {
     const { day, modifiers, ...buttonProps } = props;
-    const ref = React$H.useRef(null);
-    React$H.useEffect(() => {
+    const ref = React$G.useRef(null);
+    React$G.useEffect(() => {
         if (modifiers.focused)
             ref.current?.focus();
     }, [modifiers.focused]);
-    return React$H.createElement("button", { ref: ref, ...buttonProps });
+    return React$G.createElement("button", { ref: ref, ...buttonProps });
 }
 
-const React$G = await importShared('react');
+const React$F = await importShared('react');
 /**
  * Render a dropdown component for navigation in the calendar.
  *
@@ -26135,14 +27190,14 @@ function Dropdown(props) {
     const { options, className, components, classNames, ...selectProps } = props;
     const cssClassSelect = [classNames[UI.Dropdown], className].join(" ");
     const selectedOption = options?.find(({ value }) => value === selectProps.value);
-    return (React$G.createElement("span", { "data-disabled": selectProps.disabled, className: classNames[UI.DropdownRoot] },
-        React$G.createElement(components.Select, { className: cssClassSelect, ...selectProps }, options?.map(({ value, label, disabled }) => (React$G.createElement(components.Option, { key: value, value: value, disabled: disabled }, label)))),
-        React$G.createElement("span", { className: classNames[UI.CaptionLabel], "aria-hidden": true },
+    return (React$F.createElement("span", { "data-disabled": selectProps.disabled, className: classNames[UI.DropdownRoot] },
+        React$F.createElement(components.Select, { className: cssClassSelect, ...selectProps }, options?.map(({ value, label, disabled }) => (React$F.createElement(components.Option, { key: value, value: value, disabled: disabled }, label)))),
+        React$F.createElement("span", { className: classNames[UI.CaptionLabel], "aria-hidden": true },
             selectedOption?.label,
-            React$G.createElement(components.Chevron, { orientation: "down", size: 18, className: classNames[UI.Chevron] }))));
+            React$F.createElement(components.Chevron, { orientation: "down", size: 18, className: classNames[UI.Chevron] }))));
 }
 
-const React$F = await importShared('react');
+const React$E = await importShared('react');
 
 /**
  * Render the navigation dropdowns for the calendar.
@@ -26151,10 +27206,10 @@ const React$F = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function DropdownNav(props) {
-    return React$F.createElement("div", { ...props });
+    return React$E.createElement("div", { ...props });
 }
 
-const React$E = await importShared('react');
+const React$D = await importShared('react');
 
 /**
  * Render the footer of the calendar.
@@ -26163,10 +27218,10 @@ const React$E = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function Footer(props) {
-    return React$E.createElement("div", { ...props });
+    return React$D.createElement("div", { ...props });
 }
 
-const React$D = await importShared('react');
+const React$C = await importShared('react');
 
 /**
  * Render the grid with the weekday header row and the weeks for a specific
@@ -26177,10 +27232,10 @@ const React$D = await importShared('react');
  */
 function Month(props) {
     const { calendarMonth, displayIndex, ...divProps } = props;
-    return React$D.createElement("div", { ...divProps }, props.children);
+    return React$C.createElement("div", { ...divProps }, props.children);
 }
 
-const React$C = await importShared('react');
+const React$B = await importShared('react');
 
 /**
  * Render the caption for a month in the calendar.
@@ -26190,10 +27245,10 @@ const React$C = await importShared('react');
  */
 function MonthCaption(props) {
     const { calendarMonth, displayIndex, ...divProps } = props;
-    return React$C.createElement("div", { ...divProps });
+    return React$B.createElement("div", { ...divProps });
 }
 
-const React$B = await importShared('react');
+const React$A = await importShared('react');
 
 /**
  * Render the grid of days for a specific month.
@@ -26202,10 +27257,10 @@ const React$B = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function MonthGrid(props) {
-    return React$B.createElement("table", { ...props });
+    return React$A.createElement("table", { ...props });
 }
 
-const React$A = await importShared('react');
+const React$z = await importShared('react');
 
 /**
  * Render a container wrapping the month grids.
@@ -26214,7 +27269,7 @@ const React$A = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function Months(props) {
-    return React$A.createElement("div", { ...props });
+    return React$z.createElement("div", { ...props });
 }
 
 const {createContext: createContext$1,useContext: useContext$1} = await importShared('react');
@@ -26241,7 +27296,7 @@ function useDayPicker() {
     return context;
 }
 
-const React$z = await importShared('react');
+const React$y = await importShared('react');
 /**
  * Render a dropdown to navigate between months in the calendar.
  *
@@ -26250,11 +27305,11 @@ const React$z = await importShared('react');
  */
 function MonthsDropdown(props) {
     const { components } = useDayPicker();
-    return React$z.createElement(components.Dropdown, { ...props });
+    return React$y.createElement(components.Dropdown, { ...props });
 }
 
-const React$y = await importShared('react');
-const {useCallback: useCallback$1} = React$y;
+const React$x = await importShared('react');
+const {useCallback: useCallback$1} = React$x;
 /**
  * Render the navigation toolbar with buttons to navigate between months.
  *
@@ -26274,14 +27329,14 @@ function Nav(props) {
             onPreviousClick?.(e);
         }
     }, [previousMonth, onPreviousClick]);
-    return (React$y.createElement("nav", { ...navProps },
-        React$y.createElement(components.PreviousMonthButton, { type: "button", className: classNames[UI.PreviousMonthButton], tabIndex: previousMonth ? undefined : -1, "aria-disabled": previousMonth ? undefined : true, "aria-label": labelPrevious(previousMonth), onClick: handlePreviousClick },
-            React$y.createElement(components.Chevron, { disabled: previousMonth ? undefined : true, className: classNames[UI.Chevron], orientation: "left" })),
-        React$y.createElement(components.NextMonthButton, { type: "button", className: classNames[UI.NextMonthButton], tabIndex: nextMonth ? undefined : -1, "aria-disabled": nextMonth ? undefined : true, "aria-label": labelNext(nextMonth), onClick: handleNextClick },
-            React$y.createElement(components.Chevron, { disabled: nextMonth ? undefined : true, orientation: "right", className: classNames[UI.Chevron] }))));
+    return (React$x.createElement("nav", { ...navProps },
+        React$x.createElement(components.PreviousMonthButton, { type: "button", className: classNames[UI.PreviousMonthButton], tabIndex: previousMonth ? undefined : -1, "aria-disabled": previousMonth ? undefined : true, "aria-label": labelPrevious(previousMonth), onClick: handlePreviousClick },
+            React$x.createElement(components.Chevron, { disabled: previousMonth ? undefined : true, className: classNames[UI.Chevron], orientation: "left" })),
+        React$x.createElement(components.NextMonthButton, { type: "button", className: classNames[UI.NextMonthButton], tabIndex: nextMonth ? undefined : -1, "aria-disabled": nextMonth ? undefined : true, "aria-label": labelNext(nextMonth), onClick: handleNextClick },
+            React$x.createElement(components.Chevron, { disabled: nextMonth ? undefined : true, orientation: "right", className: classNames[UI.Chevron] }))));
 }
 
-const React$x = await importShared('react');
+const React$w = await importShared('react');
 /**
  * Render the button to navigate to the next month in the calendar.
  *
@@ -26290,10 +27345,10 @@ const React$x = await importShared('react');
  */
 function NextMonthButton(props) {
     const { components } = useDayPicker();
-    return React$x.createElement(components.Button, { ...props });
+    return React$w.createElement(components.Button, { ...props });
 }
 
-const React$w = await importShared('react');
+const React$v = await importShared('react');
 
 /**
  * Render an `option` element.
@@ -26302,10 +27357,10 @@ const React$w = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function Option(props) {
-    return React$w.createElement("option", { ...props });
+    return React$v.createElement("option", { ...props });
 }
 
-const React$v = await importShared('react');
+const React$u = await importShared('react');
 /**
  * Render the button to navigate to the previous month in the calendar.
  *
@@ -26314,10 +27369,10 @@ const React$v = await importShared('react');
  */
 function PreviousMonthButton(props) {
     const { components } = useDayPicker();
-    return React$v.createElement(components.Button, { ...props });
+    return React$u.createElement(components.Button, { ...props });
 }
 
-const React$u = await importShared('react');
+const React$t = await importShared('react');
 
 /**
  * Render the root element of the calendar.
@@ -26327,10 +27382,10 @@ const React$u = await importShared('react');
  */
 function Root$1(props) {
     const { rootRef, ...rest } = props;
-    return React$u.createElement("div", { ...rest, ref: rootRef });
+    return React$t.createElement("div", { ...rest, ref: rootRef });
 }
 
-const React$t = await importShared('react');
+const React$s = await importShared('react');
 
 /**
  * Render a `select` element.
@@ -26339,10 +27394,10 @@ const React$t = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function Select(props) {
-    return React$t.createElement("select", { ...props });
+    return React$s.createElement("select", { ...props });
 }
 
-const React$s = await importShared('react');
+const React$r = await importShared('react');
 
 /**
  * Render a table row representing a week in the calendar.
@@ -26352,10 +27407,10 @@ const React$s = await importShared('react');
  */
 function Week(props) {
     const { week, ...trProps } = props;
-    return React$s.createElement("tr", { ...trProps });
+    return React$r.createElement("tr", { ...trProps });
 }
 
-const React$r = await importShared('react');
+const React$q = await importShared('react');
 
 /**
  * Render a table header cell with the name of a weekday (e.g., "Mo", "Tu").
@@ -26364,10 +27419,10 @@ const React$r = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function Weekday(props) {
-    return React$r.createElement("th", { ...props });
+    return React$q.createElement("th", { ...props });
 }
 
-const React$q = await importShared('react');
+const React$p = await importShared('react');
 
 /**
  * Render the table row containing the weekday names.
@@ -26376,11 +27431,11 @@ const React$q = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function Weekdays(props) {
-    return (React$q.createElement("thead", { "aria-hidden": true },
-        React$q.createElement("tr", { ...props })));
+    return (React$p.createElement("thead", { "aria-hidden": true },
+        React$p.createElement("tr", { ...props })));
 }
 
-const React$p = await importShared('react');
+const React$o = await importShared('react');
 
 /**
  * Render a table cell displaying the number of the week.
@@ -26390,10 +27445,10 @@ const React$p = await importShared('react');
  */
 function WeekNumber(props) {
     const { week, ...thProps } = props;
-    return React$p.createElement("th", { ...thProps });
+    return React$o.createElement("th", { ...thProps });
 }
 
-const React$o = await importShared('react');
+const React$n = await importShared('react');
 
 /**
  * Render the header cell for the week numbers column.
@@ -26402,10 +27457,10 @@ const React$o = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function WeekNumberHeader(props) {
-    return React$o.createElement("th", { ...props });
+    return React$n.createElement("th", { ...props });
 }
 
-const React$n = await importShared('react');
+const React$m = await importShared('react');
 
 /**
  * Render the container for the weeks in the month grid.
@@ -26414,10 +27469,10 @@ const React$n = await importShared('react');
  * @see https://daypicker.dev/guides/custom-components
  */
 function Weeks(props) {
-    return React$n.createElement("tbody", { ...props });
+    return React$m.createElement("tbody", { ...props });
 }
 
-const React$m = await importShared('react');
+const React$l = await importShared('react');
 /**
  * Render a dropdown to navigate between years in the calendar.
  *
@@ -26426,7 +27481,7 @@ const React$m = await importShared('react');
  */
 function YearsDropdown(props) {
     const { components } = useDayPicker();
-    return React$m.createElement(components.Dropdown, { ...props });
+    return React$l.createElement(components.Dropdown, { ...props });
 }
 
 const components = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
@@ -28139,8 +29194,8 @@ function useSelection(props, dateLib) {
     }
 }
 
-const React$l = await importShared('react');
-const {useCallback,useMemo: useMemo$1,useRef: useRef$4} = React$l;
+const React$k = await importShared('react');
+const {useCallback,useMemo: useMemo$1,useRef: useRef$4} = React$k;
 /**
  * Renders the DayPicker calendar component.
  *
@@ -28329,24 +29384,24 @@ function DayPicker(initialProps) {
         labels,
         formatters
     };
-    return (React$l.createElement(dayPickerContext.Provider, { value: contextValue },
-        React$l.createElement(components.Root, { rootRef: props.animate ? rootElRef : undefined, className: className, style: style, dir: props.dir, id: props.id, lang: props.lang, nonce: props.nonce, title: props.title, role: props.role, "aria-label": props["aria-label"], ...dataAttributes },
-            React$l.createElement(components.Months, { className: classNames[UI.Months], style: styles?.[UI.Months] },
-                !props.hideNavigation && !navLayout && (React$l.createElement(components.Nav, { "data-animated-nav": props.animate ? "true" : undefined, className: classNames[UI.Nav], style: styles?.[UI.Nav], "aria-label": labelNav(), onPreviousClick: handlePreviousClick, onNextClick: handleNextClick, previousMonth: previousMonth, nextMonth: nextMonth })),
+    return (React$k.createElement(dayPickerContext.Provider, { value: contextValue },
+        React$k.createElement(components.Root, { rootRef: props.animate ? rootElRef : undefined, className: className, style: style, dir: props.dir, id: props.id, lang: props.lang, nonce: props.nonce, title: props.title, role: props.role, "aria-label": props["aria-label"], ...dataAttributes },
+            React$k.createElement(components.Months, { className: classNames[UI.Months], style: styles?.[UI.Months] },
+                !props.hideNavigation && !navLayout && (React$k.createElement(components.Nav, { "data-animated-nav": props.animate ? "true" : undefined, className: classNames[UI.Nav], style: styles?.[UI.Nav], "aria-label": labelNav(), onPreviousClick: handlePreviousClick, onNextClick: handleNextClick, previousMonth: previousMonth, nextMonth: nextMonth })),
                 months.map((calendarMonth, displayIndex) => {
                     const dropdownMonths = getMonthOptions(calendarMonth.date, navStart, navEnd, formatters, dateLib);
                     const dropdownYears = getYearOptions(navStart, navEnd, formatters, dateLib);
-                    return (React$l.createElement(components.Month, { "data-animated-month": props.animate ? "true" : undefined, className: classNames[UI.Month], style: styles?.[UI.Month], key: displayIndex, displayIndex: displayIndex, calendarMonth: calendarMonth },
+                    return (React$k.createElement(components.Month, { "data-animated-month": props.animate ? "true" : undefined, className: classNames[UI.Month], style: styles?.[UI.Month], key: displayIndex, displayIndex: displayIndex, calendarMonth: calendarMonth },
                         navLayout === "around" &&
                             !props.hideNavigation &&
-                            displayIndex === 0 && (React$l.createElement(components.PreviousMonthButton, { type: "button", className: classNames[UI.PreviousMonthButton], tabIndex: previousMonth ? undefined : -1, "aria-disabled": previousMonth ? undefined : true, "aria-label": labelPrevious(previousMonth), onClick: handlePreviousClick, "data-animated-button": props.animate ? "true" : undefined },
-                            React$l.createElement(components.Chevron, { disabled: previousMonth ? undefined : true, className: classNames[UI.Chevron], orientation: props.dir === "rtl" ? "right" : "left" }))),
-                        React$l.createElement(components.MonthCaption, { "data-animated-caption": props.animate ? "true" : undefined, className: classNames[UI.MonthCaption], style: styles?.[UI.MonthCaption], calendarMonth: calendarMonth, displayIndex: displayIndex }, captionLayout?.startsWith("dropdown") ? (React$l.createElement(components.DropdownNav, { className: classNames[UI.Dropdowns], style: styles?.[UI.Dropdowns] },
+                            displayIndex === 0 && (React$k.createElement(components.PreviousMonthButton, { type: "button", className: classNames[UI.PreviousMonthButton], tabIndex: previousMonth ? undefined : -1, "aria-disabled": previousMonth ? undefined : true, "aria-label": labelPrevious(previousMonth), onClick: handlePreviousClick, "data-animated-button": props.animate ? "true" : undefined },
+                            React$k.createElement(components.Chevron, { disabled: previousMonth ? undefined : true, className: classNames[UI.Chevron], orientation: props.dir === "rtl" ? "right" : "left" }))),
+                        React$k.createElement(components.MonthCaption, { "data-animated-caption": props.animate ? "true" : undefined, className: classNames[UI.MonthCaption], style: styles?.[UI.MonthCaption], calendarMonth: calendarMonth, displayIndex: displayIndex }, captionLayout?.startsWith("dropdown") ? (React$k.createElement(components.DropdownNav, { className: classNames[UI.Dropdowns], style: styles?.[UI.Dropdowns] },
                             captionLayout === "dropdown" ||
-                                captionLayout === "dropdown-months" ? (React$l.createElement(components.MonthsDropdown, { className: classNames[UI.MonthsDropdown], "aria-label": labelMonthDropdown(), classNames: classNames, components: components, disabled: Boolean(props.disableNavigation), onChange: handleMonthChange(calendarMonth.date), options: dropdownMonths, style: styles?.[UI.Dropdown], value: dateLib.getMonth(calendarMonth.date) })) : (React$l.createElement("span", null, formatMonthDropdown(calendarMonth.date, dateLib))),
+                                captionLayout === "dropdown-months" ? (React$k.createElement(components.MonthsDropdown, { className: classNames[UI.MonthsDropdown], "aria-label": labelMonthDropdown(), classNames: classNames, components: components, disabled: Boolean(props.disableNavigation), onChange: handleMonthChange(calendarMonth.date), options: dropdownMonths, style: styles?.[UI.Dropdown], value: dateLib.getMonth(calendarMonth.date) })) : (React$k.createElement("span", null, formatMonthDropdown(calendarMonth.date, dateLib))),
                             captionLayout === "dropdown" ||
-                                captionLayout === "dropdown-years" ? (React$l.createElement(components.YearsDropdown, { className: classNames[UI.YearsDropdown], "aria-label": labelYearDropdown(dateLib.options), classNames: classNames, components: components, disabled: Boolean(props.disableNavigation), onChange: handleYearChange(calendarMonth.date), options: dropdownYears, style: styles?.[UI.Dropdown], value: dateLib.getYear(calendarMonth.date) })) : (React$l.createElement("span", null, formatYearDropdown(calendarMonth.date, dateLib))),
-                            React$l.createElement("span", { role: "status", "aria-live": "polite", style: {
+                                captionLayout === "dropdown-years" ? (React$k.createElement(components.YearsDropdown, { className: classNames[UI.YearsDropdown], "aria-label": labelYearDropdown(dateLib.options), classNames: classNames, components: components, disabled: Boolean(props.disableNavigation), onChange: handleYearChange(calendarMonth.date), options: dropdownYears, style: styles?.[UI.Dropdown], value: dateLib.getYear(calendarMonth.date) })) : (React$k.createElement("span", null, formatYearDropdown(calendarMonth.date, dateLib))),
+                            React$k.createElement("span", { role: "status", "aria-live": "polite", style: {
                                     border: 0,
                                     clip: "rect(0 0 0 0)",
                                     height: "1px",
@@ -28357,22 +29412,22 @@ function DayPicker(initialProps) {
                                     width: "1px",
                                     whiteSpace: "nowrap",
                                     wordWrap: "normal"
-                                } }, formatCaption(calendarMonth.date, dateLib.options, dateLib)))) : (React$l.createElement(components.CaptionLabel, { className: classNames[UI.CaptionLabel], role: "status", "aria-live": "polite" }, formatCaption(calendarMonth.date, dateLib.options, dateLib)))),
+                                } }, formatCaption(calendarMonth.date, dateLib.options, dateLib)))) : (React$k.createElement(components.CaptionLabel, { className: classNames[UI.CaptionLabel], role: "status", "aria-live": "polite" }, formatCaption(calendarMonth.date, dateLib.options, dateLib)))),
                         navLayout === "around" &&
                             !props.hideNavigation &&
-                            displayIndex === numberOfMonths - 1 && (React$l.createElement(components.NextMonthButton, { type: "button", className: classNames[UI.NextMonthButton], tabIndex: nextMonth ? undefined : -1, "aria-disabled": nextMonth ? undefined : true, "aria-label": labelNext(nextMonth), onClick: handleNextClick, "data-animated-button": props.animate ? "true" : undefined },
-                            React$l.createElement(components.Chevron, { disabled: nextMonth ? undefined : true, className: classNames[UI.Chevron], orientation: props.dir === "rtl" ? "left" : "right" }))),
+                            displayIndex === numberOfMonths - 1 && (React$k.createElement(components.NextMonthButton, { type: "button", className: classNames[UI.NextMonthButton], tabIndex: nextMonth ? undefined : -1, "aria-disabled": nextMonth ? undefined : true, "aria-label": labelNext(nextMonth), onClick: handleNextClick, "data-animated-button": props.animate ? "true" : undefined },
+                            React$k.createElement(components.Chevron, { disabled: nextMonth ? undefined : true, className: classNames[UI.Chevron], orientation: props.dir === "rtl" ? "left" : "right" }))),
                         displayIndex === numberOfMonths - 1 &&
                             navLayout === "after" &&
-                            !props.hideNavigation && (React$l.createElement(components.Nav, { "data-animated-nav": props.animate ? "true" : undefined, className: classNames[UI.Nav], style: styles?.[UI.Nav], "aria-label": labelNav(), onPreviousClick: handlePreviousClick, onNextClick: handleNextClick, previousMonth: previousMonth, nextMonth: nextMonth })),
-                        React$l.createElement(components.MonthGrid, { role: "grid", "aria-multiselectable": mode === "multiple" || mode === "range", "aria-label": labelGrid(calendarMonth.date, dateLib.options, dateLib) ||
+                            !props.hideNavigation && (React$k.createElement(components.Nav, { "data-animated-nav": props.animate ? "true" : undefined, className: classNames[UI.Nav], style: styles?.[UI.Nav], "aria-label": labelNav(), onPreviousClick: handlePreviousClick, onNextClick: handleNextClick, previousMonth: previousMonth, nextMonth: nextMonth })),
+                        React$k.createElement(components.MonthGrid, { role: "grid", "aria-multiselectable": mode === "multiple" || mode === "range", "aria-label": labelGrid(calendarMonth.date, dateLib.options, dateLib) ||
                                 undefined, className: classNames[UI.MonthGrid], style: styles?.[UI.MonthGrid] },
-                            !props.hideWeekdays && (React$l.createElement(components.Weekdays, { "data-animated-weekdays": props.animate ? "true" : undefined, className: classNames[UI.Weekdays], style: styles?.[UI.Weekdays] },
-                                showWeekNumber && (React$l.createElement(components.WeekNumberHeader, { "aria-label": labelWeekNumberHeader(dateLib.options), className: classNames[UI.WeekNumberHeader], style: styles?.[UI.WeekNumberHeader], scope: "col" }, formatWeekNumberHeader())),
-                                weekdays.map((weekday, i) => (React$l.createElement(components.Weekday, { "aria-label": labelWeekday(weekday, dateLib.options, dateLib), className: classNames[UI.Weekday], key: i, style: styles?.[UI.Weekday], scope: "col" }, formatWeekdayName(weekday, dateLib.options, dateLib)))))),
-                            React$l.createElement(components.Weeks, { "data-animated-weeks": props.animate ? "true" : undefined, className: classNames[UI.Weeks], style: styles?.[UI.Weeks] }, calendarMonth.weeks.map((week, weekIndex) => {
-                                return (React$l.createElement(components.Week, { className: classNames[UI.Week], key: week.weekNumber, style: styles?.[UI.Week], week: week },
-                                    showWeekNumber && (React$l.createElement(components.WeekNumber, { week: week, style: styles?.[UI.WeekNumber], "aria-label": labelWeekNumber(week.weekNumber, {
+                            !props.hideWeekdays && (React$k.createElement(components.Weekdays, { "data-animated-weekdays": props.animate ? "true" : undefined, className: classNames[UI.Weekdays], style: styles?.[UI.Weekdays] },
+                                showWeekNumber && (React$k.createElement(components.WeekNumberHeader, { "aria-label": labelWeekNumberHeader(dateLib.options), className: classNames[UI.WeekNumberHeader], style: styles?.[UI.WeekNumberHeader], scope: "col" }, formatWeekNumberHeader())),
+                                weekdays.map((weekday, i) => (React$k.createElement(components.Weekday, { "aria-label": labelWeekday(weekday, dateLib.options, dateLib), className: classNames[UI.Weekday], key: i, style: styles?.[UI.Weekday], scope: "col" }, formatWeekdayName(weekday, dateLib.options, dateLib)))))),
+                            React$k.createElement(components.Weeks, { "data-animated-weeks": props.animate ? "true" : undefined, className: classNames[UI.Weeks], style: styles?.[UI.Weeks] }, calendarMonth.weeks.map((week, weekIndex) => {
+                                return (React$k.createElement(components.Week, { className: classNames[UI.Week], key: week.weekNumber, style: styles?.[UI.Week], week: week },
+                                    showWeekNumber && (React$k.createElement(components.WeekNumber, { week: week, style: styles?.[UI.WeekNumber], "aria-label": labelWeekNumber(week.weekNumber, {
                                             locale
                                         }), className: classNames[UI.WeekNumber], scope: "row", role: "rowheader" }, formatWeekNumber(week.weekNumber, dateLib))),
                                     week.days.map((day) => {
@@ -28396,17 +29451,17 @@ function DayPicker(initialProps) {
                                         const ariaLabel = !isInteractive && !modifiers.hidden
                                             ? labelGridcell(date, modifiers, dateLib.options, dateLib)
                                             : undefined;
-                                        return (React$l.createElement(components.Day, { key: `${dateLib.format(date, "yyyy-MM-dd")}_${dateLib.format(day.displayMonth, "yyyy-MM")}`, day: day, modifiers: modifiers, className: className.join(" "), style: style, role: "gridcell", "aria-selected": modifiers.selected || undefined, "aria-label": ariaLabel, "data-day": dateLib.format(date, "yyyy-MM-dd"), "data-month": day.outside
+                                        return (React$k.createElement(components.Day, { key: `${dateLib.format(date, "yyyy-MM-dd")}_${dateLib.format(day.displayMonth, "yyyy-MM")}`, day: day, modifiers: modifiers, className: className.join(" "), style: style, role: "gridcell", "aria-selected": modifiers.selected || undefined, "aria-label": ariaLabel, "data-day": dateLib.format(date, "yyyy-MM-dd"), "data-month": day.outside
                                                 ? dateLib.format(date, "yyyy-MM")
-                                                : undefined, "data-selected": modifiers.selected || undefined, "data-disabled": modifiers.disabled || undefined, "data-hidden": modifiers.hidden || undefined, "data-outside": day.outside || undefined, "data-focused": modifiers.focused || undefined, "data-today": modifiers.today || undefined }, !modifiers.hidden && isInteractive ? (React$l.createElement(components.DayButton, { className: classNames[UI.DayButton], style: styles?.[UI.DayButton], type: "button", day: day, modifiers: modifiers, disabled: modifiers.disabled || undefined, tabIndex: isFocusTarget(day) ? 0 : -1, "aria-label": labelDayButton(date, modifiers, dateLib.options, dateLib), onClick: handleDayClick(day, modifiers), onBlur: handleDayBlur(day, modifiers), onFocus: handleDayFocus(day, modifiers), onKeyDown: handleDayKeyDown(day, modifiers), onMouseEnter: handleDayMouseEnter(day, modifiers), onMouseLeave: handleDayMouseLeave(day, modifiers) }, formatDay(date, dateLib.options, dateLib))) : (!modifiers.hidden &&
+                                                : undefined, "data-selected": modifiers.selected || undefined, "data-disabled": modifiers.disabled || undefined, "data-hidden": modifiers.hidden || undefined, "data-outside": day.outside || undefined, "data-focused": modifiers.focused || undefined, "data-today": modifiers.today || undefined }, !modifiers.hidden && isInteractive ? (React$k.createElement(components.DayButton, { className: classNames[UI.DayButton], style: styles?.[UI.DayButton], type: "button", day: day, modifiers: modifiers, disabled: modifiers.disabled || undefined, tabIndex: isFocusTarget(day) ? 0 : -1, "aria-label": labelDayButton(date, modifiers, dateLib.options, dateLib), onClick: handleDayClick(day, modifiers), onBlur: handleDayBlur(day, modifiers), onFocus: handleDayFocus(day, modifiers), onKeyDown: handleDayKeyDown(day, modifiers), onMouseEnter: handleDayMouseEnter(day, modifiers), onMouseLeave: handleDayMouseLeave(day, modifiers) }, formatDay(date, dateLib.options, dateLib))) : (!modifiers.hidden &&
                                             formatDay(day.date, dateLib.options, dateLib))));
                                     })));
                             })))));
                 })),
-            props.footer && (React$l.createElement(components.Footer, { className: classNames[UI.Footer], style: styles?.[UI.Footer], role: "status", "aria-live": "polite" }, props.footer)))));
+            props.footer && (React$k.createElement(components.Footer, { className: classNames[UI.Footer], style: styles?.[UI.Footer], role: "status", "aria-live": "polite" }, props.footer)))));
 }
 
-const React$k = await importShared('react');
+const React$j = await importShared('react');
 function Calendar({
   className,
   classNames,
@@ -28532,8 +29587,8 @@ function CalendarDayButton({
   ...props
 }) {
   const defaultClassNames = getDefaultClassNames();
-  const ref = React$k.useRef(null);
-  React$k.useEffect(() => {
+  const ref = React$j.useRef(null);
+  React$j.useEffect(() => {
     if (modifiers.focused) ref.current?.focus();
   }, [modifiers.focused]);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -28558,18 +29613,18 @@ function CalendarDayButton({
 }
 
 // src/dismissable-layer.tsx
-const React$j = await importShared('react');
+const React$i = await importShared('react');
 var DISMISSABLE_LAYER_NAME = "DismissableLayer";
 var CONTEXT_UPDATE = "dismissableLayer.update";
 var POINTER_DOWN_OUTSIDE = "dismissableLayer.pointerDownOutside";
 var FOCUS_OUTSIDE = "dismissableLayer.focusOutside";
 var originalBodyPointerEvents;
-var DismissableLayerContext = React$j.createContext({
+var DismissableLayerContext = React$i.createContext({
   layers: /* @__PURE__ */ new Set(),
   layersWithOutsidePointerEventsDisabled: /* @__PURE__ */ new Set(),
   branches: /* @__PURE__ */ new Set()
 });
-var DismissableLayer = React$j.forwardRef(
+var DismissableLayer = React$i.forwardRef(
   (props, forwardedRef) => {
     const {
       disableOutsidePointerEvents = false,
@@ -28580,10 +29635,10 @@ var DismissableLayer = React$j.forwardRef(
       onDismiss,
       ...layerProps
     } = props;
-    const context = React$j.useContext(DismissableLayerContext);
-    const [node, setNode] = React$j.useState(null);
+    const context = React$i.useContext(DismissableLayerContext);
+    const [node, setNode] = React$i.useState(null);
     const ownerDocument = node?.ownerDocument ?? globalThis?.document;
-    const [, force] = React$j.useState({});
+    const [, force] = React$i.useState({});
     const composedRefs = useComposedRefs(forwardedRef, (node2) => setNode(node2));
     const layers = Array.from(context.layers);
     const [highestLayerWithOutsidePointerEventsDisabled] = [...context.layersWithOutsidePointerEventsDisabled].slice(-1);
@@ -28616,7 +29671,7 @@ var DismissableLayer = React$j.forwardRef(
         onDismiss();
       }
     }, ownerDocument);
-    React$j.useEffect(() => {
+    React$i.useEffect(() => {
       if (!node) return;
       if (disableOutsidePointerEvents) {
         if (context.layersWithOutsidePointerEventsDisabled.size === 0) {
@@ -28633,7 +29688,7 @@ var DismissableLayer = React$j.forwardRef(
         }
       };
     }, [node, ownerDocument, disableOutsidePointerEvents, context]);
-    React$j.useEffect(() => {
+    React$i.useEffect(() => {
       return () => {
         if (!node) return;
         context.layers.delete(node);
@@ -28641,7 +29696,7 @@ var DismissableLayer = React$j.forwardRef(
         dispatchUpdate();
       };
     }, [node, context]);
-    React$j.useEffect(() => {
+    React$i.useEffect(() => {
       const handleUpdate = () => force({});
       document.addEventListener(CONTEXT_UPDATE, handleUpdate);
       return () => document.removeEventListener(CONTEXT_UPDATE, handleUpdate);
@@ -28667,11 +29722,11 @@ var DismissableLayer = React$j.forwardRef(
 );
 DismissableLayer.displayName = DISMISSABLE_LAYER_NAME;
 var BRANCH_NAME = "DismissableLayerBranch";
-var DismissableLayerBranch = React$j.forwardRef((props, forwardedRef) => {
-  const context = React$j.useContext(DismissableLayerContext);
-  const ref = React$j.useRef(null);
+var DismissableLayerBranch = React$i.forwardRef((props, forwardedRef) => {
+  const context = React$i.useContext(DismissableLayerContext);
+  const ref = React$i.useRef(null);
   const composedRefs = useComposedRefs(forwardedRef, ref);
-  React$j.useEffect(() => {
+  React$i.useEffect(() => {
     const node = ref.current;
     if (node) {
       context.branches.add(node);
@@ -28685,10 +29740,10 @@ var DismissableLayerBranch = React$j.forwardRef((props, forwardedRef) => {
 DismissableLayerBranch.displayName = BRANCH_NAME;
 function usePointerDownOutside(onPointerDownOutside, ownerDocument = globalThis?.document) {
   const handlePointerDownOutside = useCallbackRef$1(onPointerDownOutside);
-  const isPointerInsideReactTreeRef = React$j.useRef(false);
-  const handleClickRef = React$j.useRef(() => {
+  const isPointerInsideReactTreeRef = React$i.useRef(false);
+  const handleClickRef = React$i.useRef(() => {
   });
-  React$j.useEffect(() => {
+  React$i.useEffect(() => {
     const handlePointerDown = (event) => {
       if (event.target && !isPointerInsideReactTreeRef.current) {
         let handleAndDispatchPointerDownOutsideEvent2 = function() {
@@ -28728,8 +29783,8 @@ function usePointerDownOutside(onPointerDownOutside, ownerDocument = globalThis?
 }
 function useFocusOutside(onFocusOutside, ownerDocument = globalThis?.document) {
   const handleFocusOutside = useCallbackRef$1(onFocusOutside);
-  const isFocusInsideReactTreeRef = React$j.useRef(false);
-  React$j.useEffect(() => {
+  const isFocusInsideReactTreeRef = React$i.useRef(false);
+  React$i.useEffect(() => {
     const handleFocus = (event) => {
       if (event.target && !isFocusInsideReactTreeRef.current) {
         const eventDetail = { originalEvent: event };
@@ -28762,11 +29817,11 @@ function handleAndDispatchCustomEvent(name, handler, detail, { discrete }) {
 }
 
 // packages/react/focus-guards/src/focus-guards.tsx
-const React$i = await importShared('react');
+const React$h = await importShared('react');
 
 var count = 0;
 function useFocusGuards() {
-  React$i.useEffect(() => {
+  React$h.useEffect(() => {
     const edgeGuards = document.querySelectorAll("[data-radix-focus-guard]");
     document.body.insertAdjacentElement("afterbegin", edgeGuards[0] ?? createFocusGuard());
     document.body.insertAdjacentElement("beforeend", edgeGuards[1] ?? createFocusGuard());
@@ -30626,7 +31681,7 @@ const computePosition = (reference, floating, options) => {
   });
 };
 
-const React$h = await importShared('react');
+const React$g = await importShared('react');
 
 const {useLayoutEffect} = await importShared('react');
 
@@ -30702,7 +31757,7 @@ function roundByDPR(element, value) {
 }
 
 function useLatestRef(value) {
-  const ref = React$h.useRef(value);
+  const ref = React$g.useRef(value);
   index(() => {
     ref.current = value;
   });
@@ -30730,7 +31785,7 @@ function useFloating(options) {
     whileElementsMounted,
     open
   } = options;
-  const [data, setData] = React$h.useState({
+  const [data, setData] = React$g.useState({
     x: 0,
     y: 0,
     strategy,
@@ -30738,19 +31793,19 @@ function useFloating(options) {
     middlewareData: {},
     isPositioned: false
   });
-  const [latestMiddleware, setLatestMiddleware] = React$h.useState(middleware);
+  const [latestMiddleware, setLatestMiddleware] = React$g.useState(middleware);
   if (!deepEqual(latestMiddleware, middleware)) {
     setLatestMiddleware(middleware);
   }
-  const [_reference, _setReference] = React$h.useState(null);
-  const [_floating, _setFloating] = React$h.useState(null);
-  const setReference = React$h.useCallback(node => {
+  const [_reference, _setReference] = React$g.useState(null);
+  const [_floating, _setFloating] = React$g.useState(null);
+  const setReference = React$g.useCallback(node => {
     if (node !== referenceRef.current) {
       referenceRef.current = node;
       _setReference(node);
     }
   }, []);
-  const setFloating = React$h.useCallback(node => {
+  const setFloating = React$g.useCallback(node => {
     if (node !== floatingRef.current) {
       floatingRef.current = node;
       _setFloating(node);
@@ -30758,14 +31813,14 @@ function useFloating(options) {
   }, []);
   const referenceEl = externalReference || _reference;
   const floatingEl = externalFloating || _floating;
-  const referenceRef = React$h.useRef(null);
-  const floatingRef = React$h.useRef(null);
-  const dataRef = React$h.useRef(data);
+  const referenceRef = React$g.useRef(null);
+  const floatingRef = React$g.useRef(null);
+  const dataRef = React$g.useRef(data);
   const hasWhileElementsMounted = whileElementsMounted != null;
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
   const platformRef = useLatestRef(platform);
   const openRef = useLatestRef(open);
-  const update = React$h.useCallback(() => {
+  const update = React$g.useCallback(() => {
     if (!referenceRef.current || !floatingRef.current) {
       return;
     }
@@ -30803,7 +31858,7 @@ function useFloating(options) {
       }));
     }
   }, [open]);
-  const isMountedRef = React$h.useRef(false);
+  const isMountedRef = React$g.useRef(false);
   index(() => {
     isMountedRef.current = true;
     return () => {
@@ -30820,17 +31875,17 @@ function useFloating(options) {
       update();
     }
   }, [referenceEl, floatingEl, update, whileElementsMountedRef, hasWhileElementsMounted]);
-  const refs = React$h.useMemo(() => ({
+  const refs = React$g.useMemo(() => ({
     reference: referenceRef,
     floating: floatingRef,
     setReference,
     setFloating
   }), [setReference, setFloating]);
-  const elements = React$h.useMemo(() => ({
+  const elements = React$g.useMemo(() => ({
     reference: referenceEl,
     floating: floatingEl
   }), [referenceEl, floatingEl]);
-  const floatingStyles = React$h.useMemo(() => {
+  const floatingStyles = React$g.useMemo(() => {
     const initialStyles = {
       position: strategy,
       left: 0,
@@ -30856,7 +31911,7 @@ function useFloating(options) {
       top: y
     };
   }, [strategy, transform, elements.floating, data.x, data.y]);
-  return React$h.useMemo(() => ({
+  return React$g.useMemo(() => ({
     ...data,
     update,
     refs,
@@ -30977,9 +32032,9 @@ const arrow = (options, deps) => ({
 });
 
 // src/arrow.tsx
-const React$g = await importShared('react');
+const React$f = await importShared('react');
 var NAME = "Arrow";
-var Arrow$1 = React$g.forwardRef((props, forwardedRef) => {
+var Arrow$1 = React$f.forwardRef((props, forwardedRef) => {
   const { children, width = 10, height = 5, ...arrowProps } = props;
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     Primitive.svg,
@@ -30998,24 +32053,24 @@ Arrow$1.displayName = NAME;
 var Root = Arrow$1;
 
 // src/popper.tsx
-const React$f = await importShared('react');
+const React$e = await importShared('react');
 var POPPER_NAME = "Popper";
 var [createPopperContext, createPopperScope] = createContextScope(POPPER_NAME);
 var [PopperProvider, usePopperContext] = createPopperContext(POPPER_NAME);
 var Popper = (props) => {
   const { __scopePopper, children } = props;
-  const [anchor, setAnchor] = React$f.useState(null);
+  const [anchor, setAnchor] = React$e.useState(null);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(PopperProvider, { scope: __scopePopper, anchor, onAnchorChange: setAnchor, children });
 };
 Popper.displayName = POPPER_NAME;
 var ANCHOR_NAME$1 = "PopperAnchor";
-var PopperAnchor = React$f.forwardRef(
+var PopperAnchor = React$e.forwardRef(
   (props, forwardedRef) => {
     const { __scopePopper, virtualRef, ...anchorProps } = props;
     const context = usePopperContext(ANCHOR_NAME$1, __scopePopper);
-    const ref = React$f.useRef(null);
+    const ref = React$e.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, ref);
-    React$f.useEffect(() => {
+    React$e.useEffect(() => {
       context.onAnchorChange(virtualRef?.current || ref.current);
     });
     return virtualRef ? null : /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { ...anchorProps, ref: composedRefs });
@@ -31024,7 +32079,7 @@ var PopperAnchor = React$f.forwardRef(
 PopperAnchor.displayName = ANCHOR_NAME$1;
 var CONTENT_NAME$1 = "PopperContent";
 var [PopperContentProvider, useContentContext] = createPopperContext(CONTENT_NAME$1);
-var PopperContent = React$f.forwardRef(
+var PopperContent = React$e.forwardRef(
   (props, forwardedRef) => {
     const {
       __scopePopper,
@@ -31043,9 +32098,9 @@ var PopperContent = React$f.forwardRef(
       ...contentProps
     } = props;
     const context = usePopperContext(CONTENT_NAME$1, __scopePopper);
-    const [content, setContent] = React$f.useState(null);
+    const [content, setContent] = React$e.useState(null);
     const composedRefs = useComposedRefs(forwardedRef, (node) => setContent(node));
-    const [arrow$1, setArrow] = React$f.useState(null);
+    const [arrow$1, setArrow] = React$e.useState(null);
     const arrowSize = useSize(arrow$1);
     const arrowWidth = arrowSize?.width ?? 0;
     const arrowHeight = arrowSize?.height ?? 0;
@@ -31107,7 +32162,7 @@ var PopperContent = React$f.forwardRef(
     const arrowX = middlewareData.arrow?.x;
     const arrowY = middlewareData.arrow?.y;
     const cannotCenterArrow = middlewareData.arrow?.centerOffset !== 0;
-    const [contentZIndex, setContentZIndex] = React$f.useState();
+    const [contentZIndex, setContentZIndex] = React$e.useState();
     useLayoutEffect2(() => {
       if (content) setContentZIndex(window.getComputedStyle(content).zIndex);
     }, [content]);
@@ -31173,7 +32228,7 @@ var OPPOSITE_SIDE = {
   bottom: "top",
   left: "right"
 };
-var PopperArrow = React$f.forwardRef(function PopperArrow2(props, forwardedRef) {
+var PopperArrow = React$e.forwardRef(function PopperArrow2(props, forwardedRef) {
   const { __scopePopper, ...arrowProps } = props;
   const contentContext = useContentContext(ARROW_NAME$1, __scopePopper);
   const baseSide = OPPOSITE_SIDE[contentContext.placedSide];
@@ -31265,7 +32320,7 @@ var Content = PopperContent;
 var Arrow = PopperArrow;
 
 // src/popover.tsx
-const React$e = await importShared('react');
+const React$d = await importShared('react');
 var POPOVER_NAME = "Popover";
 var [createPopoverContext, createPopoverScope] = createContextScope(POPOVER_NAME, [
   createPopperScope
@@ -31282,8 +32337,8 @@ var Popover$1 = (props) => {
     modal = false
   } = props;
   const popperScope = usePopperScope(__scopePopover);
-  const triggerRef = React$e.useRef(null);
-  const [hasCustomAnchor, setHasCustomAnchor] = React$e.useState(false);
+  const triggerRef = React$d.useRef(null);
+  const [hasCustomAnchor, setHasCustomAnchor] = React$d.useState(false);
   const [open, setOpen] = useControllableState({
     prop: openProp,
     defaultProp: defaultOpen ?? false,
@@ -31298,10 +32353,10 @@ var Popover$1 = (props) => {
       triggerRef,
       open,
       onOpenChange: setOpen,
-      onOpenToggle: React$e.useCallback(() => setOpen((prevOpen) => !prevOpen), [setOpen]),
+      onOpenToggle: React$d.useCallback(() => setOpen((prevOpen) => !prevOpen), [setOpen]),
       hasCustomAnchor,
-      onCustomAnchorAdd: React$e.useCallback(() => setHasCustomAnchor(true), []),
-      onCustomAnchorRemove: React$e.useCallback(() => setHasCustomAnchor(false), []),
+      onCustomAnchorAdd: React$d.useCallback(() => setHasCustomAnchor(true), []),
+      onCustomAnchorRemove: React$d.useCallback(() => setHasCustomAnchor(false), []),
       modal,
       children
     }
@@ -31309,13 +32364,13 @@ var Popover$1 = (props) => {
 };
 Popover$1.displayName = POPOVER_NAME;
 var ANCHOR_NAME = "PopoverAnchor";
-var PopoverAnchor = React$e.forwardRef(
+var PopoverAnchor = React$d.forwardRef(
   (props, forwardedRef) => {
     const { __scopePopover, ...anchorProps } = props;
     const context = usePopoverContext(ANCHOR_NAME, __scopePopover);
     const popperScope = usePopperScope(__scopePopover);
     const { onCustomAnchorAdd, onCustomAnchorRemove } = context;
-    React$e.useEffect(() => {
+    React$d.useEffect(() => {
       onCustomAnchorAdd();
       return () => onCustomAnchorRemove();
     }, [onCustomAnchorAdd, onCustomAnchorRemove]);
@@ -31324,7 +32379,7 @@ var PopoverAnchor = React$e.forwardRef(
 );
 PopoverAnchor.displayName = ANCHOR_NAME;
 var TRIGGER_NAME = "PopoverTrigger";
-var PopoverTrigger$1 = React$e.forwardRef(
+var PopoverTrigger$1 = React$d.forwardRef(
   (props, forwardedRef) => {
     const { __scopePopover, ...triggerProps } = props;
     const context = usePopoverContext(TRIGGER_NAME, __scopePopover);
@@ -31358,7 +32413,7 @@ var PopoverPortal = (props) => {
 };
 PopoverPortal.displayName = PORTAL_NAME;
 var CONTENT_NAME = "PopoverContent";
-var PopoverContent$1 = React$e.forwardRef(
+var PopoverContent$1 = React$d.forwardRef(
   (props, forwardedRef) => {
     const portalContext = usePortalContext(CONTENT_NAME, props.__scopePopover);
     const { forceMount = portalContext.forceMount, ...contentProps } = props;
@@ -31368,13 +32423,13 @@ var PopoverContent$1 = React$e.forwardRef(
 );
 PopoverContent$1.displayName = CONTENT_NAME;
 var Slot = createSlot("PopoverContent.RemoveScroll");
-var PopoverContentModal = React$e.forwardRef(
+var PopoverContentModal = React$d.forwardRef(
   (props, forwardedRef) => {
     const context = usePopoverContext(CONTENT_NAME, props.__scopePopover);
-    const contentRef = React$e.useRef(null);
+    const contentRef = React$d.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, contentRef);
-    const isRightClickOutsideRef = React$e.useRef(false);
-    React$e.useEffect(() => {
+    const isRightClickOutsideRef = React$d.useRef(false);
+    React$d.useEffect(() => {
       const content = contentRef.current;
       if (content) return hideOthers(content);
     }, []);
@@ -31408,11 +32463,11 @@ var PopoverContentModal = React$e.forwardRef(
     ) });
   }
 );
-var PopoverContentNonModal = React$e.forwardRef(
+var PopoverContentNonModal = React$d.forwardRef(
   (props, forwardedRef) => {
     const context = usePopoverContext(CONTENT_NAME, props.__scopePopover);
-    const hasInteractedOutsideRef = React$e.useRef(false);
-    const hasPointerDownOutsideRef = React$e.useRef(false);
+    const hasInteractedOutsideRef = React$d.useRef(false);
+    const hasPointerDownOutsideRef = React$d.useRef(false);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       PopoverContentImpl,
       {
@@ -31448,7 +32503,7 @@ var PopoverContentNonModal = React$e.forwardRef(
     );
   }
 );
-var PopoverContentImpl = React$e.forwardRef(
+var PopoverContentImpl = React$d.forwardRef(
   (props, forwardedRef) => {
     const {
       __scopePopover,
@@ -31512,7 +32567,7 @@ var PopoverContentImpl = React$e.forwardRef(
   }
 );
 var CLOSE_NAME = "PopoverClose";
-var PopoverClose = React$e.forwardRef(
+var PopoverClose = React$d.forwardRef(
   (props, forwardedRef) => {
     const { __scopePopover, ...closeProps } = props;
     const context = usePopoverContext(CLOSE_NAME, __scopePopover);
@@ -31529,7 +32584,7 @@ var PopoverClose = React$e.forwardRef(
 );
 PopoverClose.displayName = CLOSE_NAME;
 var ARROW_NAME = "PopoverArrow";
-var PopoverArrow = React$e.forwardRef(
+var PopoverArrow = React$d.forwardRef(
   (props, forwardedRef) => {
     const { __scopePopover, ...arrowProps } = props;
     const popperScope = usePopperScope(__scopePopover);
@@ -31586,7 +32641,7 @@ function __insertCSS(code) {
   ;style.styleSheet ? (style.styleSheet.cssText = code) : style.appendChild(document.createTextNode(code));
 }
 
-const React$d = await importShared('react');
+const React$c = await importShared('react');
 
 const ReactDOM = await importShared('react-dom');
 
@@ -31607,64 +32662,64 @@ const getAsset = (type)=>{
 };
 const bars = Array(12).fill(0);
 const Loader = ({ visible, className })=>{
-    return /*#__PURE__*/ React$d.createElement("div", {
+    return /*#__PURE__*/ React$c.createElement("div", {
         className: [
             'sonner-loading-wrapper',
             className
         ].filter(Boolean).join(' '),
         "data-visible": visible
-    }, /*#__PURE__*/ React$d.createElement("div", {
+    }, /*#__PURE__*/ React$c.createElement("div", {
         className: "sonner-spinner"
-    }, bars.map((_, i)=>/*#__PURE__*/ React$d.createElement("div", {
+    }, bars.map((_, i)=>/*#__PURE__*/ React$c.createElement("div", {
             className: "sonner-loading-bar",
             key: `spinner-bar-${i}`
         }))));
 };
-const SuccessIcon = /*#__PURE__*/ React$d.createElement("svg", {
+const SuccessIcon = /*#__PURE__*/ React$c.createElement("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 20 20",
     fill: "currentColor",
     height: "20",
     width: "20"
-}, /*#__PURE__*/ React$d.createElement("path", {
+}, /*#__PURE__*/ React$c.createElement("path", {
     fillRule: "evenodd",
     d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z",
     clipRule: "evenodd"
 }));
-const WarningIcon = /*#__PURE__*/ React$d.createElement("svg", {
+const WarningIcon = /*#__PURE__*/ React$c.createElement("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 24 24",
     fill: "currentColor",
     height: "20",
     width: "20"
-}, /*#__PURE__*/ React$d.createElement("path", {
+}, /*#__PURE__*/ React$c.createElement("path", {
     fillRule: "evenodd",
     d: "M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z",
     clipRule: "evenodd"
 }));
-const InfoIcon = /*#__PURE__*/ React$d.createElement("svg", {
+const InfoIcon = /*#__PURE__*/ React$c.createElement("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 20 20",
     fill: "currentColor",
     height: "20",
     width: "20"
-}, /*#__PURE__*/ React$d.createElement("path", {
+}, /*#__PURE__*/ React$c.createElement("path", {
     fillRule: "evenodd",
     d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z",
     clipRule: "evenodd"
 }));
-const ErrorIcon = /*#__PURE__*/ React$d.createElement("svg", {
+const ErrorIcon = /*#__PURE__*/ React$c.createElement("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 20 20",
     fill: "currentColor",
     height: "20",
     width: "20"
-}, /*#__PURE__*/ React$d.createElement("path", {
+}, /*#__PURE__*/ React$c.createElement("path", {
     fillRule: "evenodd",
     d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z",
     clipRule: "evenodd"
 }));
-const CloseIcon = /*#__PURE__*/ React$d.createElement("svg", {
+const CloseIcon = /*#__PURE__*/ React$c.createElement("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     width: "12",
     height: "12",
@@ -31674,12 +32729,12 @@ const CloseIcon = /*#__PURE__*/ React$d.createElement("svg", {
     strokeWidth: "1.5",
     strokeLinecap: "round",
     strokeLinejoin: "round"
-}, /*#__PURE__*/ React$d.createElement("line", {
+}, /*#__PURE__*/ React$c.createElement("line", {
     x1: "18",
     y1: "6",
     x2: "6",
     y2: "18"
-}), /*#__PURE__*/ React$d.createElement("line", {
+}), /*#__PURE__*/ React$c.createElement("line", {
     x1: "6",
     y1: "6",
     x2: "18",
@@ -31687,8 +32742,8 @@ const CloseIcon = /*#__PURE__*/ React$d.createElement("svg", {
 }));
 
 const useIsDocumentHidden = ()=>{
-    const [isDocumentHidden, setIsDocumentHidden] = React$d.useState(document.hidden);
-    React$d.useEffect(()=>{
+    const [isDocumentHidden, setIsDocumentHidden] = React$c.useState(document.hidden);
+    React$c.useEffect(()=>{
         const callback = ()=>{
             setIsDocumentHidden(document.hidden);
         };
@@ -31840,7 +32895,7 @@ class Observer {
                     'resolve',
                     response
                 ];
-                const isReactElementResponse = React$d.isValidElement(response);
+                const isReactElementResponse = React$c.isValidElement(response);
                 if (isReactElementResponse) {
                     shouldDismiss = false;
                     this.create({
@@ -31852,7 +32907,7 @@ class Observer {
                     shouldDismiss = false;
                     const promiseData = typeof data.error === 'function' ? await data.error(`HTTP error! status: ${response.status}`) : data.error;
                     const description = typeof data.description === 'function' ? await data.description(`HTTP error! status: ${response.status}`) : data.description;
-                    const isExtendedResult = typeof promiseData === 'object' && !React$d.isValidElement(promiseData);
+                    const isExtendedResult = typeof promiseData === 'object' && !React$c.isValidElement(promiseData);
                     const toastSettings = isExtendedResult ? promiseData : {
                         message: promiseData
                     };
@@ -31866,7 +32921,7 @@ class Observer {
                     shouldDismiss = false;
                     const promiseData = typeof data.error === 'function' ? await data.error(response) : data.error;
                     const description = typeof data.description === 'function' ? await data.description(response) : data.description;
-                    const isExtendedResult = typeof promiseData === 'object' && !React$d.isValidElement(promiseData);
+                    const isExtendedResult = typeof promiseData === 'object' && !React$c.isValidElement(promiseData);
                     const toastSettings = isExtendedResult ? promiseData : {
                         message: promiseData
                     };
@@ -31880,7 +32935,7 @@ class Observer {
                     shouldDismiss = false;
                     const promiseData = typeof data.success === 'function' ? await data.success(response) : data.success;
                     const description = typeof data.description === 'function' ? await data.description(response) : data.description;
-                    const isExtendedResult = typeof promiseData === 'object' && !React$d.isValidElement(promiseData);
+                    const isExtendedResult = typeof promiseData === 'object' && !React$c.isValidElement(promiseData);
                     const toastSettings = isExtendedResult ? promiseData : {
                         message: promiseData
                     };
@@ -31900,7 +32955,7 @@ class Observer {
                     shouldDismiss = false;
                     const promiseData = typeof data.error === 'function' ? await data.error(error) : data.error;
                     const description = typeof data.description === 'function' ? await data.description(error) : data.description;
-                    const isExtendedResult = typeof promiseData === 'object' && !React$d.isValidElement(promiseData);
+                    const isExtendedResult = typeof promiseData === 'object' && !React$c.isValidElement(promiseData);
                     const toastSettings = isExtendedResult ? promiseData : {
                         message: promiseData
                     };
@@ -32020,18 +33075,18 @@ function getDefaultSwipeDirections(position) {
 const Toast = (props)=>{
     var _toast_classNames, _toast_classNames1, _toast_classNames2, _toast_classNames3, _toast_classNames4, _toast_classNames5, _toast_classNames6, _toast_classNames7, _toast_classNames8;
     const { invert: ToasterInvert, toast, unstyled, interacting, setHeights, visibleToasts, heights, index, toasts, expanded, removeToast, defaultRichColors, closeButton: closeButtonFromToaster, style, cancelButtonStyle, actionButtonStyle, className = '', descriptionClassName = '', duration: durationFromToaster, position, gap, expandByDefault, classNames, icons, closeButtonAriaLabel = 'Close toast' } = props;
-    const [swipeDirection, setSwipeDirection] = React$d.useState(null);
-    const [swipeOutDirection, setSwipeOutDirection] = React$d.useState(null);
-    const [mounted, setMounted] = React$d.useState(false);
-    const [removed, setRemoved] = React$d.useState(false);
-    const [swiping, setSwiping] = React$d.useState(false);
-    const [swipeOut, setSwipeOut] = React$d.useState(false);
-    const [isSwiped, setIsSwiped] = React$d.useState(false);
-    const [offsetBeforeRemove, setOffsetBeforeRemove] = React$d.useState(0);
-    const [initialHeight, setInitialHeight] = React$d.useState(0);
-    const remainingTime = React$d.useRef(toast.duration || durationFromToaster || TOAST_LIFETIME);
-    const dragStartTime = React$d.useRef(null);
-    const toastRef = React$d.useRef(null);
+    const [swipeDirection, setSwipeDirection] = React$c.useState(null);
+    const [swipeOutDirection, setSwipeOutDirection] = React$c.useState(null);
+    const [mounted, setMounted] = React$c.useState(false);
+    const [removed, setRemoved] = React$c.useState(false);
+    const [swiping, setSwiping] = React$c.useState(false);
+    const [swipeOut, setSwipeOut] = React$c.useState(false);
+    const [isSwiped, setIsSwiped] = React$c.useState(false);
+    const [offsetBeforeRemove, setOffsetBeforeRemove] = React$c.useState(0);
+    const [initialHeight, setInitialHeight] = React$c.useState(0);
+    const remainingTime = React$c.useRef(toast.duration || durationFromToaster || TOAST_LIFETIME);
+    const dragStartTime = React$c.useRef(null);
+    const toastRef = React$c.useRef(null);
     const isFront = index === 0;
     const isVisible = index + 1 <= visibleToasts;
     const toastType = toast.type;
@@ -32039,27 +33094,27 @@ const Toast = (props)=>{
     const toastClassname = toast.className || '';
     const toastDescriptionClassname = toast.descriptionClassName || '';
     // Height index is used to calculate the offset as it gets updated before the toast array, which means we can calculate the new layout faster.
-    const heightIndex = React$d.useMemo(()=>heights.findIndex((height)=>height.toastId === toast.id) || 0, [
+    const heightIndex = React$c.useMemo(()=>heights.findIndex((height)=>height.toastId === toast.id) || 0, [
         heights,
         toast.id
     ]);
-    const closeButton = React$d.useMemo(()=>{
+    const closeButton = React$c.useMemo(()=>{
         var _toast_closeButton;
         return (_toast_closeButton = toast.closeButton) != null ? _toast_closeButton : closeButtonFromToaster;
     }, [
         toast.closeButton,
         closeButtonFromToaster
     ]);
-    const duration = React$d.useMemo(()=>toast.duration || durationFromToaster || TOAST_LIFETIME, [
+    const duration = React$c.useMemo(()=>toast.duration || durationFromToaster || TOAST_LIFETIME, [
         toast.duration,
         durationFromToaster
     ]);
-    const closeTimerStartTimeRef = React$d.useRef(0);
-    const offset = React$d.useRef(0);
-    const lastCloseTimerStartTimeRef = React$d.useRef(0);
-    const pointerStartRef = React$d.useRef(null);
+    const closeTimerStartTimeRef = React$c.useRef(0);
+    const offset = React$c.useRef(0);
+    const lastCloseTimerStartTimeRef = React$c.useRef(0);
+    const pointerStartRef = React$c.useRef(null);
     const [y, x] = position.split('-');
-    const toastsHeightBefore = React$d.useMemo(()=>{
+    const toastsHeightBefore = React$c.useMemo(()=>{
         return heights.reduce((prev, curr, reducerIndex)=>{
             // Calculate offset up until current toast
             if (reducerIndex >= heightIndex) {
@@ -32074,20 +33129,20 @@ const Toast = (props)=>{
     const isDocumentHidden = useIsDocumentHidden();
     const invert = toast.invert || ToasterInvert;
     const disabled = toastType === 'loading';
-    offset.current = React$d.useMemo(()=>heightIndex * gap + toastsHeightBefore, [
+    offset.current = React$c.useMemo(()=>heightIndex * gap + toastsHeightBefore, [
         heightIndex,
         toastsHeightBefore
     ]);
-    React$d.useEffect(()=>{
+    React$c.useEffect(()=>{
         remainingTime.current = duration;
     }, [
         duration
     ]);
-    React$d.useEffect(()=>{
+    React$c.useEffect(()=>{
         // Trigger enter animation without using CSS animation
         setMounted(true);
     }, []);
-    React$d.useEffect(()=>{
+    React$c.useEffect(()=>{
         const toastNode = toastRef.current;
         if (toastNode) {
             const height = toastNode.getBoundingClientRect().height;
@@ -32107,7 +33162,7 @@ const Toast = (props)=>{
         setHeights,
         toast.id
     ]);
-    React$d.useLayoutEffect(()=>{
+    React$c.useLayoutEffect(()=>{
         // Keep height up to date with the content in case it updates
         if (!mounted) return;
         const toastNode = toastRef.current;
@@ -32144,7 +33199,7 @@ const Toast = (props)=>{
         toast.action,
         toast.cancel
     ]);
-    const deleteToast = React$d.useCallback(()=>{
+    const deleteToast = React$c.useCallback(()=>{
         // Save the offset for the exit swipe animation
         setRemoved(true);
         setOffsetBeforeRemove(offset.current);
@@ -32158,7 +33213,7 @@ const Toast = (props)=>{
         setHeights,
         offset
     ]);
-    React$d.useEffect(()=>{
+    React$c.useEffect(()=>{
         if (toast.promise && toastType === 'loading' || toast.duration === Infinity || toast.type === 'loading') return;
         let timeoutId;
         // Pause the timer on each hover
@@ -32196,7 +33251,7 @@ const Toast = (props)=>{
         isDocumentHidden,
         deleteToast
     ]);
-    React$d.useEffect(()=>{
+    React$c.useEffect(()=>{
         if (toast.delete) {
             deleteToast();
             toast.onDismiss == null ? void 0 : toast.onDismiss.call(toast, toast);
@@ -32209,19 +33264,19 @@ const Toast = (props)=>{
         var _toast_classNames;
         if (icons == null ? void 0 : icons.loading) {
             var _toast_classNames1;
-            return /*#__PURE__*/ React$d.createElement("div", {
+            return /*#__PURE__*/ React$c.createElement("div", {
                 className: cn(classNames == null ? void 0 : classNames.loader, toast == null ? void 0 : (_toast_classNames1 = toast.classNames) == null ? void 0 : _toast_classNames1.loader, 'sonner-loader'),
                 "data-visible": toastType === 'loading'
             }, icons.loading);
         }
-        return /*#__PURE__*/ React$d.createElement(Loader, {
+        return /*#__PURE__*/ React$c.createElement(Loader, {
             className: cn(classNames == null ? void 0 : classNames.loader, toast == null ? void 0 : (_toast_classNames = toast.classNames) == null ? void 0 : _toast_classNames.loader),
             visible: toastType === 'loading'
         });
     }
     const icon = toast.icon || (icons == null ? void 0 : icons[toastType]) || getAsset(toastType);
     var _toast_richColors, _icons_close;
-    return /*#__PURE__*/ React$d.createElement("li", {
+    return /*#__PURE__*/ React$c.createElement("li", {
         tabIndex: 0,
         ref: toastRef,
         className: cn(className, toastClassname, classNames == null ? void 0 : classNames.toast, toast == null ? void 0 : (_toast_classNames = toast.classNames) == null ? void 0 : _toast_classNames.toast, classNames == null ? void 0 : classNames.default, classNames == null ? void 0 : classNames[toastType], toast == null ? void 0 : (_toast_classNames1 = toast.classNames) == null ? void 0 : _toast_classNames1[toastType]),
@@ -32355,7 +33410,7 @@ const Toast = (props)=>{
             (_toastRef_current = toastRef.current) == null ? void 0 : _toastRef_current.style.setProperty('--swipe-amount-x', `${swipeAmount.x}px`);
             (_toastRef_current1 = toastRef.current) == null ? void 0 : _toastRef_current1.style.setProperty('--swipe-amount-y', `${swipeAmount.y}px`);
         }
-    }, closeButton && !toast.jsx && toastType !== 'loading' ? /*#__PURE__*/ React$d.createElement("button", {
+    }, closeButton && !toast.jsx && toastType !== 'loading' ? /*#__PURE__*/ React$c.createElement("button", {
         "aria-label": closeButtonAriaLabel,
         "data-disabled": disabled,
         "data-close-button": true,
@@ -32364,19 +33419,19 @@ const Toast = (props)=>{
             toast.onDismiss == null ? void 0 : toast.onDismiss.call(toast, toast);
         },
         className: cn(classNames == null ? void 0 : classNames.closeButton, toast == null ? void 0 : (_toast_classNames2 = toast.classNames) == null ? void 0 : _toast_classNames2.closeButton)
-    }, (_icons_close = icons == null ? void 0 : icons.close) != null ? _icons_close : CloseIcon) : null, (toastType || toast.icon || toast.promise) && toast.icon !== null && ((icons == null ? void 0 : icons[toastType]) !== null || toast.icon) ? /*#__PURE__*/ React$d.createElement("div", {
+    }, (_icons_close = icons == null ? void 0 : icons.close) != null ? _icons_close : CloseIcon) : null, (toastType || toast.icon || toast.promise) && toast.icon !== null && ((icons == null ? void 0 : icons[toastType]) !== null || toast.icon) ? /*#__PURE__*/ React$c.createElement("div", {
         "data-icon": "",
         className: cn(classNames == null ? void 0 : classNames.icon, toast == null ? void 0 : (_toast_classNames3 = toast.classNames) == null ? void 0 : _toast_classNames3.icon)
-    }, toast.promise || toast.type === 'loading' && !toast.icon ? toast.icon || getLoadingIcon() : null, toast.type !== 'loading' ? icon : null) : null, /*#__PURE__*/ React$d.createElement("div", {
+    }, toast.promise || toast.type === 'loading' && !toast.icon ? toast.icon || getLoadingIcon() : null, toast.type !== 'loading' ? icon : null) : null, /*#__PURE__*/ React$c.createElement("div", {
         "data-content": "",
         className: cn(classNames == null ? void 0 : classNames.content, toast == null ? void 0 : (_toast_classNames4 = toast.classNames) == null ? void 0 : _toast_classNames4.content)
-    }, /*#__PURE__*/ React$d.createElement("div", {
+    }, /*#__PURE__*/ React$c.createElement("div", {
         "data-title": "",
         className: cn(classNames == null ? void 0 : classNames.title, toast == null ? void 0 : (_toast_classNames5 = toast.classNames) == null ? void 0 : _toast_classNames5.title)
-    }, toast.jsx ? toast.jsx : typeof toast.title === 'function' ? toast.title() : toast.title), toast.description ? /*#__PURE__*/ React$d.createElement("div", {
+    }, toast.jsx ? toast.jsx : typeof toast.title === 'function' ? toast.title() : toast.title), toast.description ? /*#__PURE__*/ React$c.createElement("div", {
         "data-description": "",
         className: cn(descriptionClassName, toastDescriptionClassname, classNames == null ? void 0 : classNames.description, toast == null ? void 0 : (_toast_classNames6 = toast.classNames) == null ? void 0 : _toast_classNames6.description)
-    }, typeof toast.description === 'function' ? toast.description() : toast.description) : null), /*#__PURE__*/ React$d.isValidElement(toast.cancel) ? toast.cancel : toast.cancel && isAction(toast.cancel) ? /*#__PURE__*/ React$d.createElement("button", {
+    }, typeof toast.description === 'function' ? toast.description() : toast.description) : null), /*#__PURE__*/ React$c.isValidElement(toast.cancel) ? toast.cancel : toast.cancel && isAction(toast.cancel) ? /*#__PURE__*/ React$c.createElement("button", {
         "data-button": true,
         "data-cancel": true,
         style: toast.cancelButtonStyle || cancelButtonStyle,
@@ -32388,7 +33443,7 @@ const Toast = (props)=>{
             deleteToast();
         },
         className: cn(classNames == null ? void 0 : classNames.cancelButton, toast == null ? void 0 : (_toast_classNames7 = toast.classNames) == null ? void 0 : _toast_classNames7.cancelButton)
-    }, toast.cancel.label) : null, /*#__PURE__*/ React$d.isValidElement(toast.action) ? toast.action : toast.action && isAction(toast.action) ? /*#__PURE__*/ React$d.createElement("button", {
+    }, toast.cancel.label) : null, /*#__PURE__*/ React$c.isValidElement(toast.action) ? toast.action : toast.action && isAction(toast.action) ? /*#__PURE__*/ React$c.createElement("button", {
         "data-button": true,
         "data-action": true,
         style: toast.actionButtonStyle || actionButtonStyle,
@@ -32451,13 +33506,13 @@ function assignOffset(defaultOffset, mobileOffset) {
     });
     return styles;
 }
-const Toaster = /*#__PURE__*/ React$d.forwardRef(function Toaster(props, ref) {
+const Toaster = /*#__PURE__*/ React$c.forwardRef(function Toaster(props, ref) {
     const { invert, position = 'bottom-right', hotkey = [
         'altKey',
         'KeyT'
     ], expand, closeButton, className, offset, mobileOffset, theme = 'light', richColors, duration, style, visibleToasts = VISIBLE_TOASTS_AMOUNT, toastOptions, dir = getDocumentDirection(), gap = GAP, icons, containerAriaLabel = 'Notifications' } = props;
-    const [toasts, setToasts] = React$d.useState([]);
-    const possiblePositions = React$d.useMemo(()=>{
+    const [toasts, setToasts] = React$c.useState([]);
+    const possiblePositions = React$c.useMemo(()=>{
         return Array.from(new Set([
             position
         ].concat(toasts.filter((toast)=>toast.position).map((toast)=>toast.position))));
@@ -32465,15 +33520,15 @@ const Toaster = /*#__PURE__*/ React$d.forwardRef(function Toaster(props, ref) {
         toasts,
         position
     ]);
-    const [heights, setHeights] = React$d.useState([]);
-    const [expanded, setExpanded] = React$d.useState(false);
-    const [interacting, setInteracting] = React$d.useState(false);
-    const [actualTheme, setActualTheme] = React$d.useState(theme !== 'system' ? theme : typeof window !== 'undefined' ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light' : 'light');
-    const listRef = React$d.useRef(null);
+    const [heights, setHeights] = React$c.useState([]);
+    const [expanded, setExpanded] = React$c.useState(false);
+    const [interacting, setInteracting] = React$c.useState(false);
+    const [actualTheme, setActualTheme] = React$c.useState(theme !== 'system' ? theme : typeof window !== 'undefined' ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light' : 'light');
+    const listRef = React$c.useRef(null);
     const hotkeyLabel = hotkey.join('+').replace(/Key/g, '').replace(/Digit/g, '');
-    const lastFocusedElementRef = React$d.useRef(null);
-    const isFocusWithinRef = React$d.useRef(false);
-    const removeToast = React$d.useCallback((toastToRemove)=>{
+    const lastFocusedElementRef = React$c.useRef(null);
+    const isFocusWithinRef = React$c.useRef(false);
+    const removeToast = React$c.useCallback((toastToRemove)=>{
         setToasts((toasts)=>{
             var _toasts_find;
             if (!((_toasts_find = toasts.find((toast)=>toast.id === toastToRemove.id)) == null ? void 0 : _toasts_find.delete)) {
@@ -32482,7 +33537,7 @@ const Toaster = /*#__PURE__*/ React$d.forwardRef(function Toaster(props, ref) {
             return toasts.filter(({ id })=>id !== toastToRemove.id);
         });
     }, []);
-    React$d.useEffect(()=>{
+    React$c.useEffect(()=>{
         return ToastState.subscribe((toast)=>{
             if (toast.dismiss) {
                 // Prevent batching of other state updates
@@ -32521,7 +33576,7 @@ const Toaster = /*#__PURE__*/ React$d.forwardRef(function Toaster(props, ref) {
     }, [
         toasts
     ]);
-    React$d.useEffect(()=>{
+    React$c.useEffect(()=>{
         if (theme !== 'system') {
             setActualTheme(theme);
             return;
@@ -32564,7 +33619,7 @@ const Toaster = /*#__PURE__*/ React$d.forwardRef(function Toaster(props, ref) {
     }, [
         theme
     ]);
-    React$d.useEffect(()=>{
+    React$c.useEffect(()=>{
         // Ensure expanded is always false when no toasts are present / only one left
         if (toasts.length <= 1) {
             setExpanded(false);
@@ -32572,7 +33627,7 @@ const Toaster = /*#__PURE__*/ React$d.forwardRef(function Toaster(props, ref) {
     }, [
         toasts
     ]);
-    React$d.useEffect(()=>{
+    React$c.useEffect(()=>{
         const handleKeyDown = (event)=>{
             var _listRef_current;
             const isHotkeyPressed = hotkey.every((key)=>event[key] || event.code === key);
@@ -32590,7 +33645,7 @@ const Toaster = /*#__PURE__*/ React$d.forwardRef(function Toaster(props, ref) {
     }, [
         hotkey
     ]);
-    React$d.useEffect(()=>{
+    React$c.useEffect(()=>{
         if (listRef.current) {
             return ()=>{
                 if (lastFocusedElementRef.current) {
@@ -32606,7 +33661,7 @@ const Toaster = /*#__PURE__*/ React$d.forwardRef(function Toaster(props, ref) {
         listRef.current
     ]);
     return(// Remove item from normal navigation flow, only available via hotkey
-    /*#__PURE__*/ React$d.createElement("section", {
+    /*#__PURE__*/ React$c.createElement("section", {
         ref: ref,
         "aria-label": `${containerAriaLabel} ${hotkeyLabel}`,
         tabIndex: -1,
@@ -32618,7 +33673,7 @@ const Toaster = /*#__PURE__*/ React$d.forwardRef(function Toaster(props, ref) {
         var _heights_;
         const [y, x] = position.split('-');
         if (!toasts.length) return null;
-        return /*#__PURE__*/ React$d.createElement("ol", {
+        return /*#__PURE__*/ React$c.createElement("ol", {
             key: position,
             dir: dir === 'auto' ? getDocumentDirection() : dir,
             tabIndex: -1,
@@ -32671,7 +33726,7 @@ const Toaster = /*#__PURE__*/ React$d.forwardRef(function Toaster(props, ref) {
             onPointerUp: ()=>setInteracting(false)
         }, toasts.filter((toast)=>!toast.position && index === 0 || toast.position === position).map((toast, index)=>{
             var _toastOptions_duration, _toastOptions_closeButton;
-            return /*#__PURE__*/ React$d.createElement(Toast, {
+            return /*#__PURE__*/ React$c.createElement(Toast, {
                 key: toast.id,
                 icons: icons,
                 index: index,
@@ -32724,6 +33779,7 @@ const {useState: useState$c} = await importShared('react');
 const {useEffect: useEffect$b} = await importShared('react');
 function RegisterModal({ isOpen, onClose, onCloseAll }) {
   const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.Login);
   const navigate = useNavigate();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState$c(false);
   const [shouldReopenRegister, setShouldReopenRegister] = useState$c(false);
@@ -32745,6 +33801,11 @@ function RegisterModal({ isOpen, onClose, onCloseAll }) {
       setShouldReopenRegister(false);
     }
   }, [shouldReopenRegister, isLoginModalOpen]);
+  useEffect$b(() => {
+    if (isAuthenticated && isOpen) {
+      handleClose();
+    }
+  }, [isAuthenticated, isOpen]);
   useEffect$b(() => {
     if (isOpen) {
       setErrors({});
@@ -33067,26 +34128,50 @@ function extractOddsW1W2$1(markets) {
   };
 }
 function MainLiveSection() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
   const [selectedMatch, setSelectedMatch] = useState$b(null);
   const [selectedSport, setSelectedSport] = useState$b(null);
+  const [desktopEventsSnapshot, setDesktopEventsSnapshot] = useState$b({ selectedType: "live", matchesBySport: {} });
   const [isLoginModalOpen, setIsLoginModalOpen] = useState$b(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState$b(false);
   const selectedRunnerRef = useRef$3(null);
-  const [mobileView, setMobileView] = useState$b("sports");
+  const [mobileView, setMobileView] = useState$b(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      const state = location.state || {};
+      if (state.source === "upcoming_matches" && state.selectedGameId) {
+        return "markets";
+      }
+    }
+    return "sports";
+  });
   const [isBetSlipOpen, setIsBetSlipOpen] = useState$b(false);
   const [mobileEvents, setMobileEvents] = useState$b([]);
   const [loadingEvents, setLoadingEvents] = useState$b(false);
   const [selectedType, setSelectedType] = useState$b("live");
-  const [entrySource, setEntrySource] = useState$b(null);
+  const [entrySource, setEntrySource] = useState$b(location.state?.source || null);
+  const [mobileHeaderSport, setMobileHeaderSport] = useState$b(null);
   const eventIdFromUrl = searchParams.get("eventId");
   useEffect$a(() => {
+    console.log("=== MAIN LIVE SECTION EFFECT TRIGGERED ===");
+    console.log("Location state:", location.state);
+    console.log("Current URL search params:", window.location.search);
+    console.log("EventId from URL params:", eventIdFromUrl);
     const navigationState = location.state || {};
-    const selectedGameId = navigationState.selectedGameId || eventIdFromUrl;
-    if (!selectedGameId) return;
-    if (window.innerWidth >= 768) return;
+    const selectedGameIdFromUrl = eventIdFromUrl;
+    const selectedGameIdFromState = navigationState.selectedGameId;
+    const selectedGameId = selectedGameIdFromState || selectedGameIdFromUrl;
+    const source = navigationState.source || null;
+    console.log("SelectedGameId from URL:", selectedGameIdFromUrl);
+    console.log("SelectedGameId from state:", selectedGameIdFromState);
+    console.log("Effective selectedGameId:", selectedGameId);
+    console.log("Source:", source);
+    console.log("Entry source:", entrySource);
+    if (!selectedGameId && source !== "upcoming_matches" && entrySource !== "upcoming_matches") {
+      console.log("Returning early - no selectedGameId and not from upcoming_matches");
+      return;
+    }
     let cancelled = false;
     const viewType = navigationState.viewType;
     const isLive = viewType !== "prematch";
@@ -33095,6 +34180,46 @@ function MainLiveSection() {
     async function loadSelectedMatch() {
       setLoadingEvents(true);
       try {
+        if (source === "upcoming_matches" && selectedGameId) {
+          const effectiveSportKey = requestedSportKey || navigationState.matchDetails?.sportKey;
+          if (effectiveSportKey) {
+            const sport = SPORTS.find((s) => s.key === effectiveSportKey);
+            if (sport) {
+              setSelectedSport(sport);
+              setMobileHeaderSport(sport);
+              const matchDetails = navigationState.matchDetails || {};
+              const selectedMatchData = {
+                eventId: selectedGameId,
+                sportKey: effectiveSportKey,
+                sportId: SPORT_ID_BY_KEY[effectiveSportKey],
+                // Populate from passed details if available
+                eventName: matchDetails.eventName || "",
+                team1: matchDetails.team1 || "",
+                team2: matchDetails.team2 || "",
+                openDate: matchDetails.openDate || Date.now(),
+                status: matchDetails.status || "UPCOMING"
+              };
+              setSelectedMatch(selectedMatchData);
+              console.log("=== UPDATING URL FROM UPCOMING MATCHES ===");
+              console.log("Setting params:", {
+                eventId: selectedGameId,
+                sportKey: effectiveSportKey,
+                eventName: matchDetails.eventName || "",
+                viewType: "live",
+                source: "upcoming_matches"
+              });
+              setSearchParams({
+                eventId: selectedGameId,
+                sportKey: effectiveSportKey,
+                eventName: matchDetails.eventName || "",
+                viewType: "live",
+                source: "upcoming_matches"
+              });
+              setMobileView("markets");
+              return;
+            }
+          }
+        }
         const searchSportKeys = requestedSportKey ? [requestedSportKey] : SPORTS.map((s) => s.key);
         for (const sportKey of searchSportKeys) {
           const sportId = SPORT_ID_BY_KEY[sportKey];
@@ -33102,20 +34227,42 @@ function MainLiveSection() {
           const json = await fetchSportsEvents(sportId, isLive);
           if (cancelled) return;
           const list = Array.isArray(json?.sports) ? json.sports : [];
-          const match = list.find((m) => m.eventId === selectedGameId);
+          const match = list.find((m) => String(m.eventId) === String(selectedGameId));
           if (!match) continue;
           const sport = SPORTS.find((s) => s.key === sportKey) || null;
-          if (sport) setSelectedSport(sport);
+          if (sport) {
+            setSelectedSport(sport);
+            setMobileHeaderSport(sport);
+          }
           const parts = match.eventName ? match.eventName.split(/\s+vs\.?\s+/i) : [];
           const team1 = parts[0]?.trim() || "";
           const team2 = parts[1]?.trim() || "";
-          setSelectedMatch({
+          const selectedMatchData = {
             ...match,
             team1,
             team2,
             odds: extractOddsW1W2$1(match.markets),
             sportKey
-          });
+          };
+          setSelectedMatch(selectedMatchData);
+          console.log("=== UPDATING URL FROM MATCH FETCH ===");
+          const currentParams = new URLSearchParams(window.location.search);
+          console.log("Current params eventId:", currentParams.get("eventId"));
+          console.log("Current params sportKey:", currentParams.get("sportKey"));
+          console.log("New eventId:", match.eventId);
+          console.log("New sportKey:", sportKey);
+          if (currentParams.get("eventId") !== match.eventId || currentParams.get("sportKey") !== sportKey) {
+            console.log("Params differ - updating URL");
+            setSearchParams({
+              eventId: match.eventId,
+              sportKey,
+              eventName: match.eventName || "",
+              source: entrySource || "",
+              viewType: viewType || "live"
+            });
+          } else {
+            console.log("Params are the same - skipping URL update");
+          }
           setMobileView("markets");
           return;
         }
@@ -33127,7 +34274,43 @@ function MainLiveSection() {
     return () => {
       cancelled = true;
     };
-  }, [eventIdFromUrl, location.key]);
+  }, [eventIdFromUrl, entrySource]);
+  useEffect$a(() => {
+    const eventIdFromUrl2 = searchParams.get("eventId");
+    const urlSource = location.state?.source || entrySource || searchParams.get("source") || "";
+    if (urlSource === "upcoming_matches" && selectedMatch && eventIdFromUrl2 === selectedMatch.eventId) {
+      return;
+    }
+    if (!eventIdFromUrl2) return;
+    const effectSource = location.state?.source || entrySource;
+    if (effectSource === "upcoming_matches" && selectedMatch && (!selectedMatch.team1 || !selectedMatch.eventName)) {
+      const fetchEventDetails = async () => {
+        try {
+          const sportId = selectedMatch.sportId || SPORT_ID_BY_KEY[selectedMatch.sportKey];
+          if (!sportId) return;
+          const isLive = location.state?.viewType !== "prematch";
+          const json = await fetchSportsEvents(sportId, isLive);
+          const list = Array.isArray(json?.sports) ? json.sports : [];
+          const match = list.find((m) => String(m.eventId) === String(selectedMatch.eventId));
+          if (match) {
+            const parts = match.eventName ? match.eventName.split(/\s+vs\.?\s+/i) : [];
+            const team1 = parts[0]?.trim() || "";
+            const team2 = parts[1]?.trim() || "";
+            setSelectedMatch((prev) => ({
+              ...prev,
+              ...match,
+              team1,
+              team2,
+              odds: extractOddsW1W2$1(match.markets)
+            }));
+          }
+        } catch (e) {
+          console.error("Failed to fetch event details", e);
+        }
+      };
+      fetchEventDetails();
+    }
+  }, [eventIdFromUrl, selectedMatch, entrySource]);
   const updateSelectedMatchOdds = (updatedMatch) => {
     setSelectedMatch((prevMatch) => {
       if (prevMatch && prevMatch.eventId === updatedMatch.eventId) {
@@ -33163,6 +34346,7 @@ function MainLiveSection() {
   };
   const handleSportSelect = (sport) => {
     setSelectedSport(sport);
+    setMobileHeaderSport(sport);
     setSelectedMatch(null);
     setEntrySource(null);
     if (window.innerWidth < 768) {
@@ -33170,9 +34354,46 @@ function MainLiveSection() {
     }
   };
   const handleMatchSelect = (match) => {
+    console.log("=== HANDLE MATCH SELECT (MOBILE) ===");
+    console.log("Selected match:", match);
     setSelectedMatch(match);
+    if (match && match.eventId) {
+      const currentViewType = searchParams.get("viewType") || location.state?.viewType || "live";
+      console.log("Updating URL with match data:", {
+        eventId: match.eventId,
+        sportKey: match.sportKey || selectedSport?.key || "",
+        eventName: match.eventName || "",
+        viewType: currentViewType
+      });
+      setSearchParams({
+        eventId: match.eventId,
+        sportKey: match.sportKey || selectedSport?.key || "",
+        eventName: match.eventName || "",
+        viewType: currentViewType
+      });
+    }
     if (window.innerWidth < 768) {
       setMobileView("markets");
+    }
+  };
+  const handleMatchSelectDesktop = (match) => {
+    console.log("=== HANDLE MATCH SELECT (DESKTOP) ===");
+    console.log("Selected match:", match);
+    setSelectedMatch(match);
+    if (match && match.eventId) {
+      const currentViewType = searchParams.get("viewType") || location.state?.viewType || "live";
+      console.log("Updating URL with match data:", {
+        eventId: match.eventId,
+        sportKey: match.sportKey || selectedSport?.key || "",
+        eventName: match.eventName || "",
+        viewType: currentViewType
+      });
+      setSearchParams({
+        eventId: match.eventId,
+        sportKey: match.sportKey || selectedSport?.key || "",
+        eventName: match.eventName || "",
+        viewType: currentViewType
+      });
     }
   };
   useEffect$a(() => {
@@ -33189,6 +34410,19 @@ function MainLiveSection() {
       }
     }
   }, [selectedMatch]);
+  const activeDesktopViewType = searchParams.get("viewType") || desktopEventsSnapshot.selectedType || "live";
+  const selectedDesktopSportKey = selectedSport?.key;
+  const desktopBoardEntries = Object.entries(desktopEventsSnapshot.matchesBySport || {}).filter(
+    ([sportKey]) => activeDesktopViewType === "prematch" && selectedDesktopSportKey ? sportKey === selectedDesktopSportKey : true
+  );
+  const desktopBoardMatches = desktopBoardEntries.flatMap(
+    ([sportKey, matches]) => (Array.isArray(matches) ? matches : []).map((match) => ({
+      ...match,
+      sportKey: match.sportKey || sportKey,
+      odds: desktopEventsSnapshot.oddsByEventId?.[match.eventId] || match.odds,
+      oddsHighlight: desktopEventsSnapshot.highlightedOdds?.[match.eventId] || {}
+    }))
+  );
   const rightEventInfo = selectedMatch && selectedMatch.selectedMarket ? selectedMatch : selectedMatch ? {
     ...selectedMatch,
     team1: selectedMatch.team1,
@@ -33197,7 +34431,7 @@ function MainLiveSection() {
   } : null;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex w-full h-[calc(100vh-60px)] bg-live-primary text-live-primary relative overflow-hidden", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "md:hidden w-full h-full", children: [
-      mobileView === "sports" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full h-full bg-live-secondary p-4 overflow-y-auto", children: [
+      mobileView === "sports" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full h-full bg-live-secondary p-4 overflow-y-auto md:hidden", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-lg font-bold text-live-primary mb-4", children: "Select Sport" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-3 gap-3 pb-20", children: SPORTS.map((sport) => {
           const Icon = sport.icon;
@@ -33216,7 +34450,7 @@ function MainLiveSection() {
           );
         }) })
       ] }),
-      mobileView === "events" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full h-full bg-live-secondary flex flex-col", children: [
+      mobileView === "events" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full h-full bg-live-secondary flex flex-col md:hidden", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 p-3 border-b border-live bg-live-tertiary", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             "button",
@@ -33233,7 +34467,7 @@ function MainLiveSection() {
               children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronLeft, { className: "w-6 h-6 text-live-primary" })
             }
           ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-lg font-bold text-live-primary", children: selectedSport?.sportNames?.[0] ? `${selectedSport.sportNames[0]} Events` : "Events" })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-lg font-bold text-live-primary", children: mobileHeaderSport?.sportNames?.[0] ? `${mobileHeaderSport.sportNames[0]} Events` : "Events" })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 overflow-y-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
           LeftSidebarEventView,
@@ -33242,11 +34476,11 @@ function MainLiveSection() {
             setSelectedSport,
             selectedMatch,
             onSelectedMatchOddsUpdate: updateSelectedMatchOdds,
-            selectedSportFilter: selectedSport
+            selectedSportFilter: mobileHeaderSport
           }
         ) })
       ] }),
-      mobileView === "markets" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full h-full flex flex-col", children: [
+      mobileView === "markets" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full h-full flex flex-col md:hidden", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 p-3 border-b border-live bg-live-tertiary", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             "button",
@@ -33278,18 +34512,22 @@ function MainLiveSection() {
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hidden md:flex md:w-[18%] min-w-[200px] max-w-[360px] overflow-y-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       LeftSidebarEventView,
       {
-        setSelectedMatch,
+        setSelectedMatch: handleMatchSelectDesktop,
         setSelectedSport,
         selectedMatch,
-        onSelectedMatchOddsUpdate: updateSelectedMatchOdds
+        onSelectedMatchOddsUpdate: updateSelectedMatchOdds,
+        onEventsSnapshot: setDesktopEventsSnapshot
       }
     ) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hidden md:flex flex-1 overflow-y-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hidden md:flex flex-1 overflow-y-auto h-full w-full min-h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       MiddleGameDisplay,
       {
         match: selectedMatch,
         sport: selectedSport,
-        onRunnerSelect: handleRunnerSelect
+        onRunnerSelect: handleRunnerSelect,
+        eventBoardMatches: desktopBoardMatches,
+        boardViewMode: activeDesktopViewType,
+        onMatchSelect: handleMatchSelectDesktop
       }
     ) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -33333,7 +34571,7 @@ function MainLiveSection() {
         ]
       }
     ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hidden md:block w-[25%] min-w-[200px] max-w-[320px] overflow-y-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hidden md:block w-[25%] min-w-[200px] max-w-[320px] overflow-y-auto h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       RightEventInfoSection,
       {
         selectedGame: rightEventInfo,
@@ -33366,8 +34604,8 @@ function MainLiveSection() {
   ] });
 }
 
-const React$c = await importShared('react');
-const {useEffect: useEffect$9,useState: useState$a,useRef: useRef$2} = React$c;
+const React$b = await importShared('react');
+const {useEffect: useEffect$9,useState: useState$a,useRef: useRef$2} = React$b;
 function extractOddsW1W2(markets) {
   const mo = markets?.matchOdds?.[0];
   const r0 = mo?.runners?.[0];
@@ -33477,43 +34715,6 @@ const LiveCalender = () => {
       }
     }).finally(() => setLoading(false));
   }, [selectedSportKeys]);
-  useEffect$9(() => {
-    let intervalId;
-    function pollOdds() {
-      if (selectedMatch) {
-        const sportId = SPORT_ID_BY_KEY[selectedMatch.sportKey];
-        if (!sportId) return;
-        fetchSportsEvents(sportId, false).then((json) => {
-          const list = json?.sports ?? [];
-          const updatedMatch = list.find((m) => m.eventId === selectedMatch.eventId);
-          if (updatedMatch) {
-            extractOddsW1W2(updatedMatch.markets);
-            setSelectedMatch((prevMatch) => {
-              if (prevMatch && prevMatch.eventId === updatedMatch.eventId) {
-                return {
-                  ...updatedMatch,
-                  sportKey: prevMatch.sportKey,
-                  // Preserve sportKey
-                  // Preserve any market runner selection if it exists
-                  selectedMarket: prevMatch.selectedMarket,
-                  selectedRunner: prevMatch.selectedRunner,
-                  selectedOdd: prevMatch.selectedOdd
-                };
-              }
-              return prevMatch;
-            });
-          }
-        }).catch(() => {
-        });
-      }
-    }
-    intervalId = setInterval(pollOdds, 1e3);
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
-  }, [selectedMatch]);
   const handleMatchClick = (match) => {
     setSelectedMatch(match);
   };
@@ -33769,8 +34970,8 @@ const fetchMatchResultsFailure = (error) => {
   };
 };
 
-const React$b = await importShared('react');
-const {useState: useState$9,useEffect: useEffect$8} = React$b;
+const React$a = await importShared('react');
+const {useState: useState$9,useEffect: useEffect$8} = React$a;
 const Results = () => {
   const dispatch = useDispatch();
   const { userData } = useSelector((state) => state.GetUserData);
@@ -33780,6 +34981,7 @@ const Results = () => {
   const [startDate, setStartDate] = useState$9(new Date(2025, 7, 22));
   const [endDate, setEndDate] = useState$9(new Date(2025, 7, 22));
   const [expandedEvents, setExpandedEvents] = useState$9({});
+  const [selectedEvent, setSelectedEvent] = useState$9(null);
   useEffect$8(() => {
     if (userData?._id) {
       dispatch(fetchUserBets(userData._id));
@@ -33799,11 +35001,38 @@ const Results = () => {
       });
     }
   }, [dispatch, userBetsState]);
-  const toggleEvent = (eventId) => {
+  const selectEvent = (event) => {
+    setSelectedEvent(event);
     setExpandedEvents((prev) => ({
       ...prev,
-      [eventId]: !prev[eventId]
+      [event.eventId]: true
     }));
+  };
+  const isEventFinished = (event) => {
+    if (!event?.markets) return false;
+    for (const marketType in event.markets) {
+      const markets = event.markets[marketType];
+      if (Array.isArray(markets)) {
+        for (const market of markets) {
+          if (Array.isArray(market.runners)) {
+            for (const runner of market.runners) {
+              if (runner.result === "won" || runner.result === "lost") {
+                return true;
+              }
+            }
+          }
+        }
+      }
+    }
+    return false;
+  };
+  const getFilteredEvents = () => {
+    const allEvents = getEventData();
+    if (activeTab === "Live") {
+      return allEvents.filter((event) => !isEventFinished(event));
+    } else {
+      return allEvents.filter((event) => isEventFinished(event));
+    }
   };
   const resetFilters = () => {
     setStartDate(new Date(2025, 7, 22));
@@ -33863,14 +35092,17 @@ const Results = () => {
     });
     return Object.values(eventMap);
   };
-  const eventData = getEventData();
+  const filteredEventData = getFilteredEvents();
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "results-container bg-live-tertiary text-live-primary min-h-screen", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "results-tabs bg-live-tertiary border-b border-live flex", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "button",
         {
           className: `tab flex-1 bg-live-tertiary text-live-secondary border-b-2 hover:bg-live-primary text-xs sm:text-sm py-2 sm:py-3 ${activeTab === "Live" ? "active bg-live-hover text-live-primary border-live-primary" : "border-transparent"}`,
-          onClick: () => setActiveTab("Live"),
+          onClick: () => {
+            setActiveTab("Live");
+            setSelectedEvent(null);
+          },
           children: "Live"
         }
       ),
@@ -33878,13 +35110,16 @@ const Results = () => {
         "button",
         {
           className: `tab flex-1 bg-live-tertiary text-live-secondary border-b-2 hover:bg-live-primary text-xs sm:text-sm py-2 sm:py-3 ${activeTab === "Finished" ? "active bg-live-hover text-live-primary border-live-primary" : "border-transparent"}`,
-          onClick: () => setActiveTab("Finished"),
+          onClick: () => {
+            setActiveTab("Finished");
+            setSelectedEvent(null);
+          },
           children: "Finished"
         }
       )
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "results-filters bg-live-primary p-3 sm:p-4 border-b border-live", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "filter-row flex flex-col gap-3", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 sm:flex sm:flex-row gap-3", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "results-filters bg-live-primary p-3 sm:p-4 border-b border-live", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "date-field w-full", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "text-xs font-medium mb-1.5 block text-live-secondary uppercase tracking-wider", children: "Start Date" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "date-input-wrapper w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Popover, { children: [
@@ -33938,11 +35173,11 @@ const Results = () => {
           ] }) })
         ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "action-buttons grid grid-cols-2 gap-3 pt-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "button",
           {
-            className: "reset-btn w-full bg-live-tertiary border border-live text-live-primary hover:bg-live-hover text-xs font-semibold px-3 py-2.5 rounded transition-all duration-200 active:scale-95",
+            className: "reset-btn w-full h-10 bg-live-tertiary border border-live text-live-primary hover:bg-live-hover text-xs font-semibold px-3 rounded transition-all duration-200 active:scale-95 whitespace-nowrap",
             onClick: resetFilters,
             children: "RESET"
           }
@@ -33950,134 +35185,70 @@ const Results = () => {
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "button",
           {
-            className: "show-btn w-full bg-live-accent text-live-dark hover:brightness-110 transition-all duration-200 font-bold text-xs px-3 py-2.5 rounded shadow-sm active:scale-95",
+            className: "show-btn w-full h-10 bg-live-accent text-live-dark hover:brightness-110 transition-all duration-200 font-bold text-xs px-3 rounded shadow-sm active:scale-95 whitespace-nowrap",
             children: "SHOW"
           }
         )
       ] })
     ] }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "results-content flex flex-col md:flex-row min-h-[calc(100vh-200px)] bg-live-tertiary", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "leagues-list w-full md:w-1/2 bg-live-tertiary md:border-r border-live overflow-y-auto p-2 sm:p-0", children: eventData.length > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-2 sm:gap-0", children: eventData.map((event) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "league-item bg-live-primary rounded-lg sm:rounded-none border border-live sm:border-0 sm:border-b last:border-0 overflow-hidden shadow-sm sm:shadow-none transition-all duration-200", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "div",
-          {
-            className: `league-header flex items-center justify-between px-4 py-3 cursor-pointer transition-colors duration-200 ${expandedEvents[event.eventId] ? "bg-live-secondary/10" : "hover:bg-live-secondary/5"}`,
-            onClick: () => toggleEvent(event.eventId),
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "league-info flex items-center gap-3 flex-1 min-w-0", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center w-8 h-8 rounded-full bg-live-tertiary border border-live shadow-sm flex-shrink-0 group-hover:scale-105 transition-transform", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "league-icon text-live-accent text-sm", children: "⚽" }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col min-w-0", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "league-name text-live-primary text-sm font-bold truncate leading-tight", children: event.eventName }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mt-1", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-live-secondary px-1.5 py-0.5 bg-live-tertiary rounded border border-live/50", children: event.openDate ? new Date(event.openDate).toLocaleDateString() : "Today" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-live-secondary truncate", children: event.openDate ? new Date(event.openDate).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "Live" })
-                  ] })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "leagues-list w-full md:w-1/2 bg-live-tertiary md:border-r border-live overflow-y-auto p-2 sm:p-0", children: filteredEventData.length > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-2 sm:gap-0", children: filteredEventData.map((event) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `league-item bg-live-primary rounded-lg sm:rounded-none border border-live sm:border-0 sm:border-b last:border-0 overflow-hidden shadow-sm sm:shadow-none transition-all duration-200 ${selectedEvent?.eventId === event.eventId ? "bg-yellow-400/10" : ""}`, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "div",
+        {
+          className: `league-header flex items-center justify-between px-4 py-3 cursor-pointer transition-colors duration-200 ${selectedEvent?.eventId === event.eventId ? "bg-yellow-400/20 border-l-4 border-yellow-400" : "hover:bg-live-secondary/5"}`,
+          onClick: () => selectEvent(event),
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "league-info flex items-center gap-3 flex-1 min-w-0", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center w-8 h-8 rounded-full bg-live-tertiary border border-live shadow-sm flex-shrink-0 group-hover:scale-105 transition-transform", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "league-icon text-live-accent text-sm", children: "⚽" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col min-w-0", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "league-name text-live-primary text-sm font-bold truncate leading-tight", children: event.eventName }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mt-1", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-live-secondary px-1.5 py-0.5 bg-live-tertiary rounded border border-live/50", children: event.openDate ? new Date(event.openDate).toLocaleDateString() : "Today" }),
+                  activeTab === "Finished" ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-green-500 px-1.5 py-0.5 bg-green-500/20 rounded border border-green-500/30 whitespace-nowrap", children: "Settled" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-live-secondary truncate", children: event.openDate ? new Date(event.openDate).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "Live" })
                 ] })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `expand-arrow text-live-secondary w-6 h-6 flex items-center justify-center rounded-full bg-live-tertiary border border-live/30 transition-all duration-300 flex-shrink-0 ml-2 ${expandedEvents[event.eventId] ? "rotate-180 bg-live-accent text-live-dark border-live-accent" : "group-hover:bg-live-hover"}`, children: "▼" })
-            ]
-          }
-        ),
-        expandedEvents[event.eventId] && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "league-content bg-live-tertiary/50 p-3 border-t border-live animate-in slide-in-from-top-2 duration-200", children: event.markets && Object.keys(event.markets).some((marketType) => event.markets[marketType] && event.markets[marketType].length > 0) ? Object.entries(event.markets).map(
-          ([marketType, marketList]) => marketList && marketList.length > 0 ? marketList.map((market, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-3 last:mb-0 bg-live-primary rounded-lg border border-live p-3 shadow-sm", children: [
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `expand-arrow text-live-secondary w-6 h-6 flex items-center justify-center rounded-full bg-live-tertiary border border-live/30 transition-all duration-300 flex-shrink-0 ml-2 ${selectedEvent?.eventId === event.eventId ? "transform rotate-90 bg-live-accent text-live-dark border-live-accent" : "group-hover:bg-live-hover"}`, children: "◀" })
+          ]
+        }
+      ) }, event.eventId)) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "no-results-placeholder p-4 text-center text-live-muted text-xs sm:text-sm", children: matchResultsState.loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Loading match results..." }) : matchResultsState.error ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        "Error loading match results: ",
+        matchResultsState.error
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "No match results found" }) }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "results-display w-full md:w-1/2 bg-live-tertiary", children: selectedEvent ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full max-w-full bg-live-primary rounded-lg border border-live shadow-lg animate-in fade-in duration-300 flex flex-col h-full", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-b border-live px-4 py-3 bg-live-secondary/5", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-lg font-bold text-live-primary truncate", children: selectedEvent.eventName }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mt-1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-live-secondary px-2 py-1 bg-live-tertiary rounded border border-live/50", children: selectedEvent.openDate ? new Date(selectedEvent.openDate).toLocaleDateString() : "Today" }),
+            activeTab === "Finished" ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-green-500 px-2 py-1 bg-green-500/20 rounded border border-green-500/30 whitespace-nowrap", children: "Settled" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-live-secondary", children: selectedEvent.openDate ? new Date(selectedEvent.openDate).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "Live" })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-4 max-h-96 overflow-y-auto flex-grow", children: selectedEvent.markets && Object.keys(selectedEvent.markets).some((marketType) => selectedEvent.markets[marketType] && selectedEvent.markets[marketType].length > 0) ? Object.entries(selectedEvent.markets).map(
+          ([marketType, marketList]) => marketList && marketList.length > 0 ? marketList.map((market, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-4 last:mb-0 bg-live-tertiary rounded-lg border border-live p-3 shadow-sm", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-3 pb-2 border-b border-live/50", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-1 h-3 bg-live-accent rounded-full" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-bold text-live-primary text-xs uppercase tracking-wider", children: market.marketName })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-bold text-live-primary text-sm uppercase tracking-wider", children: market.marketName })
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 gap-2", children: market.runners && market.runners.map((runner, runnerIndex) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
               "div",
               {
-                className: `relative p-2.5 rounded-md text-center text-xs transition-all duration-200 border ${runner.result === "won" ? "bg-green-500/10 text-green-500 border-green-500/30" : runner.result === "lost" ? "bg-red-500/10 text-red-500 border-red-500/30" : "bg-live-tertiary text-live-primary border-live"}`,
+                className: `relative p-3 rounded-md text-center transition-all duration-200 border ${runner.result === "won" ? "bg-green-500/10 text-green-500 border-green-500/30 shadow-green-500/10 shadow-sm" : runner.result === "lost" ? "bg-red-500/10 text-red-500 border-red-500/30 shadow-red-500/10 shadow-sm" : "bg-live-primary text-live-primary border-live shadow-sm"}`,
                 children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-bold truncate mb-1.5", children: runner.runnerName }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full inline-block ${runner.result === "won" ? "bg-green-500/20" : runner.result === "lost" ? "bg-red-500/20" : "bg-live-secondary/20"}`, children: runner.result ? runner.result : "Pending" })
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-bold truncate mb-2", children: runner.runnerName }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `text-xs uppercase tracking-wider font-bold px-2 py-1 rounded-full inline-block ${runner.result === "won" ? "bg-green-500/20" : runner.result === "lost" ? "bg-red-500/20" : "bg-live-secondary/20"}`, children: runner.result ? runner.result : "Pending" })
                 ]
               },
-              `${event.eventId}-${market.marketId}-${runner.runnerId}`
+              `${selectedEvent.eventId}-${market.marketId}-${runner.runnerId}`
             )) })
-          ] }, `${event.eventId}-${market.marketId}`)) : null
-        ) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "no-matches flex flex-col items-center justify-center py-6 text-live-muted", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-2xl mb-2 opacity-20", children: "📊" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-medium", children: "No market data available" })
+          ] }, `${selectedEvent.eventId}-${market.marketId}`)) : null
+        ) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "no-matches flex flex-col items-center justify-center py-8 text-live-muted", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-3xl mb-3 opacity-20", children: "📊" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium", children: "No market data available" })
         ] }) })
-      ] }, event.eventId)) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "no-results-placeholder p-4 text-center text-live-muted text-xs sm:text-sm", children: matchResultsState.loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Loading match results..." }) : matchResultsState.error ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        "Error loading match results: ",
-        matchResultsState.error
-      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "No match results found" }) }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "results-display hidden md:flex flex-1 bg-live-tertiary items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "no-results text-live-muted text-base sm:text-lg font-medium", children: "No Results" }) })
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-muted text-base sm:text-lg font-medium text-center h-full flex items-start justify-center pt-4", children: activeTab === "Live" ? "Select a live event to view details" : "Select a finished event to view results" }) })
     ] })
   ] });
 };
-
-const React$a = await importShared('react');
-const OTPInput = React$a.forwardRef(({
-  value,
-  onChange,
-  length = 6,
-  disabled = false,
-  className,
-  ...props
-}, ref) => {
-  const inputRefs = React$a.useRef([]);
-  const handleChange = (elementValue, index) => {
-    if (isNaN(elementValue)) return;
-    const newOtp = value ? value.split("") : Array(length).fill("");
-    newOtp[index] = elementValue;
-    onChange(newOtp.join(""));
-    if (elementValue && index < length - 1) {
-      inputRefs.current[index + 1].focus();
-    }
-  };
-  const handleKeyDown = (e, index) => {
-    if (e.key === "Backspace") {
-      if (!value[index] && index > 0) {
-        inputRefs.current[index - 1].focus();
-      } else if (value[index]) {
-        const newOtp = value.split("");
-        newOtp[index] = "";
-        onChange(newOtp.join(""));
-      }
-    } else if (e.key === "ArrowLeft" && index > 0) {
-      inputRefs.current[index - 1].focus();
-    } else if (e.key === "ArrowRight" && index < length - 1) {
-      inputRefs.current[index + 1].focus();
-    }
-  };
-  const handlePaste = (e) => {
-    e.preventDefault();
-    const pastedData = e.clipboardData.getData("text/plain").slice(0, length);
-    if (/^\d+$/.test(pastedData)) {
-      onChange(pastedData.padEnd(length, "").slice(0, length));
-      const nextIndex = Math.min(pastedData.length, length - 1);
-      inputRefs.current[nextIndex].focus();
-    }
-  };
-  const otpValues = value ? value.split("") : Array(length).fill("");
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: cn$1("flex gap-3 justify-center", className), children: Array.from({ length }, (_, index) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "input",
-    {
-      ref: (el) => inputRefs.current[index] = el,
-      type: "text",
-      inputMode: "numeric",
-      pattern: "[0-9]*",
-      maxLength: "1",
-      value: otpValues[index] || "",
-      onChange: (e) => handleChange(e.target.value, index),
-      onKeyDown: (e) => handleKeyDown(e, index),
-      onPaste: handlePaste,
-      disabled,
-      className: cn$1(
-        "w-12 h-12 text-center text-lg font-bold rounded-md border border-gray-600 bg-[#404040] text-white",
-        "focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500",
-        "disabled:opacity-50 disabled:cursor-not-allowed",
-        value && value[index] ? "border-yellow-500" : ""
-      ),
-      ...props
-    },
-    index
-  )) });
-});
-OTPInput.displayName = "OTPInput";
 
 const React$9 = await importShared('react');
 const {useState: useState$8,useEffect: useEffect$7,useRef: useRef$1} = React$9;
@@ -34093,7 +35264,9 @@ function VerifyEmail() {
   const [timeLeft, setTimeLeft] = useState$8(0);
   const [verificationStatus, setVerificationStatus] = useState$8("");
   const timerRef = useRef$1(null);
-  const userData = useSelector((state) => state?.Login?.userData);
+  const loginUserData = useSelector((state) => state?.Login?.userData);
+  const pendingVerificationUser = getLocalStorageItem("pendingVerificationUser");
+  const userData = loginUserData?.email ? loginUserData : pendingVerificationUser;
   const verifyEmailState = useSelector((state) => state?.VerifyEmail);
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60);
@@ -34142,8 +35315,9 @@ function VerifyEmail() {
         route: "VE"
       }, (response) => {
         console.log("verified otp", response);
-        if (response?.code == 200) {
+        if (isApiSuccess(response)) {
           setLocalStorageItem("showWelcomeModal", "true");
+          removeLocalStorageItem("pendingVerificationUser");
           navigate(Paths.home);
         }
       })
@@ -34178,14 +35352,21 @@ function VerifyEmail() {
   }, [isTimerOn]);
   useEffect$7(() => {
     if (verifyEmailState?.loading) ; else if (verifyEmailState?.success) {
-      if (!verifyEmailState?.data?.hasOwnProperty("otp")) ; else if (verifyEmailState?.data?.hasOwnProperty("otp")) {
+      if (verifyEmailState?.data?.emailVerified) {
         setIsLoading(false);
         setVerificationStatus("Verification Success");
         setIsVerified(true);
         setLocalStorageItem("showWelcomeModal", "true");
+        removeLocalStorageItem("pendingVerificationUser");
         setTimeout(() => {
           navigate(Paths.home);
         }, 1e3);
+      } else if (!verifyEmailState?.data?.hasOwnProperty("otp")) {
+        setIsLoading(false);
+      } else if (verifyEmailState?.data?.hasOwnProperty("otp")) {
+        setIsLoading(false);
+        setVerificationStatus("Verification Success");
+        setIsVerified(true);
       }
     } else if (verifyEmailState?.error) {
       if (!verifyEmailState?.data?.hasOwnProperty("otp")) {
@@ -35082,8 +36263,8 @@ const MarketReport = () => {
         }
       )
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "market-report-filters bg-live-primary p-3 sm:p-4 border-b border-live", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "filter-row flex flex-col gap-3", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 sm:flex sm:flex-row gap-3", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "market-report-filters bg-live-primary p-3 sm:p-4 border-b border-live", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "date-field w-full", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "text-xs font-medium mb-1.5 block text-live-secondary uppercase tracking-wider", children: "Start Date" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "date-input-wrapper w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Popover, { children: [
@@ -35137,8 +36318,8 @@ const MarketReport = () => {
           ] }) })
         ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "filter-group grid grid-cols-2 sm:flex sm:flex-row gap-3", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "filter-type w-full", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `filter-type w-full ${filterType === "all" ? "col-span-2" : ""}`, children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "text-xs font-medium mb-1.5 block text-live-secondary uppercase tracking-wider", children: "Filter By" }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -35171,11 +36352,11 @@ const MarketReport = () => {
           )
         ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "action-buttons grid grid-cols-2 gap-3 pt-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "button",
           {
-            className: "reset-btn w-full bg-live-tertiary border border-live text-live-primary hover:bg-live-hover text-xs font-semibold px-3 py-2.5 rounded transition-all duration-200 active:scale-95",
+            className: "reset-btn w-full h-10 bg-live-tertiary border border-live text-live-primary hover:bg-live-hover text-xs font-semibold px-3 rounded transition-all duration-200 active:scale-95 whitespace-nowrap",
             onClick: resetFilters,
             children: "RESET"
           }
@@ -35183,7 +36364,7 @@ const MarketReport = () => {
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "button",
           {
-            className: "show-btn w-full bg-live-accent text-live-dark hover:brightness-110 transition-all duration-200 font-bold text-xs px-3 py-2.5 rounded shadow-sm active:scale-95",
+            className: "show-btn w-full h-10 bg-live-accent text-live-dark hover:brightness-110 transition-all duration-200 font-bold text-xs px-3 rounded shadow-sm active:scale-95 whitespace-nowrap",
             onClick: handleFilterSubmit,
             children: "APPLY"
           }
@@ -35323,8 +36504,8 @@ function NotificationProvider({ children }) {
     loading: (message = "Loading...", title = "") => _add({ type: "loading", title, message, duration: null, dismissible: false }),
     notifyPromise: async (promise, options = {}) => {
       const loadingText = options.loadingText || "Please wait...";
-      const getSuccessMessage = options.getSuccessMessage || ((res) => res?.data?.meta?.message || res?.data?.message || "Success");
-      const getErrorMessage = options.getErrorMessage || ((err) => err?.response?.data?.meta?.message || err?.response?.data?.message || err?.message || "Something went wrong");
+      const getSuccessMessage = options.getSuccessMessage || ((res) => getApiMessage(res?.data, "Success"));
+      const getErrorMessage = options.getErrorMessage || ((err) => getApiErrorMessage(err));
       const loadingId = _add({ type: "loading", title: "", message: loadingText, duration: null, dismissible: false });
       try {
         const res = await (typeof promise === "function" ? promise() : promise);
@@ -35408,8 +36589,8 @@ const ServerStatusChecker = () => {
   const [showMessage, setShowMessage] = useState(false);
   const checkServerStatus = async () => {
     try {
-      const EVENTS_API_BASE_URL = "https://xfair91.com:3003";
-      const url = `${EVENTS_API_BASE_URL}/api/events?sport_id=sr:sport:1&live_matches=true`;
+      const ODDS_API_BASE_URL = "https://odds-api.xfair91.com";
+      const url = `${ODDS_API_BASE_URL}/health`;
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5e3);
       const response = await fetch(url, {
@@ -35430,10 +36611,6 @@ const ServerStatusChecker = () => {
   };
   useEffect(() => {
     checkServerStatus();
-    const intervalId = setInterval(() => {
-      checkServerStatus();
-    }, 3e4);
-    return () => clearInterval(intervalId);
   }, []);
   useEffect(() => {
     if (serverStatus === "offline") {
@@ -35476,4 +36653,4 @@ function LayoutApp() {
   ] }) }) });
 }
 
-export { login as $, ArrowRight as A, Button$1 as B, Content$1 as C, DismissableLayer as D, Eye as E, FocusScope as F, GET_USER_DATA as G, Content as H, Input as I, Arrow as J, composeRefs as K, LOGOUT as L, useNavigate as M, useLocation as N, Overlay as O, Portal$1 as P, ChevronDown as Q, Root$2 as R, useDispatch as S, useSelector as T, User as U, Link as V, RegisterModal as W, X, LoginModal as Y, useForm as Z, Checkbox as _, LOGOUT_SUCCESS as a, removeLocalStorageItem as a$, notifyError$1 as a0, verifyEmail as a1, signup as a2, Toaster as a3, NavLink as a4, Outlet as a5, SIGNUP_FAILURE as a6, SIGNUP_SUCCESS as a7, SIGNUP as a8, UPDATE_USER_BALANCE_EXPOSURE_SUCCESS as a9, FETCH_MORE_CASINO_GAMES as aA, FETCH_CASINO_GAMES_FAILURE as aB, FETCH_CASINO_GAMES_SUCCESS as aC, FETCH_CASINO_GAMES as aD, FETCH_ALL_USER_BETS_FAILURE as aE, FETCH_ALL_USER_BETS_SUCCESS as aF, FETCH_ALL_USER_BETS as aG, SKIP_NEXT_USER_BETS_FETCH as aH, FETCH_USER_BETS_FAILURE as aI, FETCH_USER_BETS_SUCCESS as aJ, FETCH_USER_BETS as aK, FETCH_MATCH_RESULTS_FAILURE as aL, FETCH_MATCH_RESULTS_SUCCESS as aM, FETCH_MATCH_RESULTS as aN, FETCH_MARKET_REPORT_FAILURE as aO, FETCH_MARKET_REPORT_SUCCESS as aP, FETCH_MARKET_REPORT as aQ, getIPAddresses as aR, notifyPromise as aS, api as aT, setLocalStorageItem as aU, signupSuccess as aV, signupFailure as aW, loginSuccess as aX, loginFailure as aY, verifyEmailSuccess as aZ, verifyEmailFailure as a_, UPDATE_USER_BALANCE_EXPOSURE as aa, LOGIN_FAILURE as ab, LOGIN_SUCCESS as ac, LOGIN as ad, VERIFY_EMAIL_FAILURE as ae, VERIFY_EMAIL_SUCCESS as af, VERIFY_EMAIL as ag, UPDATE_USER_BALANCE_EXPOSURE_FAILURE as ah, FETCH_CASINO_GAME_URL_FAILURE as ai, FETCH_CASINO_GAME_URL_SUCCESS as aj, FETCH_CASINO_GAME_URL as ak, FETCH_MORE_CASINO_PROVIDERS_FAILURE as al, FETCH_MORE_CASINO_PROVIDERS_SUCCESS as am, FETCH_MORE_CASINO_PROVIDERS as an, FETCH_CASINO_PROVIDERS_FAILURE as ao, FETCH_CASINO_PROVIDERS_SUCCESS as ap, FETCH_CASINO_PROVIDERS as aq, FETCH_HOMEPAGE_LIVE_GAMES_FAILURE as ar, FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS as as, FETCH_HOMEPAGE_LIVE_GAMES as at, FETCH_HOMEPAGE_CASINO_GAMES_FAILURE as au, FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS as av, FETCH_HOMEPAGE_CASINO_GAMES as aw, RESET_CASINO_GAMES as ax, FETCH_MORE_CASINO_GAMES_FAILURE as ay, FETCH_MORE_CASINO_GAMES_SUCCESS as az, LOGOUT_FAILURE as b, updateUserBalanceExposureFailure as b0, updateUserBalanceExposureSuccess as b1, axios as b2, notifyError as b3, fetchCasinoProvidersSuccess as b4, fetchCasinoProvidersFailure as b5, fetchMoreCasinoProvidersSuccess as b6, fetchCasinoGamesSuccess as b7, fetchCasinoGamesFailure as b8, fetchMoreCasinoGamesSuccess as b9, fetchHomepageLiveGames as bA, Carousel as bB, CarouselContent as bC, CarouselItem as bD, CarouselPrevious as bE, CarouselNext as bF, useNotification as bG, fetchMoreCasinoGamesFailure as ba, fetchHomepageCasinoGamesSuccess as bb, fetchHomepageCasinoGamesFailure as bc, fetchHomepageLiveGamesSuccess as bd, fetchHomepageLiveGamesFailure as be, fetchCasinoGameUrlSuccess as bf, fetchCasinoGameUrlFailure as bg, fetchUserBetsSuccess as bh, fetchUserBetsFailure as bi, fetchAllUserBetsSuccess as bj, fetchAllUserBetsFailure as bk, fetchMatchResultsSuccess as bl, fetchMatchResultsFailure as bm, fetchMarketReportSuccess as bn, fetchMarketReportFailure as bo, Provider_default as bp, useLayoutEffect2 as bq, usePrevious as br, Check as bs, ChevronUp as bt, SPORTS as bu, ChevronRight as bv, SkeletonLoader as bw, SPORT_ID_BY_KEY as bx, fetchSportsEvents as by, fetchHomepageCasinoGames as bz, GET_USER_DATA_SUCCESS as c, GET_USER_DATA_FAILURE as d, LayoutApp as default, createLucideIcon as e, createContextScope as f, createSlot as g, cn$1 as h, Close as i, jsxRuntimeExports as j, getLocalStorageItem as k, useId as l, Primitive as m, composeEventHandlers$1 as n, useControllableState as o, useCallbackRef$1 as p, createPopperScope as q, Root2$1 as r, Anchor as s, Presence$1 as t, useComposedRefs as u, Portal$2 as v, hideOthers as w, dispatchDiscreteCustomEvent as x, ReactRemoveScroll as y, useFocusGuards as z };
+export { useForm as $, ArrowRight as A, Button$1 as B, Content$1 as C, DismissableLayer as D, Eye as E, FocusScope as F, GET_USER_DATA_SUCCESS as G, Content as H, Input as I, Arrow as J, composeRefs as K, LOGOUT as L, useNavigate as M, useLocation as N, Overlay as O, Portal$1 as P, ChevronDown as Q, Root$2 as R, useDispatch as S, useSelector as T, User as U, setLocalStorageItem as V, updateUserBalanceExposureSuccess as W, X, Link as Y, RegisterModal as Z, LoginModal as _, LOGOUT_SUCCESS as a, unwrapApiResponse as a$, notifySuccess as a0, Checkbox as a1, OTPInput as a2, RefreshCw as a3, login as a4, notifyError$1 as a5, verifyEmail as a6, signup as a7, Paths as a8, Toaster as a9, FETCH_HOMEPAGE_LIVE_GAMES as aA, FETCH_HOMEPAGE_CASINO_GAMES_FAILURE as aB, FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS as aC, FETCH_HOMEPAGE_CASINO_GAMES as aD, RESET_CASINO_GAMES as aE, FETCH_MORE_CASINO_GAMES_FAILURE as aF, FETCH_MORE_CASINO_GAMES_SUCCESS as aG, FETCH_MORE_CASINO_GAMES as aH, FETCH_CASINO_GAMES_FAILURE as aI, FETCH_CASINO_GAMES_SUCCESS as aJ, FETCH_CASINO_GAMES as aK, FETCH_ALL_USER_BETS_FAILURE as aL, FETCH_ALL_USER_BETS_SUCCESS as aM, FETCH_ALL_USER_BETS as aN, SKIP_NEXT_USER_BETS_FETCH as aO, FETCH_USER_BETS_FAILURE as aP, FETCH_USER_BETS_SUCCESS as aQ, FETCH_USER_BETS as aR, FETCH_MATCH_RESULTS_FAILURE as aS, FETCH_MATCH_RESULTS_SUCCESS as aT, FETCH_MATCH_RESULTS as aU, FETCH_MARKET_REPORT_FAILURE as aV, FETCH_MARKET_REPORT_SUCCESS as aW, FETCH_MARKET_REPORT as aX, getIPAddresses as aY, notifyPromise as aZ, api as a_, NavLink as aa, Outlet as ab, SIGNUP_FAILURE as ac, SIGNUP_SUCCESS as ad, SIGNUP as ae, UPDATE_USER_BALANCE_EXPOSURE_SUCCESS as af, UPDATE_USER_BALANCE_EXPOSURE as ag, LOGIN_FAILURE as ah, LOGIN_VERIFICATION_PENDING as ai, LOGIN_SUCCESS as aj, LOGIN as ak, VERIFY_EMAIL_FAILURE as al, VERIFY_EMAIL_SUCCESS as am, VERIFY_EMAIL as an, UPDATE_USER_BALANCE_EXPOSURE_FAILURE as ao, FETCH_CASINO_GAME_URL_FAILURE as ap, FETCH_CASINO_GAME_URL_SUCCESS as aq, FETCH_CASINO_GAME_URL as ar, FETCH_MORE_CASINO_PROVIDERS_FAILURE as as, FETCH_MORE_CASINO_PROVIDERS_SUCCESS as at, FETCH_MORE_CASINO_PROVIDERS as au, FETCH_CASINO_PROVIDERS_FAILURE as av, FETCH_CASINO_PROVIDERS_SUCCESS as aw, FETCH_CASINO_PROVIDERS as ax, FETCH_HOMEPAGE_LIVE_GAMES_FAILURE as ay, FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS as az, LOGOUT_FAILURE as b, signupSuccess as b0, loginVerificationPending as b1, signupFailure as b2, loginSuccess as b3, loginFailure as b4, verifyEmailSuccess as b5, verifyEmailFailure as b6, removeLocalStorageItem as b7, updateUserBalanceExposureFailure as b8, fetchUserBetsSuccess as b9, ChevronUp as bA, createOddsSocket as bB, ChevronRight as bC, SPORTS as bD, SkeletonLoader as bE, SPORT_ID_BY_KEY as bF, fetchSportsEvents as bG, ODDS_SPORT_KEY_BY_FRONTEND_KEY as bH, fetchHomepageCasinoGames as bI, fetchHomepageLiveGames as bJ, Carousel as bK, CarouselContent as bL, CarouselItem as bM, CarouselPrevious as bN, CarouselNext as bO, useNotification as bP, axios as ba, notifyError as bb, fetchCasinoProvidersSuccess as bc, fetchCasinoProvidersFailure as bd, fetchMoreCasinoProvidersSuccess as be, fetchCasinoGamesSuccess as bf, fetchCasinoGamesFailure as bg, fetchMoreCasinoGamesSuccess as bh, fetchMoreCasinoGamesFailure as bi, fetchHomepageCasinoGamesSuccess as bj, fetchHomepageCasinoGamesFailure as bk, fetchHomepageLiveGamesSuccess as bl, fetchHomepageLiveGamesFailure as bm, fetchCasinoGameUrlSuccess as bn, fetchCasinoGameUrlFailure as bo, fetchUserBetsFailure as bp, fetchAllUserBetsSuccess as bq, fetchAllUserBetsFailure as br, fetchMatchResultsSuccess as bs, fetchMatchResultsFailure as bt, fetchMarketReportSuccess as bu, fetchMarketReportFailure as bv, Provider_default as bw, useLayoutEffect2 as bx, usePrevious as by, Check as bz, GET_USER_DATA as c, GET_USER_DATA_FAILURE as d, LayoutApp as default, createLucideIcon as e, createContextScope as f, createSlot as g, cn$1 as h, Close as i, jsxRuntimeExports as j, getLocalStorageItem as k, useId as l, Primitive as m, composeEventHandlers$1 as n, useControllableState as o, useCallbackRef$1 as p, createPopperScope as q, Root2$1 as r, Anchor as s, Presence$1 as t, useComposedRefs as u, Portal$2 as v, hideOthers as w, dispatchDiscreteCustomEvent as x, ReactRemoveScroll as y, useFocusGuards as z };

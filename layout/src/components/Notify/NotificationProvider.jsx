@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { setNotifier } from "../../utils/notificationService";
+import { getApiErrorMessage, getApiMessage } from "../../utils/apiResponse";
 import "./notification.css"; // We'll provide improved CSS
 
 const NotificationContext = createContext(null);
@@ -43,8 +44,8 @@ export default function NotificationProvider({ children }) {
     loading: (message = "Loading...", title = "", ) => _add({ type: "loading", title, message, duration: null, dismissible: false }),
     notifyPromise: async (promise, options = {}) => {
       const loadingText = options.loadingText || "Please wait...";
-      const getSuccessMessage = options.getSuccessMessage || ((res) => (res?.data?.meta?.message || res?.data?.message || "Success"));
-      const getErrorMessage = options.getErrorMessage || ((err) => (err?.response?.data?.meta?.message || err?.response?.data?.message || err?.message || "Something went wrong"));
+      const getSuccessMessage = options.getSuccessMessage || ((res) => getApiMessage(res?.data, "Success"));
+      const getErrorMessage = options.getErrorMessage || ((err) => getApiErrorMessage(err));
 
       const loadingId = _add({ type: "loading", title: "", message: loadingText, duration: null, dismissible: false });
 

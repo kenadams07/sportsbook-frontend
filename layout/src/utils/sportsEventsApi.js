@@ -1,6 +1,17 @@
-// Use environment variables for API base URLs
-const EVENTS_API_BASE_URL = import.meta.env.VITE_EVENTS_API_URL || "http://localhost:3003";
 const MARKETS_API_BASE_URL = import.meta.env.VITE_MARKETS_API_URL || "http://localhost:3003";
+const ODDS_API_BASE_URL = import.meta.env.VITE_ODDS_API_BASE_URL || "http://127.0.0.1:3010";
+
+const SPORT_CATEGORY_KEY_BY_SPORT_ID = {
+  "sr:sport:1": "soccer",
+  "sr:sport:2": "basketball",
+  "sr:sport:3": "baseball",
+  "sr:sport:4": "ice_hockey",
+  "sr:sport:5": "tennis",
+  "sr:sport:16": "american_football",
+  "sr:sport:21": "cricket",
+};
+
+const leagueKeysCache = new Map();
 
 /**
  * Utility function to implement retry logic with exponential backoff
@@ -11,22 +22,69 @@ const MARKETS_API_BASE_URL = import.meta.env.VITE_MARKETS_API_URL || "http://loc
  */
 async function retryWithBackoff(fn, retries = 3, delay = 1000) {
   try {
-    // Pass AbortSignal to the function if it accepts it
     return await fn();
   } catch (error) {
-    // Don't retry if the request was aborted
     if (error.name === 'AbortError') {
       throw error;
     }
-    
+
     if (retries === 0) {
       throw error;
     }
-    // Wait for the specified delay before retrying
+
     await new Promise(resolve => setTimeout(resolve, delay));
-    // Retry with exponential backoff (double the delay each time)
     return retryWithBackoff(fn, retries - 1, delay * 2);
   }
+}
+
+async function fetchJson(url) {
+  const response = await retryWithBackoff(async () => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+    try {
+      const res = await fetch(url, {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+        },
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+      return res;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      throw error;
+    }
+  }, 2, 1000);
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function fetchConfiguredLeagueKeysForSportCategory(categoryKey) {
+  if (!categoryKey) {
+    return [];
+  }
+
+  if (leagueKeysCache.has(categoryKey)) {
+    return leagueKeysCache.get(categoryKey);
+  }
+
+  const data = await fetchJson(
+    `${ODDS_API_BASE_URL}/frontend/sports/${encodeURIComponent(categoryKey)}/leagues`,
+  );
+
+  const leagueKeys = Array.isArray(data.leagues)
+    ? data.leagues.map((league) => league.key).filter(Boolean)
+    : [];
+
+  leagueKeysCache.set(categoryKey, leagueKeys);
+  return leagueKeys;
 }
 
 /**
@@ -37,58 +95,64 @@ async function retryWithBackoff(fn, retries = 3, delay = 1000) {
  */
 export async function fetchSportsEvents(sportId, liveMatches = true) {
   try {
-    // Use the backend service endpoint
-    const url = `${EVENTS_API_BASE_URL}/api/events?sport_id=${sportId}&live_matches=${liveMatches}`;
-    
-    // Wrap the fetch call with retry logic and timeout
-    const response = await retryWithBackoff(async () => {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-      
-      try {
-        const res = await fetch(url, {
-          method: "GET",
-          headers: {
-            "accept": "application/json",
-          },
-          signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        return res;
-      } catch (error) {
-        clearTimeout(timeoutId);
-        throw error;
-      }
-    }, 2, 1000); // Retry up to 2 times with 1 second initial delay
+    const categoryKey = SPORT_CATEGORY_KEY_BY_SPORT_ID[sportId];
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    if (categoryKey) {
+      return fetchOddsServerCategoryEvents(categoryKey, liveMatches);
     }
 
-    const data = await response.json();
-   
-    // API returns data in { status: "...", errorDescription: "", sports: [...] } format
-    // Check if the response indicates success
-    if (data.status !== "RS_OK") {
-      throw new Error(`API error: ${data.errorDescription || 'Unknown error'}`);
-    }
-    
     return {
-      sports: data?.sports || [],
-      eventsCount: data?.sports?.length || 0
+      sports: [],
+      eventsCount: 0
     };
   } catch (error) {
-    // Don't log aborted requests as errors
     if (error.name !== 'AbortError') {
       console.error('Error fetching sports events:', error.message);
     }
-    // Even if the endpoint fails, we should return a valid structure to prevent app crashes
+
     return {
       sports: [],
       eventsCount: 0
     };
   }
+}
+
+async function fetchOddsServerCategoryEvents(categoryKey, liveMatches) {
+  const leagueKeys = await fetchConfiguredLeagueKeysForSportCategory(categoryKey);
+
+  if (leagueKeys.length === 0) {
+    return {
+      sports: [],
+      eventsCount: 0,
+    };
+  }
+
+  const results = await Promise.all(
+    leagueKeys.map((leagueKey) =>
+      fetchOddsServerSportsEvents(leagueKey, liveMatches).catch((error) => {
+        console.error(`Error fetching events for league ${leagueKey}:`, error.message);
+        return { sports: [], eventsCount: 0 };
+      }),
+    ),
+  );
+
+  const sports = results.flatMap((result) => result.sports || []);
+
+  return {
+    sports,
+    eventsCount: sports.length,
+  };
+}
+
+async function fetchOddsServerSportsEvents(oddsSportKey, liveMatches) {
+  const status = liveMatches ? "live" : "pre_match";
+  const url = `${ODDS_API_BASE_URL}/frontend/events/${oddsSportKey}?status=${status}&limit=100`;
+  const data = await fetchJson(url);
+
+  return {
+    sports: Array.isArray(data.events) ? data.events : [],
+    eventsCount: Array.isArray(data.events) ? data.events.length : 0,
+  };
 }
 
 /**
@@ -99,21 +163,18 @@ export async function fetchSportsEvents(sportId, liveMatches = true) {
  */
 export async function fetchMarketsData(eventId, sportId) {
   try {
-    // Use the backend service endpoint
     const url = `${MARKETS_API_BASE_URL}/api/markets?event_id=${eventId}&sport_id=${sportId}`;
-    
-    // Wrap the fetch call with retry logic and timeout
+
     const response = await retryWithBackoff(async (signal) => {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-      
-      // If a signal is provided (from outside), combine it with our controller
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
       if (signal) {
         signal.addEventListener('abort', () => {
           controller.abort();
         });
       }
-      
+
       try {
         const res = await fetch(url, {
           method: "GET",
@@ -122,37 +183,31 @@ export async function fetchMarketsData(eventId, sportId) {
           },
           signal: controller.signal
         });
-        
+
         clearTimeout(timeoutId);
         return res;
       } catch (error) {
         clearTimeout(timeoutId);
         throw error;
       }
-    }, 2, 1000); // Retry up to 2 times with 1 second initial delay
+    }, 2, 1000);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
-    
-    // Check if the response indicates success
+
     if (data.status !== "RS_OK") {
       throw new Error(`API error: ${data.errorDescription || 'Unknown error'}`);
     }
-    
-    // Return markets data from the nested structure
-    // We want to return all available markets, not just matchOdds
+
     const markets = data?.event?.markets;
-    
+
     if (!markets) return [];
-    
-    // If it's an array (unlikely given current API, but good for robustness)
+
     if (Array.isArray(markets)) return markets;
-    
-    // If it's an object, flatten all market arrays into a single list
-    // This ensures we get matchOdds, totalGoals, asianHandicap, etc.
+
     return Object.values(markets).flatMap(v => Array.isArray(v) ? v : []);
   } catch (error) {
     console.error(`API request failed for event_id=${eventId}, sport_id=${sportId}:`, error.message);
@@ -168,13 +223,13 @@ export async function fetchMarketsData(eventId, sportId) {
  */
 export async function fetchMultipleSportsEvents(sportIds, liveMatches = true) {
   try {
-    const fetchPromises = sportIds.map(sportId => 
+    const fetchPromises = sportIds.map(sportId =>
       fetchSportsEvents(sportId, liveMatches).catch(error => {
         console.error(`Error fetching events for sport ${sportId}:`, error);
-        return { sports: [] }; // Return empty array on error for this sport
+        return { sports: [] };
       })
     );
-    
+
     const results = await Promise.all(fetchPromises);
     return results;
   } catch (error) {

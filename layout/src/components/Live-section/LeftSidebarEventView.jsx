@@ -1,13 +1,23 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ChevronDown, ChevronUp, Search, Globe, Monitor } from "lucide-react";
-import { SPORTS, SPORT_ID_BY_KEY } from "../../utils/CommonExports";
+import {
+  ODDS_SPORT_KEY_BY_FRONTEND_KEY,
+  SPORTS,
+  SPORT_ID_BY_KEY,
+} from "../../utils/CommonExports";
 import { Button } from "../ui/button";
 import GameCard from "./GameCard";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import SkeletonLoader from "../ui/SkeletonLoader";
-import { fetchSportsEvents } from "../../utils/sportsEventsApi";
+import {
+  fetchConfiguredLeagueKeysForSportCategory,
+  fetchSportsEvents,
+} from "../../utils/sportsEventsApi";
+import { createOddsSocket } from "../../utils/oddsWebSocket";
 import { fetchUserBets } from "../../redux/Action/userBetsActions";
+
+const PREFERRED_BOOKMAKER = "draftkings";
 
 function normalize(str = "") {
   return str.trim().toLowerCase();
@@ -114,14 +124,214 @@ function filterSports(sports, matchesBySport, searchTerm) {
   });
 }
 
-export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setSelectedSport = () => {}, selectedMatch, onSelectedMatchOddsUpdate = () => {}, selectedSportFilter = null }) {
+function isMatchSuspended(match) {
+  if (match?.status === "SUSPENDED") {
+    return true;
+  }
+
+  const matchOdds = match?.markets?.matchOdds?.[0];
+
+  if (matchOdds?.status === "SUSPENDED") {
+    return true;
+  }
+
+  const odds = extractOddsW1W2(match?.markets);
+
+  return odds.w1 === "SUSPENDED" && odds.x === "SUSPENDED" && odds.w2 === "SUSPENDED";
+}
+
+function getMatchPriority(match) {
+  if (isMatchSuspended(match)) {
+    return 3;
+  }
+
+  if (match?.status === "LIVE" || match?.status === "IN_PLAY") {
+    return 0;
+  }
+
+  if (match?.status === "PRE_MATCH" || match?.status === "UPCOMING") {
+    return 1;
+  }
+
+  return 2;
+}
+
+function sortMatchesForSidebar(matches) {
+  return [...matches].sort((a, b) => {
+    const priorityDifference = getMatchPriority(a) - getMatchPriority(b);
+
+    if (priorityDifference !== 0) {
+      return priorityDifference;
+    }
+
+    return new Date(a.openDate || 0).getTime() - new Date(b.openDate || 0).getTime();
+  });
+}
+
+function getMatchTeams(match) {
+  if (match?.eventType === "OUTRIGHT") {
+    return {
+      team1: match.eventName || match.competitionName || "Outright",
+      team2: "",
+    };
+  }
+
+  if (!match?.eventName) {
+    return { team1: "", team2: "" };
+  }
+
+  const parts = match.eventName.split(/\s+vs\.?\s+/i);
+
+  return {
+    team1: parts[0]?.trim() || "",
+    team2: parts[1]?.trim() || "",
+  };
+}
+
+function getSidebarMarketType(match) {
+  return match?.eventType === "OUTRIGHT" ? "Outrights" : "Match Result";
+}
+
+function getSidebarGroupName(match) {
+  if (match?.eventType === "OUTRIGHT") {
+    return "Season Outrights";
+  }
+
+  return match?.country || match?.region || match?.group || "Featured";
+}
+
+function getSidebarLeagueName(match) {
+  return match?.competitionName || match?.sportName || match?.sportKey || "League";
+}
+
+function groupMatchesForSidebar(matches) {
+  const marketGroups = new Map();
+
+  for (const match of matches) {
+    const marketType = getSidebarMarketType(match);
+    const groupName = getSidebarGroupName(match);
+    const leagueName = getSidebarLeagueName(match);
+
+    if (!marketGroups.has(marketType)) {
+      marketGroups.set(marketType, new Map());
+    }
+
+    const groupMap = marketGroups.get(marketType);
+
+    if (!groupMap.has(groupName)) {
+      groupMap.set(groupName, new Map());
+    }
+
+    const leagueMap = groupMap.get(groupName);
+
+    if (!leagueMap.has(leagueName)) {
+      leagueMap.set(leagueName, []);
+    }
+
+    leagueMap.get(leagueName).push(match);
+  }
+
+  return Array.from(marketGroups.entries()).map(([marketType, groupMap]) => ({
+    marketType,
+    count: Array.from(groupMap.values()).reduce(
+      (total, leagueMap) =>
+        total + Array.from(leagueMap.values()).reduce((leagueTotal, leagueMatches) => leagueTotal + leagueMatches.length, 0),
+      0,
+    ),
+    groups: Array.from(groupMap.entries()).map(([groupName, leagueMap]) => ({
+      groupName,
+      count: Array.from(leagueMap.values()).reduce((total, leagueMatches) => total + leagueMatches.length, 0),
+      leagues: Array.from(leagueMap.entries()).map(([leagueName, leagueMatches]) => ({
+        leagueName,
+        matches: leagueMatches,
+      })),
+    })),
+  }));
+}
+
+function getOddsKeyFromDelta(delta) {
+  if (delta.outcome === delta.homeTeam) {
+    return "w1";
+  }
+
+  if (delta.outcome === delta.awayTeam) {
+    return "w2";
+  }
+
+  if (delta.outcome?.toLowerCase() === "draw") {
+    return "x";
+  }
+
+  return null;
+}
+
+function getMarketGroupKeyFromDelta(delta) {
+  if (delta.market === "h2h" || delta.market === "outrights") {
+    return "matchOdds";
+  }
+
+  return delta.market;
+}
+
+function applyDeltaToMarkets(markets, delta) {
+  if (!markets) {
+    return markets;
+  }
+
+  const marketGroupKey = getMarketGroupKeyFromDelta(delta);
+
+  if (Array.isArray(markets)) {
+    return markets.map((market) => updateMarketWithDelta(market, delta));
+  }
+
+  return {
+    ...markets,
+    [marketGroupKey]: (markets[marketGroupKey] || []).map((market) =>
+      updateMarketWithDelta(market, delta),
+    ),
+  };
+}
+
+function updateMarketWithDelta(market, delta) {
+  const shouldUpdateMarket =
+    market?.marketType === delta.market ||
+    market?.key === delta.market ||
+    (delta.market === "h2h" && market?.marketType === "MATCH_ODDS") ||
+    (delta.market === "outrights" && market?.marketType === "OUTRIGHT");
+
+  if (!shouldUpdateMarket) {
+    return market;
+  }
+
+  return {
+    ...market,
+    runners: (market.runners || []).map((runner) => {
+      if (runner.runnerName !== delta.outcome) {
+        return runner;
+      }
+
+      return {
+        ...runner,
+        backPrices: [
+          {
+            ...(runner.backPrices?.[0] || {}),
+            price: delta.price,
+          },
+          ...(runner.backPrices || []).slice(1),
+        ],
+      };
+    }),
+  };
+}
+
+export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setSelectedSport = () => {}, selectedMatch, onSelectedMatchOddsUpdate = () => {}, selectedSportFilter = null, onEventsSnapshot = () => {} }) {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState("");
   const [expanded, setExpanded] = useState({});
-  const [selectedType, setSelectedType] = useState("live"); 
+  const [selectedType, setSelectedType] = useState(() => searchParams.get("viewType") === "prematch" ? "prematch" : "live"); 
   const [matchesBySport, setMatchesBySport] = useState({});
   const [loadingBySport, setLoadingBySport] = useState({});
   const [oddsByEventId, setOddsByEventId] = useState({});
@@ -133,9 +343,154 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
   const oddsPrevRef = useRef({});
   const placeholderIntervalRef = useRef(null);
   const hasProcessedLocationState = useRef(false); // To track if location state has been processed
+  const oddsSocketRef = useRef(null);
 
   // Animated placeholder texts
   const placeholderTexts = ["competition", "team", "date"];
+
+  const handleSelectedTypeChange = (nextType) => {
+    if (nextType === selectedType) {
+      return;
+    }
+
+    setSelectedType(nextType);
+    setHasProcessedInitialSelection(false);
+    setPendingSelection(null);
+    setSelectedMatch(null);
+    setSelectedSport(null);
+    setOddsByEventId({});
+    setScoresByEventId({});
+    setHighlightedOdds({});
+    oddsPrevRef.current = {};
+
+    setSearchParams((previousParams) => {
+      const nextParams = new URLSearchParams(previousParams);
+      nextParams.set("viewType", nextType === "prematch" ? "prematch" : "live");
+      nextParams.delete("eventId");
+      nextParams.delete("sportKey");
+      nextParams.delete("eventName");
+      nextParams.delete("source");
+      return nextParams;
+    }, { replace: true });
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+    const expandedSportKeys = Object.keys(expanded).filter((key) => expanded[key]);
+
+    async function connectOddsSocket() {
+      const resolvedLeagueKeys = await Promise.all(
+        expandedSportKeys.map(async (key) => {
+          try {
+            const leagueKeys = await fetchConfiguredLeagueKeysForSportCategory(key);
+            return leagueKeys.length > 0
+              ? leagueKeys
+              : [ODDS_SPORT_KEY_BY_FRONTEND_KEY[key]].filter(Boolean);
+          } catch (error) {
+            console.error(`[odds-ws] failed to resolve leagues for ${key}:`, error.message);
+            return [ODDS_SPORT_KEY_BY_FRONTEND_KEY[key]].filter(Boolean);
+          }
+        }),
+      );
+
+      if (cancelled) {
+        return;
+      }
+
+      const oddsSportKeys = [...new Set(resolvedLeagueKeys.flat().filter(Boolean))];
+
+      if (oddsSportKeys.length === 0) {
+        oddsSocketRef.current?.close();
+        oddsSocketRef.current = null;
+        return;
+      }
+
+      oddsSocketRef.current?.close();
+
+      oddsSocketRef.current = createOddsSocket({
+        sportKeys: oddsSportKeys,
+        onStatus: (status, payload) => {
+          // console.log("[odds-ws]", status, payload || "");
+        },
+        onOddsUpdate: (message) => {
+          // console.log("[odds-update]", message);
+          const nextOddsByEventId = { ...oddsPrevRef.current };
+          const nextHighlights = {};
+          const selectedMatchDeltas = [];
+          let hasUpdates = false;
+
+          for (const delta of message.deltas || []) {
+            if (delta.bookmaker !== PREFERRED_BOOKMAKER) {
+              continue;
+            }
+
+            if (selectedMatch?.eventId === delta.eventId) {
+              selectedMatchDeltas.push(delta);
+              hasUpdates = true;
+            }
+
+            // The sidebar W1/X/W2 uses only winner odds. The selected event receives every market delta.
+            if (!["h2h", "outrights"].includes(delta.market)) {
+              continue;
+            }
+
+            const oddsKey = getOddsKeyFromDelta(delta);
+
+            if (!oddsKey) {
+              continue;
+            }
+
+            const previousEventOdds = nextOddsByEventId[delta.eventId] || {};
+            nextOddsByEventId[delta.eventId] = {
+              ...previousEventOdds,
+              [oddsKey]: Number(delta.price).toFixed(2),
+            };
+            nextHighlights[delta.eventId] = {
+              ...(nextHighlights[delta.eventId] || {}),
+              [oddsKey]: true,
+            };
+            hasUpdates = true;
+          }
+
+          if (!hasUpdates) {
+            return;
+          }
+
+          setOddsByEventId(nextOddsByEventId);
+          setHighlightedOdds((previous) => ({
+            ...previous,
+            ...nextHighlights,
+          }));
+          oddsPrevRef.current = nextOddsByEventId;
+
+          if (selectedMatch?.eventId && selectedMatchDeltas.length > 0) {
+            const nextMarkets = selectedMatchDeltas.reduce(
+              (markets, delta) => applyDeltaToMarkets(markets, delta),
+              selectedMatch.markets,
+            );
+
+            onSelectedMatchOddsUpdate({
+              ...selectedMatch,
+              odds: nextOddsByEventId[selectedMatch.eventId],
+              markets: nextMarkets,
+            });
+          }
+
+          setTimeout(() => {
+            setHighlightedOdds({});
+          }, 1000);
+        },
+      });
+    }
+
+    void connectOddsSocket();
+
+    return () => {
+      cancelled = true;
+      oddsSocketRef.current?.close();
+      oddsSocketRef.current = null;
+    };
+  }, [expanded, selectedMatch, onSelectedMatchOddsUpdate]);
   
   // Set up animated placeholder
   useEffect(() => {
@@ -152,7 +507,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
 
   // Set selectedType based on location state
   useEffect(() => {
-    const { viewType } = location.state || {};
+    const viewType = location.state?.viewType || searchParams.get('viewType');
     if (viewType === 'prematch') {
       setSelectedType('prematch');
       
@@ -266,103 +621,9 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
     };
   }, [selectedType]);
 
-  // Only poll odds and scores for the expanded sport
   useEffect(() => {
-    let intervalId;
-    let abortController = new AbortController(); // Create AbortController for this polling cycle
-    
-    function pollOdds() {
-      // Create a new AbortController for each polling cycle
-      abortController = new AbortController();
-      
-      const expandedSportKeys = Object.keys(expanded).filter((key) => expanded[key]);
-      expandedSportKeys.forEach((sportKey) => {
-        const sportId = SPORT_ID_BY_KEY[sportKey];
-        if (!sportId) return;
-        fetchSportsEvents(sportId, selectedType === "live")
-          .then((json) => {
-            // Check if the request was aborted
-            if (abortController.signal.aborted) {
-              return;
-            }
-            
-            // Check if we received valid data before processing
-            if (!json || !Array.isArray(json.sports)) {
-              return;
-            }
-            
-            const list = json.sports;
-            const oddsMap = { ...oddsByEventId };
-            const scoresMap = { ...scoresByEventId }; // New scores map
-            const highlights = { ...highlightedOdds };
-            for (const e of list) {
-              const newOdds = extractOddsW1W2(e.markets);
-              const prevOdds = oddsPrevRef.current[e.eventId] || {};
-              oddsMap[e.eventId] = newOdds;
-              scoresMap[e.eventId] = { // Update scores
-                homeScore: e.homeScore || 0,
-                awayScore: e.awayScore || 0,
-                halfTimeScore: e.halfTimeScore || null,
-                currentTime: e.currentTime || null
-              };
-              highlights[e.eventId] = {
-                w1: prevOdds.w1 !== newOdds.w1,
-                w2: prevOdds.w2 !== newOdds.w2,
-              };
-              
-              // If this is the currently selected match, update its odds
-              // But only update the basic match data, not overwrite market runner selections
-              if (selectedMatch && selectedMatch.eventId === e.eventId) {
-                onSelectedMatchOddsUpdate({
-                  ...selectedMatch,
-                  odds: newOdds,
-                  markets: e.markets,
-                  homeScore: e.homeScore || 0,
-                  awayScore: e.awayScore || 0,
-                  halfTimeScore: e.halfTimeScore || null,
-                  currentTime: e.currentTime || null,
-                  status: e.status || selectedMatch.status
-                  // Preserve selectedMarket and selectedRunner if they exist
-                });
-              }
-            }
-            setOddsByEventId(oddsMap);
-            setScoresByEventId(scoresMap); // Set updated scores
-            setHighlightedOdds(highlights);
-            oddsPrevRef.current = oddsMap;
-            setTimeout(() => {
-              setHighlightedOdds({});
-            }, 1000);
-          })
-          .catch(error => {
-            // Ignore aborted requests
-            if (error.name === 'AbortError') {
-              return;
-            }
-            // Don't stop polling on error, just log it
-          });
-      });
-    }
-    
-    // Add error handling for the interval setup
-    try {
-      intervalId = setInterval(() => {
-        try {
-          pollOdds();
-        } catch (error) {
-        }
-      }, 1000);
-    } catch (error) {
-    }
-    
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-      // Abort any ongoing requests when component unmounts or dependencies change
-      abortController.abort();
-    };
-  }, [selectedType, oddsByEventId, scoresByEventId, expanded, selectedMatch, onSelectedMatchOddsUpdate]);
+    onEventsSnapshot({ selectedType, matchesBySport, expanded, oddsByEventId, highlightedOdds });
+  }, [matchesBySport, selectedType, expanded, oddsByEventId, highlightedOdds, onEventsSnapshot]);
 
   const toggleExpand = (sportKey) => {
     // Toggle the expanded state for this sport
@@ -398,15 +659,15 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
     const selectedGameId = stateGameId || urlGameId;
     const selectedSportKey = stateSportKey || urlSportKey;
     
-    console.log('=== LEFT SIDEBAR EVENT VIEW EFFECT ===');
-    console.log('State Game ID:', stateGameId);
-    console.log('URL Game ID:', urlGameId);
-    console.log('Effective Game ID:', selectedGameId);
-    console.log('State Sport Key:', stateSportKey);
-    console.log('URL Sport Key:', urlSportKey);
-    console.log('Effective Sport Key:', selectedSportKey);
-    console.log('Has processed initial selection:', hasProcessedInitialSelection);
-    console.log('Selected match exists:', !!selectedMatch);
+    // console.log('=== LEFT SIDEBAR EVENT VIEW EFFECT ===');
+    // console.log('State Game ID:', stateGameId);
+    // console.log('URL Game ID:', urlGameId);
+    // console.log('Effective Game ID:', selectedGameId);
+    // console.log('State Sport Key:', stateSportKey);
+    // console.log('URL Sport Key:', urlSportKey);
+    // console.log('Effective Sport Key:', selectedSportKey);
+    // console.log('Has processed initial selection:', hasProcessedInitialSelection);
+    // console.log('Selected match exists:', !!selectedMatch);
 
     if (selectedSportFilter) {
       console.log('Selected sport filter active, skipping default selection');
@@ -450,8 +711,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
           const selectedGame = matches.find(match => match.eventId === selectedGameId);
           if (selectedGame) {
             console.log('Found matching game:', selectedGame.eventName);
-            const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
-            const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
+            const { team1, team2 } = getMatchTeams(selectedGame);
             const selectedMatchData = {
               ...selectedGame,
               team1,
@@ -506,8 +766,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
             const firstMatch = matches[0];
             console.log('Selecting first match:', firstMatch.eventName);
             
-            const team1 = firstMatch.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
-            const team2 = firstMatch.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
+            const { team1, team2 } = getMatchTeams(firstMatch);
             const selectedMatchData = {
               ...firstMatch,
               team1,
@@ -524,7 +783,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
               eventId: firstMatch.eventId,
               sportKey: sport.key,
               eventName: firstMatch.eventName || '',
-              viewType: 'live'
+              viewType: selectedType === 'prematch' ? 'prematch' : 'live'
             }, { replace: true }); // Use replace to avoid adding to browser history
             console.log('URL updated with default selection:', {
               eventId: firstMatch.eventId,
@@ -542,9 +801,9 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
       }
     }
     else {
-      console.log('Skipping selection logic - already processed or has selection');
+      // console.log('Skipping selection logic - already processed or has selection');
     }
-  }, [matchesBySport, selectedMatch, setSelectedMatch, setSelectedSport, selectedSportFilter, location.state, searchParams]);
+  }, [matchesBySport, selectedMatch, setSelectedMatch, setSelectedSport, selectedSportFilter, location.state, searchParams, selectedType]);
 
   // Handle pending selection when matches data is loaded
   useEffect(() => {
@@ -559,8 +818,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
           // Try to find and select the game
           const selectedGame = matches.find(match => match.eventId === selectedGameId);
           if (selectedGame) {
-            const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
-            const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
+            const { team1, team2 } = getMatchTeams(selectedGame);
             const selectedMatchData = {
               ...selectedGame,
               team1,
@@ -586,8 +844,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
           const matches = matchesBySport[sport.key] || [];
           const selectedGame = matches.find(match => match.eventId === selectedGameId);
           if (selectedGame) {
-            const team1 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[0]?.trim() || '';
-            const team2 = selectedGame.eventName?.split(/\s+vs\.?\s+/i)[1]?.trim() || '';
+            const { team1, team2 } = getMatchTeams(selectedGame);
             const selectedMatchData = {
               ...selectedGame,
               team1,
@@ -639,6 +896,52 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
     }
   }, [hasProcessedInitialSelection, location.state, navigate]);
 
+  const renderMatchCard = (match, idx, sport) => {
+    const { team1, team2 } = getMatchTeams(match);
+    const isSelected = selectedMatch && String(selectedMatch.eventId) === String(match.eventId);
+    const odds = oddsByEventId[match.eventId] || extractOddsW1W2(match.markets);
+    const scores = scoresByEventId[match.eventId] || { homeScore: 0, awayScore: 0 };
+    const highlight = highlightedOdds[match.eventId] || { w1: false, w2: false };
+
+    return (
+      <GameCard
+        key={match.eventId || idx}
+        eventId={match.eventId}
+        team1={team1}
+        team2={team2}
+        score1={scores.homeScore}
+        score2={scores.awayScore}
+        matchStatus={match.status}
+        time={match.openDate}
+        odds={odds}
+        league={match.competitionName}
+        sport={sport.key}
+        sportKey={sport.key}
+        markets={match.markets}
+        eventType={match.eventType}
+        outrightRunners={match.markets?.matchOdds?.[0]?.runners || []}
+        highlight={isSelected}
+        oddsHighlight={highlight}
+        onClick={() => {
+          const latestOdds = oddsByEventId[match.eventId] || extractOddsW1W2(match.markets);
+          const selectedMatchData = {
+            ...match,
+            team1,
+            team2,
+            odds: latestOdds,
+            sportKey: sport.key,
+          };
+
+          setSelectedMatch(selectedMatchData);
+
+          if (!selectedSportFilter) {
+            setSelectedSport(sport);
+          }
+        }}
+      />
+    );
+  };
+
   // Filter sports and matches based on search term
   const filteredSports = filterSports(SPORTS, matchesBySport, search);
 
@@ -659,7 +962,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
               ? "btn-live-toggle-active" 
               : "btn-live-toggle-inactive"
           }`}
-          onClick={() => setSelectedType("live")}
+          onClick={() => handleSelectedTypeChange("live")}
         >
           Live
         </Button>
@@ -671,7 +974,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
               ? "btn-live-toggle-active" 
               : "btn-live-toggle-inactive"
           }`}
-          onClick={() => setSelectedType("prematch")}
+          onClick={() => handleSelectedTypeChange("prematch")}
         >
           Prematch
         </Button>
@@ -714,7 +1017,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
           const Icon = sport.icon;
           // Filter matches based on search term
           const allMatches = matchesBySport[sport.key] || [];
-          const filteredMatches = filterMatches(allMatches, search);
+          const filteredMatches = sortMatchesForSidebar(filterMatches(allMatches, search));
           const matchCount = filteredMatches.length;
           
           // Check if we are in mobile single sport view
@@ -749,57 +1052,35 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
                     ) : matchCount === 0 ? (
                       <div className="text-xs text-live-muted px-2 py-1 sm:py-2">No matches</div>
                     ) : (
-                      filteredMatches.map((match, idx) => {
-                        // Robustly extract team names
-                        let team1 = '';
-                        let team2 = '';
-                        if (match.eventName) {
-                          const parts = match.eventName.split(/\s+vs\.?\s+/i);
-                          team1 = parts[0]?.trim() || '';
-                          team2 = parts[1]?.trim() || '';
-                        }
-                        const isSelected = selectedMatch && (String(selectedMatch.eventId) === String(match.eventId));
-                        const odds = oddsByEventId[match.eventId] || extractOddsW1W2(match.markets);
-                        const scores = scoresByEventId[match.eventId] || { homeScore: 0, awayScore: 0 }; // Get scores from state
-                  
-                        const highlight = highlightedOdds[match.eventId] || { w1: false, w2: false };
-                        return (
-                          <GameCard
-                            key={match.eventId || idx}
-                            team1={team1}
-                            team2={team2}
-                            score1={scores.homeScore} // Use real-time score
-                            score2={scores.awayScore} // Use real-time score
-                            matchStatus={match.status}
-                            time={match.openDate}
-                            odds={odds}
-                            league={match.competitionName}
-                            sport={sport.key}
-                            sportKey={sport.key} // Pass sportKey for markets API call
-                            highlight={isSelected}
-                            oddsHighlight={highlight}
-                            onClick={() => {
-                              // Get the latest odds for this match
-                              const latestOdds = oddsByEventId[match.eventId] || extractOddsW1W2(match.markets);
-                          const selectedMatchData = {
-                            ...match,
-                            team1,
-                            team2,
-                            odds: latestOdds, // Include the latest odds in the selected match data
-                            sportKey: sport.key // Include sportKey for markets API call
-                          };
-                          // Use the prop function which handles both setting the match and updating URL
-                          setSelectedMatch(selectedMatchData);
-                          if (!selectedSportFilter) {
-                            setSelectedSport(sport);
-                          }
-                          
-                          // The UserBetsSection component will automatically fetch bets when userId and eventId change
-                          // So we don't need to dispatch fetchUserBets here
-                        }}
-                      />
-                        );
-                      })
+                      <div className="space-y-2">
+                        {groupMatchesForSidebar(filteredMatches).map((marketSection) => (
+                          <div key={marketSection.marketType} className="rounded bg-live-primary/60 border border-live overflow-hidden">
+                            <div className="flex items-center justify-between px-2 py-1.5 bg-live-hover/70">
+                              <span className="text-xs font-semibold uppercase tracking-wide text-live-primary">{marketSection.marketType}</span>
+                              <span className="text-[10px] bg-live-tertiary text-live-muted rounded px-1.5 py-0.5">{marketSection.count}</span>
+                            </div>
+
+                            {marketSection.groups.map((group) => (
+                              <div key={group.groupName} className="border-t border-live/70">
+                                <div className="flex items-center justify-between px-2 py-1 text-[11px] text-live-muted">
+                                  <span className="truncate">{group.groupName}</span>
+                                  <span>{group.count}</span>
+                                </div>
+
+                                {group.leagues.map((league) => (
+                                  <div key={league.leagueName} className="px-1.5 pb-1.5">
+                                    <div className="flex items-center justify-between px-1 py-1">
+                                      <span className="text-xs font-semibold text-live-primary truncate">{league.leagueName}</span>
+                                      <span className="text-[10px] bg-live-hover text-live-muted rounded px-1.5 py-0.5">{league.matches.length}</span>
+                                    </div>
+                                    {league.matches.map((match, idx) => renderMatchCard(match, idx, sport))}
+                                  </div>
+                                ))}
+                              </div>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
                     )
                   }
                 </div>
@@ -811,3 +1092,11 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
     </aside>
   );
 }
+
+
+
+
+
+
+
+

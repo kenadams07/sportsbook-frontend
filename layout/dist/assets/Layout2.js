@@ -1,7 +1,7 @@
 import { importShared } from './__federation_fn_import.js';
-import { e as createLucideIcon, j as jsxRuntimeExports, f as createContextScope, l as useId, m as Primitive, n as composeEventHandlers, u as useComposedRefs, o as useControllableState, p as useCallbackRef, q as createPopperScope, r as Root2, s as Anchor, t as Presence, v as Portal$1, w as hideOthers, x as dispatchDiscreteCustomEvent, y as ReactRemoveScroll, z as useFocusGuards, g as createSlot, F as FocusScope, D as DismissableLayer, H as Content, J as Arrow, K as composeRefs, h as cn, M as useNavigate, N as useLocation, Q as ChevronDown, S as useDispatch, T as useSelector, V as Link, U as User, W as RegisterModal, Y as LoginModal, X, E as Eye, I as Input, B as Button, Z as useForm, _ as Checkbox, $ as login, a0 as notifyError, a1 as verifyEmail, a2 as signup, k as getLocalStorageItem, a3 as Toaster$1, a4 as NavLink, a5 as Outlet } from './__federation_expose_LayoutApp.js';
+import { e as createLucideIcon, j as jsxRuntimeExports, f as createContextScope, l as useId, m as Primitive, n as composeEventHandlers, u as useComposedRefs, o as useControllableState, p as useCallbackRef, q as createPopperScope, r as Root2, s as Anchor, t as Presence, v as Portal$1, w as hideOthers, x as dispatchDiscreteCustomEvent, y as ReactRemoveScroll, z as useFocusGuards, g as createSlot, F as FocusScope, D as DismissableLayer, H as Content, J as Arrow, K as composeRefs, h as cn, M as useNavigate, N as useLocation, Q as ChevronDown, S as useDispatch, T as useSelector, k as getLocalStorageItem, V as setLocalStorageItem, W as updateUserBalanceExposureSuccess, Y as Link, U as User, Z as RegisterModal, _ as LoginModal, X, E as Eye, I as Input, B as Button, $ as useForm, a0 as notifySuccess, a1 as Checkbox, a2 as OTPInput, a3 as RefreshCw, a4 as login, a5 as notifyError, a6 as verifyEmail, a7 as signup, a8 as Paths, a9 as Toaster$1, aa as NavLink, ab as Outlet } from './__federation_expose_LayoutApp.js';
 import { c as createCollection, u as useDirection, D as DepositModal, H as History, C as CreditCard, S as Settings } from './DepositModal.js';
-import { g as getUserData, l as logout } from './getUserDataAction.js';
+import { g as getUserDataSuccess, a as getUserData, l as logout } from './getUserDataAction.js';
 
 /**
  * @license lucide-react v0.525.0 - ISC
@@ -1694,13 +1694,13 @@ const DesktopNav = ({ navItems }) => {
 const DesktopNav$1 = React$5.memo(DesktopNav);
 
 const React$4 = await importShared('react');
-const {useState: useState$6,useEffect: useEffect$3,useRef} = React$4;
+const {useState: useState$6,useEffect: useEffect$3,useRef: useRef$1} = React$4;
 const MobileNav = ({ navItems }) => {
   const [expandedIndex, setExpandedIndex] = useState$6(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const dropdownRef = useRef(null);
-  const navbarRef = useRef(null);
+  const dropdownRef = useRef$1(null);
+  const navbarRef = useRef$1(null);
   const toggleExpand = (index) => {
     setExpandedIndex((prev) => prev === index ? null : index);
   };
@@ -1839,31 +1839,42 @@ function MainNavbar() {
   const [isDepositModalOpen, setIsDepositModalOpen] = useState$5(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState$5(false);
   const [forceUpdate, setForceUpdate] = useState$5(0);
-  const [exposure, setExposure] = useState$5(0);
-  const [socket, setSocket] = useState$5(null);
+  const [exposure, setExposure] = useState$5(null);
+  const userWsUrl = "wss://user-api.xfair91.com/ws/user";
   useEffect$2(() => {
-    if (isAuthenticated && userData?._id) {
-      const newSocket = new WebSocket("ws://localhost:3001");
-      newSocket.onopen = () => {
-      };
-      newSocket.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        if (data.type === "exposureUpdate" && data.userId === userData._id) {
-          setExposure(data.exposure);
-        }
-      };
-      newSocket.onclose = () => {
-      };
-      newSocket.onerror = (error) => {
-      };
-      setSocket(newSocket);
-      return () => {
-        if (newSocket) {
-          newSocket.close();
-        }
-      };
+    const token = getLocalStorageItem("token");
+    if (!isAuthenticated || !userData?._id || !userWsUrl || !token) {
+      setExposure(null);
+      return void 0;
     }
-  }, [isAuthenticated, userData?._id]);
+    const separator = userWsUrl.includes("?") ? "&" : "?";
+    const ws = new WebSocket(`${userWsUrl}${separator}token=${encodeURIComponent(token)}`);
+    ws.onmessage = (event) => {
+      try {
+        const message = JSON.parse(event.data);
+        if (message.type !== "user:balance_exposure:update") return;
+        const account = message.data || {};
+        if (account.userId !== userData._id) return;
+        const nextUserData = {
+          ...userData,
+          balance: account.balance,
+          exposure: account.exposure,
+          availableBalance: account.availableBalance
+        };
+        setExposure(Number(account.exposure) || 0);
+        setLocalStorageItem("userData", nextUserData);
+        dispatch(updateUserBalanceExposureSuccess({
+          balance: account.balance,
+          exposure: account.exposure
+        }));
+        dispatch(getUserDataSuccess(nextUserData));
+      } catch (error) {
+      }
+    };
+    return () => {
+      ws.close();
+    };
+  }, [dispatch, isAuthenticated, userData, userWsUrl]);
   const calculateTotalExposure = useCallback((exposures) => {
     if (!exposures || !Array.isArray(exposures)) {
       return 0;
@@ -1886,7 +1897,7 @@ function MainNavbar() {
     }, 0);
   }, []);
   const getTotalExposure = useMemo(() => {
-    if (exposure !== 0) {
+    if (exposure !== null) {
       return exposure;
     }
     const sourceData = userData || profileData || {};
@@ -2275,7 +2286,7 @@ const MobileDeposit = ({ isOpen, onClose, onDeposit }) => {
   ] });
 };
 
-const {useEffect: useEffect$1,useState: useState$3} = await importShared('react');
+const {useEffect: useEffect$1,useState: useState$3,useRef} = await importShared('react');
 function MobileLoginModal({ isOpen, onClose, onSwitchToRegister }) {
   const {
     register,
@@ -2293,8 +2304,20 @@ function MobileLoginModal({ isOpen, onClose, onSwitchToRegister }) {
   });
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.Login);
+  const verifyEmailState = useSelector((state) => state?.VerifyEmail);
   const emailOrUsername = watch("emailOrUsername");
   watch("password");
+  const [forgotPasswordStep, setForgotPasswordStep] = useState$3("login");
+  const [forgotEmail, setForgotEmail] = useState$3("");
+  const [otpCode, setOtpCode] = useState$3("");
+  const [newPassword, setNewPassword] = useState$3("");
+  const [confirmPassword, setConfirmPassword] = useState$3("");
+  const [isOtpInputDisabled, setIsOtpInputDisabled] = useState$3(true);
+  const [isTimerOn, setIsTimerOn] = useState$3(false);
+  const [timeLeft, setTimeLeft] = useState$3(0);
+  const [isLoading, setIsLoading] = useState$3(false);
+  const [verificationStatus, setVerificationStatus] = useState$3("");
+  const timerRef = useRef(null);
   useEffect$1(() => {
     if (isOpen) {
       reset({
@@ -2309,12 +2332,59 @@ function MobileLoginModal({ isOpen, onClose, onSwitchToRegister }) {
       onClose();
     }
   }, [isAuthenticated, isOpen, onClose]);
+  useEffect$1(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    if (isTimerOn) {
+      timerRef.current = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            if (timerRef.current) {
+              clearInterval(timerRef.current);
+              timerRef.current = null;
+            }
+            setIsTimerOn(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1e3);
+    }
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [isTimerOn]);
+  useEffect$1(() => {
+    if (forgotPasswordStep === "otp" && verifyEmailState?.success && !verifyEmailState?.loading) {
+      if (!verifyEmailState?.data?.hasOwnProperty("otp")) {
+        setIsOtpInputDisabled(false);
+        setIsTimerOn(true);
+        setTimeLeft(120);
+        notifySuccess("OTP sent to your email");
+      }
+    }
+  }, [verifyEmailState, forgotPasswordStep]);
   const handleClose = () => {
     reset({
       emailOrUsername: "",
       password: "",
       rememberMe: false
     });
+    setForgotPasswordStep("login");
+    setForgotEmail("");
+    setOtpCode("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setIsOtpInputDisabled(true);
+    setIsTimerOn(false);
+    setTimeLeft(0);
+    setIsLoading(false);
+    setVerificationStatus("");
     onClose();
   };
   const onSubmit = (data) => {
@@ -2325,7 +2395,16 @@ function MobileLoginModal({ isOpen, onClose, onSwitchToRegister }) {
       notifyError("Please enter email");
       return;
     }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailOrUsername)) {
+      notifyError("Please enter a valid email address");
+      return;
+    }
     console.log("emailOrUsername", emailOrUsername);
+    setForgotEmail(emailOrUsername);
+    setForgotPasswordStep("otp");
+    setOtpCode("");
+    setIsOtpInputDisabled(true);
     dispatch(
       verifyEmail({
         payload: { email: emailOrUsername },
@@ -2333,6 +2412,71 @@ function MobileLoginModal({ isOpen, onClose, onSwitchToRegister }) {
         // Forget Password route
       })
     );
+  };
+  const handleResendOTP = () => {
+    if (!forgotEmail) return;
+    setOtpCode("");
+    setIsOtpInputDisabled(true);
+    dispatch(
+      verifyEmail({
+        payload: { email: forgotEmail },
+        route: "FP"
+      })
+    );
+  };
+  const handleVerifyOTP = () => {
+    if (!otpCode || otpCode.length !== 6) {
+      notifyError("Please enter a valid 6-digit OTP");
+      return;
+    }
+    setIsLoading(true);
+    setVerificationStatus("Verifying");
+    dispatch(
+      verifyEmail({
+        payload: { email: forgotEmail, otp: otpCode },
+        route: "FP"
+      }, (response) => {
+        setIsLoading(false);
+        setVerificationStatus("");
+        if (response?.code === 200) {
+          setForgotPasswordStep("newPassword");
+          notifySuccess("OTP verified successfully");
+        }
+      })
+    );
+  };
+  const handleResetPassword = () => {
+    if (!newPassword || newPassword.length < 6) {
+      notifyError("Password must be at least 6 characters");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      notifyError("Passwords do not match");
+      return;
+    }
+    setIsLoading(true);
+    setVerificationStatus("Resetting password");
+    setTimeout(() => {
+      setIsLoading(false);
+      setVerificationStatus("");
+      notifySuccess("Password reset successfully");
+      handleClose();
+    }, 1e3);
+  };
+  const handleBackToLogin = () => {
+    setForgotPasswordStep("login");
+    setForgotEmail("");
+    setOtpCode("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setIsOtpInputDisabled(true);
+    setIsTimerOn(false);
+    setTimeLeft(0);
+  };
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s < 10 ? "0" + s : s}`;
   };
   if (!isOpen) return null;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed inset-0 z-50 overflow-hidden", children: [
@@ -2359,106 +2503,220 @@ function MobileLoginModal({ isOpen, onClose, onSwitchToRegister }) {
         )
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 overflow-y-auto p-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-400 text-sm mb-2", children: "Already have an account?" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-xl font-bold", children: "Sign in, we are waiting for you" })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit(onSubmit), className: "space-y-4", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Input,
-            {
-              type: "text",
-              placeholder: "Email / Username",
-              error: errors.emailOrUsername?.message,
-              ...register("emailOrUsername", {
-                required: "Email or username is required"
-              })
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Input,
-            {
-              type: "password",
-              placeholder: "Password",
-              error: errors.password?.message,
-              ...register("password", {
-                required: "Password is required",
-                minLength: { value: 6, message: "Password must be at least 6 characters" }
-              })
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between py-2", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2", children: [
+        forgotPasswordStep === "login" && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-400 text-sm mb-2", children: "Already have an account?" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-xl font-bold", children: "Sign in, we are waiting for you" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit(onSubmit), className: "space-y-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Input,
+              {
+                type: "text",
+                placeholder: "Email / Username",
+                error: errors.emailOrUsername?.message,
+                ...register("emailOrUsername", {
+                  required: "Email or username is required"
+                })
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Input,
+              {
+                type: "password",
+                placeholder: "Password",
+                error: errors.password?.message,
+                ...register("password", {
+                  required: "Password is required",
+                  minLength: { value: 6, message: "Password must be at least 6 characters" }
+                })
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between py-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Checkbox,
+                  {
+                    id: "remember",
+                    className: "border-gray-400 data-[state=checked]:bg-yellow-500 data-[state=checked]:border-yellow-500",
+                    ...register("rememberMe")
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { htmlFor: "remember", className: "text-sm text-gray-300 cursor-pointer", children: "Remember me" })
+              ] }),
               /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Checkbox,
+                "button",
                 {
-                  id: "remember",
-                  className: "border-gray-400 data-[state=checked]:bg-yellow-500 data-[state=checked]:border-yellow-500",
-                  ...register("rememberMe")
+                  type: "button",
+                  onClick: handleForgotPassword,
+                  className: "text-sm text-gray-400 hover:text-yellow-500 cursor-pointer underline",
+                  children: "Forgot Password?"
                 }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { htmlFor: "remember", className: "text-sm text-gray-300 cursor-pointer", children: "Remember me" })
+              )
             ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "pt-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Button,
+              {
+                type: "submit",
+                className: "w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-12 text-base",
+                children: "SIGN IN"
+              }
+            ) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-6 p-4 bg-[#333333] rounded text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-gray-400 text-sm", children: [
+            "Have no account?",
+            " ",
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               "button",
               {
                 type: "button",
-                onClick: handleForgotPassword,
-                className: "text-sm text-gray-400 hover:text-yellow-500 cursor-pointer underline",
-                children: "Forgot Password?"
+                onClick: () => {
+                  handleClose();
+                  onSwitchToRegister();
+                },
+                className: "text-yellow-500 hover:text-yellow-400 underline font-medium",
+                children: "Join us"
               }
             )
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "pt-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              type: "submit",
-              className: "w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-12 text-base",
-              children: "SIGN IN"
-            }
-          ) })
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 p-3 bg-[#333333] rounded", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-gray-300 leading-relaxed", children: [
+            "Safer Gambling message. Set limits on your gambling. For support, contact the National Gambling Helpline on ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-white font-medium", children: "0808 8020 133" })
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 flex items-center justify-center gap-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-xs text-gray-500", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "GAMBLING" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "COMMISSION" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-gray-500", children: "GambleAware" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-gray-600 px-2 py-1 rounded text-xs text-white", children: "18+" })
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Button, { variant: "ghost", className: "text-gray-400 hover:text-white text-sm hover:bg-[#404040]", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(User, { className: "w-4 h-4 mr-2" }),
+            "Contact support"
+          ] }) })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-6 p-4 bg-[#333333] rounded text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-gray-400 text-sm", children: [
-          "Have no account?",
-          " ",
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              type: "button",
-              onClick: () => {
-                handleClose();
-                onSwitchToRegister();
-              },
-              className: "text-yellow-500 hover:text-yellow-400 underline font-medium",
-              children: "Join us"
-            }
-          )
-        ] }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 p-3 bg-[#333333] rounded", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-gray-300 leading-relaxed", children: [
-          "Safer Gambling message. Set limits on your gambling. For support, contact the National Gambling Helpline on ",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-white font-medium", children: "0808 8020 133" })
-        ] }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 flex items-center justify-center gap-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-xs text-gray-500", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "GAMBLING" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "COMMISSION" })
+        forgotPasswordStep === "otp" && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: handleBackToLogin,
+                className: "text-sm text-gray-400 hover:text-yellow-500 mb-4 flex items-center gap-1",
+                children: "← Back to Login"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-xl font-bold mb-2", children: "Verify OTP" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-gray-400 text-sm", children: [
+              "We've sent a verification code to ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-yellow-500", children: forgotEmail })
+            ] })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-gray-500", children: "GambleAware" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-gray-600 px-2 py-1 rounded text-xs text-white", children: "18+" })
-        ] }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-6 pt-4 border-t border-gray-600 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Button,
-          {
-            variant: "ghost",
-            className: "text-gray-400 hover:text-white text-sm font-medium hover:bg-[#404040] w-full",
-            onClick: handleForgotPassword,
-            children: "FORGOT YOUR PASSWORD?"
-          }
-        ) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Button, { variant: "ghost", className: "text-gray-400 hover:text-white text-sm hover:bg-[#404040]", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(User, { className: "w-4 h-4 mr-2" }),
-          "Contact support"
-        ] }) })
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-6", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-center mb-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 bg-[#404040] rounded-full flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(User, { className: "w-8 h-8 text-yellow-500" }) }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm font-medium text-gray-300 mb-2 text-center", children: "Verification Code" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-center mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                OTPInput,
+                {
+                  value: otpCode,
+                  onChange: setOtpCode,
+                  disabled: isOtpInputDisabled,
+                  length: 6
+                }
+              ) })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Button,
+              {
+                type: "button",
+                onClick: handleVerifyOTP,
+                disabled: isLoading || otpCode.length !== 6 || isOtpInputDisabled,
+                className: "w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-12 text-base disabled:opacity-50",
+                children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { className: "w-4 h-4 animate-spin" }),
+                  verificationStatus || "Verifying..."
+                ] }) : verificationStatus || "Verify OTP"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center", children: isTimerOn ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-sm text-gray-400", children: [
+              "Didn't receive the code?",
+              " ",
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "button",
+                {
+                  type: "button",
+                  disabled: isTimerOn,
+                  className: "text-yellow-500 font-medium disabled:opacity-50",
+                  children: [
+                    "Resend in ",
+                    formatTime(timeLeft)
+                  ]
+                }
+              )
+            ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: handleResendOTP,
+                className: "text-sm text-yellow-500 hover:text-yellow-400 font-medium",
+                children: "Resend OTP"
+              }
+            ) })
+          ] })
+        ] }),
+        forgotPasswordStep === "newPassword" && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: handleBackToLogin,
+                className: "text-sm text-gray-400 hover:text-yellow-500 mb-4 flex items-center gap-1",
+                children: "← Back to Login"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-xl font-bold mb-2", children: "Reset Password" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-gray-400 text-sm", children: [
+              "Enter your new password for ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-yellow-500", children: forgotEmail })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Input,
+              {
+                type: "password",
+                placeholder: "New Password",
+                value: newPassword,
+                onChange: (e) => setNewPassword(e.target.value)
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Input,
+              {
+                type: "password",
+                placeholder: "Confirm New Password",
+                value: confirmPassword,
+                onChange: (e) => setConfirmPassword(e.target.value)
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Button,
+              {
+                type: "button",
+                onClick: handleResetPassword,
+                disabled: isLoading || !newPassword || !confirmPassword,
+                className: "w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold h-12 text-base disabled:opacity-50",
+                children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { className: "w-4 h-4 animate-spin" }),
+                  verificationStatus || "Resetting..."
+                ] }) : verificationStatus || "Reset Password"
+              }
+            )
+          ] })
+        ] })
       ] })
     ] }) })
   ] });
@@ -2470,7 +2728,7 @@ const {useEffect} = await importShared('react');
 function MobileRegisterModal({ isOpen, onClose, onCloseAll, onSwitchToLogin }) {
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.Login);
-  useNavigate();
+  const navigate = useNavigate();
   const [isConsentChecked, setIsConsentChecked] = useState$2(false);
   const [formData, setFormData] = useState$2({
     username: "",
@@ -2537,7 +2795,12 @@ function MobileRegisterModal({ isOpen, onClose, onCloseAll, onSwitchToLogin }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    dispatch(signup(formData));
+    dispatch(
+      signup(formData, () => {
+        handleClose();
+        navigate(Paths.verifyEmail);
+      })
+    );
   };
   useEffect(() => {
     if (isAuthenticated && isOpen) {

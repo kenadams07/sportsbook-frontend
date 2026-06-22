@@ -8,9 +8,8 @@ const ServerStatusChecker = () => {
   // Function to check server connectivity
   const checkServerStatus = async () => {
     try {
-      // Use the backend service endpoint
-      const EVENTS_API_BASE_URL = import.meta.env.VITE_EVENTS_API_URL || "http://localhost:3003";
-      const url = `${EVENTS_API_BASE_URL}/api/events?sport_id=sr:sport:1&live_matches=true`;
+      const ODDS_API_BASE_URL = import.meta.env.VITE_ODDS_API_BASE_URL || "http://127.0.0.1:3010";
+      const url = `${ODDS_API_BASE_URL}/health`;
 
       // Try to ping the server with a simple request
       const controller = new AbortController();
@@ -38,13 +37,6 @@ const ServerStatusChecker = () => {
   useEffect(() => {
     // Check server status immediately on component mount
     checkServerStatus();
-    
-    // Check server status every 30 seconds
-    const intervalId = setInterval(() => {
-      checkServerStatus();
-    }, 30000);
-    
-    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {

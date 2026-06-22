@@ -1,4 +1,5 @@
 import api from "./api";
+import { unwrapApiResponse } from "./apiResponse";
 
 /**
  * Fetch market report from the API
@@ -17,7 +18,7 @@ export async function fetchMarketReport(userId, marketId = null, eventId = null)
       url += `&event_id=${eventId}`;
     }
     const response = await api.get(url);
-    return response.data;
+    return unwrapApiResponse(response).data;
   } catch (error) {
     console.error("Error fetching market report:", error);
     throw error;

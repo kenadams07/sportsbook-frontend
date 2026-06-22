@@ -139,57 +139,6 @@ const LiveCalender = () => {
       .finally(() => setLoading(false));
   }, [selectedSportKeys]);
 
-  // Poll odds for the selected match to keep them updated in real-time
-  useEffect(() => {
-    let intervalId;
-    
-    function pollOdds() {
-      // Only poll if we have a selected match
-      if (selectedMatch) {
-        const sportId = SPORT_ID_BY_KEY[selectedMatch.sportKey];
-        if (!sportId) return;
-        
-        fetchSportsEvents(sportId, false)
-          .then((json) => {
-            const list = json?.sports ?? [];
-            // Find the updated match data
-            const updatedMatch = list.find(m => m.eventId === selectedMatch.eventId);
-            
-            if (updatedMatch) {
-              // Update the selected match with new odds
-              const updatedOdds = extractOddsW1W2(updatedMatch.markets);
-              setSelectedMatch(prevMatch => {
-                // Only update if this is still the selected match
-                if (prevMatch && prevMatch.eventId === updatedMatch.eventId) {
-                  return {
-                    ...updatedMatch,
-                    sportKey: prevMatch.sportKey, // Preserve sportKey
-                    // Preserve any market runner selection if it exists
-                    selectedMarket: prevMatch.selectedMarket,
-                    selectedRunner: prevMatch.selectedRunner,
-                    selectedOdd: prevMatch.selectedOdd
-                  };
-                }
-                return prevMatch;
-              });
-            }
-          })
-          .catch(() => {
-            // Ignore errors to keep polling
-          });
-      }
-    }
-    
-    // Poll every second for real-time odds updates
-    intervalId = setInterval(pollOdds, 1000);
-    
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
-  }, [selectedMatch]);
-
   const handleMatchClick = (match) => {
     setSelectedMatch(match);
   };

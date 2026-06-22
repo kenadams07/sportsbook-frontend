@@ -7,9 +7,19 @@ import { useNavigate } from "react-router-dom"
 import { Button } from "./ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 import { API_BASE } from "../utils/Constants"
-import { SPORT_ID_BY_KEY, SPORTS } from "../utils/CommonExports"
+import { ODDS_SPORT_KEY_BY_FRONTEND_KEY, SPORT_ID_BY_KEY, SPORTS } from "../utils/CommonExports"
 import SkeletonLoader from "./ui/SkeletonLoader"
 import { fetchSportsEvents } from "../utils/sportsEventsApi"
+import { createOddsSocket } from "../utils/oddsWebSocket"
+
+const PREFERRED_BOOKMAKER = "draftkings"
+
+function getOddsKeyFromDelta(delta) {
+  if (delta.outcome === delta.homeTeam) return "w1"
+  if (delta.outcome === delta.awayTeam) return "w2"
+  if (delta.outcome?.toLowerCase() === "draw") return "x"
+  return null
+}
 
 function formatDateOrInPlay(status, openDateMs) {
   if (status === "IN_PLAY") return "IN PLAY"
@@ -128,8 +138,7 @@ export default function UpcomingMatches() {
       setError(null)
       try {
         const sportId = selectedSportKey ? SPORT_ID_BY_KEY[selectedSportKey] : undefined
-        // Use the fetchSportsEvents function which now directly uses the backup endpoint
-        const data = sportId ? await fetchSportsEvents(sportId, true) : { sports: [] };
+        const data = sportId ? await fetchSportsEvents(sportId, false) : { sports: [] };
 
         // Check if we received valid data
         if (!data || !Array.isArray(data.sports)) {
@@ -159,71 +168,69 @@ export default function UpcomingMatches() {
     return () => controller.abort()
   }, [selectedSportKey])
 
-  // Polling: update only odds every second, highlight changes
+  // WebSocket: update odds without frontend HTTP polling.
   useEffect(() => {
-    let intervalId
-    async function pollOdds() {
-      try {
-        const sportId = selectedSportKey ? SPORT_ID_BY_KEY[selectedSportKey] : undefined
-        // Use the fetchSportsEvents function which now directly uses the backup endpoint
-        const data = sportId ? await fetchSportsEvents(sportId, true) : { sports: [] };
-  
-        // Check if we received valid data before processing
-        if (!data || !Array.isArray(data.sports)) {
-          return;
-        }
-        
-        const list = data.sports;
-        const oddsMap = { ...oddsByEventId }
-        const highlights = {}
-        for (const e of list) {
-          const newOdds = extractOddsW1W2(e.markets)
-          const prevOdds = oddsPrevRef.current[e.eventId] || {}
-          oddsMap[e.eventId] = newOdds
-          highlights[e.eventId] = {
-            w1: prevOdds.w1 !== newOdds.w1,
-            w2: prevOdds.w2 !== newOdds.w2,
+    const oddsSportKey = ODDS_SPORT_KEY_BY_FRONTEND_KEY[selectedSportKey]
+
+    if (!oddsSportKey) {
+      return
+    }
+
+    const socket = createOddsSocket({
+      sportKeys: [oddsSportKey],
+      onOddsUpdate: (message) => {
+        const nextOddsByEventId = { ...oddsPrevRef.current }
+        const nextHighlights = {}
+        let hasUpdates = false
+
+        for (const delta of message.deltas || []) {
+          if (delta.market !== "h2h" || delta.bookmaker !== PREFERRED_BOOKMAKER) {
+            continue
           }
+
+          const oddsKey = getOddsKeyFromDelta(delta)
+
+          if (!oddsKey) {
+            continue
+          }
+
+          const previousEventOdds = nextOddsByEventId[delta.eventId] || {}
+          nextOddsByEventId[delta.eventId] = {
+            ...previousEventOdds,
+            [oddsKey]: Number(delta.price).toFixed(2),
+          }
+          nextHighlights[delta.eventId] = {
+            ...(nextHighlights[delta.eventId] || {}),
+            [oddsKey]: true,
+          }
+          hasUpdates = true
         }
-        setOddsByEventId(oddsMap)
-        setHighlightedOdds(highlights)
-        oddsPrevRef.current = oddsMap
-        // Remove highlight after 1s
+
+        if (!hasUpdates) {
+          return
+        }
+
+        setOddsByEventId(nextOddsByEventId)
+        setHighlightedOdds((previous) => ({
+          ...previous,
+          ...nextHighlights,
+        }))
+        oddsPrevRef.current = nextOddsByEventId
+
         setTimeout(() => {
           setHighlightedOdds({})
         }, 1000)
-      } catch (error) {
-        // Don't stop polling on error, just log it
       }
-    }
-    
-    // Add error handling for the interval setup
-    try {
-      intervalId = setInterval(() => {
-        try {
-          pollOdds();
-        } catch (error) {
-          console.error("Error in pollOdds interval:", error);
-        }
-      }, 1000)
-    } catch (error) {
-      console.error("Error setting up polling interval:", error);
-    }
+    })
     
     return () => {
-      if (intervalId) {
-        clearInterval(intervalId)
-      }
+      socket.close()
     }
-  }, [selectedSportKey, oddsByEventId])
+  }, [selectedSportKey])
 
   const filteredEvents = useMemo(() => {
-    if (!selectedSportKey) return events
-    const sportConf = SPORTS.find((s) => s.key === selectedSportKey)
-    if (!sportConf) return events
-    const allowed = new Set(sportConf.sportNames.map(normalize))
-    return events.filter((e) => allowed.has(normalize(e.sportName)))
-  }, [events, selectedSportKey])
+    return events
+  }, [events])
 
   const matches = useMemo(() => {
     // First filter by sport
@@ -273,11 +280,7 @@ export default function UpcomingMatches() {
     const clickedMatch = matches.find(m => m.id === id);
     console.log('Found clicked match:', clickedMatch);
     
-    // Determine viewType based on the fact we are fetching live matches (true) 
-    // or based on event status if available.
-    // Since this component calls fetchSportsEvents(..., true), these are likely treated as live/in-play or upcoming-live.
-    // We'll default to 'live' to ensure MainLiveSection finds them in the same list.
-    const viewType = 'live'; 
+    const viewType = 'prematch'; 
 
     // Navigate to the Live section with the selected game and sport
     const navigationState = {

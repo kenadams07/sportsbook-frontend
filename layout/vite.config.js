@@ -99,34 +99,34 @@ export default defineConfig(({ mode }) => {
           }
         },
         // Proxy for the casino API to avoid CORS issues
-        '/casino-api': {
-          target: CASINO_API_URL,
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/casino-api/, '/api'),
-          configure: (proxy, options) => {
-            proxy.on('error', (err, req, res) => {
-              console.error('Proxy error for /casino-api:', err);
-              // Add safety check for res object
-              if (res && typeof res.writeHead === 'function') {
-                res.writeHead(503, {
-                  'Content-Type': 'application/json',
-                });
-                res.end(JSON.stringify({
-                  error: 'Service Unavailable',
-                  message: 'Unable to connect to casino server'
-                }));
-              }
-            });
-            proxy.on('proxyReq', (proxyReq, req, res) => {
-              // Add timeout to proxy requests
-              proxyReq.setTimeout(15000);
-            });
-            proxy.on('proxyRes', (proxyRes, req, res) => {
+        // '/casino-api': {
+        //   target: CASINO_API_URL,
+        //   changeOrigin: true,
+        //   rewrite: (path) => path.replace(/^\/casino-api/, '/api'),
+        //   configure: (proxy, options) => {
+        //     proxy.on('error', (err, req, res) => {
+        //       console.error('Proxy error for /casino-api:', err);
+        //       // Add safety check for res object
+        //       if (res && typeof res.writeHead === 'function') {
+        //         res.writeHead(503, {
+        //           'Content-Type': 'application/json',
+        //         });
+        //         res.end(JSON.stringify({
+        //           error: 'Service Unavailable',
+        //           message: 'Unable to connect to casino server'
+        //         }));
+        //       }
+        //     });
+        //     proxy.on('proxyReq', (proxyReq, req, res) => {
+        //       // Add timeout to proxy requests
+        //       proxyReq.setTimeout(15000);
+        //     });
+        //     proxy.on('proxyRes', (proxyRes, req, res) => {
        
              
-            });
-          }
-        },
+        //     });
+        //   }
+        // },
         // Proxy for sportBets API to avoid CORS issues
         '/sportBets': {
           target: USERS_API_URL,

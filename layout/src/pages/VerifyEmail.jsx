@@ -7,7 +7,8 @@ import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyEmail } from "../redux/Action/auth/verifyEmailAction";
 import { Paths } from "../routes/path";
-import { setLocalStorageItem } from "../utils/Helper";
+import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "../utils/Helper";
+import { isApiSuccess } from "../utils/apiResponse";
 
 export default function VerifyEmail() {
   const navigate = useNavigate();
@@ -22,7 +23,9 @@ export default function VerifyEmail() {
   const [verificationStatus, setVerificationStatus] = useState("");
   const timerRef = useRef(null);
 
-  const userData = useSelector((state) => state?.Login?.userData);
+  const loginUserData = useSelector((state) => state?.Login?.userData);
+  const pendingVerificationUser = getLocalStorageItem("pendingVerificationUser");
+  const userData = loginUserData?.email ? loginUserData : pendingVerificationUser;
   const verifyEmailState = useSelector((state) => state?.VerifyEmail);
 
   const formatTime = (seconds) => {
@@ -91,9 +94,10 @@ export default function VerifyEmail() {
         route: "VE",
       }, (response) => {
         console.log("verified otp", response);
-        if (response?.code == 200) {
+        if (isApiSuccess(response)) {
           // Set flag in localStorage to show welcome modal on homepage
           setLocalStorageItem('showWelcomeModal', 'true');
+          removeLocalStorageItem("pendingVerificationUser");
           
           // Navigate to the home page directly
           navigate(Paths.home);
@@ -137,10 +141,7 @@ export default function VerifyEmail() {
       // Removed direct toast notifications to prevent duplicates
       // The notifications are now handled in the saga
     } else if (verifyEmailState?.success) {
-      if (!verifyEmailState?.data?.hasOwnProperty("otp")) {
-        // Removed duplicate toast notification
-        // Notification is handled in the saga
-      } else if (verifyEmailState?.data?.hasOwnProperty("otp")) {
+      if (verifyEmailState?.data?.emailVerified) {
         setIsLoading(false);
         setVerificationStatus("Verification Success");
         setIsVerified(true);
@@ -149,11 +150,20 @@ export default function VerifyEmail() {
         
         // Set flag in localStorage to show welcome modal on homepage
         setLocalStorageItem('showWelcomeModal', 'true');
+        removeLocalStorageItem("pendingVerificationUser");
         
         // Navigate to the home page
         setTimeout(() => {
           navigate(Paths.home);
         }, 1000);
+      } else if (!verifyEmailState?.data?.hasOwnProperty("otp")) {
+        setIsLoading(false);
+        // Removed duplicate toast notification
+        // Notification is handled in the saga
+      } else if (verifyEmailState?.data?.hasOwnProperty("otp")) {
+        setIsLoading(false);
+        setVerificationStatus("Verification Success");
+        setIsVerified(true);
       }
     } else if (verifyEmailState?.error) {
       if (!verifyEmailState?.data?.hasOwnProperty("otp")) {

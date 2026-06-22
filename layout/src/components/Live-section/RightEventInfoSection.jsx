@@ -4,12 +4,15 @@ import { updateUserBalanceExposure } from '../../redux/Action/auth/updateUserBal
 import { notifyError, notifyInfo } from '../../utils/notificationService';
 import API from '../../utils/api';
 import UserBetsSection from './UserBetsSection';
-import { fetchUserBets, skipNextUserBetsFetch } from '../../redux/Action/userBetsActions';
 
 const formatDateTime = (timestamp) => {
   if (!timestamp) return 'N/A';
 
-  const date = new Date(parseInt(timestamp));
+  const date = typeof timestamp === 'number'
+    ? new Date(timestamp)
+    : /^\d+$/.test(String(timestamp))
+      ? new Date(Number(timestamp))
+      : new Date(timestamp);
 
   if (isNaN(date.getTime())) return 'Invalid Date';
 
@@ -166,8 +169,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
   const { isAuthenticated, userData } = useSelector(state => state.Login);
   const { loading: exposureLoading, error: exposureError } = useSelector(state => state.UpdateUserBalanceExposure);
   const { userData: profileData, loading } = useSelector(state => state.GetUserData);
-  const [socketExposure, setSocketExposure] = useState(0);
-  const [isSocketConnected, setIsSocketConnected] = useState(false);
   const [selectedRunnerInfo, setSelectedRunnerInfo] = useState(null);
 
   // Check if this is a market runner selection
@@ -191,40 +192,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
   };
 
   const marketName = getMarketName();
-
-  // Initialize WebSocket connection for real-time exposure updates
-  useEffect(() => {
-    if (isAuthenticated && userData?._id) {
-      const newSocket = new WebSocket('ws://localhost:3001'); // Adjust URL as needed
-
-      newSocket.onopen = () => {
-        setIsSocketConnected(true);
-      };
-
-      newSocket.onmessage = function (event) {
-        const data = JSON.parse(event.data);
-
-        if (data.type === 'exposureUpdate' && data.userId === userData._id) {
-          setSocketExposure(parseFloat(data.exposure) || 0);
-        }
-      };
-
-      newSocket.onclose = () => {
-        setIsSocketConnected(false);
-      };
-
-      newSocket.onerror = (error) => {
-        setIsSocketConnected(false);
-      };
-
-      // Clean up function to close the socket when component unmounts or user logs out
-      return () => {
-        if (newSocket) {
-          newSocket.close();
-        }
-      };
-    }
-  }, [isAuthenticated, userData?._id]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [betAmounts, setBetAmounts] = useState([500, 1000, 5000]);
@@ -399,16 +366,6 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
           marketName: marketName,
           runners: market?.runners?.map(runner => runner.runnerName) || []
         }));
-      }
-      
-      // Dispatch fetchUserBets action after placing a bet
-      if (userData?._id && selectedGame?.eventId) {
-        // Skip the next automatic fetch in UserBetsSection to prevent duplicate API calls
-        dispatch(skipNextUserBetsFetch());
-        
-        setTimeout(() => {
-          dispatch(fetchUserBets(userData._id, selectedGame.eventId));
-        }, 1000); // Delay to allow backend to process the bet
       }
     } catch (err) {
       notifyError(err.message || "Failed to place bet");
@@ -674,8 +631,8 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
 
             <div className="text-[10px] text-live-secondary mb-1">
               {isMarketRunnerSelection 
-                ? `${selectedGame?.team1} - ${selectedGame?.team2}` 
-                : `${selectedGame?.team1} - ${selectedGame?.team2}`}
+                ? `${selectedGame?.eventType === "OUTRIGHT" ? selectedGame?.eventName : `${selectedGame?.team1} - ${selectedGame?.team2}`}` 
+                : `${selectedGame?.eventType === "OUTRIGHT" ? selectedGame?.eventName : `${selectedGame?.team1} - ${selectedGame?.team2}`}`}
             </div>
             <div className="text-[10px] text-live-secondary">{formatDateTime(selectedGame?.openDate)}</div>
           </div>
@@ -923,8 +880,8 @@ export default function RightEventInfoSection({ selectedGame, onLogin, onRegiste
 
           <div className="text-xs text-live-secondary mb-1">
             {isMarketRunnerSelection 
-              ? `${selectedGame?.team1} - ${selectedGame?.team2}` 
-              : `${selectedGame?.team1} - ${selectedGame?.team2}`}
+              ? `${selectedGame?.eventType === "OUTRIGHT" ? selectedGame?.eventName : `${selectedGame?.team1} - ${selectedGame?.team2}`}` 
+              : `${selectedGame?.eventType === "OUTRIGHT" ? selectedGame?.eventName : `${selectedGame?.team1} - ${selectedGame?.team2}`}`}
           </div>
           <div className="text-xs text-live-secondary">{formatDateTime(selectedGame?.openDate)}</div>
         </div>
@@ -1031,3 +988,4 @@ const LinkTo = ({ onClick, text }) => (
     {text}
   </span>
 );
+

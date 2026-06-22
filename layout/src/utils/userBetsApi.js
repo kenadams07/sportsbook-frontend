@@ -1,4 +1,5 @@
 import api from "./api";
+import { unwrapApiResponse } from "./apiResponse";
 
 /**
  * Fetch user bets from the API
@@ -13,7 +14,7 @@ export async function fetchUserBets(userId, eventId = null) {
       url += `&eventId=${eventId}`;
     }
     const response = await api.get(url);
-    return response.data;
+    return unwrapApiResponse(response).data;
   } catch (error) {
     console.error("Error fetching user bets:", error);
     throw error;
@@ -28,7 +29,7 @@ export async function fetchUserBets(userId, eventId = null) {
 export async function fetchAllUserBets(userId) {
   try {
     const response = await api.get(`/sportBets/all-bets?userId=${userId}`);
-    return response.data;
+    return unwrapApiResponse(response).data;
   } catch (error) {
     console.error("Error fetching all user bets:", error);
     throw error;

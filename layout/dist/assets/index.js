@@ -1,7 +1,7 @@
 import { importShared } from './__federation_fn_import.js';
-import LayoutApp, { k as getLocalStorageItem, a6 as SIGNUP_FAILURE, a7 as SIGNUP_SUCCESS, a8 as SIGNUP, c as GET_USER_DATA_SUCCESS, a9 as UPDATE_USER_BALANCE_EXPOSURE_SUCCESS, aa as UPDATE_USER_BALANCE_EXPOSURE, a as LOGOUT_SUCCESS, ab as LOGIN_FAILURE, ac as LOGIN_SUCCESS, ad as LOGIN, ae as VERIFY_EMAIL_FAILURE, af as VERIFY_EMAIL_SUCCESS, ag as VERIFY_EMAIL, d as GET_USER_DATA_FAILURE, G as GET_USER_DATA, ah as UPDATE_USER_BALANCE_EXPOSURE_FAILURE, ai as FETCH_CASINO_GAME_URL_FAILURE, aj as FETCH_CASINO_GAME_URL_SUCCESS, ak as FETCH_CASINO_GAME_URL, al as FETCH_MORE_CASINO_PROVIDERS_FAILURE, am as FETCH_MORE_CASINO_PROVIDERS_SUCCESS, an as FETCH_MORE_CASINO_PROVIDERS, ao as FETCH_CASINO_PROVIDERS_FAILURE, ap as FETCH_CASINO_PROVIDERS_SUCCESS, aq as FETCH_CASINO_PROVIDERS, ar as FETCH_HOMEPAGE_LIVE_GAMES_FAILURE, as as FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS, at as FETCH_HOMEPAGE_LIVE_GAMES, au as FETCH_HOMEPAGE_CASINO_GAMES_FAILURE, av as FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS, aw as FETCH_HOMEPAGE_CASINO_GAMES, ax as RESET_CASINO_GAMES, ay as FETCH_MORE_CASINO_GAMES_FAILURE, az as FETCH_MORE_CASINO_GAMES_SUCCESS, aA as FETCH_MORE_CASINO_GAMES, aB as FETCH_CASINO_GAMES_FAILURE, aC as FETCH_CASINO_GAMES_SUCCESS, aD as FETCH_CASINO_GAMES, aE as FETCH_ALL_USER_BETS_FAILURE, aF as FETCH_ALL_USER_BETS_SUCCESS, aG as FETCH_ALL_USER_BETS, aH as SKIP_NEXT_USER_BETS_FETCH, aI as FETCH_USER_BETS_FAILURE, aJ as FETCH_USER_BETS_SUCCESS, aK as FETCH_USER_BETS, aL as FETCH_MATCH_RESULTS_FAILURE, aM as FETCH_MATCH_RESULTS_SUCCESS, aN as FETCH_MATCH_RESULTS, aO as FETCH_MARKET_REPORT_FAILURE, aP as FETCH_MARKET_REPORT_SUCCESS, aQ as FETCH_MARKET_REPORT, aR as getIPAddresses, aS as notifyPromise, aT as api, aU as setLocalStorageItem, aV as signupSuccess, aW as signupFailure, aX as loginSuccess, aY as loginFailure, aZ as verifyEmailSuccess, a_ as verifyEmailFailure, L as LOGOUT, a$ as removeLocalStorageItem, b0 as updateUserBalanceExposureFailure, b1 as updateUserBalanceExposureSuccess, b2 as axios, b3 as notifyError, b4 as fetchCasinoProvidersSuccess, b5 as fetchCasinoProvidersFailure, b6 as fetchMoreCasinoProvidersSuccess, b7 as fetchCasinoGamesSuccess, b8 as fetchCasinoGamesFailure, b9 as fetchMoreCasinoGamesSuccess, ba as fetchMoreCasinoGamesFailure, bb as fetchHomepageCasinoGamesSuccess, bc as fetchHomepageCasinoGamesFailure, bd as fetchHomepageLiveGamesSuccess, be as fetchHomepageLiveGamesFailure, bf as fetchCasinoGameUrlSuccess, bg as fetchCasinoGameUrlFailure, bh as fetchUserBetsSuccess, bi as fetchUserBetsFailure, bj as fetchAllUserBetsSuccess, bk as fetchAllUserBetsFailure, bl as fetchMatchResultsSuccess, bm as fetchMatchResultsFailure, bn as fetchMarketReportSuccess, bo as fetchMarketReportFailure, j as jsxRuntimeExports, bp as Provider_default } from './__federation_expose_LayoutApp.js';
+import LayoutApp, { k as getLocalStorageItem, ac as SIGNUP_FAILURE, ad as SIGNUP_SUCCESS, ae as SIGNUP, G as GET_USER_DATA_SUCCESS, af as UPDATE_USER_BALANCE_EXPOSURE_SUCCESS, ag as UPDATE_USER_BALANCE_EXPOSURE, a as LOGOUT_SUCCESS, ah as LOGIN_FAILURE, ai as LOGIN_VERIFICATION_PENDING, aj as LOGIN_SUCCESS, ak as LOGIN, al as VERIFY_EMAIL_FAILURE, am as VERIFY_EMAIL_SUCCESS, an as VERIFY_EMAIL, d as GET_USER_DATA_FAILURE, c as GET_USER_DATA, ao as UPDATE_USER_BALANCE_EXPOSURE_FAILURE, ap as FETCH_CASINO_GAME_URL_FAILURE, aq as FETCH_CASINO_GAME_URL_SUCCESS, ar as FETCH_CASINO_GAME_URL, as as FETCH_MORE_CASINO_PROVIDERS_FAILURE, at as FETCH_MORE_CASINO_PROVIDERS_SUCCESS, au as FETCH_MORE_CASINO_PROVIDERS, av as FETCH_CASINO_PROVIDERS_FAILURE, aw as FETCH_CASINO_PROVIDERS_SUCCESS, ax as FETCH_CASINO_PROVIDERS, ay as FETCH_HOMEPAGE_LIVE_GAMES_FAILURE, az as FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS, aA as FETCH_HOMEPAGE_LIVE_GAMES, aB as FETCH_HOMEPAGE_CASINO_GAMES_FAILURE, aC as FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS, aD as FETCH_HOMEPAGE_CASINO_GAMES, aE as RESET_CASINO_GAMES, aF as FETCH_MORE_CASINO_GAMES_FAILURE, aG as FETCH_MORE_CASINO_GAMES_SUCCESS, aH as FETCH_MORE_CASINO_GAMES, aI as FETCH_CASINO_GAMES_FAILURE, aJ as FETCH_CASINO_GAMES_SUCCESS, aK as FETCH_CASINO_GAMES, aL as FETCH_ALL_USER_BETS_FAILURE, aM as FETCH_ALL_USER_BETS_SUCCESS, aN as FETCH_ALL_USER_BETS, aO as SKIP_NEXT_USER_BETS_FETCH, aP as FETCH_USER_BETS_FAILURE, aQ as FETCH_USER_BETS_SUCCESS, aR as FETCH_USER_BETS, aS as FETCH_MATCH_RESULTS_FAILURE, aT as FETCH_MATCH_RESULTS_SUCCESS, aU as FETCH_MATCH_RESULTS, aV as FETCH_MARKET_REPORT_FAILURE, aW as FETCH_MARKET_REPORT_SUCCESS, aX as FETCH_MARKET_REPORT, aY as getIPAddresses, aZ as notifyPromise, a_ as api, a$ as unwrapApiResponse, V as setLocalStorageItem, b0 as signupSuccess, b1 as loginVerificationPending, b2 as signupFailure, b3 as loginSuccess, b4 as loginFailure, b5 as verifyEmailSuccess, b6 as verifyEmailFailure, L as LOGOUT, b7 as removeLocalStorageItem, b8 as updateUserBalanceExposureFailure, W as updateUserBalanceExposureSuccess, b9 as fetchUserBetsSuccess, ba as axios, bb as notifyError, bc as fetchCasinoProvidersSuccess, bd as fetchCasinoProvidersFailure, be as fetchMoreCasinoProvidersSuccess, bf as fetchCasinoGamesSuccess, bg as fetchCasinoGamesFailure, bh as fetchMoreCasinoGamesSuccess, bi as fetchMoreCasinoGamesFailure, bj as fetchHomepageCasinoGamesSuccess, bk as fetchHomepageCasinoGamesFailure, bl as fetchHomepageLiveGamesSuccess, bm as fetchHomepageLiveGamesFailure, bn as fetchCasinoGameUrlSuccess, bo as fetchCasinoGameUrlFailure, bp as fetchUserBetsFailure, bq as fetchAllUserBetsSuccess, br as fetchAllUserBetsFailure, bs as fetchMatchResultsSuccess, bt as fetchMatchResultsFailure, bu as fetchMarketReportSuccess, bv as fetchMarketReportFailure, j as jsxRuntimeExports, bw as Provider_default } from './__federation_expose_LayoutApp.js';
 import { r as reactDomExports } from './index3.js';
-import { a as logoutSuccess, b as logoutFailure, c as getUserDataSuccess, d as getUserDataFailure } from './getUserDataAction.js';
+import { b as logoutSuccess, c as logoutFailure, g as getUserDataSuccess, d as getUserDataFailure } from './getUserDataAction.js';
 
 var client = {};
 
@@ -1627,6 +1627,14 @@ const loginReducer = (state = INIT_STATE$6, action) => {
         isAuthenticated: true,
         error: null
       };
+    case LOGIN_VERIFICATION_PENDING:
+      return {
+        ...state,
+        userData: action.payload,
+        loading: false,
+        isAuthenticated: false,
+        error: null,
+      };
     case LOGIN_FAILURE:
       return { 
         ...state, 
@@ -2387,10 +2395,6 @@ function* signupRequest(action) {
     const data = yield call(() =>
       notifyPromise(() => api.post("/users/signup", payload), {
         loadingText: "Creating your account...",
-        getSuccessMessage: (res) => {
-          if (res?.data?.success) return res.data.message || "Account created successfully!";
-          return null; // null prevents success notification if success !== true
-        },
         getErrorMessage: (err) => {
           // Handle different types of errors
           if (err?.code === 'ECONNABORTED') {
@@ -2426,16 +2430,17 @@ function* signupRequest(action) {
       })
     );
 
-    if (data?.data?.success) {
-      yield call(setLocalStorageItem, "token", data.data.token);
-      yield call(setLocalStorageItem, "userData", data.data.data);
-      yield put(signupSuccess(data.data.data));
-      // Dispatch login success as well to update the state
-      yield put({ type: LOGIN_SUCCESS, payload: data.data.data });
+    const result = unwrapApiResponse(data);
+    const user = result.data.user;
+
+    if (user) {
+      yield call(setLocalStorageItem, "pendingVerificationUser", user);
+      yield put(signupSuccess(user));
+      yield put(loginVerificationPending(user));
       
       // Execute callback if provided
       if (action.callback && typeof action.callback === 'function') {
-        yield call(action.callback, data.data);
+        yield call(action.callback, result.raw);
       }
     } else {
       yield put(signupFailure());
@@ -2473,17 +2478,6 @@ function* loginRequest(action) {
     const data = yield call(() =>
       notifyPromise(() => api.post("/users/login", payloadWithIPs), {
         loadingText: "Logging in...",
-        getSuccessMessage: (res) => {
-          // Handle the login response structure (success: true)
-          if (res?.data?.success === true) {
-            return res.data.message || "Login successful";
-          }
-          // Also handle the existing structure for backward compatibility
-          else if (res?.data?.meta?.code === 200 || res?.data?.code === 200) {
-            return res?.data?.meta?.message || res?.data?.message || "Login successful";
-          }
-          return null; // null prevents success notification if not successful
-        },
         getErrorMessage: (err) => {
           // Handle timeout errors specifically
           if (err?.code === 'ECONNABORTED') {
@@ -2512,20 +2506,16 @@ function* loginRequest(action) {
       })
     );
 
-    if (data?.data?.success === true || data?.data?.meta?.code === 200 || data?.data?.code === 200) {
-      yield put(loginSuccess(data?.data?.data));
-      yield call(setLocalStorageItem, "userData", JSON.stringify(data?.data?.data));
-      yield call(setLocalStorageItem, "token", data?.data?.token || data?.data?.meta?.token);
+    const result = unwrapApiResponse(data);
+    yield put(loginSuccess(result.data.user));
+    yield call(setLocalStorageItem, "userData", JSON.stringify(result.data.user));
+    yield call(setLocalStorageItem, "token", result.data.token);
       
-      // Execute callback if provided
-      if (action.callback && typeof action.callback === 'function') {
-        yield call(action.callback, data?.data);
-      }
-    } else {
-      yield put(loginFailure());
+    if (action.callback && typeof action.callback === 'function') {
+      yield call(action.callback, result.raw);
     }
   } catch (error) {
-    yield put(loginFailure());
+    yield put(loginFailure(error));
   }
 }
 
@@ -2551,12 +2541,6 @@ function* verifyEmailRequest(action) {
             endpoint = "/users/forget-password";
             notificationOptions = {
                 loadingText: "Processing...",
-                getSuccessMessage: (res) => {
-                    if (res?.data?.code === 200) {
-                        return res?.data?.message || "Request processed successfully";
-                    }
-                    return null;
-                },
                 getErrorMessage: (err) => {
                     return err?.response?.data?.message || err?.message || "Failed to process request";
                 }
@@ -2567,12 +2551,6 @@ function* verifyEmailRequest(action) {
             endpoint = "/users/verify-otp";
             notificationOptions = {
                 loadingText: "Verifying OTP...",
-                getSuccessMessage: (res) => {
-                    if (res?.data?.code === 200) {
-                        return res?.data?.message || "OTP verified successfully";
-                    }
-                    return null;
-                },
                 getErrorMessage: (err) => {
                     return err?.response?.data?.message || err?.message || "Failed to verify OTP";
                 },
@@ -2585,12 +2563,6 @@ function* verifyEmailRequest(action) {
             endpoint = "/users/verifyemail";
             notificationOptions = {
                 loadingText: "Sending OTP...",
-                getSuccessMessage: (res) => {
-                    if (res?.data?.code === 200) {
-                        return res?.data?.message || "OTP sent to your email";
-                    }
-                    return null;
-                },
                 getErrorMessage: (err) => {
                     return err?.response?.data?.message || err?.message || "Failed to send OTP";
                 },
@@ -2604,17 +2576,21 @@ function* verifyEmailRequest(action) {
                 notifyPromise(() => api.post(endpoint, payload), notificationOptions)
             );
 
-            if (data?.code === 200) {
-                yield put(verifyEmailSuccess(data?.data));
+            const result = unwrapApiResponse({ data });
+            const responseData = result.data;
 
-                if (action.callback && typeof action.callback === 'function') {
-                    yield call(action.callback, data);
+                if (payload?.hasOwnProperty("otp") && responseData?.token && responseData?.user) {
+                    yield call(setLocalStorageItem, "token", responseData.token);
+                    yield call(setLocalStorageItem, "userData", JSON.stringify(responseData.user));
+                    yield put(loginSuccess(responseData.user));
                 }
 
-            } else {
-                // Pass the error data to the failure action
-                yield put(verifyEmailFailure(data));
-            }
+                yield put(verifyEmailSuccess(responseData));
+
+                if (action.callback && typeof action.callback === 'function') {
+                    yield call(action.callback, result.raw);
+                }
+
         } catch (apiError) {
             // Removed console.error("API Error:", apiError);
             // Pass the error to the failure action
@@ -2671,40 +2647,13 @@ function* getUserDataRequest(action) {
   try {
    
     const response = yield call(api.get, "/users/profile");
-    const data = response.data;
- 
+    const result = unwrapApiResponse(response);
 
-    // Handle the response structure with success field
-    if (data?.success === true) {
-  
-      yield put(getUserDataSuccess(data?.data));
-      
-  
-      yield call(setLocalStorageItem, "userData", JSON.stringify(data?.data));
-      
-      // Execute callback if provided
-      if (action.callback && typeof action.callback === 'function') {
-    
-        yield call(action.callback, data);
-      }
-    } 
-    // Handle the previous response structure with code field
-    else if (data?.meta?.code === 200 || data?.code === 200) {
-    
-      yield put(getUserDataSuccess(data?.data));
-      
-      // Update localStorage with the new user data
-     
-      yield call(setLocalStorageItem, "userData", JSON.stringify(data?.data));
-      
-      // Execute callback if provided
-      if (action.callback && typeof action.callback === 'function') {
-      
-        yield call(action.callback, data);
-      }
-    } else {
-      // Removed console.log("getUserData failed");
-      yield put(getUserDataFailure());
+    yield put(getUserDataSuccess(result.data));
+    yield call(setLocalStorageItem, "userData", JSON.stringify(result.data));
+
+    if (action.callback && typeof action.callback === 'function') {
+      yield call(action.callback, result.raw);
     }
   } catch (error) {
     // Removed console.error("Error in getUserDataRequest:", error);
@@ -2718,6 +2667,41 @@ function* watchGetUserDataAPI() {
 
 function* rootSaga$2() {
   yield all([watchGetUserDataAPI()]);
+}
+
+/**
+ * Fetch user bets from the API
+ * @param {string} userId - The user ID
+ * @param {string} [eventId] - The event ID (optional)
+ * @returns {Promise<Object>} - The response data containing user bets
+ */
+async function fetchUserBets(userId, eventId = null) {
+  try {
+    let url = `/sportBets/my-bets?userId=${userId}`;
+    if (eventId) {
+      url += `&eventId=${eventId}`;
+    }
+    const response = await api.get(url);
+    return unwrapApiResponse(response).data;
+  } catch (error) {
+    console.error("Error fetching user bets:", error);
+    throw error;
+  }
+}
+
+/**
+ * Fetch all user bets from the API
+ * @param {string} userId - The user ID
+ * @returns {Promise<Object>} - The response data containing all user bets
+ */
+async function fetchAllUserBets(userId) {
+  try {
+    const response = await api.get(`/sportBets/all-bets?userId=${userId}`);
+    return unwrapApiResponse(response).data;
+  } catch (error) {
+    console.error("Error fetching all user bets:", error);
+    throw error;
+  }
 }
 
 function* updateUserBalanceExposureRequest(action) {
@@ -2742,24 +2726,6 @@ function* updateUserBalanceExposureRequest(action) {
         () => api.post("/sportBets/place-bet", payload),
         {
           loadingText: "Updating exposure...",
-          getSuccessMessage: (res) => {
-            if (res?.data?.success === true) {
-              return res.data.message || "Bet Placed successfully";
-            } else if (
-              res?.data?.meta?.code === 200 ||
-              res?.data?.code === 200
-            ) {
-              return (
-                res?.data?.meta?.message ||
-                res?.data?.message ||
-                "Bet Placed successfully"
-              );
-            }
-            else if (res?.data && (res?.status === 200 || res?.status === 201)) {
-              return "Bet Placed successfully";
-            }
-            return null;
-          },
           getErrorMessage: (err) => {
             return (
               err?.response?.data?.message ||
@@ -2773,50 +2739,28 @@ function* updateUserBalanceExposureRequest(action) {
       )
     );
 
-    const isSuccess = response?.data?.success === true || 
-                     response?.data?.meta?.code === 200 || 
-                     response?.data?.code === 200 ||
-                     (response?.status >= 200 && response?.status < 300) ||
-                     (response?.data && response?.status === 200);
-
-    if (isSuccess) {
-      const responseData = response.data?.data || response.data;
+    const placeBetResult = unwrapApiResponse(response);
       
       yield new Promise(resolve => setTimeout(resolve, 500));
       
       const userResponse = yield call(api.get, "/users/profile");
+      const userResult = unwrapApiResponse(userResponse);
+      const updatedUserData = userResult.data;
       
-      if (userResponse?.data?.success === true || 
-          userResponse?.data?.meta?.code === 200 || 
-          userResponse?.data?.code === 200 ||
-          (userResponse?.status >= 200 && userResponse?.status < 300)) {
-        
-        const updatedUserData = userResponse.data?.data || userResponse.data;
-        
         yield put(updateUserBalanceExposureSuccess({
           balance: updatedUserData?.balance,
           exposure: updatedUserData?.exposure,
         }));
         
         yield put(getUserDataSuccess(updatedUserData));
+
+        const savedBetEventId = placeBetResult?.data?.bet?.eventId || payload.eventId;
+        if (savedBetEventId) {
+          const latestBets = yield call(fetchUserBets, userId, savedBetEventId);
+          yield put(fetchUserBetsSuccess(Array.isArray(latestBets) ? latestBets : []));
+        }
         
         yield call(setLocalStorageItem, "userData", JSON.stringify(updatedUserData));
-      } else {
-        yield put(updateUserBalanceExposureSuccess({
-          balance: action.payload.balance,
-          exposure: action.payload.exposure,
-        }));
-        
-        const updatedUserData = {
-          ...userData,
-          balance: action.payload.balance,
-          exposure: action.payload.exposure,
-        };
-        yield call(setLocalStorageItem, "userData", JSON.stringify(updatedUserData));
-      }
-    } else {
-      yield put(updateUserBalanceExposureFailure());
-    }
   } catch (error) {
     yield put(updateUserBalanceExposureFailure());
   }
@@ -3314,41 +3258,6 @@ function* casinoSaga() {
   ]);
 }
 
-/**
- * Fetch user bets from the API
- * @param {string} userId - The user ID
- * @param {string} [eventId] - The event ID (optional)
- * @returns {Promise<Object>} - The response data containing user bets
- */
-async function fetchUserBets(userId, eventId = null) {
-  try {
-    let url = `/sportBets/my-bets?userId=${userId}`;
-    if (eventId) {
-      url += `&eventId=${eventId}`;
-    }
-    const response = await api.get(url);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching user bets:", error);
-    throw error;
-  }
-}
-
-/**
- * Fetch all user bets from the API
- * @param {string} userId - The user ID
- * @returns {Promise<Object>} - The response data containing all user bets
- */
-async function fetchAllUserBets(userId) {
-  try {
-    const response = await api.get(`/sportBets/all-bets?userId=${userId}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching all user bets:", error);
-    throw error;
-  }
-}
-
 // Worker saga to fetch user bets
 function* fetchUserBetsRequest(action) {
   try {
@@ -3435,7 +3344,7 @@ async function fetchMatchResults(eventId, sportId, marketId, userId) {
       url += `&user_id=${userId}`;
     }
     const response = await api.get(url);
-    return response.data;
+    return unwrapApiResponse(response).data;
   } catch (error) {
     console.error("Error fetching match results:", error);
     throw error;
@@ -3501,7 +3410,7 @@ async function fetchMarketReport(userId, marketId = null, eventId = null) {
       url += `&event_id=${eventId}`;
     }
     const response = await api.get(url);
-    return response.data;
+    return unwrapApiResponse(response).data;
   } catch (error) {
     console.error("Error fetching market report:", error);
     throw error;

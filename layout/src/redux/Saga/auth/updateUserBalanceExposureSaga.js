@@ -15,6 +15,7 @@ import { all, call, put, takeEvery } from "redux-saga/effects";
 import API from "../../../utils/api";
 import { getLocalStorageItem, setLocalStorageItem } from "../../../utils/Helper";
 import { notifyPromise } from "../../../utils/notificationService";
+import { unwrapApiResponse } from "../../../utils/apiResponse";
 import { 
   UPDATE_USER_BALANCE_EXPOSURE,
   UPDATE_USER_BALANCE_EXPOSURE_SUCCESS,
@@ -25,6 +26,8 @@ import {
   updateUserBalanceExposureFailure
 } from "../../Action/auth/updateUserBalanceExposureAction";
 import { getUserDataSuccess } from "../../Action/auth/getUserDataAction";
+import { fetchUserBetsSuccess } from "../../Action/userBetsActions";
+import { fetchUserBets as fetchUserBetsAPI } from "../../../utils/userBetsApi";
 
 function* updateUserBalanceExposureRequest(action) {
   try {
@@ -48,24 +51,6 @@ function* updateUserBalanceExposureRequest(action) {
         () => API.post("/sportBets/place-bet", payload),
         {
           loadingText: "Updating exposure...",
-          getSuccessMessage: (res) => {
-            if (res?.data?.success === true) {
-              return res.data.message || "Bet Placed successfully";
-            } else if (
-              res?.data?.meta?.code === 200 ||
-              res?.data?.code === 200
-            ) {
-              return (
-                res?.data?.meta?.message ||
-                res?.data?.message ||
-                "Bet Placed successfully"
-              );
-            }
-            else if (res?.data && (res?.status === 200 || res?.status === 201)) {
-              return "Bet Placed successfully";
-            }
-            return null;
-          },
           getErrorMessage: (err) => {
             return (
               err?.response?.data?.message ||
@@ -79,50 +64,28 @@ function* updateUserBalanceExposureRequest(action) {
       )
     );
 
-    const isSuccess = response?.data?.success === true || 
-                     response?.data?.meta?.code === 200 || 
-                     response?.data?.code === 200 ||
-                     (response?.status >= 200 && response?.status < 300) ||
-                     (response?.data && response?.status === 200);
-
-    if (isSuccess) {
-      const responseData = response.data?.data || response.data;
+    const placeBetResult = unwrapApiResponse(response);
       
       yield new Promise(resolve => setTimeout(resolve, 500));
       
       const userResponse = yield call(API.get, "/users/profile");
+      const userResult = unwrapApiResponse(userResponse);
+      const updatedUserData = userResult.data;
       
-      if (userResponse?.data?.success === true || 
-          userResponse?.data?.meta?.code === 200 || 
-          userResponse?.data?.code === 200 ||
-          (userResponse?.status >= 200 && userResponse?.status < 300)) {
-        
-        const updatedUserData = userResponse.data?.data || userResponse.data;
-        
         yield put(updateUserBalanceExposureSuccess({
           balance: updatedUserData?.balance,
           exposure: updatedUserData?.exposure,
         }));
         
         yield put(getUserDataSuccess(updatedUserData));
+
+        const savedBetEventId = placeBetResult?.data?.bet?.eventId || payload.eventId;
+        if (savedBetEventId) {
+          const latestBets = yield call(fetchUserBetsAPI, userId, savedBetEventId);
+          yield put(fetchUserBetsSuccess(Array.isArray(latestBets) ? latestBets : []));
+        }
         
         yield call(setLocalStorageItem, "userData", JSON.stringify(updatedUserData));
-      } else {
-        yield put(updateUserBalanceExposureSuccess({
-          balance: action.payload.balance,
-          exposure: action.payload.exposure,
-        }));
-        
-        const updatedUserData = {
-          ...userData,
-          balance: action.payload.balance,
-          exposure: action.payload.exposure,
-        };
-        yield call(setLocalStorageItem, "userData", JSON.stringify(updatedUserData));
-      }
-    } else {
-      yield put(updateUserBalanceExposureFailure());
-    }
   } catch (error) {
     yield put(updateUserBalanceExposureFailure());
   }

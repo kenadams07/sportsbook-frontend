@@ -2,6 +2,7 @@ import {
   LOGIN,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
+  LOGIN_VERIFICATION_PENDING,
   LOGOUT_SUCCESS,
   UPDATE_USER_BALANCE_EXPOSURE,
   UPDATE_USER_BALANCE_EXPOSURE_SUCCESS,
@@ -26,6 +27,14 @@ const loginReducer = (state = INIT_STATE, action) => {
         loading: false,
         isAuthenticated: true,
         error: null
+      };
+    case LOGIN_VERIFICATION_PENDING:
+      return {
+        ...state,
+        userData: action.payload,
+        loading: false,
+        isAuthenticated: false,
+        error: null,
       };
     case LOGIN_FAILURE:
       return { 
