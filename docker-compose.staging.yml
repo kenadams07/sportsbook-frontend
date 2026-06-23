@@ -63,7 +63,7 @@ services:
       SMTP_FROM_MAIL: ${SMTP_FROM_MAIL}
       EMAIL_DEV_OTP_RESPONSE: ${EMAIL_DEV_OTP_RESPONSE}
     ports:
-      - "127.0.0.1:${USER_SERVER_PORT}:${USER_SERVER_PORT}"
+      - "${USER_SERVER_PORT}:${USER_SERVER_PORT}"
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -95,7 +95,7 @@ services:
       FAKE_ODDS_SPORTS: ${FAKE_ODDS_SPORTS}
       EVENT_SYNC_INTERVAL_MS: 1800000
     ports:
-      - "127.0.0.1:${ODDS_SERVER_PORT}:${ODDS_SERVER_PORT}"
+      - "${ODDS_SERVER_PORT}:${ODDS_SERVER_PORT}"
     depends_on:
       migrate:
         condition: service_completed_successfully
