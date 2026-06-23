@@ -213,13 +213,16 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect, eventB
     setSearchTerm('');
   };
 
-  if (boardViewMode === "prematch") {
+  const isEventBoardMode = boardViewMode === "prematch" || boardViewMode === "live";
+
+  if (isEventBoardMode) {
     return (
       <PrematchEventBoard
         matches={eventBoardMatches}
         selectedMatch={match}
         onMatchSelect={onMatchSelect}
         onRunnerSelect={onRunnerSelect}
+        boardViewMode={boardViewMode}
       />
     );
   }
@@ -286,7 +289,7 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect, eventB
           <div className="flex justify-between items-center p-2 sm:p-3 md:p-4">
             <div className="flex items-center gap-1 sm:gap-2">
               <div className="w-5 h-3 sm:w-6 sm:h-4 bg-live-info border border-live-primary rounded-sm flex items-center justify-center">
-                <span className="text-live-primary text-[10px] sm:text-xs font-bold">ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§</span>
+                {/* <span className="text-live-primary text-[10px] sm:text-xs font-bold">ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§</span> */}
               </div>
               <span className="text-live-primary text-xs sm:text-sm font-medium truncate">{match.competitionName || 'League'}</span>
             </div>
@@ -304,14 +307,14 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect, eventB
               {/* Left side - Teams */}
               <div className="space-y-1 sm:space-y-2 md:space-y-3 flex-1 min-w-0">
                 <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
-                  <span className="text-live-danger text-sm sm:text-base md:text-lg">ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¹Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦</span>
+                  {/* <span className="text-live-danger text-sm sm:text-base md:text-lg">ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¹Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦</span> */}
                   <span className="text-live-primary text-sm sm:text-base md:text-lg font-medium truncate">{team1}</span>
                 </div>
                 {isOutright ? (
                   <div className="text-live-muted text-xs sm:text-sm font-semibold">Outright winner market</div>
                 ) : (
                   <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
-                    <span className="text-live-accent text-sm sm:text-base md:text-lg">ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¹Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦</span>
+                    {/* <span className="text-live-accent text-sm sm:text-base md:text-lg">ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¹Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦</span> */}
                     <span className="text-live-primary text-sm sm:text-base md:text-lg font-medium truncate">{team2}</span>
                   </div>
                 )}
@@ -336,10 +339,10 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect, eventB
                 Stats
               </button>
               <button className="bg-live-tertiary hover:bg-live-hover text-live-primary p-1 sm:p-1.5 md:p-2 rounded text-xs sm:text-sm">
-                ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡
+                {/* ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ */}
               </button>
               <button className="bg-live-tertiary hover:bg-live-hover text-live-primary p-1 sm:p-1.5 md:p-2 rounded text-xs sm:text-sm">
-                ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â 
+                {/* ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â  */}
               </button>
             </div>
           </div>
@@ -370,8 +373,9 @@ export default function MiddleGameDisplay({ match, sport, onRunnerSelect, eventB
   );
 }
 
-function PrematchEventBoard({ matches = [], selectedMatch, onMatchSelect, onRunnerSelect }) {
+function PrematchEventBoard({ matches = [], selectedMatch, onMatchSelect, onRunnerSelect, boardViewMode = "prematch" }) {
   const [boardSearch, setBoardSearch] = useState("");
+  const boardTitle = boardViewMode === "live" ? "Live Event Board" : "Prematch Event Board";
 
   // Accordion open state per date group and refs for measuring height
   const [openDates, setOpenDates] = useState({});
@@ -420,7 +424,7 @@ function PrematchEventBoard({ matches = [], selectedMatch, onMatchSelect, onRunn
         <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-md border border-live bg-live-secondary">
         <div className="flex items-center justify-between gap-3 border-b border-live bg-live-tertiary px-3 py-2">
           <div className="min-w-0">
-            <div className="text-xs font-bold uppercase tracking-wide text-live-primary">Prematch Event Board</div>
+            <div className="text-xs font-bold uppercase tracking-wide text-live-primary">{boardTitle}</div>
             <div className="text-[11px] text-live-muted">{totalMatches} events grouped by date</div>
           </div>
           <div className="flex min-w-[220px] items-center gap-2 rounded border border-live bg-live-primary px-2 py-1.5">

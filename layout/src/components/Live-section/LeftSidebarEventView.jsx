@@ -507,39 +507,31 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
 
   // Set selectedType based on location state
   useEffect(() => {
-    const viewType = location.state?.viewType || searchParams.get('viewType');
-    if (viewType === 'prematch') {
-      setSelectedType('prematch');
-      
-      // Update URL parameters to reflect the view type
-      const eventId = searchParams.get('eventId');
-      const sportKey = searchParams.get('sportKey');
-      const eventName = searchParams.get('eventName');
-      const source = searchParams.get('source');
-      
-      // Only update URL if we have event parameters to preserve
-      if (eventId && sportKey) {
-        setSearchParams({
-          eventId,
-          sportKey,
-          eventName: eventName || '',
-          source: source || '',
-          viewType: 'prematch'
-        }, { replace: true });
-      } else {
-        // If no specific event parameters, just ensure viewType is in URL
-        setSearchParams(prev => {
-          const newParams = new URLSearchParams(prev);
-          newParams.set('viewType', 'prematch');
-          return newParams;
-        }, { replace: true });
-      }
-    } else if (!searchParams.get('viewType')) {
-      // If no view type in URL and not prematch in state, default to 'live'
-      setSearchParams(prev => {
-        const newParams = new URLSearchParams(prev);
-        newParams.set('viewType', 'live');
-        return newParams;
+    const locationViewType = location.state?.viewType;
+    const queryViewType = searchParams.get('viewType');
+
+    if (queryViewType) {
+      setSelectedType(queryViewType === 'prematch' ? 'prematch' : 'live');
+      return;
+    }
+
+    if (locationViewType && !hasProcessedLocationState.current) {
+      const nextType = locationViewType === 'prematch' ? 'prematch' : 'live';
+      setSelectedType(nextType);
+      hasProcessedLocationState.current = true;
+      setSearchParams((prev) => {
+        const nextParams = new URLSearchParams(prev);
+        nextParams.set('viewType', nextType);
+        return nextParams;
+      }, { replace: true });
+      return;
+    }
+
+    if (!queryViewType) {
+      setSearchParams((prev) => {
+        const nextParams = new URLSearchParams(prev);
+        nextParams.set('viewType', 'live');
+        return nextParams;
       }, { replace: true });
     }
   }, [location.state, searchParams, setSearchParams]);
