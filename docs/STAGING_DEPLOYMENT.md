@@ -3,8 +3,8 @@
 ## Services
 
 - https://xfair91.com: user frontend
-- https://user-api.xfair91.com: user-server on 127.0.0.1:3020
-- https://odds-api.xfair91.com: odds-server on 127.0.0.1:3010
+- https://user-api.xfair91.com: user-server through the ALB target group
+- https://odds-api.xfair91.com: odds-server through the ALB target group
 
 PostgreSQL and Redis remain private inside the Docker network. Do not publish their ports.
 
