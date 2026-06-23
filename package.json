@@ -15,7 +15,8 @@
     "dev:admin": "npm --workspace apps/admin-server run dev",
     "db:generate": "npm --workspace packages/db run generate",
     "db:migrate": "npm --workspace packages/db run migrate",
-    "db:deploy": "npm --workspace packages/db run deploy"
+    "db:deploy": "npm --workspace packages/db run deploy",
+    "seed:staging": "node scripts/seed-staging.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.0.0",
