@@ -1,15 +1,15 @@
 import React from 'react';
 import './Input.css';
 
-const Input = ({ 
-  label, 
-  error, 
-  className = '', 
+const Input = ({
+  label,
+  error,
+  className = '',
   id,
-  ...props 
+  ...props
 }) => {
   const inputClasses = `input ${error ? 'input-error' : ''} ${className}`;
-  
+
   return (
     <div className="input-wrapper">
       {label && (
@@ -17,7 +17,7 @@ const Input = ({
           {label}
         </label>
       )}
-      <input 
+      <input
         className={inputClasses}
         id={id}
         {...props}

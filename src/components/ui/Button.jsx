@@ -1,20 +1,20 @@
 import React from 'react';
 import './Button.css';
 
-const Button = ({ 
-  children, 
-  variant = 'primary', 
-  size = 'medium', 
-  disabled = false, 
-  onClick, 
+const Button = ({
+  children,
+  variant = 'primary',
+  size = 'medium',
+  disabled = false,
+  onClick,
   type = 'button',
   className = '',
-  ...props 
+  ...props
 }) => {
   const buttonClasses = `btn btn-${variant} btn-${size} ${disabled ? 'btn-disabled' : ''} ${className}`;
-  
+
   return (
-    <button 
+    <button
       className={buttonClasses}
       onClick={onClick}
       disabled={disabled}

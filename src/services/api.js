@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 const ADMIN_API_BASE_URL = import.meta.env.VITE_ADMIN_API_BASE_URL || '/api';
+const ODDS_ADMIN_API_BASE_URL = import.meta.env.VITE_ODDS_ADMIN_API_BASE_URL || 'http://127.0.0.1:3010';
 const ADMIN_API_TOKEN = import.meta.env.VITE_ADMIN_API_TOKEN;
 
 // Create axios instances with default configurations
@@ -15,6 +16,13 @@ const apiClient = axios.create({
 
 const adminApiClient = axios.create({
   baseURL: ADMIN_API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+const oddsAdminApiClient = axios.create({
+  baseURL: ODDS_ADMIN_API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -67,6 +75,16 @@ const axiosPut = async (client, endpoint, data, options = {}) => {
   }
 };
 
+const axiosPatch = async (client, endpoint, data, options = {}) => {
+  try {
+    const response = await client.patch(endpoint, data, options);
+    return response.data;
+  } catch (error) {
+    console.error('API PATCH call failed:', error);
+    throw error;
+  }
+};
+
 // Generic axios function for DELETE requests with error handling
 const axiosDelete = async (client, endpoint, options = {}) => {
   try {
@@ -93,9 +111,58 @@ const axiosExternalSportsApi = async (endpoint, options = {}) => {
 export const api = {
   // Sports
   getAllSports: () => axiosExternalSportsApi(API_ENDPOINTS.GET_EXTERNAL_SPORTS),
+  getAvailableOddsSports: () => axiosApi(oddsAdminApiClient, '/admin/available-sports'),
+  getAdminSportCategories: () => axiosApi(oddsAdminApiClient, '/admin/sport-categories'),
+  getAdminSports: () => axiosApi(oddsAdminApiClient, '/admin/sports'),
+  addAdminSport: () => axiosPost(oddsAdminApiClient, '/admin/sports', {}),
+  addAdminLeagues: (payload) => axiosPost(oddsAdminApiClient, '/admin/leagues', payload),
+  updateAdminSportCategorySettings: (categoryKey, payload) => axiosPatch(
+    oddsAdminApiClient,
+    `/admin/sport-categories/${categoryKey}/settings`,
+    payload
+  ),
+  updateAdminLeagueSettings: (sportKey, payload) => axiosPatch(
+    oddsAdminApiClient,
+    `/admin/leagues/${sportKey}/settings`,
+    payload
+  ),
+  syncAdminSports: () => axiosPost(oddsAdminApiClient, '/admin/sync/sports', {}),
+  configureAdminSport: (sportKey, config) => axiosPost(
+    oddsAdminApiClient,
+    `/admin/sports/${sportKey}/config`,
+    config
+  ),
   
   // Events
   getEvents: () => axiosApi(apiClient, API_ENDPOINTS.GET_EVENTS),
+  getAdminEvents: (params = {}) => axiosApi(oddsAdminApiClient, '/admin/events', { params }),
+  syncAdminEvents: (sportKey) => axiosPost(
+    oddsAdminApiClient,
+    sportKey ? `/admin/sync/events/${sportKey}` : '/admin/sync/events',
+    {}
+  ),
+  restoreAdminEvents: (payload) => axiosPost(oddsAdminApiClient, '/admin/events/restore', payload),
+  discoverAdminEventMarkets: (eventId) => axiosApi(oddsAdminApiClient, `/admin/events/${eventId}/markets`),
+  updateAdminEventStatus: (eventId, status) => axiosPatch(
+    oddsAdminApiClient,
+    `/admin/events/${eventId}/status`,
+    { status }
+  ),
+  releaseAdminEventStatus: (eventId) => axiosPatch(
+    oddsAdminApiClient,
+    `/admin/events/${eventId}/status-control`,
+    { statusSource: 'SYSTEM' }
+  ),
+  updateAdminMarketStatus: (marketDbId, status) => axiosPatch(
+    oddsAdminApiClient,
+    `/admin/markets/${marketDbId}/status`,
+    { status }
+  ),
+  updateAdminOutcomeStatus: (outcomeId, payload) => axiosPatch(
+    oddsAdminApiClient,
+    `/admin/outcomes/${outcomeId}/status`,
+    payload
+  ),
   getEvent: (id) => axiosApi(apiClient, API_ENDPOINTS.GET_EVENT_BY_ID(id)),
   createEvent: (event) => axiosPost(adminApiClient, API_ENDPOINTS.CREATE_EVENT, event),
   updateEvent: (id, event) => axiosPut(apiClient, API_ENDPOINTS.UPDATE_EVENT(id), event),

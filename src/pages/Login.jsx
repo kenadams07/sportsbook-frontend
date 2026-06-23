@@ -1,196 +1,223 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { FiEye, FiEyeOff, FiLock, FiShield } from 'react-icons/fi';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import Button from '../components/ui/Button';
-import Input from '../components/ui/Input';
 import './Login.css';
 
 const Login = () => {
   const { login, testLogin } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [credentials, setCredentials] = useState({
-    email: '',
-    password: ''
+    identifier: '',
+    password: '',
+    rememberDevice: false
   });
-  
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCredentials(prev => ({
-      ...prev,
-      [name]: value
+  const sessionMessage = useMemo(() => {
+    const params = new URLSearchParams(location.search);
+    return params.get('session') === 'expired' || params.get('timeout') === 'true';
+  }, [location.search]);
+
+  const handleChange = (event) => {
+    const { name, type, checked, value } = event.target;
+
+    setCredentials((previous) => ({
+      ...previous,
+      [name]: type === 'checkbox' ? checked : value
     }));
-    
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
+
+    if (errors[name] || errors.general) {
+      setErrors((previous) => ({
+        ...previous,
+        [name]: '',
+        general: ''
       }));
     }
   };
 
   const validateForm = () => {
-    const newErrors = {};
-    
-    if (!credentials.email) {
-      newErrors.email = 'Email is required';
-    } else if (!/^\S+@\S+\.\S+$/.test(credentials.email)) {
-      newErrors.email = 'Email address is invalid';
+    const nextErrors = {};
+    const identifier = credentials.identifier.trim();
+
+    if (!identifier) {
+      nextErrors.identifier = 'Please enter your email address or username.';
+    } else if (identifier.includes('@') && !/^\S+@\S+\.\S+$/.test(identifier)) {
+      nextErrors.identifier = 'Email address needs a valid format. Example: ops@example.com';
     }
-    
+
     if (!credentials.password) {
-      newErrors.password = 'Password is required';
+      nextErrors.password = 'Please enter your password.';
     } else if (credentials.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+      nextErrors.password = 'Password must be at least 6 characters.';
     }
-    
-    return newErrors;
+
+    return nextErrors;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
     const formErrors = validateForm();
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
       return;
     }
-    
+
     setIsLoading(true);
-    // Simulate API call
     try {
-      const result = await login(credentials);
+      const result = await login({
+        email: credentials.identifier.trim(),
+        password: credentials.password,
+        rememberDevice: credentials.rememberDevice
+      });
+
       if (result.success) {
-        console.log('Login successful');
-        // Navigate to dashboard after successful login
         navigate('/dashboard');
       }
     } catch (error) {
       console.error('Login failed:', error);
-      setErrors({ general: 'Login failed. Please check your credentials and try again.' });
+      setErrors({
+        general: 'We could not verify those credentials. Check your access details and try again.'
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Test login function for development
   const handleTestLogin = () => {
     testLogin();
-    // Navigate to dashboard after test login
     navigate('/dashboard');
   };
 
   return (
-    <div className="login-page">
-      <div className="login-left">
-        <div className="overlay">
-          <div className="logo">
-            <h1 style={{ color: 'white' }}>SportsBook Admin</h1>
-          </div>
-          <div className="sports-illustration">
-            {/* Sports image from public folder */}
-            <img 
-              src="/sports.jpg" 
-              alt="Sports illustration" 
-              className="sports-image"
-              onError={(e) => {
-                e.target.style.display = 'none';
-                // Show placeholder if image fails to load
-                const placeholder = document.querySelector('.sports-image-placeholder');
-                if (placeholder) {
-                  placeholder.style.display = 'flex';
-                }
-              }}
-            />
-            {/* Fallback placeholder */}
-            <div className="sports-image-placeholder">
-              <div className="placeholder-content">
-                <div className="sports-icon">⚽🏀🏈</div>
-                <div className="placeholder-text">Sports Illustration</div>
-              </div>
-            </div>
-          </div>
-          <div className="tagline">
-            <h2>Manage Your Sportsbook Platform</h2>
-            <p>Access comprehensive analytics and management tools</p>
+    <main className="login-page" aria-labelledby="login-title">
+      <section className="login-shell" aria-label="Sportsbook admin authentication">
+        <div className="login-context" aria-hidden="true">
+          <div className="context-kicker">Sportsbook Admin</div>
+          <h1>Critical operations access</h1>
+          <p>Authenticate before entering event, market, settlement, and risk controls.</p>
+          <div className="ops-signal-grid">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
           </div>
         </div>
-      </div>
-      <div className="login-right">
-        <div className="login-card">
-          <div className="login-header">
-            <h2>Welcome Back</h2>
-            <p>Please sign in to your account</p>
+
+        <form className="login-card" onSubmit={handleSubmit} noValidate>
+          <div className="login-card__header">
+            <div className="login-icon" aria-hidden="true">
+              <FiShield />
+            </div>
+            <div>
+              <p className="login-eyebrow">Authorized personnel only</p>
+              <h2 id="login-title">Operations Access</h2>
+              <p>Sign in with your admin identity to continue.</p>
+            </div>
           </div>
-          
-          {errors.general && (
-            <div className="error-message">
-              {errors.general}
+
+          {sessionMessage && (
+            <div className="session-alert" role="status" aria-live="polite">
+              <strong>Session timed out.</strong>
+              <span>Sign in again to protect active sportsbook controls.</span>
             </div>
           )}
-          
-          <form onSubmit={handleSubmit} className="login-form">
-            <Input
-              type="email"
-              id="email"
-              name="email"
-              value={credentials.email}
-              onChange={handleChange}
-              required
-              placeholder="Enter your email"
-              error={errors.email}
-              label="Email Address"
-            />
-            
-            <Input
-              type="password"
-              id="password"
-              name="password"
-              value={credentials.password}
-              onChange={handleChange}
-              required
-              placeholder="Enter your password"
-              error={errors.password}
-              label="Password"
-            />
-            
-            <div className="form-options">
-              <div className="remember-me">
-                <input type="checkbox" id="remember" name="remember" />
-                <label htmlFor="remember">Remember me</label>
-              </div>
-              <a href="#forgot" className="forgot-password">Forgot password?</a>
+
+          {errors.general && (
+            <div className="auth-alert" role="alert" aria-live="assertive">
+              <FiLock aria-hidden="true" />
+              <span>{errors.general}</span>
             </div>
-            
-            <Button 
-              type="submit" 
-              className="login-button" 
-              disabled={isLoading}
-            >
-              {isLoading ? 'Signing In...' : 'Sign In'}
-            </Button>
-            
-            {/* Test login button for development - remove in production */}
-            <Button 
-              type="button" 
-              variant="secondary"
-              className="test-login-button"
-              onClick={handleTestLogin}
-              style={{ marginTop: '10px' }}
-            >
-              Test Login (Skip Authentication)
-            </Button>
-          </form>
-          
-          <div className="login-footer">
-            <p>Don't have an account? <a href="#signup">Sign up</a></p>
+          )}
+
+          <div className="login-field">
+            <label htmlFor="identifier">Email or username</label>
+            <input
+              id="identifier"
+              name="identifier"
+              type="text"
+              autoComplete="username"
+              value={credentials.identifier}
+              onChange={handleChange}
+              placeholder="ops.admin@example.com"
+              aria-invalid={Boolean(errors.identifier)}
+              aria-describedby={errors.identifier ? 'identifier-error' : undefined}
+              autoFocus
+            />
+            {errors.identifier && (
+              <p className="field-error" id="identifier-error" role="alert">
+                {errors.identifier}
+              </p>
+            )}
           </div>
-        </div>
-      </div>
-    </div>
+
+          <div className="login-field">
+            <label htmlFor="password">Password</label>
+            <div className="password-control">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                value={credentials.password}
+                onChange={handleChange}
+                placeholder="Enter password"
+                aria-invalid={Boolean(errors.password)}
+                aria-describedby={errors.password ? 'password-error' : undefined}
+              />
+              <button
+                className="password-toggle"
+                type="button"
+                onClick={() => setShowPassword((value) => !value)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-pressed={showPassword}
+              >
+                {showPassword ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
+              </button>
+            </div>
+            {errors.password && (
+              <p className="field-error" id="password-error" role="alert">
+                {errors.password}
+              </p>
+            )}
+          </div>
+
+          <div className="login-options">
+            <label className="remember-device">
+              <input
+                type="checkbox"
+                id="rememberDevice"
+                name="rememberDevice"
+                checked={credentials.rememberDevice}
+                onChange={handleChange}
+              />
+              <span>Remember this device</span>
+            </label>
+            <a href="#forgot-password">Reset access</a>
+          </div>
+
+          <button className="login-submit" type="submit" disabled={isLoading}>
+            {isLoading && <span className="submit-spinner" aria-hidden="true" />}
+            <span>{isLoading ? 'Verifying access...' : 'Sign in to console'}</span>
+          </button>
+
+          <button className="test-login-link" type="button" onClick={handleTestLogin}>
+            Development bypass
+          </button>
+
+          <div className="login-card__footer">
+            <span>Protected admin environment</span>
+            <span>Role-based access enforced after sign-in</span>
+          </div>
+        </form>
+      </section>
+    </main>
   );
 };
 

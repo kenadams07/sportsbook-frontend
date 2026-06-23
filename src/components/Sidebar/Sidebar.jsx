@@ -1,254 +1,90 @@
-import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { 
-  FaTachometerAlt, 
-  FaExchangeAlt, 
-  FaUsers, 
-  FaUserTie,
-  FaChartBar, 
-  FaMoneyBillWave,
-  FaTrashRestore,
-  FaCalendarAlt,
-  FaListAlt,
-  FaCog, 
-  FaIdCard,
-  FaBell,
-  FaGift,
-  FaSignOutAlt,
-  FaBars,
-  FaTimes,
-  FaChevronDown,
-  FaChevronRight,
-  FaTag
-} from 'react-icons/fa';
-import './Sidebar.css';
+import { useNavigate } from 'react-router-dom'
+import { cn } from '@/lib/utils'
+import { useAuth } from '@/context/AuthContext'
+import { Sheet, SheetContent, SheetTitle, SheetDescription } from '@/components/shadcn-ui/sheet'
+import { TooltipProvider } from '@/components/shadcn-ui/tooltip'
+import { SidebarBody } from '@/components/sidebar/SidebarBody'
 
-const Sidebar = ({ isOpen, onClose, isCollapsed, toggleCollapse }) => {
-  const { logout } = useAuth();
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [expandedMenus, setExpandedMenus] = useState({});
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
-  React.useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+/**
+ * Production sidebar shell.
+ *
+ * Desktop: a fixed glassmorphism rail that is either expanded (280px) or
+ * collapsed to an icon rail (72px). The width switches instantly — only
+ * transform & opacity are animated (labels, flyouts, submenus) per the motion
+ * spec — so nothing janks on toggle.
+ *
+ * Mobile (<1024px): an off-canvas drawer via the Sheet primitive, which
+ * provides the backdrop overlay, focus trap, ESC-to-close and outside-click
+ * close out of the box.
+ */
+export function Sidebar({ sidebar }) {
+  const { user, role, logout } = useAuthSafe()
+  const navigate = useNavigate()
 
   const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
+    logout?.()
+    sidebar.closeMobile()
+    navigate('/login')
+  }
 
-  const handleToggle = () => {
-    if (isMobile) {
-      onClose();
-    } else {
-      toggleCollapse();
-    }
-  };
+  // ----- Mobile drawer -----
+  if (sidebar.isMobile) {
+    return (
+      <TooltipProvider delay={300}>
+        <Sheet open={sidebar.mobileOpen} onOpenChange={(open) => (open ? sidebar.openMobile() : sidebar.closeMobile())}>
+          <SheetContent
+            side="left"
+            showCloseButton
+            className="glass-surface w-[280px] border-sidebar-border p-0 text-sidebar-foreground sm:max-w-[280px]"
+          >
+            <SheetTitle className="sr-only">Navigation</SheetTitle>
+            <SheetDescription className="sr-only">
+              Primary navigation for the sportsbook operations console.
+            </SheetDescription>
+            <SidebarBody
+              sidebar={{ ...sidebar, collapsed: false }}
+              user={user}
+              role={role}
+              onLogout={handleLogout}
+              onNavigate={sidebar.closeMobile}
+              showCollapseToggle={false}
+            />
+          </SheetContent>
+        </Sheet>
+      </TooltipProvider>
+    )
+  }
 
-  const toggleSubMenu = (label) => {
-    if (isCollapsed && !isMobile) {
-      toggleCollapse();
-      setTimeout(() => {
-        setExpandedMenus(prev => ({
-          ...prev,
-          [label]: !prev[label]
-        }));
-      }, 100);
-    } else {
-      setExpandedMenus(prev => ({
-        ...prev,
-        [label]: !prev[label]
-      }));
-    }
-  };
-
-  const menuItems = [
-    { 
-      label: 'Dashboard', 
-      path: '/dashboard', 
-      icon: <FaTachometerAlt /> 
-    },
-    { 
-      label: 'Running Markets', 
-      icon: <FaExchangeAlt />,
-      subItems: [
-        { label: 'Exchange Market', path: '/markets/exchange' }
-      ]
-    },
-    { 
-      label: 'Users', 
-      icon: <FaUsers />,
-      subItems: [
-        { label: 'Add User', path: '/users/add' },
-        { label: 'Users', path: '/users/list' },
-        { label: 'Inactive Users', path: '/users/inactive' }
-      ]
-    },
-    { 
-      label: 'Whitelabel', 
-      icon: <FaTag />,
-      subItems: [
-        { label: 'Add Whitelabel', path: '/whitelabel/add' },
-        { label: 'Whitelabel List', path: '/whitelabel/list' },
-        { label: 'Inactive Whitelabel List', path: '/whitelabel/inactive' }
-      ]
-    },
-    { 
-      label: 'Managers', 
-      icon: <FaUserTie />,
-      subItems: [
-        { label: 'Add Manager', path: '/managers/add' },
-        { label: 'Managers', path: '/managers/list' },
-        { label: 'Account Managers', path: '/managers/account' },
-        { label: 'Operational Managers', path: '/managers/operational' },
-        { label: 'Monitoring Managers', path: '/managers/monitoring' }
-      ]
-    },
-    { 
-      label: 'Reports', 
-      icon: <FaChartBar />,
-      subItems: [
-        { label: 'Reports', path: '/reports/general' },
-        { label: 'Report Analysis', path: '/reports/analysis' },
-        { label: 'Casino Report Analysis', path: '/reports/casino-analysis' },
-        { label: 'Commission Report', path: '/reports/commission' }
-      ]
-    },
-    { 
-      label: 'Currency', 
-      icon: <FaMoneyBillWave />,
-      subItems: [
-        { label: 'Add Currency', path: '/currency/add' },
-        { label: 'Currencies', path: '/currency/list' }
-      ]
-    },
-    { 
-      label: 'Restore Panel', 
-      path: '/restore', 
-      icon: <FaTrashRestore /> 
-    },
-    { 
-      label: 'Manage Events', 
-      path: '/events', 
-      icon: <FaCalendarAlt /> 
-    },
-    { 
-      label: 'Results', 
-      path: '/results', 
-      icon: <FaListAlt /> 
-    },
-    { 
-      label: 'Settings', 
-      icon: <FaCog />,
-      subItems: [
-        { label: 'Sports Settings', path: '/settings/sports' },
-        { label: 'League Settings', path: '/settings/leagues' },
-        { label: 'Match Settings', path: '/settings/matches' },
-        { label: 'Commission Settings', path: '/settings/commission' }
-      ]
-    },
-    { 
-      label: 'Change ID', 
-      path: '/change-id', 
-      icon: <FaIdCard /> 
-    },
-    { 
-      label: 'Notifications', 
-      path: '/notifications', 
-      icon: <FaBell /> 
-    },
-    { 
-      label: 'Bonus', 
-      path: '/bonus', 
-      icon: <FaGift /> 
-    }
-  ];
-
+  // ----- Desktop rail -----
   return (
-    <>
-      <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isOpen ? 'mobile-open' : ''}`}>
-        <div className="sidebar-header">
-          <div className="sidebar-brand">
-            <h2>{isCollapsed ? 'AD' : 'Admin Desk'}</h2>
-          </div>
-          <button className="toggle-btn" onClick={handleToggle}>
-            {isMobile ? <FaTimes /> : (isCollapsed ? <FaBars /> : <FaTimes />)}
-          </button>
-        </div>
-        
-        <nav className="sidebar-nav">
-          <ul>
-            {menuItems.map((item, index) => {
-              const hasSubItems = item.subItems && item.subItems.length > 0;
-              const isExpanded = expandedMenus[item.label];
-              const isActive = item.path === location.pathname || 
-                             (hasSubItems && item.subItems.some(sub => sub.path === location.pathname));
-
-              return (
-                <li key={index} className={`nav-item ${isActive ? 'active-parent' : ''}`}>
-                  {hasSubItems ? (
-                    <div 
-                      className={`nav-link parent-link ${isActive ? 'active' : ''}`}
-                      onClick={() => toggleSubMenu(item.label)}
-                    >
-                      <span className="nav-icon">{item.icon}</span>
-                      {(!isCollapsed || isMobile) && (
-                        <>
-                          <span className="nav-text">{item.label}</span>
-                          <span className="arrow-icon">
-                            {isExpanded ? <FaChevronDown /> : <FaChevronRight />}
-                          </span>
-                        </>
-                      )}
-                    </div>
-                  ) : (
-                    <Link 
-                      to={item.path} 
-                      className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
-                      onClick={onClose}
-                    >
-                      <span className="nav-icon">{item.icon}</span>
-                      {(!isCollapsed || isMobile) && <span className="nav-text">{item.label}</span>}
-                    </Link>
-                  )}
-
-                  {hasSubItems && (!isCollapsed || isMobile) && isExpanded && (
-                    <ul className="sub-menu">
-                      {item.subItems.map((subItem, subIndex) => (
-                        <li key={subIndex} className="sub-nav-item">
-                          <Link 
-                            to={subItem.path} 
-                            className={`sub-nav-link ${location.pathname === subItem.path ? 'active' : ''}`}
-                            onClick={onClose}
-                          >
-                            <span className="sub-nav-text">{subItem.label}</span>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-        
-        <div className="sidebar-footer">
-          <button className="logout-icon" onClick={handleLogout}>
-            <FaSignOutAlt />
-            {(!isCollapsed || isMobile) && <span className="nav-text">Logout</span>}
-          </button>
-        </div>
+    <TooltipProvider delay={300}>
+      <aside
+        aria-label="Sidebar"
+        data-collapsed={sidebar.collapsed}
+        className={cn(
+          'glass-surface fixed inset-y-0 left-0 z-30 flex flex-col rounded-none border-y-0 border-l-0',
+          sidebar.collapsed ? 'w-[72px]' : 'w-[280px]',
+        )}
+      >
+        <SidebarBody
+          sidebar={sidebar}
+          user={user}
+          role={role}
+          onLogout={handleLogout}
+          onNavigate={undefined}
+        />
       </aside>
-    </>
-  );
-};
+    </TooltipProvider>
+  )
+}
 
-export default Sidebar;
+/* Tolerate usage outside the demo AuthProvider gracefully. */
+function useAuthSafe() {
+  try {
+    const { user, logout } = useAuth()
+    const role = user?.roleName || (user?.role === 1 ? 'admin' : user?.role)
+    return { user, role, logout }
+  } catch {
+    return { user: null, role: null, logout: () => {} }
+  }
+}
