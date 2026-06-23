@@ -5,6 +5,33 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 const ADMIN_API_BASE_URL = import.meta.env.VITE_ADMIN_API_BASE_URL || '/api';
 const ODDS_ADMIN_API_BASE_URL = import.meta.env.VITE_ODDS_ADMIN_API_BASE_URL || 'http://127.0.0.1:3010';
 const ADMIN_API_TOKEN = import.meta.env.VITE_ADMIN_API_TOKEN;
+const ADMIN_SESSION_KEY = 'sportsbook_admin_session';
+
+function getAdminSessionToken() {
+  try {
+    const raw = window.localStorage.getItem(ADMIN_SESSION_KEY);
+    const session = raw ? JSON.parse(raw) : null;
+
+    if (!session?.token || !session?.expiresAt || Date.now() >= session.expiresAt) {
+      return null;
+    }
+
+    return session.token;
+  } catch {
+    return null;
+  }
+}
+
+function attachAdminAuthorization(config) {
+  const token = getAdminSessionToken() || ADMIN_API_TOKEN;
+
+  if (token) {
+    config.headers = config.headers || {};
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+}
 
 // Create axios instances with default configurations
 const apiClient = axios.create({
@@ -28,13 +55,8 @@ const oddsAdminApiClient = axios.create({
   },
 });
 
-adminApiClient.interceptors.request.use((config) => {
-  if (ADMIN_API_TOKEN) {
-    config.headers = config.headers || {};
-    config.headers.Authorization = `Bearer ${ADMIN_API_TOKEN}`;
-  }
-  return config;
-});
+adminApiClient.interceptors.request.use(attachAdminAuthorization);
+oddsAdminApiClient.interceptors.request.use(attachAdminAuthorization);
 
 const externalSportsApiClient = axios.create({
   headers: {

@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import axios from 'axios';
 
 const AuthContext = createContext();
 const ADMIN_SESSION_KEY = 'sportsbook_admin_session';
 const ADMIN_SESSION_TTL_MS = 6 * 60 * 60 * 1000;
+const ADMIN_API_BASE_URL = import.meta.env.VITE_ADMIN_API_BASE_URL || 'http://127.0.0.1:3002';
 
 function normalizeAdminUser(user) {
   const displayName = user?.name || user?.username || user?.email || 'Admin User';
@@ -38,10 +40,10 @@ function readStoredSession() {
   }
 }
 
-function createSession(user) {
+function createSession(user, token) {
   const session = {
     user: normalizeAdminUser(user),
-    token: `admin-dev-${Date.now()}`,
+    token,
     expiresAt: Date.now() + ADMIN_SESSION_TTL_MS,
   };
   window.localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(session));
@@ -63,12 +65,17 @@ export const AuthProvider = ({ children }) => {
   const [session, setSession] = useState(() => readStoredSession());
 
   const login = async (credentials) => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    const nextSession = createSession({
-      username: credentials.email,
-      role: 1,
+    const response = await axios.post(`${ADMIN_API_BASE_URL}/admin/auth/login`, {
+      emailOrUsername: credentials.email,
+      password: credentials.password,
     });
+    const payload = response.data?.data ?? response.data;
+
+    if (!payload?.token || !payload?.admin) {
+      throw new Error('Admin login response is invalid');
+    }
+
+    const nextSession = createSession(payload.admin, payload.token);
     setSession(nextSession);
 
     return { success: true };
@@ -80,12 +87,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const testLogin = () => {
-    setSession(
-      createSession({
-        username: 'admin',
-        role: 1,
-      }),
-    );
+    throw new Error("Development bypass is disabled. Use valid admin credentials.");
   };
 
   useEffect(() => {

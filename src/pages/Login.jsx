@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import './Login.css';
 
 const Login = () => {
-  const { login, testLogin } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [credentials, setCredentials] = useState({
@@ -88,10 +88,6 @@ const Login = () => {
     }
   };
 
-  const handleTestLogin = () => {
-    testLogin();
-    navigate('/dashboard');
-  };
 
   return (
     <main className="login-page" aria-labelledby="login-title">
@@ -205,10 +201,6 @@ const Login = () => {
           <button className="login-submit" type="submit" disabled={isLoading}>
             {isLoading && <span className="submit-spinner" aria-hidden="true" />}
             <span>{isLoading ? 'Verifying access...' : 'Sign in to console'}</span>
-          </button>
-
-          <button className="test-login-link" type="button" onClick={handleTestLogin}>
-            Development bypass
           </button>
 
           <div className="login-card__footer">
