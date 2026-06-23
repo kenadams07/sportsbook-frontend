@@ -7,20 +7,23 @@ export function createOddsSocket({ sportKeys = [], onOddsUpdate, onStatus }) {
   let reconnectAttempts = 0;
   let reconnectTimer = null;
   let currentSportKeys = [...sportKeys];
+   let connectionReady = false;
 
   function connect() {
     socket = new WebSocket(ODDS_WS_URL);
 
     socket.onopen = () => {
       reconnectAttempts = 0;
+      connectionReady = false;
       onStatus?.("connected");
-      subscribe(currentSportKeys);
     };
 
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
 
       if (message.type === "connected") {
+        connectionReady = true;
+        subscribe(currentSportKeys);
         onStatus?.("ready");
         return;
       }
@@ -45,6 +48,7 @@ export function createOddsSocket({ sportKeys = [], onOddsUpdate, onStatus }) {
     };
 
     socket.onclose = () => {
+      connectionReady = false;
       onStatus?.("closed");
 
       if (!manuallyClosed) {
@@ -63,9 +67,9 @@ export function createOddsSocket({ sportKeys = [], onOddsUpdate, onStatus }) {
   }
 
   function subscribe(nextSportKeys) {
-    currentSportKeys = [...nextSportKeys];
+    currentSportKeys = [...new Set(nextSportKeys.filter(Boolean))];
 
-    if (currentSportKeys.length === 0) {
+    if (!connectionReady || currentSportKeys.length === 0) {
       return;
     }
 

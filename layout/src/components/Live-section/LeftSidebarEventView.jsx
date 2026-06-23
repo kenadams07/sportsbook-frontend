@@ -377,10 +377,14 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
   useEffect(() => {
     let cancelled = false;
     const expandedSportKeys = Object.keys(expanded).filter((key) => expanded[key]);
+    const fallbackSportKey = selectedMatch?.sportKey || SPORTS.find((sport) => (matchesBySport[sport.key] || []).length > 0)?.key;
+    const sportCategoriesToSubscribe = expandedSportKeys.length > 0
+      ? expandedSportKeys
+      : [fallbackSportKey].filter(Boolean);
 
     async function connectOddsSocket() {
       const resolvedLeagueKeys = await Promise.all(
-        expandedSportKeys.map(async (key) => {
+        sportCategoriesToSubscribe.map(async (key) => {
           try {
             const leagueKeys = await fetchConfiguredLeagueKeysForSportCategory(key);
             return leagueKeys.length > 0
@@ -397,7 +401,13 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
         return;
       }
 
-      const oddsSportKeys = [...new Set(resolvedLeagueKeys.flat().filter(Boolean))];
+      const directLeagueKey = selectedMatch?.sportKey && !ODDS_SPORT_KEY_BY_FRONTEND_KEY[selectedMatch.sportKey]
+        ? selectedMatch.sportKey
+        : null;
+      const oddsSportKeys = [...new Set([
+        ...resolvedLeagueKeys.flat().filter(Boolean),
+        directLeagueKey,
+      ].filter(Boolean))];
 
       if (oddsSportKeys.length === 0) {
         oddsSocketRef.current?.close();
@@ -490,7 +500,7 @@ export default function LeftSidebarEventView({ setSelectedMatch = () => {}, setS
       oddsSocketRef.current?.close();
       oddsSocketRef.current = null;
     };
-  }, [expanded, selectedMatch, onSelectedMatchOddsUpdate]);
+  }, [expanded, matchesBySport, selectedMatch, onSelectedMatchOddsUpdate]);
   
   // Set up animated placeholder
   useEffect(() => {

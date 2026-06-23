@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { Clock, ChevronRight } from "lucide-react"
+import { CalendarDays, ChevronRight, CircleDot, Clock, Search } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
 import { Button } from "./ui/button"
@@ -170,14 +170,16 @@ export default function UpcomingMatches() {
 
   // WebSocket: update odds without frontend HTTP polling.
   useEffect(() => {
-    const oddsSportKey = ODDS_SPORT_KEY_BY_FRONTEND_KEY[selectedSportKey]
+    const visibleLeagueKeys = events.map((event) => event.sportKey).filter(Boolean);
+    const fallbackLeagueKey = ODDS_SPORT_KEY_BY_FRONTEND_KEY[selectedSportKey];
+    const sportKeys = [...new Set(visibleLeagueKeys.length > 0 ? visibleLeagueKeys : [fallbackLeagueKey].filter(Boolean))];
 
-    if (!oddsSportKey) {
-      return
+    if (sportKeys.length === 0) {
+      return;
     }
 
     const socket = createOddsSocket({
-      sportKeys: [oddsSportKey],
+      sportKeys,
       onOddsUpdate: (message) => {
         const nextOddsByEventId = { ...oddsPrevRef.current }
         const nextHighlights = {}
@@ -226,7 +228,7 @@ export default function UpcomingMatches() {
     return () => {
       socket.close()
     }
-  }, [selectedSportKey])
+  }, [events, selectedSportKey])
 
   const filteredEvents = useMemo(() => {
     return events
@@ -268,6 +270,14 @@ export default function UpcomingMatches() {
     return sportFilteredMatches
   }, [filteredEvents, oddsByEventId, highlightedOdds, selectedTimeFilter])
 
+  const matchesByDate = useMemo(() => {
+    return matches.reduce((groups, match) => {
+      const dateKey = match.gameDate || "Date to be confirmed";
+      if (!groups[dateKey]) groups[dateKey] = [];
+      groups[dateKey].push(match);
+      return groups;
+    }, {});
+  }, [matches]);
   const handleGameClick = (id, sportKey) => {
     console.log('=== UPCOMING MATCHES NAVIGATION START ===');
     console.log('Clicked game ID:', id);
@@ -306,266 +316,172 @@ export default function UpcomingMatches() {
   }
 
   return (
-    <div className="bg-[#3f3e3e] text-white">
-      {/* Featured Game */}
-      <div className="p-3 sm:p-4">
-        <h2 className="text-sm sm:text-lg font-semibold mb-3">FEATURED GAME</h2>
-        {featuredGame ? (
-          <div
-            className={`flex flex-col sm:flex-row items-center justify-between gap-3 p-3 rounded-md cursor-pointer border border-gray-600 transition-all duration-200 ease-in-out ${
-              selectedGameId === featuredGame.id ? `${featuredGame.color} text-white` : ""
-            }`}
-            onClick={() => handleGameClick(featuredGame.id, featuredGame.sportKey)}
-          >
-            <div className="flex flex-col sm:flex-row items-center gap-3">
-              <div className="flex items-center gap-2 text-[11px] sm:text-sm text-gray-300">
-                <Clock className="w-4 h-4" />
-                <span>{featuredGame.date}</span>
-              </div>
-              <div className="font-medium text-[13px] sm:text-base truncate">
-                {featuredGame.team1} vs {featuredGame.team2}
-              </div>
+    <section className="overflow-hidden border border-live bg-live-primary text-live-primary">
+      <header className="border-b border-live bg-live-secondary px-3 py-3 sm:px-4">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center border border-live-accent/60 bg-live-tertiary text-live-accent">
+                <CalendarDays className="h-4 w-4" />
+              </span>
+              <h2 className="text-sm font-bold uppercase tracking-wide sm:text-base">Upcoming matches</h2>
             </div>
-            <div className="flex gap-2">
-              <Button
-                variant={selectedGameId === featuredGame.id ? "default" : "outline"}
-                size="sm"
-                className={`w-10 sm:w-16 px-0 ${selectedGameId === featuredGame.id ? "bg-white text-black" : ""}`}
-              >
-                {featuredGame.odds.w1}
-              </Button>
-              <Button
-                variant={selectedGameId === featuredGame.id ? "default" : "outline"}
-                size="sm"
-                className={`w-10 sm:w-16 px-0 ${selectedGameId === featuredGame.id ? "bg-white text-black" : ""}`}
-              >
-                {featuredGame.odds.w2}
-              </Button>
-            </div>
+            <p className="mt-1 text-xs text-live-muted">
+              {matches.length} {matches.length === 1 ? "event" : "events"} available in {SPORTS.find((sport) => sport.key === selectedSportKey)?.sportNames?.[0] || "selected sport"}
+            </p>
           </div>
-        ) : (
-          <div className="text-sm text-muted-foreground text-center py-6">There is no featured games at the moment</div>
-        )}
-      </div>
 
-      {/* Upcoming Matches Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 gap-3">
-        <h2 className="text-sm sm:text-lg font-semibold">UPCOMING MATCHES</h2>
-        <div className="flex items-center gap-3 w-full sm:w-auto">
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide py-1">
-            {timeFilters.map((filter) => (
-              <Button
-                key={filter}
-                variant={selectedTimeFilter === filter ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectedTimeFilter(filter)}
-                className={`text-xs sm:text-sm px-2 py-1 sm:px-3 sm:py-2 ${
-                  selectedTimeFilter === filter
-                    ? "bg-white text-black hover:bg-white"
-                    : "bg-transparent border-gray-600 text-white hover:bg-white hover:text-black"
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0">
+            <span className="hidden text-[11px] font-semibold uppercase tracking-wide text-live-muted sm:inline">Kick-off</span>
+            {[...timeFilters, "All"].map((filter) => {
+              const isActive = filter === "All" ? !selectedTimeFilter : selectedTimeFilter === filter;
+              return (
+                <button
+                  key={filter}
+                  type="button"
+                  onClick={() => setSelectedTimeFilter(filter === "All" ? null : filter)}
+                  className={`h-8 shrink-0 border px-3 text-xs font-semibold transition-colors duration-150 active:scale-[0.97] ${
+                    isActive
+                      ? "border-live-accent bg-live-accent text-live-dark"
+                      : "border-live bg-live-primary text-live-muted hover:border-live-accent/70 hover:text-live-primary"
+                  }`}
+                >
+                  {filter}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </header>
+
+      <div className="border-b border-live bg-live-primary px-2 py-2 sm:px-3">
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+          {SPORTS.map((sport) => {
+            const Icon = sport.icon;
+            const isSelected = selectedSportKey === sport.key;
+
+            return (
+              <button
+                key={sport.key}
+                type="button"
+                onClick={() => setSelectedSportKey(sport.key)}
+                title={sport.sportNames[0]}
+                className={`flex h-10 shrink-0 items-center gap-2 border px-3 text-xs font-semibold transition-colors duration-150 active:scale-[0.97] ${
+                  isSelected
+                    ? "border-live-accent bg-live-tertiary text-live-primary shadow-[inset_0_-2px_0_#ffc400]"
+                    : "border-live bg-live-secondary text-live-muted hover:border-live-accent/60 hover:text-live-primary"
                 }`}
               >
-                {filter}
-              </Button>
-            ))}
-            {/* Add a "Show All" button to reset the time filter */}
-            <Button
-              variant={!selectedTimeFilter ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSelectedTimeFilter(null)}
-              className={`text-xs sm:text-sm px-2 py-1 sm:px-3 sm:py-2 ${
-                !selectedTimeFilter
-                  ? "bg-white text-black hover:bg-white"
-                  : "bg-transparent border-gray-600 text-white hover:bg-white hover:text-black"
-              }`}
-            >
-              All
-            </Button>
-          </div>
-          <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800 hover:text-white text-xs sm:text-sm">
-            More
-            <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
-          </Button>
+                <Icon className={`h-4 w-4 ${isSelected ? "text-live-accent" : "text-live-muted"}`} />
+                <span>{sport.sportNames[0]}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* Sports Icons bar - Full names displayed */}
-      {/* Mobile: fixed small chips scrollable; sm+: chips expand evenly */}
-      <div className="flex w-full gap-2 overflow-x-auto scrollbar-hide px-2 py-2">
-        {loading ? (
-          SPORTS.map((sport) => {
-            const Icon = sport.icon
-            const isSelected = selectedSportKey === sport.key
-            const colorClass = sport.color.split(' ').find(cls => cls.startsWith('bg-chart-')) || 'bg-gray-600'
-            return (
-              <div
-                key={sport.key}
-                onClick={() => setSelectedSportKey(sport.key)}
-                className={`snap-start flex-shrink-0 sm:flex-1 flex flex-col items-center justify-center gap-1 cursor-pointer border rounded-md sport-icon-box ${
-                  isSelected 
-                  ? `${colorClass} selected border-white` 
-                  : "border-gray-600 bg-gray-700 text-white hover:bg-gray-600"
-                }`}
-                style={{ padding: "0.5rem 0.75rem", minWidth: "80px" }}
-                title={sport.sportNames[0]}
-              >
-                <Icon className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 mx-auto" />
-                <span className="text-[10px] sm:text-[11px] text-center font-medium leading-tight whitespace-normal max-w-full">
-                  {sport.sportNames[0]}
-                </span>
-              </div>
-            )
-          })
-        ) : (
-          SPORTS.map((sport) => {
-            const Icon = sport.icon
-            const isSelected = selectedSportKey === sport.key
-            const colorClass = sport.color.split(' ').find(cls => cls.startsWith('bg-chart-')) || 'bg-gray-600'
-            return (
-              <div
-                key={sport.key}
-                onClick={() => setSelectedSportKey(sport.key)}
-                className={`snap-start flex-shrink-0 sm:flex-1 flex flex-col items-center justify-center gap-1 cursor-pointer border rounded-md sport-icon-box ${
-                  isSelected 
-                  ? `${colorClass} selected border-white` 
-                  : "border-gray-600 bg-gray-700 text-white hover:bg-gray-600"
-                }`}
-                style={{ padding: "0.5rem 0.75rem", minWidth: "80px" }}
-                title={sport.sportNames[0]}
-              >
-                <Icon className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 mx-auto" />
-                <span className="text-[10px] sm:text-[11px] text-center font-medium leading-tight whitespace-normal max-w-full">
-                  {sport.sportNames[0]}
-                </span>
-              </div>
-            )
-          })
-        )}
+      <div className="grid grid-cols-[minmax(0,1fr)_72px_66px_66px] items-center gap-2 border-b border-live bg-live-hover px-3 py-2 text-[10px] font-bold uppercase tracking-wide text-live-muted sm:grid-cols-[minmax(0,1fr)_84px_76px_76px] sm:px-4">
+        <span>Event</span>
+        <span className="text-center">Time</span>
+        <span className="text-center">1</span>
+        <span className="text-center">2</span>
       </div>
 
-      {/* W1/W2 header above the matches list */}
-      <div className="flex justify-end px-3 lg:px-5 py-2">
-        <div className="flex gap-2 sm:gap-4 text-xs sm:text-sm font-medium">
-          <div className="w-10 sm:w-16 bg-[#505050] flex items-center justify-center h-6 sm:h-8 text-center rounded">W1</div>
-          <div className="w-10 sm:w-16 bg-[#505050] flex items-center justify-center h-6 sm:h-8 text-center rounded">W2</div>
-        </div>
-      </div>
-
-      {/* Loading / Error / Empty states */}
       {loading && (
-        <div className="flex flex-col px-2">
-          {/* Using SkeletonLoader for match rows when loading */}
+        <div className="px-3 py-3">
           <SkeletonLoader type="row" count={5} />
         </div>
       )}
-      {error && <div className="px-4 py-3 text-sm text-red-400">Error: {error}</div>}
-      {!loading && !error && matches.length === 0 && (
-        <div className="px-4 py-10 text-center text-sm text-muted-foreground">
-          Currently no matches to display
-          {selectedTimeFilter && ` for ${selectedTimeFilter} time range`}
+
+      {!loading && error && (
+        <div className="flex items-center gap-2 px-4 py-8 text-sm text-red-400">
+          <CircleDot className="h-4 w-4" />
+          {error}
         </div>
       )}
 
-      {/* Matches list with scroll for more than 5 items */}
-      <div className="flex flex-col px-2 max-h-[320px] overflow-y-auto custom-scrollbar">
-        {!loading &&
-          matches.map((match) => {
-            const isSelected = selectedGameId === match.id
-            
-            // Determine the background styling based on selection state
-            let backgroundClass = "bg-[#505050] hover:bg-[#606060]"
-            let textColor = "text-white"
-            
-            // Only apply sport color when this specific game is clicked
-            if (isSelected) {
-              // Use selectedSportKey if available, otherwise fall back to match's sport key
-              const effectiveSportKey = selectedSportKey || match.sportKey
-              const sportConfig = SPORTS.find((s) => s.key === effectiveSportKey)
-              
-              if (sportConfig) {
-                // Apply the full sport color background
-                backgroundClass = sportConfig.color.split(' ').find(cls => cls.startsWith('bg-chart-')) || "bg-gray-600"
-                // Adjust text color based on background - lighter backgrounds need dark text
-                textColor = sportConfig.color.includes('bg-chart-4') || sportConfig.color.includes('bg-chart-13') 
-                  ? "text-black" : "text-white"
-              }
-            }
-            
-            return (
-              <div
-                key={match.id}
-                onClick={() => handleGameClick(match.id, match.sportKey)}
-                className={`cursor-pointer flex items-center justify-between gap-2 px-3 py-2 m-1 rounded-md transition-all duration-300 ${
-                  backgroundClass
-                } ${textColor} ${isSelected ? 'shadow-md transform scale-[1.01] border border-white/20' : ''}`}
-              >
-                {/* Left: date + time - vertically centered */}
-                <div className="flex flex-col items-start justify-center gap-0.5 text-[10px] sm:text-[11px] text-muted-foreground flex-shrink-0 w-14 sm:w-16">
-                  <div className="whitespace-nowrap">{match.gameDate}</div>
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    <span className="whitespace-nowrap">{match.gameTime}</span>
-                  </div>
-                </div>
+      {!loading && !error && matches.length === 0 && (
+        <div className="flex min-h-44 flex-col items-center justify-center px-4 text-center">
+          <span className="mb-3 flex h-10 w-10 items-center justify-center border border-live bg-live-secondary text-live-muted">
+            <Search className="h-5 w-5" />
+          </span>
+          <p className="text-sm font-semibold text-live-primary">No matches available</p>
+          <p className="mt-1 text-xs text-live-muted">
+            {selectedTimeFilter ? `No events start within ${selectedTimeFilter.toLowerCase()}.` : "Choose another sport to view its events."}
+          </p>
+        </div>
+      )}
 
-                <div className="h-6 w-px bg-gradient-to-b from-transparent via-muted-foreground to-transparent opacity-30 hidden sm:block" />
-
-                {/* Center: teams + competition - vertically centered */}
-                <div className="flex-1 min-w-0 flex items-center justify-center">
-                  <div className="flex flex-col justify-center min-w-0 w-full">
-                    <div className="font-medium truncate text-[12px] sm:text-sm">
-                      {match.team1}
-                    </div>
-                    <div className="text-[11px] sm:text-sm truncate opacity-90">
-                      {match.team2}
-                    </div>
-                    {match.status === "IN_PLAY" && (
-                      <div className="text-[9px] font-bold bg-red-600 text-white px-1 py-0.5 rounded w-fit mt-0.5">
-                        IN PLAY
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Competition name */}
-                  {match.competitionName && (
-                    <div className="hidden md:flex items-center ml-2">
-                      <div className="text-[10px] text-white truncate max-w-[120px]">
-                        {match.competitionName}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Right: odds buttons - vertically centered */}
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant={isSelected ? "default" : "outline"}
-                    size="sm"
-                    className={`w-10 sm:w-12 lg:w-16 h-8 px-0 text-[11px] font-semibold ${
-                      isSelected 
-                        ? "bg-white text-black hover:bg-gray-100 border-white shadow-sm" 
-                        : "bg-gray-700 text-white border-gray-500 hover:bg-gray-600"
-                    } ${match.highlight.w1 ? "odds-highlight" : ""}`}
-                  >
-                    {match.odds.w1}
-                  </Button>
-
-                  <Button
-                    variant={isSelected ? "default" : "outline"}
-                    size="sm"
-                    className={`w-10 sm:w-12 lg:w-16 h-8 px-0 text-[11px] font-semibold ${
-                      isSelected 
-                        ? "bg-white text-black hover:bg-gray-100 border-white shadow-sm" 
-                        : "bg-gray-700 text-white border-gray-500 hover:bg-gray-600"
-                    } ${match.highlight.w2 ? "odds-highlight" : ""}`}
-                  >
-                    {match.odds.w2}
-                  </Button>
-                </div>
+      {!loading && !error && matches.length > 0 && (
+        <div className="max-h-[430px] overflow-y-auto custom-scrollbar">
+          {Object.entries(matchesByDate).map(([dateLabel, dateMatches]) => (
+            <div key={dateLabel} className="border-b border-live last:border-b-0">
+              <div className="sticky top-0 z-10 flex items-center justify-between border-b border-live/70 bg-live-primary px-3 py-2 shadow-sm sm:px-4">
+                <span className="text-xs font-bold text-live-accent">{dateLabel}</span>
+                <span className="rounded bg-live-tertiary px-2 py-0.5 text-[10px] font-semibold text-live-muted">{dateMatches.length}</span>
               </div>
-            )
-          })}
-      </div>
-    </div>
+
+              {dateMatches.map((match) => {
+                const isSelected = selectedGameId === match.id;
+                const isLive = match.status === "IN_PLAY";
+
+                return (
+                  <button
+                    key={match.id}
+                    type="button"
+                    onClick={() => handleGameClick(match.id, match.sportKey)}
+                    className={`grid w-full grid-cols-[minmax(0,1fr)_72px_66px_66px] items-center gap-2 border-b border-live/70 px-3 py-3 text-left transition-colors duration-150 last:border-b-0 active:scale-[0.995] sm:grid-cols-[minmax(0,1fr)_84px_76px_76px] sm:px-4 ${
+                      isSelected
+                        ? "bg-live-odds/45 shadow-[inset_3px_0_0_#ffc400]"
+                        : "bg-live-secondary hover:bg-live-hover"
+                    }`}
+                  >
+                    <div className="min-w-0">
+                      <div className="flex min-w-0 items-center gap-2">
+                        {isLive && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-red-500" />}
+                        <span className="truncate text-sm font-semibold text-live-primary">{match.team1}</span>
+                      </div>
+                      <div className="mt-0.5 flex min-w-0 items-center gap-2">
+                        <span className="truncate text-xs text-live-muted">{match.team2}</span>
+                        {isLive && <span className="shrink-0 text-[9px] font-bold tracking-wide text-red-400">LIVE</span>}
+                      </div>
+                      <div className="mt-1 truncate text-[10px] text-live-muted">{match.competitionName || "Match odds"}</div>
+                    </div>
+
+                    <div className="text-center">
+                      <div className="text-xs font-semibold text-live-primary">{match.gameTime}</div>
+                      <div className="mt-0.5 text-[10px] text-live-muted">{isLive ? "In play" : "Kick-off"}</div>
+                    </div>
+
+                    {[
+                      { key: "w1", value: match.odds.w1 },
+                      { key: "w2", value: match.odds.w2 },
+                    ].map((odd) => (
+                      <span
+                        key={odd.key}
+                        className={`flex h-9 items-center justify-center border text-xs font-bold transition-colors duration-150 ${
+                          match.highlight?.[odd.key]
+                            ? "odds-highlight text-live-primary"
+                            : "border-live bg-live-primary text-live-accent"
+                        }`}
+                      >
+                        {odd.value}
+                      </span>
+                    ))}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <footer className="flex items-center justify-end border-t border-live bg-live-secondary px-3 py-2 sm:px-4">
+        <button type="button" className="flex items-center gap-1 text-xs font-semibold text-live-muted transition-colors duration-150 hover:text-live-accent active:scale-[0.97]">
+          View all markets
+          <ChevronRight className="h-3.5 w-3.5" />
+        </button>
+      </footer>
+    </section>
   )
 }

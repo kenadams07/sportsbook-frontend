@@ -10240,16 +10240,19 @@ function createOddsSocket({ sportKeys = [], onOddsUpdate, onStatus }) {
   let reconnectAttempts = 0;
   let reconnectTimer = null;
   let currentSportKeys = [...sportKeys];
+  let connectionReady = false;
   function connect() {
     socket = new WebSocket(ODDS_WS_URL);
     socket.onopen = () => {
       reconnectAttempts = 0;
+      connectionReady = false;
       onStatus?.("connected");
-      subscribe(currentSportKeys);
     };
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       if (message.type === "connected") {
+        connectionReady = true;
+        subscribe(currentSportKeys);
         onStatus?.("ready");
         return;
       }
@@ -10269,6 +10272,7 @@ function createOddsSocket({ sportKeys = [], onOddsUpdate, onStatus }) {
       onStatus?.("error", error);
     };
     socket.onclose = () => {
+      connectionReady = false;
       onStatus?.("closed");
       if (!manuallyClosed) {
         scheduleReconnect();
@@ -10283,8 +10287,8 @@ function createOddsSocket({ sportKeys = [], onOddsUpdate, onStatus }) {
     return true;
   }
   function subscribe(nextSportKeys) {
-    currentSportKeys = [...nextSportKeys];
-    if (currentSportKeys.length === 0) {
+    currentSportKeys = [...new Set(nextSportKeys.filter(Boolean))];
+    if (!connectionReady || currentSportKeys.length === 0) {
       return;
     }
     send({
@@ -10649,9 +10653,11 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
   useEffect$h(() => {
     let cancelled = false;
     const expandedSportKeys = Object.keys(expanded).filter((key) => expanded[key]);
+    const fallbackSportKey = selectedMatch?.sportKey || SPORTS.find((sport) => (matchesBySport[sport.key] || []).length > 0)?.key;
+    const sportCategoriesToSubscribe = expandedSportKeys.length > 0 ? expandedSportKeys : [fallbackSportKey].filter(Boolean);
     async function connectOddsSocket() {
       const resolvedLeagueKeys = await Promise.all(
-        expandedSportKeys.map(async (key) => {
+        sportCategoriesToSubscribe.map(async (key) => {
           try {
             const leagueKeys = await fetchConfiguredLeagueKeysForSportCategory(key);
             return leagueKeys.length > 0 ? leagueKeys : [ODDS_SPORT_KEY_BY_FRONTEND_KEY[key]].filter(Boolean);
@@ -10664,7 +10670,11 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
       if (cancelled) {
         return;
       }
-      const oddsSportKeys = [...new Set(resolvedLeagueKeys.flat().filter(Boolean))];
+      const directLeagueKey = selectedMatch?.sportKey && !ODDS_SPORT_KEY_BY_FRONTEND_KEY[selectedMatch.sportKey] ? selectedMatch.sportKey : null;
+      const oddsSportKeys = [...new Set([
+        ...resolvedLeagueKeys.flat().filter(Boolean),
+        directLeagueKey
+      ].filter(Boolean))];
       if (oddsSportKeys.length === 0) {
         oddsSocketRef.current?.close();
         oddsSocketRef.current = null;
@@ -10738,7 +10748,7 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
       oddsSocketRef.current?.close();
       oddsSocketRef.current = null;
     };
-  }, [expanded, selectedMatch, onSelectedMatchOddsUpdate]);
+  }, [expanded, matchesBySport, selectedMatch, onSelectedMatchOddsUpdate]);
   useEffect$h(() => {
     placeholderIntervalRef.current = setInterval(() => {
       setPlaceholderIndex((prev) => (prev + 1) % placeholderTexts.length);
@@ -10750,33 +10760,28 @@ function LeftSidebarEventView({ setSelectedMatch = () => {
     };
   }, []);
   useEffect$h(() => {
-    const viewType = location.state?.viewType || searchParams.get("viewType");
-    if (viewType === "prematch") {
-      setSelectedType("prematch");
-      const eventId = searchParams.get("eventId");
-      const sportKey = searchParams.get("sportKey");
-      const eventName = searchParams.get("eventName");
-      const source = searchParams.get("source");
-      if (eventId && sportKey) {
-        setSearchParams({
-          eventId,
-          sportKey,
-          eventName: eventName || "",
-          source: source || "",
-          viewType: "prematch"
-        }, { replace: true });
-      } else {
-        setSearchParams((prev) => {
-          const newParams = new URLSearchParams(prev);
-          newParams.set("viewType", "prematch");
-          return newParams;
-        }, { replace: true });
-      }
-    } else if (!searchParams.get("viewType")) {
+    const locationViewType = location.state?.viewType;
+    const queryViewType = searchParams.get("viewType");
+    if (queryViewType) {
+      setSelectedType(queryViewType === "prematch" ? "prematch" : "live");
+      return;
+    }
+    if (locationViewType && !hasProcessedLocationState.current) {
+      const nextType = locationViewType === "prematch" ? "prematch" : "live";
+      setSelectedType(nextType);
+      hasProcessedLocationState.current = true;
       setSearchParams((prev) => {
-        const newParams = new URLSearchParams(prev);
-        newParams.set("viewType", "live");
-        return newParams;
+        const nextParams = new URLSearchParams(prev);
+        nextParams.set("viewType", nextType);
+        return nextParams;
+      }, { replace: true });
+      return;
+    }
+    if (!queryViewType) {
+      setSearchParams((prev) => {
+        const nextParams = new URLSearchParams(prev);
+        nextParams.set("viewType", "live");
+        return nextParams;
       }, { replace: true });
     }
   }, [location.state, searchParams, setSearchParams]);
@@ -11341,14 +11346,16 @@ function MiddleGameDisplay({ match, sport, onRunnerSelect, eventBoardMatches = [
   const handleSearchClear = () => {
     setSearchTerm("");
   };
-  if (boardViewMode === "prematch") {
+  const isEventBoardMode = boardViewMode === "prematch" || boardViewMode === "live";
+  if (isEventBoardMode) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       PrematchEventBoard,
       {
         matches: eventBoardMatches,
         selectedMatch: match,
         onMatchSelect,
-        onRunnerSelect
+        onRunnerSelect,
+        boardViewMode
       }
     );
   }
@@ -11395,21 +11402,15 @@ function MiddleGameDisplay({ match, sport, onRunnerSelect, eventBoardMatches = [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute inset-0 flex flex-col text-white", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center p-2 sm:p-3 md:p-4", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-5 h-3 sm:w-6 sm:h-4 bg-live-info border border-live-primary rounded-sm flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary text-[10px] sm:text-xs font-bold", children: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-5 h-3 sm:w-6 sm:h-4 bg-live-info border border-live-primary rounded-sm flex items-center justify-center" }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary text-xs sm:text-sm font-medium truncate", children: match.competitionName || "League" })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-1 sm:gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-live-dark text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 bg-live-accent rounded ${match.status === "IN_PLAY" ? "animate-pulse-highlight in-play-golden" : ""}`, children: match.status === "IN_PLAY" ? "IN PLAY" : match.status || "N/A" }) })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 flex items-center justify-between px-2 sm:px-3 md:px-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full flex items-center justify-between", style: { background: "rgba(0,0,0,0.4)", padding: "8px 12px", borderRadius: "8px" }, children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1 sm:space-y-2 md:space-y-3 flex-1 min-w-0", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 md:gap-3", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-danger text-sm sm:text-base md:text-lg", children: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¹Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary text-sm sm:text-base md:text-lg font-medium truncate", children: team1 })
-            ] }),
-            isOutright ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-muted text-xs sm:text-sm font-semibold", children: "Outright winner market" }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 md:gap-3", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-accent text-sm sm:text-base md:text-lg", children: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¹Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary text-sm sm:text-base md:text-lg font-medium truncate", children: team2 })
-            ] })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-1 sm:gap-2 md:gap-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary text-sm sm:text-base md:text-lg font-medium truncate", children: team1 }) }),
+            isOutright ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-muted text-xs sm:text-sm font-semibold", children: "Outright winner market" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-1 sm:gap-2 md:gap-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-live-primary text-sm sm:text-base md:text-lg font-medium truncate", children: team2 }) })
           ] }),
           !isOutright && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-right space-y-1 sm:space-y-2 md:space-y-3 flex-shrink-0 ml-2", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-live-primary text-lg sm:text-xl md:text-2xl font-bold", children: homeScore }),
@@ -11418,8 +11419,8 @@ function MiddleGameDisplay({ match, sport, onRunnerSelect, eventBoardMatches = [
         ] }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-center pb-2 sm:pb-3 md:pb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-1 sm:gap-2", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-live-tertiary hover:bg-live-hover text-live-primary px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 rounded text-[10px] sm:text-xs md:text-sm", children: "Stats" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-live-tertiary hover:bg-live-hover text-live-primary p-1 sm:p-1.5 md:p-2 rounded text-xs sm:text-sm", children: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-live-tertiary hover:bg-live-hover text-live-primary p-1 sm:p-1.5 md:p-2 rounded text-xs sm:text-sm", children: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â" })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-live-tertiary hover:bg-live-hover text-live-primary p-1 sm:p-1.5 md:p-2 rounded text-xs sm:text-sm" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-live-tertiary hover:bg-live-hover text-live-primary p-1 sm:p-1.5 md:p-2 rounded text-xs sm:text-sm" })
         ] }) })
       ] })
     ] }),
@@ -11441,8 +11442,9 @@ function MiddleGameDisplay({ match, sport, onRunnerSelect, eventBoardMatches = [
     ) })
   ] });
 }
-function PrematchEventBoard({ matches = [], selectedMatch, onMatchSelect, onRunnerSelect }) {
+function PrematchEventBoard({ matches = [], selectedMatch, onMatchSelect, onRunnerSelect, boardViewMode = "prematch" }) {
   const [boardSearch, setBoardSearch] = useState$i("");
+  const boardTitle = boardViewMode === "live" ? "Live Event Board" : "Prematch Event Board";
   const [openDates, setOpenDates] = useState$i({});
   const groupRefs = useRef$8({});
   const groupedMatches = useMemo$2(() => {
@@ -11475,7 +11477,7 @@ function PrematchEventBoard({ matches = [], selectedMatch, onMatchSelect, onRunn
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-full min-h-0 flex-col overflow-hidden rounded-md border border-live bg-live-secondary", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between gap-3 border-b border-live bg-live-tertiary px-3 py-2", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs font-bold uppercase tracking-wide text-live-primary", children: "Prematch Event Board" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs font-bold uppercase tracking-wide text-live-primary", children: boardTitle }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-[11px] text-live-muted", children: [
             totalMatches,
             " events grouped by date"
@@ -36653,4 +36655,4 @@ function LayoutApp() {
   ] }) }) });
 }
 
-export { useForm as $, ArrowRight as A, Button$1 as B, Content$1 as C, DismissableLayer as D, Eye as E, FocusScope as F, GET_USER_DATA_SUCCESS as G, Content as H, Input as I, Arrow as J, composeRefs as K, LOGOUT as L, useNavigate as M, useLocation as N, Overlay as O, Portal$1 as P, ChevronDown as Q, Root$2 as R, useDispatch as S, useSelector as T, User as U, setLocalStorageItem as V, updateUserBalanceExposureSuccess as W, X, Link as Y, RegisterModal as Z, LoginModal as _, LOGOUT_SUCCESS as a, unwrapApiResponse as a$, notifySuccess as a0, Checkbox as a1, OTPInput as a2, RefreshCw as a3, login as a4, notifyError$1 as a5, verifyEmail as a6, signup as a7, Paths as a8, Toaster as a9, FETCH_HOMEPAGE_LIVE_GAMES as aA, FETCH_HOMEPAGE_CASINO_GAMES_FAILURE as aB, FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS as aC, FETCH_HOMEPAGE_CASINO_GAMES as aD, RESET_CASINO_GAMES as aE, FETCH_MORE_CASINO_GAMES_FAILURE as aF, FETCH_MORE_CASINO_GAMES_SUCCESS as aG, FETCH_MORE_CASINO_GAMES as aH, FETCH_CASINO_GAMES_FAILURE as aI, FETCH_CASINO_GAMES_SUCCESS as aJ, FETCH_CASINO_GAMES as aK, FETCH_ALL_USER_BETS_FAILURE as aL, FETCH_ALL_USER_BETS_SUCCESS as aM, FETCH_ALL_USER_BETS as aN, SKIP_NEXT_USER_BETS_FETCH as aO, FETCH_USER_BETS_FAILURE as aP, FETCH_USER_BETS_SUCCESS as aQ, FETCH_USER_BETS as aR, FETCH_MATCH_RESULTS_FAILURE as aS, FETCH_MATCH_RESULTS_SUCCESS as aT, FETCH_MATCH_RESULTS as aU, FETCH_MARKET_REPORT_FAILURE as aV, FETCH_MARKET_REPORT_SUCCESS as aW, FETCH_MARKET_REPORT as aX, getIPAddresses as aY, notifyPromise as aZ, api as a_, NavLink as aa, Outlet as ab, SIGNUP_FAILURE as ac, SIGNUP_SUCCESS as ad, SIGNUP as ae, UPDATE_USER_BALANCE_EXPOSURE_SUCCESS as af, UPDATE_USER_BALANCE_EXPOSURE as ag, LOGIN_FAILURE as ah, LOGIN_VERIFICATION_PENDING as ai, LOGIN_SUCCESS as aj, LOGIN as ak, VERIFY_EMAIL_FAILURE as al, VERIFY_EMAIL_SUCCESS as am, VERIFY_EMAIL as an, UPDATE_USER_BALANCE_EXPOSURE_FAILURE as ao, FETCH_CASINO_GAME_URL_FAILURE as ap, FETCH_CASINO_GAME_URL_SUCCESS as aq, FETCH_CASINO_GAME_URL as ar, FETCH_MORE_CASINO_PROVIDERS_FAILURE as as, FETCH_MORE_CASINO_PROVIDERS_SUCCESS as at, FETCH_MORE_CASINO_PROVIDERS as au, FETCH_CASINO_PROVIDERS_FAILURE as av, FETCH_CASINO_PROVIDERS_SUCCESS as aw, FETCH_CASINO_PROVIDERS as ax, FETCH_HOMEPAGE_LIVE_GAMES_FAILURE as ay, FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS as az, LOGOUT_FAILURE as b, signupSuccess as b0, loginVerificationPending as b1, signupFailure as b2, loginSuccess as b3, loginFailure as b4, verifyEmailSuccess as b5, verifyEmailFailure as b6, removeLocalStorageItem as b7, updateUserBalanceExposureFailure as b8, fetchUserBetsSuccess as b9, ChevronUp as bA, createOddsSocket as bB, ChevronRight as bC, SPORTS as bD, SkeletonLoader as bE, SPORT_ID_BY_KEY as bF, fetchSportsEvents as bG, ODDS_SPORT_KEY_BY_FRONTEND_KEY as bH, fetchHomepageCasinoGames as bI, fetchHomepageLiveGames as bJ, Carousel as bK, CarouselContent as bL, CarouselItem as bM, CarouselPrevious as bN, CarouselNext as bO, useNotification as bP, axios as ba, notifyError as bb, fetchCasinoProvidersSuccess as bc, fetchCasinoProvidersFailure as bd, fetchMoreCasinoProvidersSuccess as be, fetchCasinoGamesSuccess as bf, fetchCasinoGamesFailure as bg, fetchMoreCasinoGamesSuccess as bh, fetchMoreCasinoGamesFailure as bi, fetchHomepageCasinoGamesSuccess as bj, fetchHomepageCasinoGamesFailure as bk, fetchHomepageLiveGamesSuccess as bl, fetchHomepageLiveGamesFailure as bm, fetchCasinoGameUrlSuccess as bn, fetchCasinoGameUrlFailure as bo, fetchUserBetsFailure as bp, fetchAllUserBetsSuccess as bq, fetchAllUserBetsFailure as br, fetchMatchResultsSuccess as bs, fetchMatchResultsFailure as bt, fetchMarketReportSuccess as bu, fetchMarketReportFailure as bv, Provider_default as bw, useLayoutEffect2 as bx, usePrevious as by, Check as bz, GET_USER_DATA as c, GET_USER_DATA_FAILURE as d, LayoutApp as default, createLucideIcon as e, createContextScope as f, createSlot as g, cn$1 as h, Close as i, jsxRuntimeExports as j, getLocalStorageItem as k, useId as l, Primitive as m, composeEventHandlers$1 as n, useControllableState as o, useCallbackRef$1 as p, createPopperScope as q, Root2$1 as r, Anchor as s, Presence$1 as t, useComposedRefs as u, Portal$2 as v, hideOthers as w, dispatchDiscreteCustomEvent as x, ReactRemoveScroll as y, useFocusGuards as z };
+export { useForm as $, ArrowRight as A, Button$1 as B, Content$1 as C, DismissableLayer as D, Eye as E, FocusScope as F, GET_USER_DATA_SUCCESS as G, Content as H, Input as I, Arrow as J, composeRefs as K, LOGOUT as L, useNavigate as M, useLocation as N, Overlay as O, Portal$1 as P, ChevronDown as Q, Root$2 as R, useDispatch as S, useSelector as T, User as U, setLocalStorageItem as V, updateUserBalanceExposureSuccess as W, X, Link as Y, RegisterModal as Z, LoginModal as _, LOGOUT_SUCCESS as a, unwrapApiResponse as a$, notifySuccess as a0, Checkbox as a1, OTPInput as a2, RefreshCw as a3, login as a4, notifyError$1 as a5, verifyEmail as a6, signup as a7, Paths as a8, Toaster as a9, FETCH_HOMEPAGE_LIVE_GAMES as aA, FETCH_HOMEPAGE_CASINO_GAMES_FAILURE as aB, FETCH_HOMEPAGE_CASINO_GAMES_SUCCESS as aC, FETCH_HOMEPAGE_CASINO_GAMES as aD, RESET_CASINO_GAMES as aE, FETCH_MORE_CASINO_GAMES_FAILURE as aF, FETCH_MORE_CASINO_GAMES_SUCCESS as aG, FETCH_MORE_CASINO_GAMES as aH, FETCH_CASINO_GAMES_FAILURE as aI, FETCH_CASINO_GAMES_SUCCESS as aJ, FETCH_CASINO_GAMES as aK, FETCH_ALL_USER_BETS_FAILURE as aL, FETCH_ALL_USER_BETS_SUCCESS as aM, FETCH_ALL_USER_BETS as aN, SKIP_NEXT_USER_BETS_FETCH as aO, FETCH_USER_BETS_FAILURE as aP, FETCH_USER_BETS_SUCCESS as aQ, FETCH_USER_BETS as aR, FETCH_MATCH_RESULTS_FAILURE as aS, FETCH_MATCH_RESULTS_SUCCESS as aT, FETCH_MATCH_RESULTS as aU, FETCH_MARKET_REPORT_FAILURE as aV, FETCH_MARKET_REPORT_SUCCESS as aW, FETCH_MARKET_REPORT as aX, getIPAddresses as aY, notifyPromise as aZ, api as a_, NavLink as aa, Outlet as ab, SIGNUP_FAILURE as ac, SIGNUP_SUCCESS as ad, SIGNUP as ae, UPDATE_USER_BALANCE_EXPOSURE_SUCCESS as af, UPDATE_USER_BALANCE_EXPOSURE as ag, LOGIN_FAILURE as ah, LOGIN_VERIFICATION_PENDING as ai, LOGIN_SUCCESS as aj, LOGIN as ak, VERIFY_EMAIL_FAILURE as al, VERIFY_EMAIL_SUCCESS as am, VERIFY_EMAIL as an, UPDATE_USER_BALANCE_EXPOSURE_FAILURE as ao, FETCH_CASINO_GAME_URL_FAILURE as ap, FETCH_CASINO_GAME_URL_SUCCESS as aq, FETCH_CASINO_GAME_URL as ar, FETCH_MORE_CASINO_PROVIDERS_FAILURE as as, FETCH_MORE_CASINO_PROVIDERS_SUCCESS as at, FETCH_MORE_CASINO_PROVIDERS as au, FETCH_CASINO_PROVIDERS_FAILURE as av, FETCH_CASINO_PROVIDERS_SUCCESS as aw, FETCH_CASINO_PROVIDERS as ax, FETCH_HOMEPAGE_LIVE_GAMES_FAILURE as ay, FETCH_HOMEPAGE_LIVE_GAMES_SUCCESS as az, LOGOUT_FAILURE as b, signupSuccess as b0, loginVerificationPending as b1, signupFailure as b2, loginSuccess as b3, loginFailure as b4, verifyEmailSuccess as b5, verifyEmailFailure as b6, removeLocalStorageItem as b7, updateUserBalanceExposureFailure as b8, fetchUserBetsSuccess as b9, ChevronUp as bA, ODDS_SPORT_KEY_BY_FRONTEND_KEY as bB, createOddsSocket as bC, SPORTS as bD, SkeletonLoader as bE, Search as bF, ChevronRight as bG, SPORT_ID_BY_KEY as bH, fetchSportsEvents as bI, fetchHomepageCasinoGames as bJ, fetchHomepageLiveGames as bK, Carousel as bL, CarouselContent as bM, CarouselItem as bN, CarouselPrevious as bO, CarouselNext as bP, useNotification as bQ, axios as ba, notifyError as bb, fetchCasinoProvidersSuccess as bc, fetchCasinoProvidersFailure as bd, fetchMoreCasinoProvidersSuccess as be, fetchCasinoGamesSuccess as bf, fetchCasinoGamesFailure as bg, fetchMoreCasinoGamesSuccess as bh, fetchMoreCasinoGamesFailure as bi, fetchHomepageCasinoGamesSuccess as bj, fetchHomepageCasinoGamesFailure as bk, fetchHomepageLiveGamesSuccess as bl, fetchHomepageLiveGamesFailure as bm, fetchCasinoGameUrlSuccess as bn, fetchCasinoGameUrlFailure as bo, fetchUserBetsFailure as bp, fetchAllUserBetsSuccess as bq, fetchAllUserBetsFailure as br, fetchMatchResultsSuccess as bs, fetchMatchResultsFailure as bt, fetchMarketReportSuccess as bu, fetchMarketReportFailure as bv, Provider_default as bw, useLayoutEffect2 as bx, usePrevious as by, Check as bz, GET_USER_DATA as c, GET_USER_DATA_FAILURE as d, LayoutApp as default, createLucideIcon as e, createContextScope as f, createSlot as g, cn$1 as h, Close as i, jsxRuntimeExports as j, getLocalStorageItem as k, useId as l, Primitive as m, composeEventHandlers$1 as n, useControllableState as o, useCallbackRef$1 as p, createPopperScope as q, Root2$1 as r, Anchor as s, Presence$1 as t, useComposedRefs as u, Portal$2 as v, hideOthers as w, dispatchDiscreteCustomEvent as x, ReactRemoveScroll as y, useFocusGuards as z };
