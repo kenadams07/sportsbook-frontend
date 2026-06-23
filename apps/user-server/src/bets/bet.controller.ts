@@ -27,36 +27,34 @@ type SettleMarketBody = {
 };
 
 function getStatusCode(error: unknown) {
-  if (error instanceof ZodError) {
-    return 400;
-  }
-
-  if (
-    typeof error === "object" &&
-    error !== null &&
-    "statusCode" in error &&
-    typeof error.statusCode === "number"
-  ) {
+  if (error instanceof ZodError) return 400;
+  if (typeof error === "object" && error !== null && "statusCode" in error && typeof error.statusCode === "number") {
     return error.statusCode;
   }
-
   return 500;
 }
 
 function getMessage(error: unknown) {
   if (error instanceof ZodError) {
-    return error.issues
-      .map((issue) => `${issue.path.join(".") || "body"}: ${issue.message}`)
-      .join("; ");
+    return error.issues.map((issue) => `${issue.path.join(".") || "body"}: ${issue.message}`).join("; ");
   }
-
   return error instanceof Error ? error.message : "Something went wrong";
+}
+
+function requireAuthenticatedUserId(request: FastifyRequest, reply: FastifyReply) {
+  const userId = request.authUser?.id;
+  if (userId) return userId;
+  reply.code(401).send(errorResponse("Authorization token is required", 401));
+  return null;
 }
 
 export async function placeBet(request: FastifyRequest, reply: FastifyReply) {
   try {
+    const userId = requireAuthenticatedUserId(request, reply);
+    if (!userId) return;
+
     const input = placeBetSchema.parse(request.body);
-    const result = await placeBetService(input);
+    const result = await placeBetService({ ...input, userId });
     emitUserAccountUpdate(result.account);
 
     return reply.code(201).send(successResponse("Bet placed successfully", result, 201));
@@ -70,30 +68,28 @@ export async function getMyBets(
   request: FastifyRequest<{ Querystring: MyBetsQuery }>,
   reply: FastifyReply,
 ) {
-  const { userId, eventId } = request.query;
+  const userId = requireAuthenticatedUserId(request, reply);
+  if (!userId) return;
 
-  if (!userId) {
-    return reply.code(400).send(errorResponse("User ID is required", 400));
-  }
-
+  const { eventId } = request.query;
   if (eventId) {
     const bets = await getUserBets(userId, eventId);
-    // console.log('bets',bets)
     return reply.code(200).send(successResponse("Bets retrieved successfully", bets));
   }
 
   const groups = await getUserBetGroups(userId);
-  return reply.code(200).send(successResponse("Bet groups retrieved successfully", groups));
+  return reply.code(200).send(successResponse("Bets retrieved successfully", groups));
 }
 
 export async function getAllUserBets(
   request: FastifyRequest<{ Querystring: MyBetsQuery }>,
   reply: FastifyReply,
 ) {
-  const { userId } = request.query;
+  const isAdmin = request.authUser?.role === 1;
+  const userId = isAdmin ? request.query.userId ?? request.query.user_id : request.authUser?.id;
 
   if (!userId) {
-    return reply.code(400).send(errorResponse("User ID is required", 400));
+    return reply.code(400).send(errorResponse("userId is required", 400));
   }
 
   const bets = await getUserBets(userId);
@@ -106,13 +102,8 @@ export async function settleMarket(
 ) {
   try {
     const { marketId, winningSelection } = request.body;
-
     if (!marketId || !winningSelection) {
-      return reply
-        .code(400)
-        .send(
-          errorResponse("marketId and winningSelection are required", 400),
-        );
+      return reply.code(400).send(errorResponse("marketId and winningSelection are required", 400));
     }
 
     const result = await settleMarketResults(marketId, winningSelection);
@@ -128,14 +119,11 @@ export async function marketReport(
   reply: FastifyReply,
 ) {
   try {
-    const userId = request.query.userId ?? request.query.user_id;
+    const userId = requireAuthenticatedUserId(request, reply);
+    if (!userId) return;
+
     const marketId = request.query.marketId ?? request.query.market_id;
     const eventId = request.query.eventId ?? request.query.event_id;
-
-    if (!userId) {
-      return reply.code(400).send(errorResponse("user_id is required", 400));
-    }
-
     const result = await getMarketReport(userId, marketId, eventId);
     return reply.code(200).send(successResponse("Market report retrieved successfully", result));
   } catch (error) {

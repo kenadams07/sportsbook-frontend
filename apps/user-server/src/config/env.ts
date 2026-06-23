@@ -10,6 +10,7 @@ const envSchema = z.object({
   USER_SERVER_PORT: z.coerce.number().int().positive().default(3020),
   USER_JWT_SECRET: z.string().default("dev-user-secret"),
   USER_JWT_EXPIRES_IN: z.string().default("6h"),
+  ADMIN_JWT_SECRET: z.string().min(1).default("xfair91@dubai"),
   SMTP_HOST: z.string().default(""),
   SMTP_PORT: z.coerce.number().int().positive().default(587),
   SMTP_USERNAME: z.string().default(""),

@@ -1,3 +1,5 @@
+import { requireAdminAuth } from "../admin-auth.middleware.js";
+
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { Redis } from "ioredis";
 
@@ -20,6 +22,7 @@ const debugOddsQuerySchema = {
 } as const;
 
 export async function debugRoutes(server: FastifyInstance) {
+  server.addHook("preHandler", requireAdminAuth);
   server.get(
     "/debug/odds",
     { schema: { querystring: debugOddsQuerySchema } },

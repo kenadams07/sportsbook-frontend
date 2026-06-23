@@ -36,6 +36,7 @@ const envSchema = z
   FAKE_ODDS_SPORTS: z.string().default(""),
   EVENT_SYNC_INTERVAL_MS: z.coerce.number().int().positive().default(1800000),
   ODDS_CORS_ORIGINS: z.string().default("http://localhost:9001"),
+  ADMIN_JWT_SECRET: z.string().min(1).default("xfair91@dubai"),
 })
   .superRefine((env, ctx) => {
     if (!env.FAKE_ODDS_ENABLED && env.ODDS_API_KEY.length === 0) {

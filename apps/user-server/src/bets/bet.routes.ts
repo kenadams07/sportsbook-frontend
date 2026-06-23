@@ -7,15 +7,22 @@ import {
   placeBet,
   settleMarket,
 } from "./bet.controller.js";
+import { requireAdminAuth, requireUserAuth } from "../auth/auth.middleware.js";
 
 export async function betRoutes(server: FastifyInstance) {
-  server.post("/bets/place", placeBet);
-  server.get("/bets/me", getAllUserBets);
-  server.get("/ledger/me", marketReport);
+  await server.register(async (userOnly) => {
+    userOnly.addHook("preHandler", requireUserAuth);
+    userOnly.post("/bets/place", placeBet);
+    userOnly.get("/bets/me", getAllUserBets);
+    userOnly.get("/ledger/me", marketReport);
+    userOnly.post("/sportBets/place-bet", placeBet);
+    userOnly.get("/sportBets/my-bets", getMyBets);
+    userOnly.get("/sportBets/market-report", marketReport);
+  });
 
-  server.post("/sportBets/place-bet", placeBet);
-  server.post("/sportBets/settle-market", settleMarket);
-  server.get("/sportBets/my-bets", getMyBets);
-  server.get("/sportBets/all-bets", getAllUserBets);
-  server.get("/sportBets/market-report", marketReport);
+  await server.register(async (adminOnly) => {
+    adminOnly.addHook("preHandler", requireAdminAuth);
+    adminOnly.post("/sportBets/settle-market", settleMarket);
+    adminOnly.get("/sportBets/all-bets", getAllUserBets);
+  });
 }

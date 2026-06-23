@@ -1,5 +1,6 @@
 import type { FastifyInstance } from "fastify";
 
+import { requireAdminAuth } from "../admin-auth.middleware.js";
 import {
   deleteSport,
   getSports,
@@ -19,83 +20,66 @@ const stringArraySchema = {
 export async function sportsRoutes(server: FastifyInstance) {
   server.get("/sports", getSports);
 
-  server.post(
-    "/sports",
-    {
-      schema: {
-        body: {
-          type: "object",
-          required: ["key", "regions", "markets"],
-          additionalProperties: false,
-          properties: {
-            key: {
-              type: "string",
-              minLength: 1,
-            },
-            regions: stringArraySchema,
-            markets: stringArraySchema,
-            pollIntervalMs: {
-              type: ["integer", "null"],
-              minimum: 1000,
-            },
-          },
-        },
-      },
-    },
-    postSport,
-  );
+  await server.register(async (adminOnly) => {
+    adminOnly.addHook("preHandler", requireAdminAuth);
 
-  server.patch(
-    "/sports/:key",
-    {
-      schema: {
-        params: {
-          type: "object",
-          required: ["key"],
-          properties: {
-            key: {
-              type: "string",
-              minLength: 1,
-            },
-          },
-        },
-        body: {
-          type: "object",
-          additionalProperties: false,
-          minProperties: 1,
-          properties: {
-            regions: stringArraySchema,
-            markets: stringArraySchema,
-            enabled: {
-              type: "boolean",
-            },
-            pollIntervalMs: {
-              type: ["integer", "null"],
-              minimum: 1000,
+    adminOnly.post(
+      "/sports",
+      {
+        schema: {
+          body: {
+            type: "object",
+            required: ["key", "regions", "markets"],
+            additionalProperties: false,
+            properties: {
+              key: { type: "string", minLength: 1 },
+              regions: stringArraySchema,
+              markets: stringArraySchema,
+              pollIntervalMs: { type: ["integer", "null"], minimum: 1000 },
             },
           },
         },
       },
-    },
-    patchSport,
-  );
+      postSport,
+    );
 
-  server.delete(
-    "/sports/:key",
-    {
-      schema: {
-        params: {
-          type: "object",
-          required: ["key"],
-          properties: {
-            key: {
-              type: "string",
-              minLength: 1,
+    adminOnly.patch(
+      "/sports/:key",
+      {
+        schema: {
+          params: {
+            type: "object",
+            required: ["key"],
+            properties: { key: { type: "string", minLength: 1 } },
+          },
+          body: {
+            type: "object",
+            additionalProperties: false,
+            minProperties: 1,
+            properties: {
+              regions: stringArraySchema,
+              markets: stringArraySchema,
+              enabled: { type: "boolean" },
+              pollIntervalMs: { type: ["integer", "null"], minimum: 1000 },
             },
           },
         },
       },
-    },
-    deleteSport,
-  );
+      patchSport,
+    );
+
+    adminOnly.delete(
+      "/sports/:key",
+      {
+        schema: {
+          params: {
+            type: "object",
+            required: ["key"],
+            properties: { key: { type: "string", minLength: 1 } },
+          },
+        },
+      },
+      deleteSport,
+    );
+  });
 }

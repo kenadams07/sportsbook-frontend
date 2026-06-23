@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import { requireAdminAuth } from "../admin-auth.middleware.js";
 
 import {
   addLeague,
@@ -286,6 +287,7 @@ const updateOutcomeStatusBodySchema = {
 } as const;
 
 export async function adminRoutes(server: FastifyInstance) {
+  server.addHook("preHandler", requireAdminAuth);
   server.get("/admin/available-sports", getAvailableSports);
 
   server.get("/admin/sport-categories", getAdminSportCategories);
